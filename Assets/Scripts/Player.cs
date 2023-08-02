@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
     [SerializeField] private float m_MovementSpeed = 5f;
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
     private bool m_CanMove = true;
+    [SerializeField] private LayerMask m_AttackLayerMask;
 
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
@@ -54,7 +55,18 @@ public class Player : MonoBehaviour {
                     var point = hit.point;
                     point.y = transform.position.y;
                     hitPoint = point;
-                } else if (hit.collider.gameObject.CompareTag("Enemy")) {
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
+                    var point = hit.point;
+                    point.y = transform.position.y;
+
                     if (!m_CanMove) {
                         return;
                     }
@@ -64,7 +76,7 @@ public class Player : MonoBehaviour {
                     Invoke(nameof(EnableMovement), .01f);
 
                     Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
-                    bullet.SetTarget(hit.collider);
+                    bullet.SetTarget(point);
                     bullet.SetDamage(m_Damage);
                 }
             }
