@@ -1,3 +1,4 @@
+using Events;
 using System;
 using TMPro;
 using Unity.VisualScripting;
@@ -17,6 +18,14 @@ public class Enemy : MonoBehaviour {
 
     private bool m_IsDead {
         get => !m_CanMove;
+    }
+
+    private void OnMouseEnter() {
+        EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent());
+    }
+
+    private void OnMouseExit() {
+        EventBus<EnemyStopHoverEvent>.Raise(new EnemyStopHoverEvent());
     }
 
     private void Start() {

@@ -1,3 +1,4 @@
+using Events;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,18 @@ public class Player : MonoBehaviour {
     [SerializeField] private Image m_HealthBar;
     private float m_InitialHealthBarWidth;
     [SerializeField] private float m_MovementSpeed = 5f;
+    [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
     private bool m_CanMove = true;
+
+    private void OnEnable() {
+        EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
+        EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
+    }
+
+    private void OnDisable() {
+        EventBus<EnemyStartHoverEvent>.Unsubscribe(OnEnemyStartHover);
+        EventBus<EnemyStopHoverEvent>.Unsubscribe(OnEnemyStopHover);
+    }
 
     private void Start() {
         m_Collider = GetComponent<Collider>();
@@ -29,11 +41,12 @@ public class Player : MonoBehaviour {
         m_CurrentHealth = m_MaxHealth;
         m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
         UpdateHealthBar();
+
+        SetDefaultCursorTexture();
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            // Debug.Log("Mouse 1 down");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
@@ -55,7 +68,6 @@ public class Player : MonoBehaviour {
                     bullet.SetDamage(m_Damage);
                 }
             }
-
         }
 
         if (hitPoint != Vector3.zero && m_CanMove) {
@@ -77,7 +89,6 @@ public class Player : MonoBehaviour {
         }
 
         m_Rigidboby.velocity = direction.normalized * m_MovementSpeed;
-
     }
 
     public void TakeDamage(float damage) {
@@ -96,7 +107,17 @@ public class Player : MonoBehaviour {
             healthPercentage * m_InitialHealthBarWidth,
             m_HealthBar.rectTransform.sizeDelta.y
         );
-
     }
 
+    private void SetDefaultCursorTexture() {
+        Cursor.SetCursor(m_CursorTexture, Vector2.zero, CursorMode.Auto);
+    }
+
+    private void OnEnemyStartHover(EnemyStartHoverEvent e) {
+        Cursor.SetCursor(m_AttackCursorTexture, Vector2.zero, CursorMode.Auto);
+    }
+
+    private void OnEnemyStopHover(EnemyStopHoverEvent e) {
+        SetDefaultCursorTexture();
+    }
 }
