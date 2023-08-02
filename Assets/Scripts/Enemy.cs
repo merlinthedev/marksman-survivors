@@ -1,8 +1,7 @@
 using Events;
 using System;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     private Transform m_Target;
@@ -13,7 +12,10 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float m_MovementSpeed = 7f;
 
 
-    private float m_Health = 250f;
+    private float m_MaxHealth = 250f;
+    private float m_CurrentHealth = 250f;
+    [SerializeField] private Image m_HealthBar;
+    private float m_InitialHealthBarWidth;
     private bool m_CanMove = true;
 
     private bool m_IsDead {
@@ -38,6 +40,9 @@ public class Enemy : MonoBehaviour {
         if (m_Canvas == null) {
             throw new Exception("Missing canvas");
         }
+
+        m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
+        UpdateHealthBar();
     }
 
 
@@ -64,11 +69,12 @@ public class Enemy : MonoBehaviour {
 
     public void TakeDamage(float damage) {
         if (m_IsDead) return;
-        m_Health -= damage;
+        m_CurrentHealth -= damage;
 
         ShowDamageUI(damage);
+        UpdateHealthBar();
 
-        if (m_Health <= 0) {
+        if (m_CurrentHealth <= 0) {
             m_CanMove = false;
             m_Rigidbody.velocity = Vector3.zero;
 
@@ -86,6 +92,15 @@ public class Enemy : MonoBehaviour {
             .GetComponent<EnemyDamageNumberHelper>();
 
         enemyDamageNumberHelper.Initialize(damage.ToString());
+    }
+
+    private void UpdateHealthBar() {
+        float healthPercentage = m_CurrentHealth / m_MaxHealth;
+
+        m_HealthBar.rectTransform.sizeDelta = new Vector2(
+            healthPercentage * m_InitialHealthBarWidth,
+            m_HealthBar.rectTransform.sizeDelta.y
+        );
     }
 
 
