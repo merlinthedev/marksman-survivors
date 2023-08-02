@@ -132,4 +132,8 @@ public class Player : MonoBehaviour {
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
         SetDefaultCursorTexture();
     }
+
+    public Vector3 GetCurrentMovementDirection() {
+        return m_Rigidboby.velocity.normalized;
+    }
 }
