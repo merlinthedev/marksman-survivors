@@ -1,5 +1,6 @@
 using Events;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,17 +10,30 @@ public class Player : MonoBehaviour {
 
     private Vector3 hitPoint;
 
+    [Header("Stats")]
     [SerializeField] private float m_MaxHealth = 1000f;
+
     [SerializeField] private float m_CurrentHealth = 1000f;
     [SerializeField] private float m_Damage = 90f;
+    [SerializeField] private float m_AttackSpeed = 1f;
 
     [SerializeField] private Bullet m_BulletPrefab;
-    [SerializeField] private Image m_HealthBar;
-    private float m_InitialHealthBarWidth;
+
     [SerializeField] private float m_MovementSpeed = 5f;
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
+
     private bool m_CanMove = true;
+
     [SerializeField] private LayerMask m_AttackLayerMask;
+
+    [Header("UI")]
+    [SerializeField] private Image m_HealthBar;
+
+    private float m_InitialHealthBarWidth;
+    [SerializeField] private Image m_AttackBar;
+
+    private float m_BaseAttackCooldown = 1f;
+    private float m_AttackCooldown = 0f;
 
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
@@ -59,7 +73,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && m_AttackCooldown <= 0f) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
@@ -72,8 +86,12 @@ public class Player : MonoBehaviour {
                     }
 
                     m_CanMove = false;
+                    hitPoint = transform.position;
+
+                    m_AttackCooldown = m_BaseAttackCooldown / m_AttackSpeed;
+
                     m_Rigidboby.velocity = Vector3.zero;
-                    Invoke(nameof(EnableMovement), .01f);
+                    Invoke(nameof(EnableMovement), .1f);
 
                     Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
                     bullet.SetTarget(point);
@@ -84,6 +102,12 @@ public class Player : MonoBehaviour {
 
         if (hitPoint != Vector3.zero && m_CanMove) {
             Move();
+        }
+    }
+
+    private void FixedUpdate() {
+        if (m_AttackCooldown > 0f) {
+            AttackCooldown();
         }
     }
 
@@ -121,6 +145,15 @@ public class Player : MonoBehaviour {
         );
     }
 
+    private void UpdateAttackBar() {
+        float attackPercentage = 1 - (m_AttackCooldown / m_BaseAttackCooldown);
+
+        m_AttackBar.rectTransform.sizeDelta = new Vector2(
+            attackPercentage * m_InitialHealthBarWidth,
+            m_AttackBar.rectTransform.sizeDelta.y
+        );
+    }
+
     private void SetDefaultCursorTexture() {
         Cursor.SetCursor(m_CursorTexture, Vector2.zero, CursorMode.Auto);
     }
@@ -135,5 +168,10 @@ public class Player : MonoBehaviour {
 
     public Vector3 GetCurrentMovementDirection() {
         return m_Rigidboby.velocity.normalized;
+    }
+
+    private void AttackCooldown() {
+        UpdateAttackBar();
+        m_AttackCooldown -= 0.02f;
     }
 }
