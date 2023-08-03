@@ -39,7 +39,7 @@ public class Player : MonoBehaviour {
 
     private float m_InitialAttackBarWidth;
     private float m_LastAttackTime = 0f;
-    private bool m_CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed);
+    private bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed);
     private bool m_ShouldUpdateAttackBarOnceMore = false;
 
     private void OnEnable() {
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && m_CanAttack) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && CanAttack) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
@@ -112,7 +112,7 @@ public class Player : MonoBehaviour {
             Move();
         }
 
-        if (!m_CanAttack) {
+        if (!CanAttack) {
             UpdateAttackBar();
             m_ShouldUpdateAttackBarOnceMore = true;
         }
