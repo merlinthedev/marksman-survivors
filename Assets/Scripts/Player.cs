@@ -1,7 +1,5 @@
 using Events;
 using System;
-using System.Collections;
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
@@ -12,9 +10,10 @@ public class Player : MonoBehaviour {
     private Collider m_Collider;
     private Rigidbody m_Rigidboby;
 
-    private Vector3 hitPoint;
+    private Vector3 m_HitPoint;
 
-    [Header("Stats")] [SerializeField] private float m_MaxHealth = 1000f;
+    [Header("Stats")]
+    [SerializeField] private float m_MaxHealth = 1000f;
 
     [SerializeField] private float m_CurrentHealth = 1000f;
     [SerializeField] private float m_Damage = 90f;
@@ -23,13 +22,17 @@ public class Player : MonoBehaviour {
     [SerializeField] private Bullet m_BulletPrefab;
 
     [SerializeField] private float m_MovementSpeed = 5f;
+    private float m_GlobalMovementDirectionAngle = 0f;
+    private Vector3 m_LastKnownDirection = Vector3.left;
+
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
 
     private bool m_CanMove = true;
 
     [SerializeField] private LayerMask m_AttackLayerMask;
 
-    [Header("UI")] [SerializeField] private Image m_HealthBar;
+    [Header("UI")]
+    [SerializeField] private Image m_HealthBar;
 
     private float m_InitialHealthBarWidth;
     [SerializeField] private Image m_AttackBar;
@@ -73,7 +76,7 @@ public class Player : MonoBehaviour {
                 if (hit.collider.gameObject.CompareTag("Ground")) {
                     var point = hit.point;
                     point.y = transform.position.y;
-                    hitPoint = point;
+                    m_HitPoint = point;
                 }
             }
         }
@@ -91,7 +94,7 @@ public class Player : MonoBehaviour {
                     }
 
                     m_CanMove = false;
-                    hitPoint = transform.position;
+                    m_HitPoint = transform.position;
                     m_LastAttackTime = Time.time;
 
 
@@ -105,14 +108,15 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (hitPoint != Vector3.zero && m_CanMove) {
+        if (m_HitPoint != Vector3.zero && m_CanMove) {
             Move();
         }
 
         if (!m_CanAttack) {
             UpdateAttackBar();
             m_ShouldUpdateAttackBarOnceMore = true;
-        } else {
+        }
+        else {
             if (m_ShouldUpdateAttackBarOnceMore) {
                 // update the attack bar to be full
                 m_AttackBar.rectTransform.sizeDelta = new Vector2(
@@ -129,17 +133,16 @@ public class Player : MonoBehaviour {
         m_CanMove = true;
     }
 
-    private float globalDirectionAngle = 0f;
 
     private void Move() {
-        Vector3 direction = hitPoint - transform.position;
+        Vector3 direction = m_HitPoint - transform.position;
 
-        globalDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         // Debug.Log("Global Direction Angle: " + globalDirectionAngle);
         // DrawDirectionRays();
 
         if (direction.magnitude < 0.1f) {
-            hitPoint = Vector3.zero;
+            m_HitPoint = Vector3.zero;
             m_Rigidboby.velocity = Vector3.zero;
             return;
         }
@@ -188,14 +191,12 @@ public class Player : MonoBehaviour {
         SetDefaultCursorTexture();
     }
 
-    private Vector3 m_LastKnownDirection = Vector3.left;
-
     public Vector3 GetCurrentMovementDirection() {
         return m_Rigidboby.velocity.normalized == Vector3.zero ? m_LastKnownDirection : m_Rigidboby.velocity.normalized;
     }
 
     public float GetGlobalDirectionAngle() {
-        return globalDirectionAngle;
+        return m_GlobalMovementDirectionAngle;
     }
 
 
