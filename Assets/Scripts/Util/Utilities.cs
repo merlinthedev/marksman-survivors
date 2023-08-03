@@ -14,6 +14,11 @@ public class Utilities {
 
         return Mathf.Abs(A - (A1 + A2 + A3)) < 0.01f;
     }
+    
+    public static bool IsPointInsideCameraViewport(Camera camera, Vector3 point) {
+        Vector3 viewportPoint = camera.WorldToViewportPoint(point);
+        return viewportPoint.x is > 0 and < 1 && viewportPoint.y is > 0 and < 1;
+    }
 
 
 }

@@ -1,8 +1,12 @@
 using Events;
 using System;
 using System.Collections;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour {
     private Collider m_Collider;
@@ -10,8 +14,7 @@ public class Player : MonoBehaviour {
 
     private Vector3 hitPoint;
 
-    [Header("Stats")]
-    [SerializeField] private float m_MaxHealth = 1000f;
+    [Header("Stats")] [SerializeField] private float m_MaxHealth = 1000f;
 
     [SerializeField] private float m_CurrentHealth = 1000f;
     [SerializeField] private float m_Damage = 90f;
@@ -26,8 +29,7 @@ public class Player : MonoBehaviour {
 
     [SerializeField] private LayerMask m_AttackLayerMask;
 
-    [Header("UI")]
-    [SerializeField] private Image m_HealthBar;
+    [Header("UI")] [SerializeField] private Image m_HealthBar;
 
     private float m_InitialHealthBarWidth;
     [SerializeField] private Image m_AttackBar;
@@ -115,8 +117,14 @@ public class Player : MonoBehaviour {
         m_CanMove = true;
     }
 
+    private float globalDirectionAngle = 0f;
+
     private void Move() {
         Vector3 direction = hitPoint - transform.position;
+
+        globalDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        // Debug.Log("Global Direction Angle: " + globalDirectionAngle);
+        // DrawDirectionRays();
 
         if (direction.magnitude < 0.1f) {
             hitPoint = Vector3.zero;
@@ -125,6 +133,7 @@ public class Player : MonoBehaviour {
         }
 
         m_Rigidboby.velocity = direction.normalized * m_MovementSpeed;
+        m_LastKnownDirection = direction.normalized;
     }
 
     public void TakeDamage(float damage) {
@@ -166,12 +175,33 @@ public class Player : MonoBehaviour {
         SetDefaultCursorTexture();
     }
 
+    private Vector3 m_LastKnownDirection = Vector3.zero;
+
     public Vector3 GetCurrentMovementDirection() {
-        return m_Rigidboby.velocity.normalized;
+        return m_Rigidboby.velocity.normalized == Vector3.zero ? m_LastKnownDirection : m_Rigidboby.velocity.normalized;
+    }
+
+    public float GetGlobalDirectionAngle() {
+        return globalDirectionAngle;
     }
 
     private void AttackCooldown() {
         UpdateAttackBar();
         m_AttackCooldown -= 0.02f;
+    }
+
+    private void DrawDirectionRays() {
+        // Direction ray
+        Debug.DrawRay(transform.position, GetCurrentMovementDirection() * 10f, Color.red);
+
+        // Right ray
+        Vector3 rightDirection = Quaternion.Euler(0, 45, 0) * GetCurrentMovementDirection();
+        // Debug.DrawRay(transform.position, rightDirection * 10f, Color.green);
+        // Draw the ray until the edge of the viewport
+        Debug.DrawRay(transform.position, rightDirection * 10f, Color.green, 0);
+
+        // Left ray
+        Vector3 leftDirection = Quaternion.Euler(0, -45, 0) * GetCurrentMovementDirection();
+        Debug.DrawRay(transform.position, leftDirection * 10f, Color.blue, 0);
     }
 }
