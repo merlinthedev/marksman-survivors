@@ -2,6 +2,7 @@ using Events;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -97,13 +98,23 @@ public class Player : MonoBehaviour {
                     m_HitPoint = transform.position;
                     m_LastAttackTime = Time.time;
 
-
-                    m_Rigidboby.velocity = Vector3.zero;
                     Invoke(nameof(EnableMovement), .1f);
+                    m_Rigidboby.velocity = Vector3.zero;
 
-                    Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
-                    bullet.SetTarget(point);
-                    bullet.SetDamage(m_Damage);
+                    // shoot 3 bullets in burst mode
+
+                    Vector3 randomBulletSpread = new Vector3(
+                        UnityEngine.Random.Range(-0.1f, 0.1f),
+                        0,
+                        UnityEngine.Random.Range(-0.1f, 0.1f)
+                    );
+
+                    /*
+                     *      Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+                     *      bullet.SetTarget(point + randomBulletSpread);
+                     *      bullet.SetDamage(m_Damage);
+                     * 
+                     */   
                 }
             }
         }
@@ -213,5 +224,9 @@ public class Player : MonoBehaviour {
         // Left ray
         Vector3 leftDirection = Quaternion.Euler(0, -45, 0) * GetCurrentMovementDirection();
         Debug.DrawRay(transform.position, leftDirection * 10f, Color.blue, 0);
+    }
+
+    private void ShootBurstMode() {
+        
     }
 }
