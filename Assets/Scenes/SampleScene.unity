@@ -1525,7 +1525,7 @@ MonoBehaviour:
   m_MaxHealth: 1000
   m_CurrentHealth: 1000
   m_Damage: 90
-  m_AttackSpeed: 1
+  m_AttackSpeed: 1.8
   m_BulletPrefab: {fileID: 8955770984125741509, guid: f1948c67dfa58d2438c736f0231d2050,
     type: 3}
   m_MovementSpeed: 10

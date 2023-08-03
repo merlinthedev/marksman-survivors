@@ -34,8 +34,10 @@ public class Player : MonoBehaviour {
     private float m_InitialHealthBarWidth;
     [SerializeField] private Image m_AttackBar;
 
-    private float m_BaseAttackCooldown = 1f;
-    private float m_AttackCooldown = 0f;
+    private float m_InitialAttackBarWidth;
+    private float m_LastAttackTime = 0f;
+    private bool m_CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed);
+    private bool m_ShouldUpdateAttackBarOnceMore = false;
 
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
@@ -57,6 +59,7 @@ public class Player : MonoBehaviour {
 
         m_CurrentHealth = m_MaxHealth;
         m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
+        m_InitialAttackBarWidth = m_AttackBar.rectTransform.sizeDelta.x;
         UpdateHealthBar();
 
         SetDefaultCursorTexture();
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && m_AttackCooldown <= 0f) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && m_CanAttack) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
@@ -89,8 +92,8 @@ public class Player : MonoBehaviour {
 
                     m_CanMove = false;
                     hitPoint = transform.position;
+                    m_LastAttackTime = Time.time;
 
-                    m_AttackCooldown = m_BaseAttackCooldown / m_AttackSpeed;
 
                     m_Rigidboby.velocity = Vector3.zero;
                     Invoke(nameof(EnableMovement), .1f);
@@ -105,13 +108,22 @@ public class Player : MonoBehaviour {
         if (hitPoint != Vector3.zero && m_CanMove) {
             Move();
         }
-    }
 
-    private void FixedUpdate() {
-        if (m_AttackCooldown > 0f) {
-            AttackCooldown();
+        if (!m_CanAttack) {
+            UpdateAttackBar();
+            m_ShouldUpdateAttackBarOnceMore = true;
+        } else {
+            if (m_ShouldUpdateAttackBarOnceMore) {
+                // update the attack bar to be full
+                m_AttackBar.rectTransform.sizeDelta = new Vector2(
+                    m_InitialAttackBarWidth,
+                    m_AttackBar.rectTransform.sizeDelta.y
+                );
+                m_ShouldUpdateAttackBarOnceMore = false;
+            }
         }
     }
+
 
     private void EnableMovement() {
         m_CanMove = true;
@@ -155,13 +167,14 @@ public class Player : MonoBehaviour {
     }
 
     private void UpdateAttackBar() {
-        float attackPercentage = 1 - (m_AttackCooldown / m_BaseAttackCooldown);
+        float attackPercentage = (Time.time - m_LastAttackTime) / (1f / m_AttackSpeed);
 
         m_AttackBar.rectTransform.sizeDelta = new Vector2(
-            attackPercentage * m_InitialHealthBarWidth,
+            attackPercentage * m_InitialAttackBarWidth,
             m_AttackBar.rectTransform.sizeDelta.y
         );
     }
+
 
     private void SetDefaultCursorTexture() {
         Cursor.SetCursor(m_CursorTexture, Vector2.zero, CursorMode.Auto);
@@ -185,10 +198,6 @@ public class Player : MonoBehaviour {
         return globalDirectionAngle;
     }
 
-    private void AttackCooldown() {
-        UpdateAttackBar();
-        m_AttackCooldown -= 0.02f;
-    }
 
     private void DrawDirectionRays() {
         // Direction ray
