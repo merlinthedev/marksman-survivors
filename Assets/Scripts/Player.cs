@@ -175,7 +175,7 @@ public class Player : MonoBehaviour {
         SetDefaultCursorTexture();
     }
 
-    private Vector3 m_LastKnownDirection = Vector3.zero;
+    private Vector3 m_LastKnownDirection = Vector3.left;
 
     public Vector3 GetCurrentMovementDirection() {
         return m_Rigidboby.velocity.normalized == Vector3.zero ? m_LastKnownDirection : m_Rigidboby.velocity.normalized;

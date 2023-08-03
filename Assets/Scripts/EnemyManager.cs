@@ -61,7 +61,7 @@ public class EnemyManager : MonoBehaviour {
             , new Vector2(leftPoint.x, leftPoint.z)
             , new Vector2(randomPointOnPlane.x, randomPointOnPlane.z));
 
-        Debug.Log("Point in triangle?: " + isInTriangle);
+        // Debug.Log("Point in triangle?: " + isInTriangle);
 
         if (isInTriangle) {
             return FindPositionRecursively();
