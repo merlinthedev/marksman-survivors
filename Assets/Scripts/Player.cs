@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
                     }
 
                     m_CanMove = false;
-                    m_HitPoint = transform.position;
+                    m_HitPoint = transform.position; // ???
                     m_LastAttackTime = Time.time;
 
                     Invoke(nameof(EnableMovement), .1f);
@@ -103,18 +103,14 @@ public class Player : MonoBehaviour {
 
                     // shoot 3 bullets in burst mode
 
-                    Vector3 randomBulletSpread = new Vector3(
-                        UnityEngine.Random.Range(-0.1f, 0.1f),
-                        0,
-                        UnityEngine.Random.Range(-0.1f, 0.1f)
-                    );
+                    ShootBullet_Recursive(true, point);
 
                     /*
                      *      Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
                      *      bullet.SetTarget(point + randomBulletSpread);
                      *      bullet.SetDamage(m_Damage);
                      * 
-                     */   
+                     */
                 }
             }
         }
@@ -226,7 +222,27 @@ public class Player : MonoBehaviour {
         Debug.DrawRay(transform.position, leftDirection * 10f, Color.blue, 0);
     }
 
-    private void ShootBurstMode() {
-        
+    private int recurseCount = 0;
+    private int maxRecurseCount = 3;
+
+    private void ShootBullet_Recursive(bool shouldCallRecursive, Vector3 target) {
+        recurseCount++;
+
+        Vector3 randomBulletSpread = new Vector3(
+            UnityEngine.Random.Range(-0.1f, 0.1f),
+            0,
+            UnityEngine.Random.Range(-0.1f, 0.1f)
+        );
+
+        Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+        bullet.SetTarget(target + randomBulletSpread);
+        bullet.SetDamage(m_Damage);
+
+        if (shouldCallRecursive && recurseCount < maxRecurseCount) {
+            Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
+        }
+        else {
+            recurseCount = 0;
+        }
     }
 }
