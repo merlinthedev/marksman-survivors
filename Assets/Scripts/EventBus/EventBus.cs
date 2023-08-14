@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class EventBus<T> where T : Event {
+﻿public abstract class EventBus<T> where T : Event {
     private static event System.Action<T> onEventRaised;
 
     public static void Subscribe(System.Action<T> action) {

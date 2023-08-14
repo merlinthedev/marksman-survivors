@@ -1523,13 +1523,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83df9413230b8c41b295bf419e6232f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxHealth: 1000
-  m_CurrentHealth: 1000
-  m_Damage: 90
-  m_AttackSpeed: 1.8
   m_BulletPrefab: {fileID: 8955770984125741509, guid: f1948c67dfa58d2438c736f0231d2050,
     type: 3}
-  m_MovementSpeed: 10
   m_CursorTexture: {fileID: 2800000, guid: 54cad0d84eedca24dba3aa4b8eba260f, type: 3}
   m_AttackCursorTexture: {fileID: 2800000, guid: cc3b6b70dd497e14c9ea212938c90923,
     type: 3}
@@ -1538,6 +1533,7 @@ MonoBehaviour:
     m_Bits: 64
   m_HealthBar: {fileID: 1215093158}
   m_AttackBar: {fileID: 1628741560}
+  m_SelectedChampion: {fileID: 2114737659}
 --- !u!54 &2114737658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1578,3 +1574,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Abilities: []
+  m_Rigidbody: {fileID: 2114737658}
+  m_CanMove: 1
+  m_AttackSpeed: 1.8
+  m_MovementSpeed: 10
+  m_Damage: 90
+  m_MaxHealth: 1000
+  m_CurrentHealth: 1000
+  m_BulletPrefab: {fileID: 8955770984125741509, guid: f1948c67dfa58d2438c736f0231d2050,
+    type: 3}

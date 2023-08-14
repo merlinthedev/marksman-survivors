@@ -29,7 +29,7 @@ public class EnemyManager : MonoBehaviour {
     }
 
     private Vector3 FindPositionRecursively() {
-        Vector3 randomPointOnPlane = new(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
+        Vector3 randomPointOnPlane = new Vector3(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
 
 
         // If it isn't, check if the random point is in the triangle
@@ -38,7 +38,7 @@ public class EnemyManager : MonoBehaviour {
 
         // Take the player position, shoot two rays from this position, one 45 deg to the right of the players direction, one 45 deg to the left
         Vector3 playerPos = player.gameObject.transform.position;
-        Vector3 playerDirection = player.GetCurrentMovementDirection();
+        Vector3 playerDirection = player.GetCurrentlySelectedChampion().GetCurrentMovementDirection();
 
 
         Vector3 rightDirection = Quaternion.Euler(0, 45, 0) * playerDirection;
