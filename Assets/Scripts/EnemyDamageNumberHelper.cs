@@ -15,6 +15,7 @@ public class EnemyDamageNumberHelper : MonoBehaviour {
     private void Update() {
         if (m_ShouldMove) {
             transform.position += Vector3.up * Time.deltaTime;
+            // m_DamageText.alpha -= Time.deltaTime;
         }
     }
 

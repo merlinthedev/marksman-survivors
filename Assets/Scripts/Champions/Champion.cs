@@ -23,12 +23,14 @@ public abstract class Champion : AAbilityHolder {
     private float m_GlobalMovementDirectionAngle = 0f;
 
     public abstract void OnAutoAttack();
+    public abstract void OnAbility(KeyCode keyCode);
 
     public void TakeDamage(float damage) {
         OnDamageTaken(damage);
     }
 
     private void Start() {
+        Debug.Log("Champion start");
         m_CurrentHealth = m_MaxHealth;
     }
 
@@ -43,7 +45,7 @@ public abstract class Champion : AAbilityHolder {
     }
 
     protected virtual void OnMove() {
-        Debug.Log("Moving");
+        // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
         m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;

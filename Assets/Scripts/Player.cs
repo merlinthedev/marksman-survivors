@@ -1,6 +1,6 @@
 using Events;
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
@@ -39,6 +39,8 @@ public class Player : MonoBehaviour {
         SetDefaultCursorTexture();
     }
 
+    private bool m_FirstMove = true;
+
     private void HandleMoveClick() {
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -49,6 +51,13 @@ public class Player : MonoBehaviour {
                     point.y = transform.position.y;
                     // m_HitPoint = point;
 
+                    if (m_FirstMove) {
+                        m_FirstMove = false;
+                        EnemyManager.GetInstance().SetShouldSpawn(true);
+                        Debug.Log("Start enemy spawning");
+                    }
+
+
                     m_SelectedChampion.SetMouseHitPoint(point);
                 }
             }
@@ -56,8 +65,25 @@ public class Player : MonoBehaviour {
     }
 
     private void HandleAttackClick() {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.A)) {
             m_SelectedChampion.OnAutoAttack();
+        }
+    }
+
+    private void HandleAbilityClicks() {
+        // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
+
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            m_SelectedChampion.OnAbility(KeyCode.Q);
+        }
+        if (Input.GetKeyDown(KeyCode.W)) {
+            m_SelectedChampion.OnAbility(KeyCode.W);
+        }
+        if (Input.GetKeyDown(KeyCode.E)) {
+            m_SelectedChampion.OnAbility(KeyCode.E);
+        }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            m_SelectedChampion.OnAbility(KeyCode.R);
         }
     }
 

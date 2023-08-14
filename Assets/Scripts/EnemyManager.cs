@@ -1,30 +1,35 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using Util;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour {
     private float m_SpawnTimer = 1.4f;
 
-    private bool m_ShouldSpawn = true;
+    private bool m_ShouldSpawn = false;
     [SerializeField] private Enemy m_EnemyPrefab;
+    [SerializeField] private Player m_Player; // THIS IS BAD LETS NOT DO THIS
+
+    private static EnemyManager instance;
 
     private void Start() {
+        if (instance != null) {
+            Destroy(this);
+            return;
+        }
+
+        instance = this;
+
         StartCoroutine(SpawnEnemy());
-    }
-
-    public void StopSpawning() {
-        m_ShouldSpawn = false;
-    }
-
-    public void StartSpawning() {
-        m_ShouldSpawn = true;
     }
 
     private IEnumerator SpawnEnemy() {
         while (m_ShouldSpawn) {
             yield return new WaitForSeconds(m_SpawnTimer);
+            Debug.Log("Spawning enemy");
             Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.identity);
-            enemy.SetTarget(GameObject.FindGameObjectWithTag("Player").transform);
+            enemy.SetTarget(m_Player.transform);
         }
     }
 
@@ -33,12 +38,12 @@ public class EnemyManager : MonoBehaviour {
 
 
         // If it isn't, check if the random point is in the triangle
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
         // TODO: GET TWO TRIANGLE POINTS TAKEN FROM THE PLAYERS POSITION ETC ETC 
 
         // Take the player position, shoot two rays from this position, one 45 deg to the right of the players direction, one 45 deg to the left
-        Vector3 playerPos = player.gameObject.transform.position;
-        Vector3 playerDirection = player.GetCurrentlySelectedChampion().GetCurrentMovementDirection();
+        Vector3 playerPos = m_Player.gameObject.transform.position;
+        Vector3 playerDirection = m_Player.GetCurrentlySelectedChampion().GetCurrentMovementDirection();
 
 
         Vector3 rightDirection = Quaternion.Euler(0, 45, 0) * playerDirection;
@@ -75,5 +80,21 @@ public class EnemyManager : MonoBehaviour {
 
     private Vector3 CalculateValidSpawnPosition() {
         return FindPositionRecursively();
+    }
+
+    public void SetShouldSpawn(bool value) {
+        m_ShouldSpawn = value;
+
+        if (value) {
+            StartCoroutine(SpawnEnemy());
+        } else {
+            StopCoroutine(SpawnEnemy());
+        }
+        
+        
+    }
+
+    public static EnemyManager GetInstance() {
+        return instance;
     }
 }

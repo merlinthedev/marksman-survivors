@@ -1,14 +1,20 @@
+using System;
+
+[Serializable]
 public class KitegirlQ : AAbility {
-
     public override void OnUse() {
-        throw new System.NotImplementedException();
+        // TODO: MAKE THE ABILITY WORK
     }
 
-    public override void ResetCooldown() {
-        throw new System.NotImplementedException();
+    // WE NEED THIS FUNCTION DO NOT DELETE
+    protected override void ResetCooldown() {
+        base.ResetCooldown();
+
     }
 
-    public override void DeductFromCooldown(float timeToDeduct) {
-        throw new System.NotImplementedException();
+    // WE NEED THIS FUNCTION DO NOT DELETE
+    protected override void DeductFromCooldown(float timeToDeduct) {
+        base.DeductFromCooldown(timeToDeduct);
+
     }
 }

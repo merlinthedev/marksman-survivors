@@ -35,6 +35,13 @@ public class Kitegirl : Champion {
         }
     }
 
+    public override void OnAbility(KeyCode keyCode) {
+        AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == keyCode);
+        if (ability != null) {
+            ability.OnUse();
+        }
+    }
+
     protected override void Update() {
         base.Update(); // this is important, even tho the editor says it's not...
     }

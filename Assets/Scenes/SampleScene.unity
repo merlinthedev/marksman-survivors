@@ -245,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
+  m_Player: {fileID: 2114737657}
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Abilities: []
   m_Rigidbody: {fileID: 2114737658}
+  m_MouseHitPoint: {x: 0, y: 0, z: 0}
   m_CanMove: 1
   m_AttackSpeed: 1.8
   m_MovementSpeed: 10
