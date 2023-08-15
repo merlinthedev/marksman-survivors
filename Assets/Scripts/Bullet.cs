@@ -1,3 +1,5 @@
+using Events;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
@@ -7,6 +9,7 @@ public class Bullet : MonoBehaviour {
     private bool m_ShouldMove = false;
     [SerializeField] private float m_BulletLifeTime = 2f;
     private float m_BulletSpawnTime = 0f;
+    private bool m_ShouldChain = false;
 
     public void SetTarget(Vector3 target) {
         m_Target = target;
@@ -42,6 +45,24 @@ public class Bullet : MonoBehaviour {
         Enemy enemy = other.gameObject.GetComponent<Enemy>();
         enemy.TakeDamage(m_Damage);
         // Debug.Log("Hit an enemy");
+
+        // EventBus<EnemyHitEvent>.Raise(new EnemyHitEvent(other, enemy, gameObject.transform.position));
+
+        if (m_ShouldChain) {
+            FindChainTargets(gameObject.transform.position);
+        }
+
         Destroy(gameObject);
+    }
+
+    private List<Enemy> m_ChainTargets = new List<Enemy>();
+
+    private void FindChainTargets(Vector3 bulletHitPosition) {
+        // TODO: Find all enemies in range of the bullet hit position
+        m_ChainTargets.Add(EnemyManager.GetInstance().GetClosestEnemy(bulletHitPosition));
+    }
+
+    public void SetShouldChain(bool value) {
+        m_ShouldChain = value;
     }
 }

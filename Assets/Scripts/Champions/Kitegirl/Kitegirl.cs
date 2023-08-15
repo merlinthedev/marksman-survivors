@@ -5,6 +5,8 @@ public class Kitegirl : Champion {
 
     [SerializeField] private Bullet m_BulletPrefab;
 
+    private bool m_AutoAttackShouldChain = false;
+
     public override void OnAutoAttack() {
         if (!CanAttack) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -46,11 +48,11 @@ public class Kitegirl : Champion {
         base.Update(); // this is important, even tho the editor says it's not...
     }
 
-    private int recurseCount = 0;
-    private int maxRecurseCount = 3;
+    private int m_RecurseCount = 0;
+    private int m_MaxRecurseCount = 3;
 
     private void ShootBullet_Recursive(bool shouldCallRecursive, Vector3 target) {
-        recurseCount++;
+        m_RecurseCount++;
 
         Vector3 randomBulletSpread = new Vector3(
             Random.Range(-0.1f, 0.1f),
@@ -59,13 +61,18 @@ public class Kitegirl : Champion {
         );
 
         Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+        bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
         bullet.SetDamage(m_Damage);
 
-        if (shouldCallRecursive && recurseCount < maxRecurseCount) {
+        if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
             Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
         } else {
-            recurseCount = 0;
+            m_RecurseCount = 0;
         }
+    }
+
+    public void SetAutoAttackChain(bool b) {
+        m_AutoAttackShouldChain = b;
     }
 }

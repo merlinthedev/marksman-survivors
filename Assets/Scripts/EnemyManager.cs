@@ -1,5 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using Util;
 using Random = UnityEngine.Random;
@@ -12,6 +12,7 @@ public class EnemyManager : MonoBehaviour {
     [SerializeField] private Player m_Player; // THIS IS BAD LETS NOT DO THIS
 
     private static EnemyManager instance;
+    private Dictionary<Collider, Enemy> m_EnemyDictionary = new Dictionary<Collider, Enemy>();
 
     private void Start() {
         if (instance != null) {
@@ -30,6 +31,7 @@ public class EnemyManager : MonoBehaviour {
             Debug.Log("Spawning enemy");
             Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.identity);
             enemy.SetTarget(m_Player.transform);
+            m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
         }
     }
 
@@ -82,6 +84,21 @@ public class EnemyManager : MonoBehaviour {
         return FindPositionRecursively();
     }
 
+    public Enemy GetClosestEnemy(Vector3 position) {
+        float closestDistance = Mathf.Infinity;
+        Enemy closestEnemy = null;
+
+        foreach (KeyValuePair<Collider, Enemy> enemy in m_EnemyDictionary) {
+            float distance = Vector3.Distance(position, enemy.Value.transform.position);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestEnemy = enemy.Value;
+            }
+        }
+
+        return closestEnemy;
+    }
+
     public void SetShouldSpawn(bool value) {
         m_ShouldSpawn = value;
 
@@ -90,8 +107,8 @@ public class EnemyManager : MonoBehaviour {
         } else {
             StopCoroutine(SpawnEnemy());
         }
-        
-        
+
+
     }
 
     public static EnemyManager GetInstance() {

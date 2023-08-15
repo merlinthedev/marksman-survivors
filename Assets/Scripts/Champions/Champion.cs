@@ -104,5 +104,5 @@ public abstract class Champion : AAbilityHolder {
     public float GetMaxHealth() => m_MaxHealth;
     public float GetAttackSpeed() => m_AttackSpeed;
     public float GetLastAttackTime() => m_LastAttackTime;
-
+    
 }

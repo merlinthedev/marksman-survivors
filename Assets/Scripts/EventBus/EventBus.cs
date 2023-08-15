@@ -1,4 +1,6 @@
-﻿public abstract class EventBus<T> where T : Event {
+﻿using UnityEngine;
+
+public abstract class EventBus<T> where T : Event {
     private static event System.Action<T> onEventRaised;
 
     public static void Subscribe(System.Action<T> action) {
@@ -22,5 +24,17 @@ namespace Events {
     }
 
     public class EnemyStopHoverEvent : Event {
+    }
+
+    public class EnemyHitEvent : Event {
+        public Collider m_Collider { get; private set; }
+        public Enemy m_Enemy { get; private set; }
+        public Vector3 m_BulletHitPosition { get; private set; }
+
+        public EnemyHitEvent(Collider collider, Enemy enemy, Vector3 bulletHitPosition) {
+            m_Collider = collider;
+            m_Enemy = enemy;
+            m_BulletHitPosition = bulletHitPosition;
+        }
     }
 }
