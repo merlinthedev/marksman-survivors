@@ -8,6 +8,7 @@ using Util;
 using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour {
+    [SerializeField] [Tooltip("Time it takes between enemy spawn")]
     private float m_SpawnTimer = 1.4f;
 
     private bool m_ShouldSpawn = false;
