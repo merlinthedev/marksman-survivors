@@ -22,6 +22,7 @@ public abstract class Champion : AAbilityHolder {
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = true;
     public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed) || !m_HasAttackCooldown;
+    public bool IsMoving => m_Rigidbody.velocity.magnitude > 0;
 
     public abstract void OnAutoAttack();
     public abstract void OnAbility(KeyCode keyCode);
