@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Util;
 
 public class Kitegirl : Champion {
 
     [SerializeField] private KitegirlBullet m_BulletPrefab;
+    [SerializeField] private GameObject m_AnimationController;
 
     private bool m_AutoAttackShouldChain = false;
     private bool m_IsDashing = false;
@@ -45,7 +46,7 @@ public class Kitegirl : Champion {
                 // shoot 3 bullets in burst mode
 
                 ShootBullet_Recursive(true, point);
-
+                m_AnimationController.Attack();
 
             }
         }
