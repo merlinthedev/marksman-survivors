@@ -21,6 +21,13 @@ public class KitegirlBullet : ABullet {
             }
         }
 
+        if (other.gameObject.CompareTag("KitegirlGrenade")) {
+            // do stuff
+            Debug.Log("Hit a grenade");
+            KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
+            kitegirlGrenade.EarlyDetonate();
+        }
+
     }
 
 

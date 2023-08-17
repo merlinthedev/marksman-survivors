@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 42440824}
   - component: {fileID: 42440825}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: EnemyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 246267775}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1369,7 +1369,7 @@ GameObject:
   - component: {fileID: 2114737656}
   - component: {fileID: 2114737657}
   - component: {fileID: 2114737659}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Kitegirl
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1574,6 +1574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Abilities:
   - {fileID: 640121110517076604, guid: bc94e5e8ee2208f4bbcd1dcdf939d1e2, type: 3}
+  - {fileID: -2301999179170599804, guid: e252c537c7aec1a449fbb7598a4d005e, type: 3}
   m_Rigidbody: {fileID: 2114737658}
   m_MouseHitPoint: {x: 0, y: 0, z: 0}
   m_CanMove: 1

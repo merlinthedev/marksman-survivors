@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -5,7 +6,6 @@ public class KitegirlW : AAbility {
 
     [SerializeField] private KitegirlGrenade m_GrenadePrefab;
     [SerializeField] private float m_AbilityRange = 10f;
-    
 
 
     public override void OnUse() {
@@ -17,12 +17,17 @@ public class KitegirlW : AAbility {
         if (Physics.Raycast(ray, out hit)) {
             if (hit.collider.gameObject.CompareTag("Ground")) {
                 Vector3 point = hit.point;
-                point.y = this.m_Champion.transform.position.y;
+                point.y = this.m_Champion.transform.position.y - 0.2f;
+
+                Debug.Log("Point: " + point, this);
 
                 if (DistanceCheck(point)) {
-                    KitegirlGrenade grenade = Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
+                    KitegirlGrenade grenade =
+                        Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
                     grenade.SetTargetPoint(point);
                     grenade.OnThrow();
+                } else {
+                    Debug.Log("Out of range");
                 }
 
             }

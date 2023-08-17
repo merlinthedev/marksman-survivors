@@ -1,9 +1,8 @@
 using System;
-using Unity.VisualScripting.Dependencies.NCalc;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public abstract class Champion : AAbilityHolder {
-
     [SerializeField] protected Rigidbody m_Rigidbody;
 
     [SerializeField] protected Vector3 m_MouseHitPoint;
@@ -104,5 +103,5 @@ public abstract class Champion : AAbilityHolder {
     public float GetMaxHealth() => m_MaxHealth;
     public float GetAttackSpeed() => m_AttackSpeed;
     public float GetLastAttackTime() => m_LastAttackTime;
-    
+
 }

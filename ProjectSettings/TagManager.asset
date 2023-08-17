@@ -6,15 +6,16 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - KitegirlGrenade
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Champion
   - Water
   - UI
   - Ground
-  - 
+  - ChampionExclusive
   - 
   - 
   - 
