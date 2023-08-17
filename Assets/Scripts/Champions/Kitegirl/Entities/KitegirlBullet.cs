@@ -10,15 +10,19 @@ public class KitegirlBullet : ABullet {
     }
 
     protected private override void OnTriggerEnter(Collider other) {
-        if (!other.gameObject.CompareTag("Enemy")) return;
-        if (m_ShouldChain) {
-            Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.TakeDamage(this.m_Damage);
-            Chain(other.gameObject.transform.position, enemy);
-        } else {
-            base.OnTriggerEnter(other);
+        // Debug.Log("KitegirlBullet OnTriggerEnter called");
+        if (other.gameObject.CompareTag("Enemy")) {
+            if (m_ShouldChain) {
+                Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                enemy.TakeDamage(this.m_Damage);
+                Chain(other.gameObject.transform.position, enemy);
+            } else {
+                base.OnTriggerEnter(other);
+            }
         }
+
     }
+
 
     private void Chain(Vector3 bulletHitPoint, Enemy alreadyHit, bool shouldRecurse = true) {
         while (true) {

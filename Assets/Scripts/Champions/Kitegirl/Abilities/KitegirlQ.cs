@@ -4,10 +4,8 @@ using UnityEngine;
 [Serializable]
 public class KitegirlQ : AAbility {
     public override void OnUse() {
-        // TODO: MAKE THE ABILITY WORK
-        if (IsOnCooldown()) {
-            return;
-        }
+        if (IsOnCooldown()) return;
+
 
         (this.m_Champion as Kitegirl)?.SetAutoAttackChain(true);
         m_LastUseTime = Time.time;

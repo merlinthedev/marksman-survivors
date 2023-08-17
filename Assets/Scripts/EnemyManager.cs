@@ -2,6 +2,7 @@ using Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Util;
 using Random = UnityEngine.Random;
@@ -111,6 +112,12 @@ public class EnemyManager : MonoBehaviour {
         }
 
         return closestEnemy;
+    }
+
+    public List<Enemy> GetEnemiesInArea(Vector3 point, float radius = 10f) {
+        return (from enemy in m_EnemyDictionary
+            where Vector3.Distance(point, enemy.Value.transform.position) < radius
+            select enemy.Value).ToList();
     }
 
     public void SetShouldSpawn(bool value) {

@@ -86,11 +86,11 @@ public class Kitegirl : Champion {
 
         if (m_AutoAttackShouldChain) {
             m_CurrentChainCount++;
-            Debug.Log("Chain count: " + m_CurrentChainCount + " / " + m_MaxChainCount + "");
+            // Debug.Log("Chain count: " + m_CurrentChainCount + " / " + m_MaxChainCount + "");
             if (m_CurrentChainCount >= m_MaxChainCount) {
                 m_CurrentChainCount = 0;
                 m_AutoAttackShouldChain = false;
-                Debug.Log("Chain count reset");
+                // Debug.Log("Chain count reset");
             }
         }
 

@@ -15,7 +15,7 @@ namespace Util {
 
             return Mathf.Abs(A - (A1 + A2 + A3)) < 0.01f;
         }
-    
+
         public static bool IsPointInsideCameraViewport(Camera camera, Vector3 point) {
             Vector3 viewportPoint = camera.WorldToViewportPoint(point);
             return viewportPoint.x is > 0 and < 1 && viewportPoint.y is > 0 and < 1;
@@ -24,13 +24,20 @@ namespace Util {
         public static void InvokeDelayed(System.Action action, float delay, MonoBehaviour context) {
             context.StartCoroutine(InvokeDelayedCoroutine(action, delay));
         }
-        
+
+        public static void InvokeNextFrame(System.Action action, MonoBehaviour context) {
+            context.StartCoroutine(InvokeNextFrameCoroutine(action));
+        }
+
+        private static IEnumerator InvokeNextFrameCoroutine(System.Action action) {
+            yield return new WaitForEndOfFrame();
+            action.Invoke();
+        }
+
         private static IEnumerator InvokeDelayedCoroutine(System.Action action, float delay) {
             yield return new WaitForSeconds(delay);
             action.Invoke();
         }
-    
-
 
     }
 }

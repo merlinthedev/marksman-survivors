@@ -73,7 +73,6 @@ public class Player : MonoBehaviour {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
-            Debug.Log("Q Pressed");
             m_SelectedChampion.OnAbility(KeyCode.Q);
         }
         if (Input.GetKeyDown(KeyCode.W)) {

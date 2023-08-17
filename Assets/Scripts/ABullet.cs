@@ -40,12 +40,14 @@ public abstract class ABullet : MonoBehaviour {
     }
 
     protected private virtual void OnTriggerEnter(Collider other) {
-        if (!other.gameObject.CompareTag("Enemy")) return;
-        Enemy enemy = other.gameObject.GetComponent<Enemy>();
-        enemy.TakeDamage(m_Damage);
-        Debug.Log("Hit an enemy");
+        // Debug.Log("ABullet base OnTriggerEnter called");
+        if (other.gameObject.CompareTag("Enemy")) {
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+            enemy.TakeDamage(m_Damage);
+            // Debug.Log("Hit an enemy");
 
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 
 }

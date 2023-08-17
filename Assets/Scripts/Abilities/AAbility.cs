@@ -8,10 +8,14 @@ public abstract class AAbility : MonoBehaviour {
     private float m_CurrentCooldown = 0f;
     protected Champion m_Champion;
 
+    protected bool m_IsCancelled = false;
+
     public void Hook(Champion champion) {
         m_Champion = champion;
 
         m_LastUseTime = 0f;
+
+        Debug.Log("Base Hook() called");
     }
 
     public abstract void OnUse();
