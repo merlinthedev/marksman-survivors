@@ -94,7 +94,8 @@ public abstract class Champion : AAbilityHolder {
     }
 
     public float GetGlobalDirectionAngle() {
-        return m_GlobalMovementDirectionAngle;
+        // return the angle but instead of -180-180 i want it to be 0-360
+        return m_GlobalMovementDirectionAngle < 0 ? m_GlobalMovementDirectionAngle + 360 : m_GlobalMovementDirectionAngle;
     }
 
     public void SetMouseHitPoint(Vector3 point) {
