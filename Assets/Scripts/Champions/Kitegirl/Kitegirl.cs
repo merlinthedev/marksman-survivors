@@ -4,7 +4,7 @@ using Util;
 public class Kitegirl : Champion {
 
     [SerializeField] private KitegirlBullet m_BulletPrefab;
-    [SerializeField] private GameObject m_AnimationController;
+    [SerializeField] private Champion_AnimationController m_AnimationController;
 
     private bool m_AutoAttackShouldChain = false;
     private bool m_IsDashing = false;
