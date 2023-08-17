@@ -6,13 +6,14 @@ public class Kitegirl : Champion {
     [SerializeField] private KitegirlBullet m_BulletPrefab;
 
     private bool m_AutoAttackShouldChain = false;
+    private bool m_IsDashing = false;
 
     private int m_RecurseCount = 0;
     private int m_MaxRecurseCount = 3;
-
     private int m_MaxChainCount { get { return m_MaxRecurseCount * 3; } }
-
     private int m_CurrentChainCount = 0;
+
+    [SerializeField] private float m_DashSpeed = 20f;
 
     public override void OnAutoAttack() {
         if (!CanAttack) return;
@@ -31,6 +32,11 @@ public class Kitegirl : Champion {
                 this.m_MouseHitPoint = transform.position; // ???
                 m_LastAttackTime = Time.time;
 
+                AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
+                if (ability.IsOnCooldown()) {
+                    ability.DeductFromCooldown(1f);
+                }
+
                 // Invoke(nameof(SetCanMove(true)), .1f);
                 Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
                 m_Rigidbody.velocity = Vector3.zero;
@@ -42,6 +48,16 @@ public class Kitegirl : Champion {
 
             }
         }
+    }
+
+    protected override void OnMove() {
+        if (!m_IsDashing) {
+            base.OnMove();
+        } else {
+            this.m_Rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
+        }
+
+
     }
 
     public override void OnAbility(KeyCode keyCode) {
@@ -104,5 +120,9 @@ public class Kitegirl : Champion {
 
     public void SetAutoAttackChain(bool b) {
         m_AutoAttackShouldChain = b;
+    }
+
+    public void SetIsDashing(bool p0) {
+        m_IsDashing = p0;
     }
 }

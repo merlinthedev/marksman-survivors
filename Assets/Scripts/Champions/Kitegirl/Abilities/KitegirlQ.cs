@@ -21,7 +21,7 @@ public class KitegirlQ : AAbility {
     }
 
     // WE NEED THIS FUNCTION DO NOT DELETE
-    protected override void DeductFromCooldown(float timeToDeduct) {
+    protected internal override void DeductFromCooldown(float timeToDeduct) {
         base.DeductFromCooldown(timeToDeduct);
 
     }
