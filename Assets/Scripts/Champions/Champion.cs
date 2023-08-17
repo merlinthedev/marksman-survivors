@@ -93,7 +93,7 @@ public abstract class Champion : AAbilityHolder {
         return m_Rigidbody.velocity.normalized == Vector3.zero ? m_LastKnownDirection : m_Rigidbody.velocity.normalized;
     }
 
-    private float GetGlobalDirectionAngle() {
+    public float GetGlobalDirectionAngle() {
         return m_GlobalMovementDirectionAngle;
     }
 
