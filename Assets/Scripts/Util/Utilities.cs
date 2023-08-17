@@ -25,6 +25,11 @@ namespace Util {
             context.StartCoroutine(InvokeDelayedCoroutine(action, delay));
         }
 
+        private static IEnumerator InvokeDelayedCoroutine(System.Action action, float delay) {
+            yield return new WaitForSeconds(delay);
+            action.Invoke();
+        }
+
         public static void InvokeNextFrame(System.Action action, MonoBehaviour context) {
             context.StartCoroutine(InvokeNextFrameCoroutine(action));
         }
@@ -34,10 +39,6 @@ namespace Util {
             action.Invoke();
         }
 
-        private static IEnumerator InvokeDelayedCoroutine(System.Action action, float delay) {
-            yield return new WaitForSeconds(delay);
-            action.Invoke();
-        }
 
     }
 }

@@ -7,6 +7,7 @@ public class Kitegirl : Champion {
 
     private bool m_AutoAttackShouldChain = false;
     private bool m_IsDashing = false;
+    private bool m_HasUltimateActive = false;
 
     private int m_RecurseCount = 0;
     private int m_MaxRecurseCount = 3;
@@ -50,16 +51,6 @@ public class Kitegirl : Champion {
         }
     }
 
-    protected override void OnMove() {
-        if (!m_IsDashing) {
-            base.OnMove();
-        } else {
-            this.m_Rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
-        }
-
-
-    }
-
     public override void OnAbility(KeyCode keyCode) {
         AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == keyCode);
 
@@ -67,6 +58,32 @@ public class Kitegirl : Champion {
             ability.OnUse();
         } else {
             Debug.Log("Ability not found");
+        }
+    }
+
+    public void ActivateUltimate() {
+        m_HasUltimateActive = true;
+
+        SetMovementDebuff(0.3f);
+        SetDamageMultiplier(2f); // 2x damage
+
+        this.m_HasAttackCooldown = false;
+    }
+
+    public void DeactivateUltimate() {
+        m_HasUltimateActive = false;
+
+        ResetMovementMultiplier();
+        ResetDamageMultiplier();
+
+        this.m_HasAttackCooldown = true;
+    }
+
+    protected override void OnMove() {
+        if (!m_IsDashing) {
+            base.OnMove();
+        } else {
+            this.m_Rigidbody.velocity = GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
         }
     }
 
@@ -98,7 +115,7 @@ public class Kitegirl : Champion {
         KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
         bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
-        bullet.SetDamage(m_Damage);
+        bullet.SetDamage(this.m_Damage * GetDamageMultiplier());
 
         if (m_AutoAttackShouldChain) {
             m_CurrentChainCount++;
@@ -125,4 +142,6 @@ public class Kitegirl : Champion {
     public void SetIsDashing(bool p0) {
         m_IsDashing = p0;
     }
+
+
 }

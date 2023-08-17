@@ -1,25 +1,27 @@
-using System;
-using Unity.VisualScripting.FullSerializer;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Champion : AAbilityHolder {
     [SerializeField] protected Rigidbody m_Rigidbody;
 
     [SerializeField] protected Vector3 m_MouseHitPoint;
+    private Vector3 m_LastKnownDirection = Vector3.zero;
 
-    [SerializeField] protected bool m_CanMove = true;
 
-    [SerializeField] private float m_AttackSpeed;
     [SerializeField] protected float m_MovementSpeed;
-    protected float m_LastAttackTime = 0f;
     [SerializeField] protected float m_Damage;
     [SerializeField] protected float m_MaxHealth;
     [SerializeField] protected float m_CurrentHealth;
-    public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed);
-
-    // Utility fields
-    private Vector3 m_LastKnownDirection = Vector3.zero;
+    [SerializeField] private float m_AttackSpeed;
+    protected float m_LastAttackTime = 0f;
     private float m_GlobalMovementDirectionAngle = 0f;
+    private float m_MovementMultiplier = 1f;
+    protected float m_DamageMultiplier = 1f;
+
+
+    [SerializeField] protected bool m_CanMove = true;
+    protected bool m_HasAttackCooldown = true;
+    public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed) || !m_HasAttackCooldown;
 
     public abstract void OnAutoAttack();
     public abstract void OnAbility(KeyCode keyCode);
@@ -55,7 +57,7 @@ public abstract class Champion : AAbilityHolder {
             return;
         }
 
-        m_Rigidbody.velocity = direction.normalized * m_MovementSpeed;
+        m_Rigidbody.velocity = direction.normalized * (m_MovementSpeed * m_MovementMultiplier);
         m_LastKnownDirection = direction.normalized;
     }
 
@@ -99,10 +101,36 @@ public abstract class Champion : AAbilityHolder {
         m_MouseHitPoint = point;
     }
 
+    protected void SetMovementDebuff(float v) {
+        m_MovementMultiplier -= v; // for example -> v = 0.3f = 30% debuff so the multiplier will be 0.7f
+    }
+
+    public void SetMovementMultiplier(float v) {
+        m_MovementMultiplier = v; // hard set the multiplier
+    }
+
+    protected void ResetMovementMultiplier() {
+        m_MovementMultiplier = 1f; // reset the multiplier
+    }
+
+    public void CleanseAllDebuffs() {
+        ResetMovementMultiplier();
+    }
+
+    protected void SetDamageMultiplier(float v) {
+        m_DamageMultiplier = v; // hard set the multiplier
+    }
+
+    protected void ResetDamageMultiplier() {
+        m_DamageMultiplier = 1f;
+    }
+
     public float GetCurrentHealth() => m_CurrentHealth;
     public float GetMaxHealth() => m_MaxHealth;
     public float GetAttackSpeed() => m_AttackSpeed;
     public float GetLastAttackTime() => m_LastAttackTime;
+    protected float GetCurrentMovementMultiplier() => m_MovementMultiplier;
+    protected float GetDamageMultiplier() => m_DamageMultiplier;
     public Rigidbody GetRigidbody() => m_Rigidbody;
 
 }
