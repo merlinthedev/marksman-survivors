@@ -1,3 +1,5 @@
+using Events;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +16,14 @@ public class EnemyManager : MonoBehaviour {
     private static EnemyManager instance;
     private Dictionary<Collider, Enemy> m_EnemyDictionary = new Dictionary<Collider, Enemy>();
 
+    private void OnEnable() {
+        EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
+    }
+
+    private void OnDisable() {
+        EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
+    }
+
     private void Start() {
         if (instance != null) {
             Destroy(this);
@@ -28,7 +38,7 @@ public class EnemyManager : MonoBehaviour {
     private IEnumerator SpawnEnemy() {
         while (m_ShouldSpawn) {
             yield return new WaitForSeconds(m_SpawnTimer);
-            Debug.Log("Spawning enemy");
+            // Debug.Log("Spawning enemy");
             Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.identity);
             enemy.SetTarget(m_Player.transform);
             m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
@@ -84,16 +94,20 @@ public class EnemyManager : MonoBehaviour {
         return FindPositionRecursively();
     }
 
-    public Enemy GetClosestEnemy(Vector3 position) {
-        float closestDistance = Mathf.Infinity;
-        Enemy closestEnemy = null;
+    private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
+        m_EnemyDictionary.Remove(enemyKilledEvent.m_Collider);
+    }
 
-        foreach (KeyValuePair<Collider, Enemy> enemy in m_EnemyDictionary) {
+    public Enemy GetClosestEnemy(Vector3 position, Enemy enemyToIgnore = null) {
+        float closestDistance = Mathf.Infinity;
+
+        Enemy closestEnemy = null;
+        foreach (var enemy in m_EnemyDictionary) {
+            if (enemy.Value == enemyToIgnore) continue;
             float distance = Vector3.Distance(position, enemy.Value.transform.position);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestEnemy = enemy.Value;
-            }
+            if (!(distance < closestDistance)) continue;
+            closestDistance = distance;
+            closestEnemy = enemy.Value;
         }
 
         return closestEnemy;

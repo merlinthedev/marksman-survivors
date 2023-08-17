@@ -1,15 +1,14 @@
 using Events;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 public class Player : MonoBehaviour {
 
-    [Header("Stats")]
-    [SerializeField] private Bullet m_BulletPrefab;
 
+    [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
+
     [SerializeField] private LayerMask m_AttackLayerMask;
 
     [Header("UI")]
@@ -54,7 +53,7 @@ public class Player : MonoBehaviour {
                     if (m_FirstMove) {
                         m_FirstMove = false;
                         EnemyManager.GetInstance().SetShouldSpawn(true);
-                        Debug.Log("Start enemy spawning");
+                        // Debug.Log("Start enemy spawning");
                     }
 
 
@@ -74,6 +73,7 @@ public class Player : MonoBehaviour {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
+            Debug.Log("Q Pressed");
             m_SelectedChampion.OnAbility(KeyCode.Q);
         }
         if (Input.GetKeyDown(KeyCode.W)) {
@@ -90,6 +90,7 @@ public class Player : MonoBehaviour {
     private void Update() {
         HandleMoveClick();
         HandleAttackClick();
+        HandleAbilityClicks();
 
         if (!m_SelectedChampion.CanAttack) {
             UpdateAttackBar();

@@ -37,4 +37,16 @@ namespace Events {
             m_BulletHitPosition = bulletHitPosition;
         }
     }
+
+    public class EnemyKilledEvent : Event {
+        public Collider m_Collider { get; private set; }
+        public Enemy m_Enemy { get; private set; }
+        public Vector3 m_EnemyDeathPosition { get; private set; }
+
+        public EnemyKilledEvent(Collider collider, Enemy enemy, Vector3 enemyDeathPosition) {
+            m_Collider = collider;
+            m_Enemy = enemy;
+            m_EnemyDeathPosition = enemyDeathPosition;
+        }
+    }
 }

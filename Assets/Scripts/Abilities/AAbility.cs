@@ -3,14 +3,22 @@ using UnityEngine;
 public abstract class AAbility : MonoBehaviour {
 
     [SerializeField] protected KeyCode m_KeyCode;
-    protected float m_AbilityCooldown = 0f;
+    [SerializeField] protected float m_AbilityCooldown = 0f;
+    protected float m_LastUseTime;
+    private float m_CurrentCooldown = 0f;
     protected Champion m_Champion;
 
     public void Hook(Champion champion) {
         m_Champion = champion;
+
+        m_LastUseTime = 0f;
     }
 
     public abstract void OnUse();
+
+    protected void SetBaseCooldown() {
+        m_AbilityCooldown = m_CurrentCooldown;
+    }
 
     protected virtual void ResetCooldown() {
         m_AbilityCooldown = 0f;

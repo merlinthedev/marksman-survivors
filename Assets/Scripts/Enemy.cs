@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour {
     private Canvas m_Canvas;
 
     private Rigidbody m_Rigidbody;
+    private Collider m_Collider;
     [SerializeField] private float m_MovementSpeed = 7f;
 
 
@@ -18,7 +19,8 @@ public class Enemy : MonoBehaviour {
     private float m_InitialHealthBarWidth;
     private bool m_CanMove = true;
 
-    private bool m_IsDead {
+    private bool m_IsDead
+    {
         get => !m_CanMove;
     }
 
@@ -39,6 +41,11 @@ public class Enemy : MonoBehaviour {
         m_Canvas = GetComponentInChildren<Canvas>();
         if (m_Canvas == null) {
             throw new Exception("Missing canvas");
+        }
+
+        m_Collider = GetComponent<Collider>();
+        if (m_Collider == null) {
+            throw new Exception("Missing collider");
         }
 
         m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
@@ -83,6 +90,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Die() {
+        EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
+
         Destroy(gameObject);
     }
 

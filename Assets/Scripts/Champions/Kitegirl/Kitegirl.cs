@@ -3,9 +3,16 @@ using Util;
 
 public class Kitegirl : Champion {
 
-    [SerializeField] private Bullet m_BulletPrefab;
+    [SerializeField] private KitegirlBullet m_BulletPrefab;
 
     private bool m_AutoAttackShouldChain = false;
+
+    private int m_RecurseCount = 0;
+    private int m_MaxRecurseCount = 3;
+
+    private int m_MaxChainCount { get { return m_MaxRecurseCount * 3; } }
+
+    private int m_CurrentChainCount = 0;
 
     public override void OnAutoAttack() {
         if (!CanAttack) return;
@@ -39,8 +46,11 @@ public class Kitegirl : Champion {
 
     public override void OnAbility(KeyCode keyCode) {
         AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == keyCode);
+
         if (ability != null) {
             ability.OnUse();
+        } else {
+            Debug.Log("Ability not found");
         }
     }
 
@@ -48,8 +58,12 @@ public class Kitegirl : Champion {
         base.Update(); // this is important, even tho the editor says it's not...
     }
 
-    private int m_RecurseCount = 0;
-    private int m_MaxRecurseCount = 3;
+    private void Start() {
+        foreach (AAbility ability in m_Abilities) {
+            ability.Hook(this);
+        }
+    }
+
 
     private void ShootBullet_Recursive(bool shouldCallRecursive, Vector3 target) {
         m_RecurseCount++;
@@ -60,10 +74,25 @@ public class Kitegirl : Champion {
             Random.Range(-0.1f, 0.1f)
         );
 
-        Bullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+        // ABullet aBullet = Instantiate(mABulletPrefab, transform.position, Quaternion.identity);
+        // aBullet.SetShouldChain(m_AutoAttackShouldChain);
+        // aBullet.SetTarget(target + randomBulletSpread);
+        // aBullet.SetDamage(m_Damage);
+
+        KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
         bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
         bullet.SetDamage(m_Damage);
+
+        if (m_AutoAttackShouldChain) {
+            m_CurrentChainCount++;
+            Debug.Log("Chain count: " + m_CurrentChainCount + " / " + m_MaxChainCount + "");
+            if (m_CurrentChainCount >= m_MaxChainCount) {
+                m_CurrentChainCount = 0;
+                m_AutoAttackShouldChain = false;
+                Debug.Log("Chain count reset");
+            }
+        }
 
         if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
             Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
@@ -71,6 +100,7 @@ public class Kitegirl : Champion {
             m_RecurseCount = 0;
         }
     }
+
 
     public void SetAutoAttackChain(bool b) {
         m_AutoAttackShouldChain = b;
