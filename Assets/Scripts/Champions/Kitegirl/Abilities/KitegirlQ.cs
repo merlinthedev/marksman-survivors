@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 [Serializable]
@@ -10,7 +10,6 @@ public class KitegirlQ : AAbility {
         (this.m_Champion as Kitegirl)?.SetAutoAttackChain(true);
         m_LastUseTime = Time.time;
 
-        Debug.Log("Kitegirl Q used");
 
     }
 

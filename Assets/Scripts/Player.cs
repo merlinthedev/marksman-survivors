@@ -1,4 +1,4 @@
-using Events;
+﻿using Events;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -13,11 +13,12 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
-
-    private float m_InitialHealthBarWidth;
     [SerializeField] private Image m_AttackBar;
-    private float m_InitialAttackBarWidth;
-    private bool m_ShouldUpdateAttackBarOnceMore = false;
+    [SerializeField] private Image m_QBar;
+    private bool QIsOnCooldown;
+    [SerializeField] private Image m_WBar;
+    [SerializeField] private Image m_EBar;
+    [SerializeField] private Image m_RBar;
     [SerializeField] private Champion m_SelectedChampion;
 
     private void OnEnable() {
@@ -35,10 +36,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
-        m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
-        m_InitialAttackBarWidth = m_AttackBar.rectTransform.sizeDelta.x;
         UpdateHealthBar();
-
         SetDefaultCursorTexture();
     }
 
@@ -78,15 +76,19 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Q)) {
             m_SelectedChampion.OnAbility(KeyCode.Q);
+            UpdateQCooldown();
         }
         if (Input.GetKeyDown(KeyCode.W)) {
             m_SelectedChampion.OnAbility(KeyCode.W);
+            UpdateWCooldown();
         }
         if (Input.GetKeyDown(KeyCode.E)) {
             m_SelectedChampion.OnAbility(KeyCode.E);
+            UpdateECooldown();
         }
         if (Input.GetKeyDown(KeyCode.R)) {
             m_SelectedChampion.OnAbility(KeyCode.R);
+            UpdateRCooldown();
         }
     }
 
@@ -94,19 +96,9 @@ public class Player : MonoBehaviour {
         HandleMoveClick();
         HandleAttackClick();
         HandleAbilityClicks();
-
+        HandleAbilityCooldowns();
         if (!m_SelectedChampion.CanAttack) {
             UpdateAttackBar();
-            m_ShouldUpdateAttackBarOnceMore = true;
-        } else {
-            if (m_ShouldUpdateAttackBarOnceMore) {
-                // update the attack bar to be full
-                m_AttackBar.rectTransform.sizeDelta = new Vector2(
-                    m_InitialAttackBarWidth,
-                    m_AttackBar.rectTransform.sizeDelta.y
-                );
-                m_ShouldUpdateAttackBarOnceMore = false;
-            }
         }
     }
 
@@ -119,19 +111,47 @@ public class Player : MonoBehaviour {
         float healthPercentage = m_SelectedChampion.GetCurrentHealth() / m_SelectedChampion.GetMaxHealth();
         Debug.Log("Health percentage: " + healthPercentage + "", this);
 
-        m_HealthBar.rectTransform.sizeDelta = new Vector2(
-            healthPercentage * m_InitialHealthBarWidth,
-            m_HealthBar.rectTransform.sizeDelta.y
-        );
+        m_HealthBar.fillAmount = healthPercentage;
     }
 
     private void UpdateAttackBar() {
         float attackPercentage = (Time.time - m_SelectedChampion.GetLastAttackTime()) / (1f / m_SelectedChampion.GetAttackSpeed());
 
-        m_AttackBar.rectTransform.sizeDelta = new Vector2(
-            attackPercentage * m_InitialAttackBarWidth,
-            m_AttackBar.rectTransform.sizeDelta.y
-        );
+        m_AttackBar.fillAmount = 1 - attackPercentage;
+    }
+
+    private void HandleAbilityCooldowns() {
+        if(m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {
+            UpdateQCooldown();
+        }
+        if (m_SelectedChampion.GetAbilities()[1].IsOnCooldown()) {
+            UpdateWCooldown();
+        }
+        if (m_SelectedChampion.GetAbilities()[2].IsOnCooldown()) {
+            UpdateECooldown();
+        }
+        if (m_SelectedChampion.GetAbilities()[3].IsOnCooldown()) {
+            UpdateRCooldown();
+        }
+    }
+    private void UpdateQCooldown() {
+        float QCoolDownPercentage = m_SelectedChampion.GetAbilities()[0].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[0].GetAbilityCooldown();
+        m_QBar.fillAmount = 1 - QCoolDownPercentage;
+    }
+
+    private void UpdateWCooldown() {
+        float WCoolDownPercentage = m_SelectedChampion.GetAbilities()[1].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[1].GetAbilityCooldown();
+        m_WBar.fillAmount = 1 - WCoolDownPercentage;
+    }
+
+    private void UpdateECooldown() {
+        float ECoolDownPercentage = m_SelectedChampion.GetAbilities()[2].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[2].GetAbilityCooldown();
+        m_EBar.fillAmount = 1 - ECoolDownPercentage;
+    }
+
+    private void UpdateRCooldown() {
+        float RCoolDownPercentage = m_SelectedChampion.GetAbilities()[3].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[3].GetAbilityCooldown();
+        m_RBar.fillAmount = 1 - RCoolDownPercentage;
     }
 
     private void SetDefaultCursorTexture() {
