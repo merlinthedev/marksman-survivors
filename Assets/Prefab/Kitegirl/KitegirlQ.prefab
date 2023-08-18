@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_KeyCode: 113
-  m_AbilityCooldown: 6
+  m_AbilityCooldown: 2
