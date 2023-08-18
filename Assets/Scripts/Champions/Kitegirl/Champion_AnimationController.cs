@@ -6,6 +6,7 @@ public class Champion_AnimationController : MonoBehaviour {
     [SerializeField] private Champion m_ChampionScript;
     [SerializeField] private Animator m_Animator;
     private bool m_Moving;
+    private int m_CurrentDir;
 
     private int m_Dir;
 
@@ -17,12 +18,17 @@ public class Champion_AnimationController : MonoBehaviour {
     }
 
     private void Move() {
-        if (m_ChampionScript.IsMoving) {
-            // Debug.Log("m_ChampionScript.IsMoving: " + m_ChampionScript.IsMoving);
-            // Debug.Log(m_ChampionScript.GetRigidbody().velocity.ToString());
+        if (m_ChampionScript.IsMoving && !m_Moving || m_ChampionScript.IsMoving && m_CurrentDir != m_Dir) {
+            m_CurrentDir = m_Dir;
+            m_Moving = true;
             m_Animator.SetTrigger("Move");
-        } else {
+            m_Animator.SetBool("IsMoving", true);
+        } else if (!m_ChampionScript.IsMoving) {
+            m_Moving = false;
             m_Animator.SetBool("IsMoving", false);
+        }
+        else {
+            return;
         }
 
     }
