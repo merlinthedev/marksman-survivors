@@ -10,10 +10,10 @@ public class Champion_AnimationController : MonoBehaviour {
     private int m_Dir;
 
     private void Update() {
-        m_Dir = (int)Mathf.Floor((m_ChampionScript.GetGlobalDirectionAngle() + 135 + 22.5f) / 45.0f) % 8;
-        Debug.Log(m_Dir);
-        m_Animator.SetInteger("Dir", m_Dir);
         Move();
+        m_Animator.SetInteger("Dir", m_Dir);
+        Debug.Log(m_Dir);
+        m_Dir = (int)Mathf.Floor((m_ChampionScript.GetGlobalDirectionAngle() + 135 + 22.5f) / 45.0f) % 8;
     }
 
     public void Move() {

@@ -22,6 +22,7 @@ public abstract class Champion : AAbilityHolder {
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = true;
     public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed) || !m_HasAttackCooldown;
+    public bool IsMoving => m_Rigidbody.velocity.magnitude > 0;
 
     public abstract void OnAutoAttack();
     public abstract void OnAbility(KeyCode keyCode);
@@ -45,13 +46,18 @@ public abstract class Champion : AAbilityHolder {
         m_CanMove = value;
     }
 
+    private float previousAngle = 0f;
+
     protected virtual void OnMove() {
         // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
+        previousAngle = m_GlobalMovementDirectionAngle;
         m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         if (direction.magnitude < 0.1f) {
+            Debug.Log("Stop moving");
+            m_GlobalMovementDirectionAngle = previousAngle;
             m_MouseHitPoint = Vector3.zero;
             m_Rigidbody.velocity = Vector3.zero;
             return;
