@@ -16,12 +16,12 @@ public class Champion_AnimationController : MonoBehaviour {
         Move();
     }
 
-    public void Move() {
-        if (m_ChampionScript.IsMoving && !m_Moving) {
+    private void Move() {
+        if (m_ChampionScript.IsMoving) {
+            // Debug.Log("m_ChampionScript.IsMoving: " + m_ChampionScript.IsMoving);
+            // Debug.Log(m_ChampionScript.GetRigidbody().velocity.ToString());
             m_Animator.SetTrigger("Move");
-            m_Moving = true;
-        } else if (!m_ChampionScript.IsMoving) {
-            m_Moving = false;
+        } else {
             m_Animator.SetBool("IsMoving", false);
         }
 

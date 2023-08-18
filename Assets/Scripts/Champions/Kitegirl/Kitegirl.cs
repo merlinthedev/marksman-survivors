@@ -26,7 +26,7 @@ public class Kitegirl : Champion {
                 var point = hit.point;
                 point.y = transform.position.y;
 
-                if (!m_CanMove) {
+                if (!this.m_CanMove) {
                     return;
                 }
 
@@ -34,10 +34,12 @@ public class Kitegirl : Champion {
                 // this.m_MouseHitPoint = transform.position; // ???
                 m_LastAttackTime = Time.time;
 
-                AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
-                if (ability.IsOnCooldown()) {
-                    ability.DeductFromCooldown(1f);
-                }
+                SetGlobalDirectionAngle(Mathf.Atan2(point.x, point.z) * Mathf.Rad2Deg);
+
+                // AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
+                // if (ability.IsOnCooldown()) {
+                //     ability.DeductFromCooldown(1f);
+                // }
 
                 // Invoke(nameof(SetCanMove(true)), .1f);
                 Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);

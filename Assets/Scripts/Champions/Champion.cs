@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class Champion : AAbilityHolder {
     [SerializeField] protected Rigidbody m_Rigidbody;
@@ -16,15 +17,22 @@ public abstract class Champion : AAbilityHolder {
     protected float m_LastAttackTime = 0f;
     private float m_GlobalMovementDirectionAngle = 0f;
     private float m_MovementMultiplier = 1f;
-    protected float m_DamageMultiplier = 1f;
+    private float m_DamageMultiplier = 1f;
 
 
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = true;
     public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed) || !m_HasAttackCooldown;
-    public bool IsMoving => m_Rigidbody.velocity.magnitude > 0;
+
+    public bool IsMoving {
+        get {
+            // Debug.Log("Vel: " + m_Rigidbody.velocity.magnitude.ToString());
+            return m_Rigidbody.velocity.magnitude > 0.001f;
+        }
+    }
 
     public abstract void OnAutoAttack();
+
     public abstract void OnAbility(KeyCode keyCode);
 
     public void TakeDamage(float damage) {
@@ -32,23 +40,31 @@ public abstract class Champion : AAbilityHolder {
     }
 
     private void Start() {
-        Debug.Log("Champion start");
+        // Debug.Log("Champion start");
         m_CurrentHealth = m_MaxHealth;
     }
 
     protected virtual void Update() {
-        if (m_MouseHitPoint != Vector3.zero && m_CanMove) {
-            OnMove();
+        if (m_MouseHitPoint != Vector3.zero) {
+            // Debug.Log("Received mouse hit point");
+            if (m_CanMove) {
+                // Debug.Log("Can move");
+                OnMove();
+            }
         }
     }
 
     protected void SetCanMove(bool value) {
         m_CanMove = value;
+        // Debug.Log("Move set ton true");
     }
 
     private float previousAngle = 0f;
 
     protected virtual void OnMove() {
+        if (m_MouseHitPoint == Vector3.zero || !m_CanMove) {
+            return;
+        }
         // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
@@ -56,7 +72,7 @@ public abstract class Champion : AAbilityHolder {
         m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         if (direction.magnitude < 0.1f) {
-            Debug.Log("Stop moving");
+            // Debug.Log("Stop moving");
             m_GlobalMovementDirectionAngle = previousAngle;
             m_MouseHitPoint = Vector3.zero;
             m_Rigidbody.velocity = Vector3.zero;
@@ -106,6 +122,10 @@ public abstract class Champion : AAbilityHolder {
 
     public void SetMouseHitPoint(Vector3 point) {
         m_MouseHitPoint = point;
+    }
+    
+    protected void SetGlobalDirectionAngle(float angle) {
+        m_GlobalMovementDirectionAngle = angle;
     }
 
     protected void SetMovementDebuff(float v) {

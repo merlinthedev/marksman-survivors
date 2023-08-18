@@ -15,7 +15,7 @@ public abstract class AAbility : MonoBehaviour {
 
         m_LastUseTime = 0f;
 
-        Debug.Log("Base Hook() called");
+        // Debug.Log("Base Hook() called");
     }
 
     public abstract void OnUse();
@@ -32,7 +32,7 @@ public abstract class AAbility : MonoBehaviour {
         m_AbilityCooldown -= timeToDeduct;
     }
 
-    protected internal bool IsOnCooldown() {
+    protected bool IsOnCooldown() {
         bool isOnCooldown = Time.time < m_LastUseTime + m_AbilityCooldown;
         Debug.Log("Is on cooldown: " + isOnCooldown);
         return isOnCooldown;
