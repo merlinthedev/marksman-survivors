@@ -97,6 +97,7 @@ public class Kitegirl : Champion {
     }
 
     private void Start() {
+        base.Start();
         foreach (AAbility ability in m_Abilities) {
             ability.Hook(this);
         }
@@ -121,7 +122,7 @@ public class Kitegirl : Champion {
         bullet.SetSourceEntity(this);
         bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
-        bullet.SetDamage(this.m_Damage * GetDamageMultiplier());
+        bullet.SetDamage(this.m_ChampionStatistics.AttackDamage * GetDamageMultiplier());
 
 
         if (m_AutoAttackShouldChain) {

@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public abstract class Champion : AAbilityHolder {
     [SerializeField] protected Rigidbody m_Rigidbody;
@@ -8,12 +6,8 @@ public abstract class Champion : AAbilityHolder {
     [SerializeField] protected Vector3 m_MouseHitPoint;
     private Vector3 m_LastKnownDirection = Vector3.zero;
 
+    [SerializeField] protected ChampionStatistics m_ChampionStatistics;
 
-    [SerializeField] protected float m_MovementSpeed;
-    [SerializeField] protected float m_Damage;
-    [SerializeField] protected float m_MaxHealth;
-    [SerializeField] protected float m_CurrentHealth;
-    [SerializeField] private float m_AttackSpeed;
     protected float m_LastAttackTime = 0f;
     private float m_GlobalMovementDirectionAngle = 0f;
     private float m_MovementMultiplier = 1f;
@@ -22,11 +16,15 @@ public abstract class Champion : AAbilityHolder {
 
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = true;
-    public bool CanAttack => Time.time > m_LastAttackTime + (1f / m_AttackSpeed) || !m_HasAttackCooldown;
+
+    public bool CanAttack {
+        get {
+            return Time.time > m_LastAttackTime + (1f / m_ChampionStatistics.AttackSpeed) || !m_HasAttackCooldown;
+        }
+    }
 
     public bool IsMoving {
         get {
-            // Debug.Log("Vel: " + m_Rigidbody.velocity.magnitude.ToString());
             return m_Rigidbody.velocity.magnitude > 0.001f;
         }
     }
@@ -39,9 +37,10 @@ public abstract class Champion : AAbilityHolder {
         OnDamageTaken(damage);
     }
 
-    private void Start() {
-        // Debug.Log("Champion start");
-        m_CurrentHealth = m_MaxHealth;
+    protected virtual void Start() {
+        Debug.Log("Champion start");
+
+        m_ChampionStatistics.Initialize();
     }
 
     protected virtual void Update() {
@@ -79,13 +78,13 @@ public abstract class Champion : AAbilityHolder {
             return;
         }
 
-        m_Rigidbody.velocity = direction.normalized * (m_MovementSpeed * m_MovementMultiplier);
+        m_Rigidbody.velocity = direction.normalized * (m_ChampionStatistics.MovementSpeed * m_MovementMultiplier);
         m_LastKnownDirection = direction.normalized;
     }
 
     protected virtual void OnDamageTaken(float damage) {
-        m_CurrentHealth -= damage;
-        if (m_CurrentHealth <= 0) {
+        m_ChampionStatistics.CurrentHealth -= damage;
+        if (m_ChampionStatistics.CurrentHealth <= 0) {
             OnDeath();
         }
     }
@@ -123,7 +122,7 @@ public abstract class Champion : AAbilityHolder {
     public void SetMouseHitPoint(Vector3 point) {
         m_MouseHitPoint = point;
     }
-    
+
     protected void SetGlobalDirectionAngle(float angle) {
         m_GlobalMovementDirectionAngle = angle;
     }
@@ -152,9 +151,9 @@ public abstract class Champion : AAbilityHolder {
         m_DamageMultiplier = 1f;
     }
 
-    public float GetCurrentHealth() => m_CurrentHealth;
-    public float GetMaxHealth() => m_MaxHealth;
-    public float GetAttackSpeed() => m_AttackSpeed;
+    public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;
+    public float GetMaxHealth() => m_ChampionStatistics.MaxHealth;
+    public float GetAttackSpeed() => m_ChampionStatistics.AttackSpeed;
     public float GetLastAttackTime() => m_LastAttackTime;
     protected float GetCurrentMovementMultiplier() => m_MovementMultiplier;
     protected float GetDamageMultiplier() => m_DamageMultiplier;

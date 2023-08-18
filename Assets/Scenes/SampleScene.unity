@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpawnTimer: 1e+15
+  m_SpawnTimer: 0.7
   m_EnemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
   m_Player: {fileID: 2114737657}
@@ -1582,11 +1582,8 @@ MonoBehaviour:
   - {fileID: -1318103399301311301, guid: e9962c6ce2b135546bd7849cdd5db18e, type: 3}
   m_Rigidbody: {fileID: 2114737658}
   m_MouseHitPoint: {x: 0, y: 0, z: 0}
-  m_MovementSpeed: 10
-  m_Damage: 90
-  m_MaxHealth: 1000
-  m_CurrentHealth: 1000
-  m_AttackSpeed: 0.9
+  m_ChampionStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc,
+    type: 2}
   m_CanMove: 1
   m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}

@@ -19,6 +19,7 @@ public class KitegirlBullet : ABullet {
             } else {
                 enemy.TakeDamage(this.m_Damage);
                 TryReduceECooldown();
+                Destroy(gameObject);
             }
         }
 
