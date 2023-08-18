@@ -15,7 +15,6 @@ public class Player : MonoBehaviour {
     [SerializeField] private Image m_HealthBar;
     [SerializeField] private Image m_AttackBar;
     [SerializeField] private Image m_QBar;
-    private bool QIsOnCooldown;
     [SerializeField] private Image m_WBar;
     [SerializeField] private Image m_EBar;
     [SerializeField] private Image m_RBar;

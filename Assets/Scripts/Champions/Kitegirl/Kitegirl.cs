@@ -66,7 +66,7 @@ public class Kitegirl : Champion {
         m_HasUltimateActive = true;
 
         SetMovementDebuff(0.3f);
-        SetDamageMultiplier(2f); // 2x damage
+        this.m_ChampionStatistics.CriticalStrikeChance = 1f;
 
         this.m_HasAttackCooldown = false;
     }
@@ -126,7 +126,7 @@ public class Kitegirl : Champion {
         bullet.SetSourceEntity(this);
         bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
-        bullet.SetDamage(this.m_ChampionStatistics.AttackDamage * GetDamageMultiplier());
+        bullet.SetDamage(CalculateDamage());
 
 
         if (m_AutoAttackShouldChain) {

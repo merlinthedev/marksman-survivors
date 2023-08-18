@@ -1,5 +1,4 @@
 using Events;
-using System.Collections;
 using UnityEngine;
 
 public abstract class Champion : AAbilityHolder {
@@ -141,6 +140,16 @@ public abstract class Champion : AAbilityHolder {
         // Left ray
         Vector3 leftDirection = Quaternion.Euler(0, -45, 0) * GetCurrentMovementDirection();
         Debug.DrawRay(transform.position, leftDirection * 10f, Color.blue, 0);
+    }
+
+    protected float CalculateDamage() {
+        float damage = m_ChampionStatistics.AttackDamage;
+        
+        if (Random.value < m_ChampionStatistics.CriticalStrikeChance) {
+            damage *= m_ChampionStatistics.CriticalStrikeDamage;
+        }
+        
+        return damage;
     }
 
     public Vector3 GetCurrentMovementDirection() {

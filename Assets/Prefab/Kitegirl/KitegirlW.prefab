@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_KeyCode: 119
-  m_AbilityCooldown: 2
+  m_AbilityCooldown: 8
   m_GrenadePrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
     type: 3}
   m_AbilityRange: 100

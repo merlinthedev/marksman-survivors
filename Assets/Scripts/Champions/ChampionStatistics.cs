@@ -14,7 +14,7 @@ public class ChampionStatistics : ScriptableObject {
     [SerializeField] private float m_MovementSpeed;
     [SerializeField] private float m_AttackRange; // Bullet lifetime
     [SerializeField] private float m_AttackDamage;
-    [SerializeField] private float m_CriticalStrikeChance;
+    [SerializeField] [Tooltip("This value has to be normalized")] private float m_CriticalStrikeChance; // NORMALIZED (0-1)
     [SerializeField] private float m_CriticalStrikeDamage;
     [SerializeField] private float m_CooldownReduction;
 

@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_KeyCode: 114
-  m_AbilityCooldown: 2
+  m_AbilityCooldown: 60
   m_UltimateDuration: 12
