@@ -23,30 +23,24 @@ public class Kitegirl : Champion {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit)) {
             if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
-                var point = hit.point;
+                Vector3 point = hit.point;
                 point.y = transform.position.y;
 
                 if (!this.m_CanMove) {
                     return;
                 }
 
-                m_CanMove = false;
-                // this.m_MouseHitPoint = transform.position; // ???
-                m_LastAttackTime = Time.time;
+                this.m_CanMove = false;
+                this.m_LastAttackTime = Time.time;
+                
+                Vector3 dir = point - transform.position;
 
-                SetGlobalDirectionAngle(Mathf.Atan2(point.x, point.z) * Mathf.Rad2Deg);
+                SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
 
-                // AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
-                // if (ability.IsOnCooldown()) {
-                //     ability.DeductFromCooldown(1f);
-                // }
-
-                // Invoke(nameof(SetCanMove(true)), .1f);
                 Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
                 m_Rigidbody.velocity = Vector3.zero;
 
                 // shoot 3 bullets in burst mode
-
                 ShootBullet_Recursive(true, point);
                 m_AnimationController.Attack();
 
@@ -116,9 +110,11 @@ public class Kitegirl : Champion {
         // aBullet.SetDamage(m_Damage);
 
         KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+        bullet.SetSourceEntity(this);
         bullet.SetShouldChain(m_AutoAttackShouldChain);
         bullet.SetTarget(target + randomBulletSpread);
         bullet.SetDamage(this.m_Damage * GetDamageMultiplier());
+
 
         if (m_AutoAttackShouldChain) {
             m_CurrentChainCount++;

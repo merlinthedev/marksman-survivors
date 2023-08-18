@@ -4,7 +4,6 @@ using UnityEngine;
 public class KitegirlBullet : ABullet {
     private bool m_ShouldChain;
 
-
     public void SetShouldChain(bool shouldChain) {
         m_ShouldChain = shouldChain;
     }
