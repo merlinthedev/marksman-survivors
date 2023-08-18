@@ -11,12 +11,14 @@ public class KitegirlBullet : ABullet {
     protected private override void OnTriggerEnter(Collider other) {
         // Debug.Log("KitegirlBullet OnTriggerEnter called");
         if (other.gameObject.CompareTag("Enemy")) {
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
             if (m_ShouldChain) {
-                Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 enemy.TakeDamage(this.m_Damage);
+                TryReduceECooldown();
                 Chain(other.gameObject.transform.position, enemy);
             } else {
-                base.OnTriggerEnter(other);
+                enemy.TakeDamage(this.m_Damage);
+                TryReduceECooldown();
             }
         }
 
@@ -46,6 +48,10 @@ public class KitegirlBullet : ABullet {
 
             break;
         }
+    }
+
+    private void TryReduceECooldown() {
+        (this.m_SourceEntity as Kitegirl)?.TryReduceECooldown();
     }
 
 }

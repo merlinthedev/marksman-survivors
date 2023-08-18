@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public abstract class ABullet : MonoBehaviour {
-    private AEntity m_SourceEntity;
+    protected AEntity m_SourceEntity;
     [SerializeField] private float m_TravelSpeed = 30f;
     [SerializeField] private float m_BulletLifeTime = 2f;
     private float m_BulletSpawnTime = 0f;

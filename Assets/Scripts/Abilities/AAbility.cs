@@ -32,7 +32,7 @@ public abstract class AAbility : MonoBehaviour {
         m_AbilityCooldown -= timeToDeduct;
     }
 
-    protected bool IsOnCooldown() {
+    protected internal bool IsOnCooldown() {
         bool isOnCooldown = Time.time < m_LastUseTime + m_AbilityCooldown;
         Debug.Log("Is on cooldown: " + isOnCooldown);
         return isOnCooldown;

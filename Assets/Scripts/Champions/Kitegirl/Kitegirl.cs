@@ -32,7 +32,7 @@ public class Kitegirl : Champion {
 
                 this.m_CanMove = false;
                 this.m_LastAttackTime = Time.time;
-                
+
                 Vector3 dir = point - transform.position;
 
                 SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
@@ -74,6 +74,14 @@ public class Kitegirl : Champion {
         ResetDamageMultiplier();
 
         this.m_HasAttackCooldown = true;
+    }
+
+    public void TryReduceECooldown() {
+        AAbility kitegirlE = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
+        if (kitegirlE == null) return;
+        if (kitegirlE.IsOnCooldown()) {
+            kitegirlE.DeductFromCooldown(1f);
+        }
     }
 
     protected override void OnMove() {
