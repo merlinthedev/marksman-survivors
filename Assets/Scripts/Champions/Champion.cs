@@ -46,13 +46,18 @@ public abstract class Champion : AAbilityHolder {
         m_CanMove = value;
     }
 
+    private float previousAngle = 0f;
+
     protected virtual void OnMove() {
         // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
+        previousAngle = m_GlobalMovementDirectionAngle;
         m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         if (direction.magnitude < 0.1f) {
+            Debug.Log("Stop moving");
+            m_GlobalMovementDirectionAngle = previousAngle;
             m_MouseHitPoint = Vector3.zero;
             m_Rigidbody.velocity = Vector3.zero;
             return;
