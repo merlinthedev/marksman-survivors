@@ -9,11 +9,13 @@ public class Champion_AnimationController : MonoBehaviour {
     private int m_Dir;
 
     private void Update() {
-        m_Dir = (int)Mathf.Floor((m_ChampionScript.GetGlobalDirectionAngle() + 22.5f) / 45.0f) % 8;
-        m_Dir--;
-        if (m_Dir == -1) m_Dir = 7;
+        // m_Dir = (int)Mathf.Floor((m_ChampionScript.GetGlobalDirectionAngle() + 22.5f) / 45.0f) % 8;
+        // m_Dir--;
+        // if (m_Dir == -1) m_Dir = 7;
+        int globalDirection = Mathf.FloorToInt((m_ChampionScript.GetGlobalDirectionAngle() + 22.5f) / 45.0f);
+        m_Dir = (globalDirection + 7) % 8;
         m_Animator.SetInteger("direction", m_Dir);
-        Debug.Log("GlobalDirectionAngle: " + m_ChampionScript.GetGlobalDirectionAngle() + ", Dir: " + m_Dir, this);
+        // Debug.Log("GlobalDirectionAngle: " + m_ChampionScript.GetGlobalDirectionAngle() + ", Dir: " + m_Dir, this);
         Animate();
     }
 

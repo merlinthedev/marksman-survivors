@@ -31,7 +31,7 @@ public class Kitegirl : Champion {
                 }
 
                 m_CanMove = false;
-                this.m_MouseHitPoint = transform.position; // ???
+                // this.m_MouseHitPoint = transform.position; // ???
                 m_LastAttackTime = Time.time;
 
                 AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
