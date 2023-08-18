@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MaxHealth: 1000
   m_MaxMana: 600
-  m_HealthRegen: 1.2
+  m_HealthRegen: 5.6
   m_ManaRegen: 3.4
   m_AttackSpeed: 0.9
   m_MovementSpeed: 10

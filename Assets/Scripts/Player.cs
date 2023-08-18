@@ -23,11 +23,15 @@ public class Player : MonoBehaviour {
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
+        EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
+        EventBus<ChampionManaRegenerated>.Subscribe(OnChampionManaRegenerated);
     }
 
     private void OnDisable() {
         EventBus<EnemyStartHoverEvent>.Unsubscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Unsubscribe(OnEnemyStopHover);
+        EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
+        EventBus<ChampionManaRegenerated>.Unsubscribe(OnChampionManaRegenerated);
     }
 
     private void Start() {
@@ -140,6 +144,14 @@ public class Player : MonoBehaviour {
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
         SetDefaultCursorTexture();
+    }
+
+    private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
+        UpdateHealthBar();
+    }
+
+    private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
+        // TODO: update the mana bar
     }
 
     public Champion GetCurrentlySelectedChampion() {

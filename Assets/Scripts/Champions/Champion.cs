@@ -1,3 +1,5 @@
+using Events;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Champion : AAbilityHolder {
@@ -49,6 +51,37 @@ public abstract class Champion : AAbilityHolder {
             if (m_CanMove) {
                 // Debug.Log("Can move");
                 OnMove();
+            }
+        }
+
+        RegenerateResources();
+    }
+
+    private void RegenerateResources() {
+        TryRegenerateHealth();
+        TryRegenerateMana();
+    }
+
+    private float m_LastHealthRegenerationTime = 0f;
+
+    private void TryRegenerateHealth() {
+        if (m_ChampionStatistics.CurrentHealth < m_ChampionStatistics.MaxHealth) {
+            if (Time.time > m_LastHealthRegenerationTime + 1f) {
+                m_ChampionStatistics.CurrentHealth += m_ChampionStatistics.HealthRegen;
+                m_LastHealthRegenerationTime = Time.time;
+                EventBus<ChampionHealthRegenerated>.Raise(new ChampionHealthRegenerated());
+            }
+        }
+    }
+
+    private float m_LastManaRegenerationTime = 0f;
+
+    private void TryRegenerateMana() {
+        if (m_ChampionStatistics.CurrentMana < m_ChampionStatistics.MaxMana) {
+            if (Time.time > m_LastManaRegenerationTime + 1f) {
+                m_ChampionStatistics.CurrentMana += m_ChampionStatistics.ManaRegen;
+                m_LastManaRegenerationTime = Time.time;
+                EventBus<ChampionManaRegenerated>.Raise(new ChampionManaRegenerated());
             }
         }
     }

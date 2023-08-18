@@ -49,4 +49,8 @@ namespace Events {
             m_EnemyDeathPosition = enemyDeathPosition;
         }
     }
+    
+    public class ChampionHealthRegenerated : Event {}
+    
+    public class ChampionManaRegenerated : Event {}
 }
