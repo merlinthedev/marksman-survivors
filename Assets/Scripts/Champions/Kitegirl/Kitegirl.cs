@@ -25,7 +25,11 @@ public class Kitegirl : Champion {
             if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
                 Vector3 point = hit.point;
                 point.y = transform.position.y;
-
+                
+                
+                // Debug.Log("Point on line: " + pointOnLine);
+                
+                
                 if (!this.m_CanMove) {
                     return;
                 }

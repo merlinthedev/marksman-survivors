@@ -24,6 +24,7 @@ public class KitegirlW : AAbility {
                         Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
                     grenade.SetTargetPoint(point);
                     grenade.OnThrow();
+                    this.m_LastUseTime = Time.time;
                 } else {
                     Debug.Log("Out of range");
                 }

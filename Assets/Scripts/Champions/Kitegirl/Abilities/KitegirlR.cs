@@ -9,6 +9,7 @@ public class KitegirlR : AAbility {
         if (IsOnCooldown()) return;
 
         (this.m_Champion as Kitegirl)?.ActivateUltimate();
+        m_LastUseTime = Time.time;
 
         Utilities.InvokeDelayed(() => {
             (this.m_Champion as Kitegirl)?.DeactivateUltimate();
