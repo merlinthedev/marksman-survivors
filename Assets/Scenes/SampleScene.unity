@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpawnTimer: 2
+  m_SpawnTimer: 1.6
   m_EnemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
   m_Player: {fileID: 2114737657}
@@ -597,7 +597,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

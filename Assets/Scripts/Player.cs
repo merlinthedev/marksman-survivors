@@ -1,4 +1,5 @@
 ﻿using Events;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -40,12 +41,12 @@ public class Player : MonoBehaviour {
     private void Start() {
         UpdateHealthBar();
         SetDefaultCursorTexture();
-
-
     }
 
     private bool m_FirstMove = true;
 
+    // Deprecated
+    [Obsolete("Use HandleMouseClicks() instead")]
     private void HandleMoveClick() {
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour {
         }
     }
 
+    [Obsolete("Use HandleMouseClicks() instead")]
     private void HandleAttackClick() {
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.A)) {
             m_SelectedChampion.OnAutoAttack(null);

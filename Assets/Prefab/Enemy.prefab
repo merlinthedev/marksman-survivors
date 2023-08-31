@@ -404,10 +404,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.89384365
+  m_Height: 2.5048463
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.25242317, z: 0}
 --- !u!114 &6350459874293242501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,5 +422,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnemyDamageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
     type: 3}
-  m_MovementSpeed: 3
+  m_MovementSpeed: 2.2
   m_HealthBar: {fileID: 8277267421854434963}
+  m_AttackCooldown: 3
