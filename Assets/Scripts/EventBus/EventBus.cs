@@ -49,10 +49,23 @@ namespace Events {
             m_EnemyDeathPosition = enemyDeathPosition;
         }
     }
-    
-    public class ChampionHealthRegenerated : Event {}
-    
-    public class ChampionManaRegenerated : Event {}
-    
-    public class ChampionAbilitiesHookedEvent : Event {}
+
+    public class ChampionHealthRegenerated : Event {
+    }
+
+    public class ChampionManaRegenerated : Event {
+    }
+
+    public class ChampionAbilitiesHookedEvent : Event {
+    }
+
+    public class ChampionLevelUpEvent : Event {
+        public int m_CurrentLevel { get; private set; }
+        public int m_PreviousLevel { get; private set; }
+
+        public ChampionLevelUpEvent(int currentLevel, int previousLevel) {
+            m_CurrentLevel = currentLevel;
+            m_PreviousLevel = previousLevel;
+        }
+    }
 }

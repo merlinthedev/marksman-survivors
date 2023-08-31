@@ -1,5 +1,7 @@
 using Events;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public abstract class Champion : AAbilityHolder {
     [SerializeField] protected Rigidbody m_Rigidbody;
@@ -8,6 +10,8 @@ public abstract class Champion : AAbilityHolder {
     private Vector3 m_LastKnownDirection = Vector3.zero;
 
     [SerializeField] protected ChampionStatistics m_ChampionStatistics;
+
+    private ChampionLevelManager m_ChampionLevelManager;
 
     protected float m_LastAttackTime = 0f;
     private float m_GlobalMovementDirectionAngle = 0f;
@@ -30,6 +34,18 @@ public abstract class Champion : AAbilityHolder {
         }
     }
 
+    private void OnEnable() {
+        // Debug.Log("Champion onEnable");
+
+        EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
+    }
+
+    private void OnDisable() {
+        // Debug.Log("Champion onDisable");
+
+        EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
+    }
+
     public abstract void OnAutoAttack(Collider collider);
 
     public abstract void OnAbility(KeyCode keyCode);
@@ -39,7 +55,9 @@ public abstract class Champion : AAbilityHolder {
     }
 
     protected virtual void Start() {
-        Debug.Log("Champion start");
+        // Debug.Log("Champion start");
+
+        m_ChampionLevelManager = new ChampionLevelManager(this);
 
         m_ChampionStatistics.Initialize();
     }
@@ -144,11 +162,11 @@ public abstract class Champion : AAbilityHolder {
 
     protected float CalculateDamage() {
         float damage = m_ChampionStatistics.AttackDamage;
-        
+
         if (Random.value < m_ChampionStatistics.CriticalStrikeChance) {
             damage *= (1 + m_ChampionStatistics.CriticalStrikeDamage);
         }
-        
+
         return damage;
     }
 
@@ -193,6 +211,13 @@ public abstract class Champion : AAbilityHolder {
         m_DamageMultiplier = 1f;
     }
 
+    private void OnEnemyKilledEvent(EnemyKilledEvent e) {
+        // TODO: XP
+        m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
+
+        m_ChampionLevelManager.CheckForLevelUp();
+    }
+
     public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;
     public float GetMaxHealth() => m_ChampionStatistics.MaxHealth;
     public float GetAttackSpeed() => m_ChampionStatistics.AttackSpeed;
@@ -200,5 +225,6 @@ public abstract class Champion : AAbilityHolder {
     protected float GetCurrentMovementMultiplier() => m_MovementMultiplier;
     protected float GetDamageMultiplier() => m_DamageMultiplier;
     public Rigidbody GetRigidbody() => m_Rigidbody;
+    public ChampionStatistics GetChampionStatistics() => m_ChampionStatistics;
 
 }

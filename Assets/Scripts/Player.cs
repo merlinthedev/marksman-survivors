@@ -148,7 +148,7 @@ public class Player : MonoBehaviour {
 
     private void UpdateHealthBar() {
         float healthPercentage = m_SelectedChampion.GetCurrentHealth() / m_SelectedChampion.GetMaxHealth();
-        Debug.Log("Health percentage: " + healthPercentage + "", this);
+        // Debug.Log("Health percentage: " + healthPercentage + "", this);
 
         m_HealthBar.fillAmount = healthPercentage;
     }

@@ -17,7 +17,7 @@ public class KitegirlW : AAbility {
                 Vector3 point = hit.point;
                 point.y = this.m_Champion.transform.position.y - 0.2f;
 
-                Debug.Log("Point: " + point, this);
+                // Debug.Log("Point: " + point, this);
 
                 if (DistanceCheck(point)) {
                     KitegirlGrenade grenade =
@@ -26,7 +26,7 @@ public class KitegirlW : AAbility {
                     grenade.OnThrow();
                     this.m_LastUseTime = Time.time;
                 } else {
-                    Debug.Log("Out of range");
+                    // Debug.Log("Out of range");
                 }
 
             }

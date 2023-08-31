@@ -22,7 +22,7 @@ public class KitegirlGrenade : MonoBehaviour, IThrowable {
     public void OnThrow() {
         m_ThrownTime = Time.time;
         m_Rigidbody.useGravity = false;
-        Debug.Log("OnThrow()", this);
+        // Debug.Log("OnThrow()", this);
 
         m_Rigidbody.velocity = (m_TargetPoint - transform.position).normalized * 10f; // TODO: REFACTOR THIS, IT IS TERRIBLE
 
@@ -47,7 +47,7 @@ public class KitegirlGrenade : MonoBehaviour, IThrowable {
 
     private void Detonate(bool shot = false) {
         if (m_RegularDetonationCancelled) return;
-        Debug.Log("Detonating");
+        // Debug.Log("Detonating");
 
         List<Enemy> enemiesInRange = EnemyManager.GetInstance().GetEnemiesInArea(transform.position, m_DamageRadius);
 
@@ -59,7 +59,7 @@ public class KitegirlGrenade : MonoBehaviour, IThrowable {
     }
 
     public void EarlyDetonate() {
-        Debug.Log("Early detonating");
+        // Debug.Log("Early detonating");
         Detonate(true);
 
         m_RegularDetonationCancelled = true;
