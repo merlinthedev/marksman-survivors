@@ -1,4 +1,4 @@
-using Events;
+﻿using Events;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +23,10 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float m_AttackCooldown = 3f;
 
     [SerializeField] private float m_RewardXP = 21f;
+
+    private SpriteRenderer m_SpriteRenderer;
+    private int m_CurrentDir = 0;
+    private int m_NewDir = 0;
 
     private bool m_IsDead {
         get => !m_CanMove;
@@ -54,6 +58,8 @@ public class Enemy : MonoBehaviour {
 
         m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
         UpdateHealthBar();
+
+        m_SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 
@@ -64,6 +70,20 @@ public class Enemy : MonoBehaviour {
     private void Update() {
         if (m_Target != null && m_CanMove) {
             Move();
+        }
+
+        //Check dir
+        if(m_Rigidbody.velocity.x > 0.001f) {
+            m_CurrentDir = 1;
+        }
+        else if(m_Rigidbody.velocity.x < -0.001f) {
+            m_CurrentDir = 0;
+        }
+
+        //If dir changed, flip sprite
+        if(m_CurrentDir != m_NewDir) {
+            m_NewDir = m_CurrentDir;
+            m_SpriteRenderer.flipX = !m_SpriteRenderer.flipX;
         }
     }
 
