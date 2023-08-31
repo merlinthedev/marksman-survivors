@@ -19,6 +19,11 @@ public class Enemy : MonoBehaviour {
     private float m_InitialHealthBarWidth;
     private bool m_CanMove = true;
 
+    private float m_LastAttackTime = 0f;
+    [SerializeField] private float m_AttackCooldown = 3f;
+
+    [SerializeField] private float m_RewardXP = 21f;
+
     private bool m_IsDead {
         get => !m_CanMove;
     }
@@ -111,8 +116,6 @@ public class Enemy : MonoBehaviour {
         );
     }
 
-    private float m_LastAttackTime = 0f;
-    [SerializeField] private float m_AttackCooldown = 3f;
 
     private void OnCollisionStay(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
@@ -127,5 +130,9 @@ public class Enemy : MonoBehaviour {
                 m_LastAttackTime = Time.time;
             }
         }
+    }
+
+    public float GetXP() {
+        return this.m_RewardXP;
     }
 }
