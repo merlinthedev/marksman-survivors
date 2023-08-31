@@ -1,4 +1,5 @@
 ﻿using Events;
+using UnityEngine;
 
 public class ChampionLevelManager {
 
@@ -19,6 +20,8 @@ public class ChampionLevelManager {
         if (m_Champion.GetChampionStatistics().CurrentXP >= m_CurrentLevelXP) {
             LevelUp();
         }
+
+        Debug.Log("Current level: " + m_CurrentLevel + ", Current XP: " + m_Champion.GetChampionStatistics().CurrentXP);
     }
 
     private void LevelUp() {

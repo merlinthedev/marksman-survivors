@@ -10,7 +10,7 @@ public abstract class Champion : AAbilityHolder {
     private Vector3 m_LastKnownDirection = Vector3.zero;
 
     [SerializeField] protected ChampionStatistics m_ChampionStatistics;
-    
+
     private ChampionLevelManager m_ChampionLevelManager;
 
     protected float m_LastAttackTime = 0f;
@@ -56,6 +56,8 @@ public abstract class Champion : AAbilityHolder {
 
     protected virtual void Start() {
         // Debug.Log("Champion start");
+
+        m_ChampionLevelManager = new ChampionLevelManager(this);
 
         m_ChampionStatistics.Initialize();
     }
@@ -212,7 +214,7 @@ public abstract class Champion : AAbilityHolder {
     private void OnEnemyKilledEvent(EnemyKilledEvent e) {
         // TODO: XP
         m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
-        
+
         m_ChampionLevelManager.CheckForLevelUp();
     }
 
