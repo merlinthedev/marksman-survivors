@@ -19,8 +19,7 @@ public class Enemy : MonoBehaviour {
     private float m_InitialHealthBarWidth;
     private bool m_CanMove = true;
 
-    private bool m_IsDead
-    {
+    private bool m_IsDead {
         get => !m_CanMove;
     }
 
@@ -112,13 +111,21 @@ public class Enemy : MonoBehaviour {
         );
     }
 
+    private float m_LastAttackTime = 0f;
+    [SerializeField] private float m_AttackCooldown = 3f;
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnCollisionStay(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             if (m_IsDead) return;
-            // Debug.Log("Hit the player!");
-            Player player = other.gameObject.GetComponent<Player>();
-            player.TakeDamage(70f);
+
+            Player player = other.gameObject.TryGetComponent(out Player playerComponent)
+                ? playerComponent
+                : throw new Exception("Missing player component");
+
+            if (Time.time > m_LastAttackTime + m_AttackCooldown) {
+                player.TakeDamage(70f);
+                m_LastAttackTime = Time.time;
+            }
         }
     }
 }
