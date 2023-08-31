@@ -25,7 +25,7 @@ public class KitegirlBullet : ABullet {
 
         if (other.gameObject.CompareTag("KitegirlGrenade")) {
             // do stuff
-            Debug.Log("Hit a grenade");
+            // Debug.Log("Hit a grenade");
             KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
             kitegirlGrenade.EarlyDetonate();
         }
@@ -35,7 +35,7 @@ public class KitegirlBullet : ABullet {
 
     private void Chain(Vector3 bulletHitPoint, Enemy alreadyHit, bool shouldRecurse = true) {
         while (true) {
-            Debug.Log("Chaining");
+            // Debug.Log("Chaining");
 
             Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
             enemy.TakeDamage(this.m_Damage);

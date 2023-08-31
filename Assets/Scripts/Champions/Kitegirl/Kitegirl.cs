@@ -73,7 +73,7 @@ public class Kitegirl : Champion {
         if (ability != null) {
             ability.OnUse();
         } else {
-            Debug.Log("Ability not found");
+            // Debug.Log("Ability not found");
         }
     }
 

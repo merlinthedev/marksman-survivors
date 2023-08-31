@@ -39,7 +39,7 @@ public abstract class Champion : AAbilityHolder {
     }
 
     protected virtual void Start() {
-        Debug.Log("Champion start");
+        // Debug.Log("Champion start");
 
         m_ChampionStatistics.Initialize();
     }

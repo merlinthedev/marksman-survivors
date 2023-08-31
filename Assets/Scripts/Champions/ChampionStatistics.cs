@@ -43,7 +43,7 @@ public class ChampionStatistics : ScriptableObject {
     #endregion
 
     public void Initialize() {
-        Debug.Log("HELLO WORLD");
+        // Debug.Log("HELLO WORLD");
         
         maxHealth = m_MaxHealth;
         currentHealth = m_MaxHealth;

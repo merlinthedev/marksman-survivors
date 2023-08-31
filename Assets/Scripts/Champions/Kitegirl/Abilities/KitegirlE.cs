@@ -29,7 +29,7 @@ public class KitegirlE : AAbility {
     protected internal override void DeductFromCooldown(float timeToDeduct) {
         base.DeductFromCooldown(timeToDeduct);
 
-        Debug.Log("Deducted from cooldown.");
+        // Debug.Log("Deducted from cooldown.");
     }
 
 }
