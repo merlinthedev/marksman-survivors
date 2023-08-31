@@ -71,7 +71,39 @@ public class Player : MonoBehaviour {
 
     private void HandleAttackClick() {
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.A)) {
-            m_SelectedChampion.OnAutoAttack();
+            m_SelectedChampion.OnAutoAttack(null);
+        }
+    }
+
+    private void HandleMouseClicks() {
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                if (hit.collider.gameObject.CompareTag("Ground")) {
+                    var point = hit.point;
+                    point.y = transform.position.y;
+                    // m_HitPoint = point;
+
+                    if (m_FirstMove) {
+                        m_FirstMove = false;
+                        EnemyManager.GetInstance().SetShouldSpawn(true);
+                        // Debug.Log("Start enemy spawning");
+                    }
+
+
+                    m_SelectedChampion.SetMouseHitPoint(point);
+                }
+
+                if (hit.collider.gameObject.CompareTag("Enemy")) {
+                    m_SelectedChampion.OnAutoAttack(hit.collider);
+                }
+
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            Debug.Log("RMB pressed");
         }
     }
 
@@ -97,8 +129,9 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
-        HandleMoveClick();
-        HandleAttackClick();
+        // HandleMoveClick();
+        // HandleAttackClick();
+        HandleMouseClicks();
         HandleAbilityClicks();
         HandleAbilityCooldowns();
         if (!m_SelectedChampion.CanAttack) {
@@ -119,7 +152,8 @@ public class Player : MonoBehaviour {
     }
 
     private void UpdateAttackBar() {
-        float attackPercentage = (Time.time - m_SelectedChampion.GetLastAttackTime()) / (1f / m_SelectedChampion.GetAttackSpeed());
+        float attackPercentage = (Time.time - m_SelectedChampion.GetLastAttackTime()) /
+                                 (1f / m_SelectedChampion.GetAttackSpeed());
 
         m_AttackBar.fillAmount = 1 - attackPercentage;
     }

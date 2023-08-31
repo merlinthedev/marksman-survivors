@@ -30,7 +30,7 @@ public abstract class Champion : AAbilityHolder {
         }
     }
 
-    public abstract void OnAutoAttack();
+    public abstract void OnAutoAttack(Collider collider);
 
     public abstract void OnAbility(KeyCode keyCode);
 

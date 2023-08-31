@@ -18,39 +18,53 @@ public class Kitegirl : Champion {
 
     [SerializeField] private float m_DashSpeed = 20f;
 
-    public override void OnAutoAttack() {
+    public override void OnAutoAttack(Collider collider) {
+        // if (!CanAttack) return;
+        // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // RaycastHit hit;
+        // if (Physics.Raycast(ray, out hit)) {
+        //     if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
+        //         Vector3 point = hit.point;
+        //         point.y = transform.position.y;
+        //         
+        //         
+        //         // Debug.Log("Point on line: " + pointOnLine);
+        //         
+        //         
+        //         if (!this.m_CanMove) {
+        //             return;
+        //         }
+        //
+        //         this.m_CanMove = false;
+        //         this.m_LastAttackTime = Time.time;
+        //
+        //         Vector3 dir = point - transform.position;
+        //
+        //         SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
+        //
+        //         Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
+        //         m_Rigidbody.velocity = Vector3.zero;
+        //
+        //         // shoot 3 bullets in burst mode
+        //         ShootBullet_Recursive(true, point);
+        //         m_AnimationController.Attack();
+        //
+        //     }
+        // }
+
         if (!CanAttack) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) {
-            if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
-                Vector3 point = hit.point;
-                point.y = transform.position.y;
-                
-                
-                // Debug.Log("Point on line: " + pointOnLine);
-                
-                
-                if (!this.m_CanMove) {
-                    return;
-                }
+        this.m_CanMove = false;
+        this.m_LastAttackTime = Time.time;
+        Vector3 dir = collider.transform.position - transform.position;
+        SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
+        Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f,
+            this); // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
+        m_Rigidbody.velocity = Vector3.zero;
 
-                this.m_CanMove = false;
-                this.m_LastAttackTime = Time.time;
+        ShootBullet_Recursive(true,
+            new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
+        m_AnimationController.Attack();
 
-                Vector3 dir = point - transform.position;
-
-                SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
-
-                Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
-                m_Rigidbody.velocity = Vector3.zero;
-
-                // shoot 3 bullets in burst mode
-                ShootBullet_Recursive(true, point);
-                m_AnimationController.Attack();
-
-            }
-        }
     }
 
     public override void OnAbility(KeyCode keyCode) {
@@ -77,8 +91,9 @@ public class Kitegirl : Champion {
 
         ResetMovementMultiplier();
         // ResetDamageMultiplier();
-        this.m_ChampionStatistics.CriticalStrikeChance = 0f; // TODO: REFACTOR, crit chance won't always be 0 before ultimate is activated
-        
+        this.m_ChampionStatistics.CriticalStrikeChance =
+            0f; // TODO: REFACTOR, crit chance won't always be 0 before ultimate is activated
+
         this.m_HasAttackCooldown = true;
     }
 
@@ -107,7 +122,7 @@ public class Kitegirl : Champion {
         foreach (AAbility ability in m_Abilities) {
             ability.Hook(this);
         }
-        
+
         EventBus<ChampionAbilitiesHookedEvent>.Raise(new ChampionAbilitiesHookedEvent()); // TODO: REFACTOR
     }
 
