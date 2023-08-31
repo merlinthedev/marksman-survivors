@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
+
     [SerializeField] private Image m_AttackBar;
     [SerializeField] private Image m_QBar;
     [SerializeField] private Image m_WBar;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour {
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionManaRegenerated>.Subscribe(OnChampionManaRegenerated);
+        EventBus<ChampionAbilitiesHookedEvent>.Subscribe(OnChampionAbilitiesHooked);
     }
 
     private void OnDisable() {
@@ -32,11 +34,14 @@ public class Player : MonoBehaviour {
         EventBus<EnemyStopHoverEvent>.Unsubscribe(OnEnemyStopHover);
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionManaRegenerated>.Unsubscribe(OnChampionManaRegenerated);
+        EventBus<ChampionAbilitiesHookedEvent>.Unsubscribe(OnChampionAbilitiesHooked);
     }
 
     private void Start() {
         UpdateHealthBar();
         SetDefaultCursorTexture();
+
+
     }
 
     private bool m_FirstMove = true;
@@ -120,7 +125,7 @@ public class Player : MonoBehaviour {
     }
 
     private void HandleAbilityCooldowns() {
-        if(m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {
+        if (m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {
             UpdateQCooldown();
         }
         if (m_SelectedChampion.GetAbilities()[1].IsOnCooldown()) {
@@ -133,23 +138,28 @@ public class Player : MonoBehaviour {
             UpdateRCooldown();
         }
     }
+
     private void UpdateQCooldown() {
-        float QCoolDownPercentage = m_SelectedChampion.GetAbilities()[0].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[0].GetAbilityCooldown();
+        float QCoolDownPercentage = m_SelectedChampion.GetAbilities()[0].GetCurrentCooldown() /
+                                    m_SelectedChampion.GetAbilities()[0].GetAbilityCooldown();
         m_QBar.fillAmount = 1 - QCoolDownPercentage;
     }
 
     private void UpdateWCooldown() {
-        float WCoolDownPercentage = m_SelectedChampion.GetAbilities()[1].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[1].GetAbilityCooldown();
+        float WCoolDownPercentage = m_SelectedChampion.GetAbilities()[1].GetCurrentCooldown() /
+                                    m_SelectedChampion.GetAbilities()[1].GetAbilityCooldown();
         m_WBar.fillAmount = 1 - WCoolDownPercentage;
     }
 
     private void UpdateECooldown() {
-        float ECoolDownPercentage = m_SelectedChampion.GetAbilities()[2].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[2].GetAbilityCooldown();
+        float ECoolDownPercentage = m_SelectedChampion.GetAbilities()[2].GetCurrentCooldown() /
+                                    m_SelectedChampion.GetAbilities()[2].GetAbilityCooldown();
         m_EBar.fillAmount = 1 - ECoolDownPercentage;
     }
 
     private void UpdateRCooldown() {
-        float RCoolDownPercentage = m_SelectedChampion.GetAbilities()[3].GetCurrentCooldown() / m_SelectedChampion.GetAbilities()[3].GetAbilityCooldown();
+        float RCoolDownPercentage = m_SelectedChampion.GetAbilities()[3].GetCurrentCooldown() /
+                                    m_SelectedChampion.GetAbilities()[3].GetAbilityCooldown();
         m_RBar.fillAmount = 1 - RCoolDownPercentage;
     }
 
@@ -171,6 +181,13 @@ public class Player : MonoBehaviour {
 
     private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
         // TODO: update the mana bar
+    }
+
+    private void OnChampionAbilitiesHooked(ChampionAbilitiesHookedEvent e) {
+        UpdateQCooldown();
+        UpdateWCooldown();
+        UpdateECooldown();
+        UpdateRCooldown();
     }
 
     public Champion GetCurrentlySelectedChampion() {

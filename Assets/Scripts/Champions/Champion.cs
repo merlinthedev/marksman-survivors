@@ -146,7 +146,7 @@ public abstract class Champion : AAbilityHolder {
         float damage = m_ChampionStatistics.AttackDamage;
         
         if (Random.value < m_ChampionStatistics.CriticalStrikeChance) {
-            damage *= m_ChampionStatistics.CriticalStrikeDamage;
+            damage *= (1 + m_ChampionStatistics.CriticalStrikeDamage);
         }
         
         return damage;

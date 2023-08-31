@@ -9,11 +9,12 @@ public abstract class AAbility : MonoBehaviour {
     protected Champion m_Champion;
 
     protected bool m_IsCancelled = false;
+    
 
     public void Hook(Champion champion) {
         m_Champion = champion;
 
-        m_LastUseTime = 0f;
+        m_LastUseTime = float.NegativeInfinity;
 
         // Debug.Log("Base Hook() called");
     }

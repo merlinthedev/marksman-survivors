@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Events;
+using UnityEngine;
 using Util;
 
 public class Kitegirl : Champion {
@@ -75,8 +76,9 @@ public class Kitegirl : Champion {
         m_HasUltimateActive = false;
 
         ResetMovementMultiplier();
-        ResetDamageMultiplier();
-
+        // ResetDamageMultiplier();
+        this.m_ChampionStatistics.CriticalStrikeChance = 0f; // TODO: REFACTOR, crit chance won't always be 0 before ultimate is activated
+        
         this.m_HasAttackCooldown = true;
     }
 
@@ -105,6 +107,8 @@ public class Kitegirl : Champion {
         foreach (AAbility ability in m_Abilities) {
             ability.Hook(this);
         }
+        
+        EventBus<ChampionAbilitiesHookedEvent>.Raise(new ChampionAbilitiesHookedEvent()); // TODO: REFACTOR
     }
 
 

@@ -21,6 +21,6 @@ MonoBehaviour:
   m_AttackRange: 2
   m_AttackDamage: 90
   m_CriticalStrikeChance: 0
-  m_CriticalStrikeDamage: 100
+  m_CriticalStrikeDamage: 1
   m_CooldownReduction: 0
   m_CurrentXP: 0

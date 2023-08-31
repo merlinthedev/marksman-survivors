@@ -53,4 +53,6 @@ namespace Events {
     public class ChampionHealthRegenerated : Event {}
     
     public class ChampionManaRegenerated : Event {}
+    
+    public class ChampionAbilitiesHookedEvent : Event {}
 }
