@@ -57,8 +57,8 @@ public class Kitegirl : Champion {
         this.m_LastAttackTime = Time.time;
         Vector3 dir = collider.transform.position - transform.position;
         SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
-        Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f,
-            this); // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
+        // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
+        // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
         m_Rigidbody.velocity = Vector3.zero;
 
         ShootBullet_Recursive(true,
@@ -174,5 +174,8 @@ public class Kitegirl : Champion {
         m_IsDashing = p0;
     }
 
+    public void EnableMovementAfterAttack() {
+        SetCanMove(true);
+    }
 
 }
