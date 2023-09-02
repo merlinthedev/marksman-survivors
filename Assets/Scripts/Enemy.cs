@@ -25,8 +25,11 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float m_RewardXP = 21f;
 
     private SpriteRenderer m_SpriteRenderer;
-    private int m_CurrentDir = 0;
+    private Animator m_Animator;
+    [SerializeField] private int m_CurrentDir = 0;
     private int m_NewDir = 0;
+    [SerializeField] float Xspeed;
+    [SerializeField] float Zspeed;
 
     private bool m_IsDead {
         get => !m_CanMove;
@@ -60,6 +63,7 @@ public class Enemy : MonoBehaviour {
         UpdateHealthBar();
 
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
+        m_Animator = GetComponent<Animator>();
     }
 
 
@@ -73,18 +77,44 @@ public class Enemy : MonoBehaviour {
         }
 
         //Check dir
-        if(m_Rigidbody.velocity.x > 0.001f) {
-            m_CurrentDir = 1;
-        }
-        else if(m_Rigidbody.velocity.x < -0.001f) {
+        if(m_Rigidbody.velocity.x > 0 && m_Rigidbody.velocity.z > 0) {
             m_CurrentDir = 0;
         }
+        else if(m_Rigidbody.velocity.x > 0 && m_Rigidbody.velocity.z < 0) {
+            m_CurrentDir = 1;
+        }
+        else if(m_Rigidbody.velocity.x < 0 && m_Rigidbody.velocity.z < 0) {
+            m_CurrentDir = 2;
+        }
+        else if(m_Rigidbody.velocity.x < 0 && m_Rigidbody.velocity.z > 0) {
+            m_CurrentDir = 3;
+        }
+
 
         //If dir changed, flip sprite
         if(m_CurrentDir != m_NewDir) {
             m_NewDir = m_CurrentDir;
-            m_SpriteRenderer.flipX = !m_SpriteRenderer.flipX;
+            m_Animator.SetTrigger("DirChange");
+            if (m_CurrentDir == 0) {
+                m_SpriteRenderer.flipX = true;
+                m_Animator.SetInteger("Dir", 1);
+            }
+            else if(m_CurrentDir == 1) {
+                m_SpriteRenderer.flipX = true;
+                m_Animator.SetInteger("Dir", 0);
+            }
+            else if(m_CurrentDir == 2) {
+                m_SpriteRenderer.flipX = false;
+                m_Animator.SetInteger("Dir", 0);
+            }
+            else if(m_CurrentDir == 3) {
+                m_SpriteRenderer.flipX = false;
+                m_Animator.SetInteger("Dir", 1);
+            }
         }
+
+        Xspeed = m_Rigidbody.velocity.x;
+        Zspeed = m_Rigidbody.velocity.z;
     }
 
     private void Move() {
