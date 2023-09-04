@@ -3,7 +3,6 @@ using UnityEngine;
 using Util;
 
 public class Kitegirl : Champion {
-
     [SerializeField] private KitegirlBullet m_BulletPrefab;
     [SerializeField] private Champion_AnimationController m_AnimationController;
 
@@ -13,7 +12,11 @@ public class Kitegirl : Champion {
 
     private int m_RecurseCount = 0;
     private int m_MaxRecurseCount = 3;
-    private int m_MaxChainCount { get { return m_MaxRecurseCount * 3; } }
+
+    private int m_MaxChainCount {
+        get { return m_MaxRecurseCount; }
+    }
+
     private int m_CurrentChainCount = 0;
 
     [SerializeField] private float m_DashSpeed = 20f;
@@ -64,7 +67,6 @@ public class Kitegirl : Champion {
         ShootBullet_Recursive(false,
             new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
         m_AnimationController.Attack();
-
     }
 
     public override void OnAbility(KeyCode keyCode) {
@@ -72,7 +74,8 @@ public class Kitegirl : Champion {
 
         if (ability != null) {
             ability.OnUse();
-        } else {
+        }
+        else {
             // Debug.Log("Ability not found");
         }
     }
@@ -108,7 +111,8 @@ public class Kitegirl : Champion {
     protected override void OnMove() {
         if (!m_IsDashing) {
             base.OnMove();
-        } else {
+        }
+        else {
             this.m_Rigidbody.velocity = GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
         }
     }
@@ -160,7 +164,8 @@ public class Kitegirl : Champion {
 
         if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
             Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
-        } else {
+        }
+        else {
             m_RecurseCount = 0;
         }
     }
@@ -177,5 +182,4 @@ public class Kitegirl : Champion {
     public void EnableMovementAfterAttack() {
         SetCanMove(true);
     }
-
 }

@@ -100,12 +100,13 @@ public class EnemyManager : MonoBehaviour {
         m_EnemyDictionary.Remove(enemyKilledEvent.m_Collider);
     }
 
-    public Enemy GetClosestEnemy(Vector3 position, Enemy enemyToIgnore = null) {
+    public Enemy GetClosestEnemy(Vector3 position, List<Enemy> enemiesToIgnore = null) {
         float closestDistance = Mathf.Infinity;
 
         Enemy closestEnemy = null;
         foreach (var enemy in m_EnemyDictionary) {
-            if (enemy.Value == enemyToIgnore) continue;
+            // if (enemy.Value == enemyToIgnore) continue;
+            if (enemiesToIgnore != null && enemiesToIgnore.Contains(enemy.Value)) continue;
             float distance = Vector3.Distance(position, enemy.Value.transform.position);
             if (!(distance < closestDistance)) continue;
             closestDistance = distance;

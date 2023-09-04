@@ -77,37 +77,31 @@ public class Enemy : MonoBehaviour {
         }
 
         //Check dir
-        if(m_Rigidbody.velocity.x > 0 && m_Rigidbody.velocity.z > 0) {
-            m_CurrentDir = 0;
+        if (m_Rigidbody.velocity.x > 0) {
+            m_CurrentDir = (m_Rigidbody.velocity.z > 0) ? 0 : 1;
         }
-        else if(m_Rigidbody.velocity.x > 0 && m_Rigidbody.velocity.z < 0) {
-            m_CurrentDir = 1;
-        }
-        else if(m_Rigidbody.velocity.x < 0 && m_Rigidbody.velocity.z < 0) {
-            m_CurrentDir = 2;
-        }
-        else if(m_Rigidbody.velocity.x < 0 && m_Rigidbody.velocity.z > 0) {
-            m_CurrentDir = 3;
+        else if (m_Rigidbody.velocity.x < 0) {
+            m_CurrentDir = (m_Rigidbody.velocity.z < 0) ? 2 : 3;
         }
 
 
         //If dir changed, flip sprite
-        if(m_CurrentDir != m_NewDir) {
+        if (m_CurrentDir != m_NewDir) {
             m_NewDir = m_CurrentDir;
             m_Animator.SetTrigger("DirChange");
             if (m_CurrentDir == 0) {
                 m_SpriteRenderer.flipX = true;
                 m_Animator.SetInteger("Dir", 1);
             }
-            else if(m_CurrentDir == 1) {
+            else if (m_CurrentDir == 1) {
                 m_SpriteRenderer.flipX = true;
                 m_Animator.SetInteger("Dir", 0);
             }
-            else if(m_CurrentDir == 2) {
+            else if (m_CurrentDir == 2) {
                 m_SpriteRenderer.flipX = false;
                 m_Animator.SetInteger("Dir", 0);
             }
-            else if(m_CurrentDir == 3) {
+            else if (m_CurrentDir == 3) {
                 m_SpriteRenderer.flipX = false;
                 m_Animator.SetInteger("Dir", 1);
             }
