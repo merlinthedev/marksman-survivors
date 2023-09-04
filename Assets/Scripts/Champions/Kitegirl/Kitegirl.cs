@@ -67,6 +67,7 @@ public class Kitegirl : Champion {
         ShootBullet_Recursive(false,
             new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
         m_AnimationController.Attack();
+        CanAttack = false;
     }
 
     public override void OnAbility(KeyCode keyCode) {
@@ -179,7 +180,8 @@ public class Kitegirl : Champion {
         m_IsDashing = p0;
     }
 
-    public void EnableMovementAfterAttack() {
+    public void EnableStuffAfterAttack() {
         SetCanMove(true);
+        CanAttack = true;
     }
 }

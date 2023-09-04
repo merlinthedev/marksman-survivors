@@ -20,11 +20,14 @@ public abstract class Champion : AAbilityHolder {
 
 
     [SerializeField] protected bool m_CanMove = true;
-    protected bool m_HasAttackCooldown = true;
+    protected bool m_HasAttackCooldown = false;
 
     public bool CanAttack {
         get {
-            return Time.time > m_LastAttackTime + (1f / m_ChampionStatistics.AttackSpeed) || !m_HasAttackCooldown;
+            return !m_HasAttackCooldown;
+        }
+        protected set {
+            m_HasAttackCooldown = !value;
         }
     }
 
