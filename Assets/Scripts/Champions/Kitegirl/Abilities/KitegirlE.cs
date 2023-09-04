@@ -11,6 +11,7 @@ public class KitegirlE : AAbility {
 
         // Dash forward 
         (this.m_Champion as Kitegirl)?.SetIsDashing(true);
+        (m_Champion as Kitegirl)?.SetNextAttackWillCrit(true);
         m_LastUseTime = Time.time;
 
         Utilities.InvokeDelayed(() => {

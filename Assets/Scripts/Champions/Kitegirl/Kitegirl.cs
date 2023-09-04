@@ -105,7 +105,7 @@ public class Kitegirl : Champion {
         AAbility kitegirlE = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
         if (kitegirlE == null) return;
         if (kitegirlE.IsOnCooldown()) {
-            kitegirlE.DeductFromCooldown(1f);
+            kitegirlE.DeductFromCooldown(kitegirlE.GetAbilityCooldown() * 0.02f); // 2% of cooldown 
         }
     }
 
@@ -184,4 +184,6 @@ public class Kitegirl : Champion {
         SetCanMove(true);
         CanAttack = true;
     }
+
+    
 }

@@ -22,6 +22,8 @@ public abstract class Champion : AAbilityHolder, IDamageable {
 
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = false;
+    private bool m_NextAttackWillCrit = false;
+
 
     public bool CanAttack {
         get { return !m_HasAttackCooldown; }
@@ -175,9 +177,11 @@ public abstract class Champion : AAbilityHolder, IDamageable {
     protected float CalculateDamage() {
         float damage = m_ChampionStatistics.AttackDamage;
 
-        if (Random.value < m_ChampionStatistics.CriticalStrikeChance) {
+        if (Random.value < m_ChampionStatistics.CriticalStrikeChance || m_NextAttackWillCrit) {
             damage *= (1 + m_ChampionStatistics.CriticalStrikeDamage);
         }
+
+        if (m_NextAttackWillCrit) m_NextAttackWillCrit = false;
 
         return damage;
     }
@@ -223,6 +227,10 @@ public abstract class Champion : AAbilityHolder, IDamageable {
 
     protected void ResetDamageMultiplier() {
         m_DamageMultiplier = 1f;
+    }
+
+    public void SetNextAttackWillCrit(bool b) {
+        m_NextAttackWillCrit = b;
     }
 
     private void OnEnemyKilledEvent(EnemyKilledEvent e) {

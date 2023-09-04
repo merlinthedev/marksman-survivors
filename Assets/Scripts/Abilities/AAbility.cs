@@ -30,7 +30,7 @@ public abstract class AAbility : MonoBehaviour {
     }
 
     protected internal virtual void DeductFromCooldown(float timeToDeduct) {
-        m_AbilityCooldown -= timeToDeduct;
+        m_LastUseTime -= timeToDeduct;
     }
 
     public bool IsOnCooldown() {
