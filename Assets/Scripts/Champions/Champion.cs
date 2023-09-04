@@ -2,6 +2,7 @@ using Events;
 using System;
 using System.Collections;
 using UnityEngine;
+using Util;
 using Random = UnityEngine.Random;
 
 public abstract class Champion : AAbilityHolder, IDamageable {
@@ -23,6 +24,12 @@ public abstract class Champion : AAbilityHolder, IDamageable {
     [SerializeField] protected bool m_CanMove = true;
     protected bool m_HasAttackCooldown = false;
     private bool m_NextAttackWillCrit = false;
+
+    public bool IsBurning { get; set; }
+    public bool IsFragile { get; set; }
+    public float FragileStacks { get; set; }
+
+    public float LastFragileApplyTime { get; set; }
 
 
     public bool CanAttack {
@@ -55,6 +62,7 @@ public abstract class Champion : AAbilityHolder, IDamageable {
     }
 
     public void TakeBurnDamage(float damage, float interval, float time) {
+        IsBurning = true;
         StartCoroutine(BurnDamageCoroutine(damage, interval, time));
     }
 
@@ -64,6 +72,8 @@ public abstract class Champion : AAbilityHolder, IDamageable {
             OnDamageTaken(damage);
             yield return new WaitForSeconds(interval);
         }
+
+        IsBurning = false;
     }
 
     protected virtual void Start() {
@@ -84,6 +94,12 @@ public abstract class Champion : AAbilityHolder, IDamageable {
         }
 
         RegenerateResources();
+
+        // check for fragile stacks
+        if (Time.time > LastFragileApplyTime + 10f) {
+            // 10 for the duration of the stacks
+            FragileStacks = 0;
+        }
     }
 
     private void RegenerateResources() {
@@ -146,6 +162,7 @@ public abstract class Champion : AAbilityHolder, IDamageable {
     }
 
     protected virtual void OnDamageTaken(float damage) {
+        damage = IsFragile ? damage * 1 + FragileStacks / 10 : damage;
         m_ChampionStatistics.CurrentHealth -= damage;
         EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
         if (m_ChampionStatistics.CurrentHealth <= 0) {

@@ -36,6 +36,11 @@ public class Enemy : MonoBehaviour, IDamageable {
         get => !m_CanMove;
     }
 
+    public bool IsBurning { get; set; }
+    public bool IsFragile { get; set; }
+    public float FragileStacks { get; set; }
+    public float LastFragileApplyTime { get; set; }
+
     private void OnMouseEnter() {
         EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent());
     }
@@ -123,11 +128,13 @@ public class Enemy : MonoBehaviour, IDamageable {
         m_Rigidbody.velocity = direction.normalized * m_MovementSpeed;
     }
 
+
     public void TakeFlatDamage(float damage) {
         TakeDamage(damage);
     }
 
     public void TakeBurnDamage(float damage, float interval, float time) {
+        IsBurning = true;
         StartCoroutine(BurnDamageCoroutine(damage, interval, time));
     }
 
@@ -137,6 +144,8 @@ public class Enemy : MonoBehaviour, IDamageable {
             TakeDamage(damage);
             yield return new WaitForSeconds(interval);
         }
+
+        IsBurning = false;
     }
 
     private void TakeDamage(float damage) {

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public class KitegirlQ : AAbility {
+public class KitegirlQ1 : AAbility {
     public override void OnUse() {
         if (IsOnCooldown()) return;
 

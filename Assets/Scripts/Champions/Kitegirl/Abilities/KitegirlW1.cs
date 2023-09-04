@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class KitegirlW : AAbility {
+public class KitegirlW1 : AAbility {
     [SerializeField] private KitegirlGrenade m_GrenadePrefab;
     [SerializeField] private float m_AbilityRange = 10f;
 
@@ -34,10 +34,7 @@ public class KitegirlW : AAbility {
             }
         }
     }
-
-    private bool DistanceCheck(Vector3 point) {
-        return (this.m_Champion.transform.position - point).magnitude <= m_AbilityRange;
-    }
+    
 
     // WE NEED THIS FUNCTION DO NOT DELETE
     protected override void ResetCooldown() {

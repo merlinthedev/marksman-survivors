@@ -4,9 +4,11 @@ public abstract class AAbility : MonoBehaviour {
 
     [SerializeField] protected KeyCode m_KeyCode;
     [SerializeField] protected float m_AbilityCooldown = 0f;
+    [SerializeField] protected float m_AbilityRange = 10f;
     protected float m_LastUseTime;
     private float m_CurrentCooldown = 0f;
-    protected Champion m_Champion;
+    protected Champion m_Champion;    
+
 
     protected bool m_IsCancelled = false;
     
@@ -23,6 +25,10 @@ public abstract class AAbility : MonoBehaviour {
 
     protected void SetBaseCooldown() {
         m_AbilityCooldown = m_CurrentCooldown;
+    }
+    
+    protected bool DistanceCheck(Vector3 point) {
+        return (this.m_Champion.transform.position - point).magnitude <= m_AbilityRange;
     }
 
     protected virtual void ResetCooldown() {

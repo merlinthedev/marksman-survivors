@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Util;
 
-public class KitegirlR : AAbility {
+public class KitegirlR1 : AAbility {
 
     [SerializeField] private float m_UltimateDuration = 12f;
 
