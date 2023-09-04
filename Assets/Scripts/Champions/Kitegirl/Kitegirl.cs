@@ -61,7 +61,7 @@ public class Kitegirl : Champion {
         // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
         m_Rigidbody.velocity = Vector3.zero;
 
-        ShootBullet_Recursive(true,
+        ShootBullet_Recursive(false,
             new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
         m_AnimationController.Attack();
 

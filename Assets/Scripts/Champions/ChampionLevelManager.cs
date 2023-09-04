@@ -2,17 +2,17 @@
 using UnityEngine;
 
 public class ChampionLevelManager {
-
     private Champion m_Champion;
     private int m_CurrentLevel;
     private float m_CurrentLevelXP;
     private float m_PreviousLevelXP;
-    private float m_GrowthRate = 1.1f;
+    private float m_GrowthRate = 1.2f;
+    private float m_ConstantLevelXPIncrease = 5f;
 
     public ChampionLevelManager(Champion champion) {
         m_Champion = champion;
         m_CurrentLevel = 1;
-        m_CurrentLevelXP = 100f;
+        m_CurrentLevelXP = 20f;
         m_PreviousLevelXP = 0f;
     }
 
@@ -31,7 +31,6 @@ public class ChampionLevelManager {
         m_Champion.GetChampionStatistics().CurrentXP = 0f;
 
         EventBus<ChampionLevelUpEvent>.Raise(new ChampionLevelUpEvent(m_CurrentLevel, m_CurrentLevel - 1));
+        Debug.Log("Leveled up to level " + m_CurrentLevel + "!");
     }
-
-
 }

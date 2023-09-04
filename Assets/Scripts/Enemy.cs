@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour {
     private float m_LastAttackTime = 0f;
     [SerializeField] private float m_AttackCooldown = 3f;
 
-    [SerializeField] private float m_RewardXP = 21f;
+    [SerializeField] private float m_RewardXP = 1f;
 
     private SpriteRenderer m_SpriteRenderer;
     private Animator m_Animator;

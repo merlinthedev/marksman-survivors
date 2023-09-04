@@ -375,7 +375,10 @@ MonoBehaviour:
   m_MovementSpeed: 2.2
   m_HealthBar: {fileID: 8277267421854434963}
   m_AttackCooldown: 3
-  m_RewardXP: 21
+  m_RewardXP: 1
+  m_CurrentDir: 0
+  Xspeed: 0
+  Zspeed: 0
 --- !u!212 &2727071012428929937
 SpriteRenderer:
   m_ObjectHideFlags: 0

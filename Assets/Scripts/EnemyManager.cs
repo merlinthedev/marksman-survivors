@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour {
         while (m_ShouldSpawn) {
             yield return new WaitForSeconds(m_SpawnTimer);
             // Debug.Log("Spawning enemy");
-            Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.identity);
+            Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.Euler(0, 45, 0));
             enemy.SetTarget(m_Player.transform);
             m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
         }
@@ -126,11 +126,10 @@ public class EnemyManager : MonoBehaviour {
 
         if (value) {
             StartCoroutine(SpawnEnemy());
-        } else {
+        }
+        else {
             StopCoroutine(SpawnEnemy());
         }
-
-
     }
 
     public static EnemyManager GetInstance() {
