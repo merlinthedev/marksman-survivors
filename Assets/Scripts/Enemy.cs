@@ -1,9 +1,10 @@
 ﻿using Events;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour, IDamageable {
     private Transform m_Target;
     [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
     private Canvas m_Canvas;
@@ -122,7 +123,23 @@ public class Enemy : MonoBehaviour {
         m_Rigidbody.velocity = direction.normalized * m_MovementSpeed;
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeFlatDamage(float damage) {
+        TakeDamage(damage);
+    }
+
+    public void TakeBurnDamage(float damage, float interval, float time) {
+        StartCoroutine(BurnDamageCoroutine(damage, interval, time));
+    }
+
+    private IEnumerator BurnDamageCoroutine(float damage, float interval, float time) {
+        float startTime = Time.time;
+        while (Time.time < startTime + time) {
+            TakeDamage(damage);
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
+    private void TakeDamage(float damage) {
         if (m_IsDead) return;
         m_CurrentHealth -= damage;
 
@@ -165,12 +182,14 @@ public class Enemy : MonoBehaviour {
         if (other.gameObject.CompareTag("Player")) {
             if (m_IsDead) return;
 
-            Player player = other.gameObject.TryGetComponent(out Player playerComponent)
-                ? playerComponent
-                : throw new Exception("Missing player component");
+            Champion champion = other.gameObject.GetComponent<Champion>();
+            if (champion == null) {
+                Debug.LogError("Missing champion component");
+                return;
+            }
 
             if (Time.time > m_LastAttackTime + m_AttackCooldown) {
-                player.TakeDamage(70f);
+                champion.TakeFlatDamage(70f);
                 m_LastAttackTime = Time.time;
             }
         }
@@ -178,5 +197,9 @@ public class Enemy : MonoBehaviour {
 
     public float GetXP() {
         return this.m_RewardXP;
+    }
+
+    public float GetMaxHealth() {
+        return m_MaxHealth;
     }
 }

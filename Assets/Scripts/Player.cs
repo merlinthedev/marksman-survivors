@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 public class Player : MonoBehaviour {
-
-
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
 
@@ -28,6 +26,7 @@ public class Player : MonoBehaviour {
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionManaRegenerated>.Subscribe(OnChampionManaRegenerated);
         EventBus<ChampionAbilitiesHookedEvent>.Subscribe(OnChampionAbilitiesHooked);
+        EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
     }
 
     private void OnDisable() {
@@ -36,6 +35,7 @@ public class Player : MonoBehaviour {
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionManaRegenerated>.Unsubscribe(OnChampionManaRegenerated);
         EventBus<ChampionAbilitiesHookedEvent>.Unsubscribe(OnChampionAbilitiesHooked);
+        EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
     }
 
     private void Start() {
@@ -100,7 +100,6 @@ public class Player : MonoBehaviour {
                 if (hit.collider.gameObject.CompareTag("Enemy")) {
                     m_SelectedChampion.OnAutoAttack(hit.collider);
                 }
-
             }
         }
 
@@ -116,14 +115,17 @@ public class Player : MonoBehaviour {
             m_SelectedChampion.OnAbility(KeyCode.Q);
             UpdateQCooldown();
         }
+
         if (Input.GetKeyDown(KeyCode.W)) {
             m_SelectedChampion.OnAbility(KeyCode.W);
             UpdateWCooldown();
         }
+
         if (Input.GetKeyDown(KeyCode.E)) {
             m_SelectedChampion.OnAbility(KeyCode.E);
             UpdateECooldown();
         }
+
         if (Input.GetKeyDown(KeyCode.R)) {
             m_SelectedChampion.OnAbility(KeyCode.R);
             UpdateRCooldown();
@@ -141,10 +143,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void TakeDamage(float damage) {
-        m_SelectedChampion.TakeDamage(damage);
-        UpdateHealthBar();
-    }
 
     private void UpdateHealthBar() {
         float healthPercentage = m_SelectedChampion.GetCurrentHealth() / m_SelectedChampion.GetMaxHealth();
@@ -164,12 +162,15 @@ public class Player : MonoBehaviour {
         if (m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {
             UpdateQCooldown();
         }
+
         if (m_SelectedChampion.GetAbilities()[1].IsOnCooldown()) {
             UpdateWCooldown();
         }
+
         if (m_SelectedChampion.GetAbilities()[2].IsOnCooldown()) {
             UpdateECooldown();
         }
+
         if (m_SelectedChampion.GetAbilities()[3].IsOnCooldown()) {
             UpdateRCooldown();
         }
@@ -209,6 +210,10 @@ public class Player : MonoBehaviour {
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
         SetDefaultCursorTexture();
+    }
+
+    private void OnChampionDamageTakenEvent(ChampionDamageTakenEvent e) {
+        UpdateHealthBar();
     }
 
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {

@@ -1,9 +1,10 @@
 using Events;
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public abstract class Champion : AAbilityHolder {
+public abstract class Champion : AAbilityHolder, IDamageable {
     [SerializeField] protected Rigidbody m_Rigidbody;
 
     [SerializeField] protected Vector3 m_MouseHitPoint;
@@ -23,18 +24,12 @@ public abstract class Champion : AAbilityHolder {
     protected bool m_HasAttackCooldown = false;
 
     public bool CanAttack {
-        get {
-            return !m_HasAttackCooldown;
-        }
-        protected set {
-            m_HasAttackCooldown = !value;
-        }
+        get { return !m_HasAttackCooldown; }
+        protected set { m_HasAttackCooldown = !value; }
     }
 
     public bool IsMoving {
-        get {
-            return m_Rigidbody.velocity.magnitude > 0.001f;
-        }
+        get { return m_Rigidbody.velocity.magnitude > 0.001f; }
     }
 
     private void OnEnable() {
@@ -53,8 +48,20 @@ public abstract class Champion : AAbilityHolder {
 
     public abstract void OnAbility(KeyCode keyCode);
 
-    public void TakeDamage(float damage) {
+    public void TakeFlatDamage(float damage) {
         OnDamageTaken(damage);
+    }
+
+    public void TakeBurnDamage(float damage, float interval, float time) {
+        StartCoroutine(BurnDamageCoroutine(damage, interval, time));
+    }
+
+    private IEnumerator BurnDamageCoroutine(float damage, float interval, float time) {
+        float startTime = Time.time;
+        while (Time.time < startTime + time) {
+            OnDamageTaken(damage);
+            yield return new WaitForSeconds(interval);
+        }
     }
 
     protected virtual void Start() {
@@ -117,6 +124,7 @@ public abstract class Champion : AAbilityHolder {
         if (m_MouseHitPoint == Vector3.zero || !m_CanMove) {
             return;
         }
+
         // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
@@ -137,6 +145,7 @@ public abstract class Champion : AAbilityHolder {
 
     protected virtual void OnDamageTaken(float damage) {
         m_ChampionStatistics.CurrentHealth -= damage;
+        EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
         if (m_ChampionStatistics.CurrentHealth <= 0) {
             OnDeath();
         }
@@ -179,7 +188,9 @@ public abstract class Champion : AAbilityHolder {
 
     public float GetGlobalDirectionAngle() {
         // return the angle but instead of -180-180 i want it to be 0-360
-        return m_GlobalMovementDirectionAngle < 0 ? m_GlobalMovementDirectionAngle + 360 : m_GlobalMovementDirectionAngle;
+        return m_GlobalMovementDirectionAngle < 0
+            ? m_GlobalMovementDirectionAngle + 360
+            : m_GlobalMovementDirectionAngle;
     }
 
     public void SetMouseHitPoint(Vector3 point) {
@@ -229,5 +240,4 @@ public abstract class Champion : AAbilityHolder {
     protected float GetDamageMultiplier() => m_DamageMultiplier;
     public Rigidbody GetRigidbody() => m_Rigidbody;
     public ChampionStatistics GetChampionStatistics() => m_ChampionStatistics;
-
 }

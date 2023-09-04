@@ -48,7 +48,7 @@ public abstract class ABullet : MonoBehaviour {
         // Debug.Log("ABullet base OnTriggerEnter called");
         if (other.gameObject.CompareTag("Enemy")) {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.TakeDamage(m_Damage);
+            enemy.TakeFlatDamage(m_Damage);
             // Debug.Log("Hit an enemy");
 
             Destroy(gameObject);

@@ -16,15 +16,12 @@ public abstract class EventBus<T> where T : Event {
     }
 }
 
-public abstract class Event {
-}
+public abstract class Event { }
 
 namespace Events {
-    public class EnemyStartHoverEvent : Event {
-    }
+    public class EnemyStartHoverEvent : Event { }
 
-    public class EnemyStopHoverEvent : Event {
-    }
+    public class EnemyStopHoverEvent : Event { }
 
     public class EnemyHitEvent : Event {
         public Collider m_Collider { get; private set; }
@@ -50,13 +47,13 @@ namespace Events {
         }
     }
 
-    public class ChampionHealthRegenerated : Event {
-    }
+    public class ChampionHealthRegenerated : Event { }
 
-    public class ChampionManaRegenerated : Event {
-    }
+    public class ChampionManaRegenerated : Event { }
 
-    public class ChampionAbilitiesHookedEvent : Event {
+    public class ChampionAbilitiesHookedEvent : Event { }
+
+    public class ChampionDamageTakenEvent : Event {
     }
 
     public class ChampionLevelUpEvent : Event {
