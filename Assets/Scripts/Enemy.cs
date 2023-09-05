@@ -185,7 +185,11 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     public void RemoveDebuff(Debuff debuff) {
         Debuffs.Remove(debuff);
-        // TODO: Fix slow and stuff
+        switch (debuff.GetDebuffType()) {
+            case Debuff.DebuffType.SLOW:
+                RemoveSlow(debuff);
+                break;
+        }
         // throw new NotImplementedException();
     }
 
@@ -202,6 +206,10 @@ public class Enemy : MonoBehaviour, IDamageable {
         Debug.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + m_InitialMovementSpeed);
 
         Utilities.InvokeDelayed(() => { m_MovementSpeed = m_InitialMovementSpeed; }, debuff.GetDuration(), this);
+    }
+
+    private void RemoveSlow(Debuff debuff) {
+        m_MovementSpeed = m_InitialMovementSpeed; // TODO: handle possible existing coroutines for the same debuff
     }
 
     private void ShowDamageUI(float damage) {
