@@ -169,6 +169,21 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
 
+    public void AddFragileStacks(float stacks) {
+        if (FragileStacks < 1) IsFragile = true;
+        FragileStacks += stacks;
+    }
+
+    public void RemoveFragileStacks(float stacks) {
+        if (FragileStacks < stacks) {
+            FragileStacks = 0;
+            IsFragile = false;
+        }
+        else {
+            FragileStacks -= stacks;
+        }
+    }
+
     private void Die() {
         EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
 

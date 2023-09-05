@@ -12,4 +12,6 @@ public interface IDamageable {
     void TakeBurnDamage(float damage, float interval, float time);
     void ApplyDebuff(Debuff debuff);
     void RemoveDebuff(Debuff debuff);
+    void AddFragileStacks(float stacks);
+    void RemoveFragileStacks(float stacks);
 }

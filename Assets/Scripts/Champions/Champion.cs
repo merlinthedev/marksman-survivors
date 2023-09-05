@@ -210,6 +210,21 @@ public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
         Destroy(gameObject);
     }
 
+    public void AddFragileStacks(float stacks) {
+        if (FragileStacks < 1) IsFragile = true;
+        FragileStacks += stacks;
+    }
+
+    public void RemoveFragileStacks(float stacks) {
+        if (FragileStacks < stacks) {
+            FragileStacks = 0;
+            IsFragile = false;
+        }
+        else {
+            FragileStacks -= stacks;
+        }
+    }
+
     protected void DrawDirectionRays() {
         // Direction ray
         Debug.DrawRay(transform.position, GetCurrentMovementDirection() * 10f, Color.red);

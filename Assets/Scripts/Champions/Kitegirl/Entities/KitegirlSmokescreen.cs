@@ -30,6 +30,9 @@ public class KitegirlSmokescreen : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Enemy")) {
             Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+            // enemy fragile stacks
+            enemy.AddFragileStacks(m_FragileStacks);
+
             Debuff debuff = Debuff.CreateDebuff(m_SourceEntity as Champion, Debuff.DebuffType.SLOW, -1,
                 m_SlowPercentage);
             m_AffectedEnemies.Add(enemy, debuff);
@@ -41,6 +44,7 @@ public class KitegirlSmokescreen : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Enemy")) {
             Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+            enemy.RemoveFragileStacks(m_FragileStacks);
             if (m_AffectedEnemies.ContainsKey(enemy)) {
                 enemy.RemoveDebuff(m_AffectedEnemies[enemy]);
                 m_AffectedEnemies.Remove(enemy);
