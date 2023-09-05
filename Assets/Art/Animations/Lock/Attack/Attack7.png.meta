@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e06e4793923be0240a2ef90a9116f947
+guid: b6ddc978140a1324690eacb61af05d21
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 35
+  spritePixelsToUnits: 20
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -71,7 +71,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hugo_attack_7_0
+      name: Attack7_0
       rect:
         serializedVersion: 2
-        x: 76
-        y: 12
-        width: 104
-        height: 104
+        x: 3
+        y: 0
+        width: 30
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,8 +133,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ee76183a6d725c44b95faa227d3392e
-      internalID: -573228057
+      spriteID: 3dd6a804837ddd54d9aec02753361a49
+      internalID: 27685747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack7_1
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 441c1961823890b4a8196e8328b961bd
+      internalID: 2075790188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack7_2
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 0
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 329c6ed09236cfc4e8e4771a64976615
+      internalID: -1029822338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack7_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f516ca9e8c7aa2f49a5f6ed17bd7650d
+      internalID: -1016037687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack7_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c28ad0f55e34014b94695a0b5ee69f0
+      internalID: 1486758639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack7_5
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 0
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bdb166e017816b4eb134ac57f50a00b
+      internalID: -172438570
       vertices: []
       indices: 
       edges: []
@@ -142,7 +247,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 4c80aa2603ca14643a9fba696620b338
+    spriteID: 1dbcb63196ceabe4194c41ab2c33bd90
     internalID: 0
     vertices: []
     indices: 
@@ -150,7 +255,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      hugo_attack_7_0: -573228057
+      Attack7_0: 27685747
+      Attack7_1: 2075790188
+      Attack7_2: -1029822338
+      Attack7_3: -1016037687
+      Attack7_4: 1486758639
+      Attack7_5: -172438570
+      Attack7_6: -1226052808
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
