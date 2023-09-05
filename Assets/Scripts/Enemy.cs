@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -156,9 +157,10 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     private void TakeDamage(float damage) {
         if (m_IsDead) return;
-        m_CurrentHealth -= damage;
+        float damageTaken = CalculateDamage(damage);
+        m_CurrentHealth -= damageTaken;
 
-        ShowDamageUI(damage);
+        ShowDamageUI(damageTaken);
         UpdateHealthBar();
 
         if (m_CurrentHealth <= 0) {
@@ -167,6 +169,14 @@ public class Enemy : MonoBehaviour, IDamageable {
 
             Invoke(nameof(Die), 0.5f);
         }
+    }
+
+    private float CalculateDamage(float incomingDamage) {
+        if (IsFragile) {
+            incomingDamage *= 1 + FragileStacks / 100f;
+        }
+
+        return incomingDamage;
     }
 
     public void AddFragileStacks(float stacks) {
