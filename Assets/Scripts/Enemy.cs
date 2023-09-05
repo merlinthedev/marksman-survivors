@@ -1,4 +1,4 @@
-﻿using Events;
+using Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     private float m_MaxHealth = 250f;
     private float m_CurrentHealth = 250f;
     [SerializeField] private Image m_HealthBar;
+    [SerializeField] private Image m_HealthBarBackground;
     private float m_InitialHealthBarWidth;
     private bool m_CanMove = true;
 
@@ -56,6 +57,10 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     private void Start() {
         m_Rigidbody = GetComponent<Rigidbody>();
+
+        m_HealthBar.enabled = false;
+        m_HealthBarBackground.enabled = false;
+
         if (m_Rigidbody == null) {
             throw new Exception("Missing rigidbody");
         }
@@ -159,6 +164,10 @@ public class Enemy : MonoBehaviour, IDamageable {
         if (m_IsDead) return;
         float damageTaken = CalculateDamage(damage);
         m_CurrentHealth -= damageTaken;
+
+        m_HealthBar.enabled = true;
+        m_HealthBarBackground.enabled = true;
+
 
         ShowDamageUI(damageTaken);
         UpdateHealthBar();

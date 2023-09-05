@@ -374,6 +374,7 @@ MonoBehaviour:
     type: 3}
   m_MovementSpeed: 2.2
   m_HealthBar: {fileID: 8277267421854434963}
+  m_HealthBarBackground: {fileID: 5725382674590694086}
   m_AttackCooldown: 3
   m_RewardXP: 1
   m_CurrentDir: 0

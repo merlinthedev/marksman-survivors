@@ -669,7 +669,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246267774}
-  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalRotation: {x: 0.31120726, y: 0, z: 0, w: 0.95034206}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -677,7 +677,7 @@ Transform:
   - {fileID: 330585546}
   m_Father: {fileID: 2114737654}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 36.264, y: 0, z: 0}
 --- !u!1 &285777485
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,8 +852,8 @@ Camera:
   near clip plane: 0.01
   far clip plane: 1000
   field of view: 15
-  orthographic: 0
-  orthographic size: 9
+  orthographic: 1
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -877,7 +877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4, z: -60}
+  m_LocalPosition: {x: 0, y: -0.4, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1057,6 +1057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_XPBar: {fileID: 429343428}
+  m_LevelText: {fileID: 1898289926}
 --- !u!1 &409803396
 GameObject:
   m_ObjectHideFlags: 0
