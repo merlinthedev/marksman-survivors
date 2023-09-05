@@ -176,6 +176,9 @@ public class Enemy : MonoBehaviour, IDamageable {
             m_CanMove = false;
             m_Rigidbody.velocity = Vector3.zero;
 
+            m_Collider.isTrigger = true;
+            m_Rigidbody.useGravity = false;
+
             Invoke(nameof(Die), 0.5f);
         }
     }
