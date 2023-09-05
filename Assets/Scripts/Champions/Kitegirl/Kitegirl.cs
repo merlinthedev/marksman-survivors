@@ -81,10 +81,10 @@ public class Kitegirl : Champion {
         }
     }
 
-    public void ActivateUltimate() {
+    public void ActivateUltimate(float duration) {
         m_HasUltimateActive = true;
 
-        SetMovementDebuff(0.3f);
+        ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.SLOW, duration, 0.5f));
         this.m_ChampionStatistics.CriticalStrikeChance = 1f;
 
         this.m_HasAttackCooldown = false;
@@ -93,7 +93,6 @@ public class Kitegirl : Champion {
     public void DeactivateUltimate() {
         m_HasUltimateActive = false;
 
-        ResetMovementMultiplier();
         // ResetDamageMultiplier();
         this.m_ChampionStatistics.CriticalStrikeChance =
             0f; // TODO: REFACTOR, crit chance won't always be 0 before ultimate is activated
@@ -184,6 +183,4 @@ public class Kitegirl : Champion {
         SetCanMove(true);
         CanAttack = true;
     }
-
-    
 }

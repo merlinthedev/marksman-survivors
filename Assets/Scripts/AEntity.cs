@@ -1,5 +1,4 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class AEntity : MonoBehaviour {
-
-}
+public class AEntity : MonoBehaviour { }

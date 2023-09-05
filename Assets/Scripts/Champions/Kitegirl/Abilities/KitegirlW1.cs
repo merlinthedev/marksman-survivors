@@ -21,10 +21,8 @@ public class KitegirlW1 : AAbility {
                 if (DistanceCheck(point)) {
                     KitegirlGrenade grenade =
                         Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
-                    grenade.SetTargetPoint(point);
-                    grenade.SetSourceEntity(this.m_Champion);
                     grenade.SetDamage(this.m_Champion.GetChampionStatistics().AttackDamage * m_AttackDamageRatio);
-                    grenade.OnThrow();
+                    grenade.OnThrow(point, m_Champion);
                     this.m_LastUseTime = Time.time;
                 }
                 else {

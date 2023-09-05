@@ -1,8 +1,10 @@
 ﻿using Events;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 public class Enemy : MonoBehaviour, IDamageable {
     private Transform m_Target;
@@ -12,6 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     private Rigidbody m_Rigidbody;
     private Collider m_Collider;
     [SerializeField] private float m_MovementSpeed = 7f;
+    private float m_InitialMovementSpeed;
 
 
     private float m_MaxHealth = 250f;
@@ -40,6 +43,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     public bool IsFragile { get; set; }
     public float FragileStacks { get; set; }
     public float LastFragileApplyTime { get; set; }
+    public List<Debuff> Debuffs { get; } = new();
 
     private void OnMouseEnter() {
         EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent());
@@ -70,6 +74,8 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
         m_Animator = GetComponent<Animator>();
+
+        m_InitialMovementSpeed = m_MovementSpeed;
     }
 
 
@@ -167,6 +173,35 @@ public class Enemy : MonoBehaviour, IDamageable {
         EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
 
         Destroy(gameObject);
+    }
+
+    public void ApplyDebuff(Debuff debuff) {
+        switch (debuff.GetDebuffType()) {
+            case Debuff.DebuffType.SLOW:
+                ApplySlow(debuff);
+                break;
+        }
+    }
+
+    public void RemoveDebuff(Debuff debuff) {
+        Debuffs.Remove(debuff);
+        // TODO: Fix slow and stuff
+        // throw new NotImplementedException();
+    }
+
+    private void ApplySlow(Debuff debuff) {
+        // m_MovementSpeed *= value;
+        // The value is 0.33, how can i decrease the speed by 33%?
+        m_MovementSpeed *= 1 - debuff.GetValue();
+
+        if (debuff.GetDuration() < 0) {
+            return;
+        }
+
+        Debug.Log("<color=green> Slow applied </color>");
+        Debug.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + m_InitialMovementSpeed);
+
+        Utilities.InvokeDelayed(() => { m_MovementSpeed = m_InitialMovementSpeed; }, debuff.GetDuration(), this);
     }
 
     private void ShowDamageUI(float damage) {

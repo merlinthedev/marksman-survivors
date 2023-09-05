@@ -3,7 +3,6 @@
 // Scriptable object attribute
 [CreateAssetMenu(fileName = "ChampionStatistics", menuName = "Champion/ChampionStatistics", order = 0)]
 public class ChampionStatistics : ScriptableObject {
-
     #region editor variables
 
     [SerializeField] private float m_MaxHealth;
@@ -14,8 +13,13 @@ public class ChampionStatistics : ScriptableObject {
     [SerializeField] private float m_MovementSpeed;
     [SerializeField] private float m_AttackRange; // Bullet lifetime
     [SerializeField] private float m_AttackDamage;
-    [SerializeField] [Tooltip("This value has to be normalized")] private float m_CriticalStrikeChance; // NORMALIZED (0-1)
-    [SerializeField] [Tooltip("This value has to be normalized")] private float m_CriticalStrikeDamage; // NORMALIZED (0-1)
+
+    [SerializeField] [Tooltip("This value has to be normalized")]
+    private float m_CriticalStrikeChance; // NORMALIZED (0-1)
+
+    [SerializeField] [Tooltip("This value has to be normalized")]
+    private float m_CriticalStrikeDamage; // NORMALIZED (0-1)
+
     [SerializeField] private float m_CooldownReduction;
 
     [SerializeField] private float m_CurrentXP;
@@ -30,7 +34,9 @@ public class ChampionStatistics : ScriptableObject {
     private float currentMana;
     private float healthRegen;
     private float manaRegen;
+    private float initialAttackSpeed;
     private float attackSpeed;
+    private float initialMovementSpeed;
     private float movementSpeed;
     private float attackRange;
     private float attackDamage;
@@ -44,14 +50,16 @@ public class ChampionStatistics : ScriptableObject {
 
     public void Initialize() {
         // Debug.Log("HELLO WORLD");
-        
+
         maxHealth = m_MaxHealth;
         currentHealth = m_MaxHealth;
         maxMana = m_MaxMana;
         currentMana = m_MaxMana;
         healthRegen = m_HealthRegen;
         manaRegen = m_ManaRegen;
+        initialAttackSpeed = m_AttackSpeed;
         attackSpeed = m_AttackSpeed;
+        initialMovementSpeed = m_MovementSpeed;
         movementSpeed = m_MovementSpeed;
         attackRange = m_AttackRange;
         attackDamage = m_AttackDamage;
@@ -99,9 +107,17 @@ public class ChampionStatistics : ScriptableObject {
         set => attackSpeed = value;
     }
 
+    public float InitialMovementSpeed {
+        get => initialMovementSpeed;
+    }
+
     public float MovementSpeed {
         get => movementSpeed;
         set => movementSpeed = value;
+    }
+
+    public float InitialAttackSpeed {
+        get => initialAttackSpeed;
     }
 
     public float AttackRange {
@@ -135,5 +151,4 @@ public class ChampionStatistics : ScriptableObject {
     }
 
     #endregion
-
 }

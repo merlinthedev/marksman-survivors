@@ -21,7 +21,9 @@ public class KitegirlGrenade : MonoBehaviour, IThrowable {
     private bool m_RegularDetonationCancelled = false;
 
 
-    public void OnThrow() {
+    public void OnThrow(Vector3 targetPoint, AEntity sourceEntity) {
+        m_TargetPoint = targetPoint;
+        m_SourceEntity = sourceEntity;
         m_ThrownTime = Time.time;
         m_Rigidbody.useGravity = false;
         // Debug.Log("OnThrow()", this);
@@ -42,14 +44,6 @@ public class KitegirlGrenade : MonoBehaviour, IThrowable {
                 m_Rigidbody.velocity = Vector3.zero;
             }
         }
-    }
-
-    public void SetTargetPoint(Vector3 point) {
-        m_TargetPoint = point;
-    }
-
-    public void SetSourceEntity(AEntity entity) {
-        m_SourceEntity = entity;
     }
 
     private void Detonate(bool shot = false) {

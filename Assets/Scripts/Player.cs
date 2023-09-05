@@ -81,7 +81,10 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) {
+            int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+            layerMask = ~layerMask;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                // Debug.Log("<color=yellow>Hit: " + hit.collider.gameObject.name + "</color>");
                 if (hit.collider.gameObject.CompareTag("Ground")) {
                     var point = hit.point;
                     point.y = transform.position.y;

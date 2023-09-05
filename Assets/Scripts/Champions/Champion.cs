@@ -1,11 +1,13 @@
 using Events;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Util;
 using Random = UnityEngine.Random;
 
-public abstract class Champion : AAbilityHolder, IDamageable {
+public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
     [SerializeField] protected Rigidbody m_Rigidbody;
 
     [SerializeField] protected Vector3 m_MouseHitPoint;
@@ -19,6 +21,7 @@ public abstract class Champion : AAbilityHolder, IDamageable {
     private float m_GlobalMovementDirectionAngle = 0f;
     private float m_MovementMultiplier = 1f;
     private float m_DamageMultiplier = 1f;
+    private float m_PreviousAngle = 0f;
 
 
     [SerializeField] protected bool m_CanMove = true;
@@ -31,15 +34,16 @@ public abstract class Champion : AAbilityHolder, IDamageable {
 
     public float LastFragileApplyTime { get; set; }
 
+    public List<IDamageable> AffectedEntities { get; set; } = new();
+    public List<Debuff> Debuffs { get; } = new();
+
 
     public bool CanAttack {
-        get { return !m_HasAttackCooldown; }
-        protected set { m_HasAttackCooldown = !value; }
+        get => !m_HasAttackCooldown;
+        protected set => m_HasAttackCooldown = !value;
     }
 
-    public bool IsMoving {
-        get { return m_Rigidbody.velocity.magnitude > 0.001f; }
-    }
+    public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
 
     private void OnEnable() {
         // Debug.Log("Champion onEnable");
@@ -66,6 +70,37 @@ public abstract class Champion : AAbilityHolder, IDamageable {
         StartCoroutine(BurnDamageCoroutine(damage, interval, time));
     }
 
+    public void RemoveDebuff(Debuff debuff) {
+        Debuffs.Remove(debuff);
+
+        throw new NotImplementedException();
+    }
+
+    public void ApplyDebuff(Debuff debuff) {
+        Debuffs.Add(debuff);
+
+        switch (debuff.GetDebuffType()) {
+            case Debuff.DebuffType.SLOW:
+                ApplySlow(debuff);
+                break;
+        }
+    }
+
+    private void ApplySlow(Debuff debuff) {
+        m_ChampionStatistics.MovementSpeed *= 1 - debuff.GetValue();
+
+        if (debuff.GetDuration() < 0) {
+            return;
+        }
+
+        Utilities.InvokeDelayed(
+            () => {
+                m_ChampionStatistics.MovementSpeed = m_ChampionStatistics.InitialMovementSpeed;
+                Debuffs.Remove(debuff);
+            },
+            debuff.GetDuration(), this);
+    }
+
     private IEnumerator BurnDamageCoroutine(float damage, float interval, float time) {
         float startTime = Time.time;
         while (Time.time < startTime + time) {
@@ -75,6 +110,7 @@ public abstract class Champion : AAbilityHolder, IDamageable {
 
         IsBurning = false;
     }
+
 
     protected virtual void Start() {
         // Debug.Log("Champion start");
@@ -131,13 +167,6 @@ public abstract class Champion : AAbilityHolder, IDamageable {
         }
     }
 
-    protected void SetCanMove(bool value) {
-        m_CanMove = value;
-        // Debug.Log("Move set ton true");
-    }
-
-    private float previousAngle = 0f;
-
     protected virtual void OnMove() {
         if (m_MouseHitPoint == Vector3.zero || !m_CanMove) {
             return;
@@ -146,12 +175,12 @@ public abstract class Champion : AAbilityHolder, IDamageable {
         // Debug.Log("Moving");
         Vector3 direction = m_MouseHitPoint - transform.position;
 
-        previousAngle = m_GlobalMovementDirectionAngle;
+        m_PreviousAngle = m_GlobalMovementDirectionAngle;
         m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         if (direction.magnitude < 0.1f) {
             // Debug.Log("Stop moving");
-            m_GlobalMovementDirectionAngle = previousAngle;
+            m_GlobalMovementDirectionAngle = m_PreviousAngle;
             m_MouseHitPoint = Vector3.zero;
             m_Rigidbody.velocity = Vector3.zero;
             return;
@@ -222,20 +251,13 @@ public abstract class Champion : AAbilityHolder, IDamageable {
         m_GlobalMovementDirectionAngle = angle;
     }
 
-    protected void SetMovementDebuff(float v) {
-        m_MovementMultiplier -= v; // for example -> v = 0.3f = 30% debuff so the multiplier will be 0.7f
-    }
-
-    public void SetMovementMultiplier(float v) {
-        m_MovementMultiplier = v; // hard set the multiplier
-    }
-
-    protected void ResetMovementMultiplier() {
-        m_MovementMultiplier = 1f; // reset the multiplier
+    protected void SetCanMove(bool value) {
+        m_CanMove = value;
+        // Debug.Log("Move set ton true");
     }
 
     public void CleanseAllDebuffs() {
-        ResetMovementMultiplier();
+        throw new NotImplementedException();
     }
 
     protected void SetDamageMultiplier(float v) {

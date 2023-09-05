@@ -122,6 +122,16 @@ public class EnemyManager : MonoBehaviour {
             select enemy.Value).ToList();
     }
 
+    public Enemy GetEnemy(Collider other) {
+        Enemy enemy = m_EnemyDictionary[other];
+        if (enemy == null) {
+            Debug.LogError("Enemy not found in dictionary");
+            throw new Exception("Enemy not found in dictionary");
+        }
+
+        return enemy;
+    }
+
     public void SetShouldSpawn(bool value) {
         m_ShouldSpawn = value;
 

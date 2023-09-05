@@ -45,4 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_KeyCode: 101
-  m_AbilityCooldown: 8
+  m_AbilityCooldown: 1
+  m_AbilityRange: 1000
+  m_SmokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
+    type: 3}

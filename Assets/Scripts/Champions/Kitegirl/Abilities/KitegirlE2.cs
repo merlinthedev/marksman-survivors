@@ -2,6 +2,7 @@
 
 public class KitegirlE2 : AAbility {
     [SerializeField] private KitegirlSmokescreen m_SmokescreenPrefab = null;
+
     public override void OnUse() {
         if (IsOnCooldown()) return;
 
@@ -18,6 +19,9 @@ public class KitegirlE2 : AAbility {
                 if (DistanceCheck(point)) {
                     // TODO: Spawn smokescreen
                     this.m_LastUseTime = Time.time;
+                    KitegirlSmokescreen kitegirlSmokescreen = Instantiate(m_SmokescreenPrefab,
+                        m_Champion.transform.position, Quaternion.identity);
+                    kitegirlSmokescreen.OnThrow(point, m_Champion);
                 }
                 else {
                     // Debug.Log("Out of range");
