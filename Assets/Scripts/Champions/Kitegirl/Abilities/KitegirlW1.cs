@@ -12,7 +12,7 @@ public class KitegirlW1 : AAbility {
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit)) {
-            if (hit.collider.gameObject.CompareTag("Ground")) {
+            if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
                 Vector3 point = hit.point;
                 point.y = this.m_Champion.transform.position.y - 0.2f;
 
@@ -31,7 +31,7 @@ public class KitegirlW1 : AAbility {
             }
         }
     }
-    
+
 
     // WE NEED THIS FUNCTION DO NOT DELETE
     protected override void ResetCooldown() {

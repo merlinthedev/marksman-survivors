@@ -47,4 +47,4 @@ MonoBehaviour:
   m_KeyCode: 114
   m_AbilityCooldown: 60
   m_AbilityRange: 10
-  m_UltimateDuration: 12
+  m_UltimateDuration: 10

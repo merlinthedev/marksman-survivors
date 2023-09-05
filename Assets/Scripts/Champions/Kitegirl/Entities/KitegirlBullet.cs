@@ -16,13 +16,37 @@ public class KitegirlBullet : ABullet {
         if (other.gameObject.CompareTag("Enemy")) {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
             if (m_ShouldChain) {
-                enemy.TakeFlatDamage(this.m_Damage);
+                // enemy.TakeFlatDamage(this.m_Damage);
+                if ((bool)(m_SourceEntity as Kitegirl)?.HasUltimateActive()) {
+                    if (enemy.IsFragile) {
+                        enemy.Die();
+                    }
+                    else {
+                        enemy.TakeFlatDamage(m_Damage);
+                    }
+                }
+                else {
+                    enemy.TakeFlatDamage(m_Damage);
+                }
+
                 TryReduceECooldown();
                 Chain(other.gameObject.transform.position, new List<Enemy> { enemy });
                 Destroy(gameObject);
             }
             else {
-                enemy.TakeFlatDamage(this.m_Damage);
+                // enemy.TakeFlatDamage(this.m_Damage);
+                if ((bool)(m_SourceEntity as Kitegirl)?.HasUltimateActive()) {
+                    if (enemy.IsFragile) {
+                        enemy.Die();
+                    }
+                    else {
+                        enemy.TakeFlatDamage(m_Damage);
+                    }
+                }
+                else {
+                    enemy.TakeFlatDamage(m_Damage);
+                }
+
                 TryReduceECooldown();
                 Destroy(gameObject);
             }

@@ -11,7 +11,7 @@ public class Kitegirl : Champion {
     private bool m_HasUltimateActive = false;
 
     private int m_RecurseCount = 0;
-    private int m_MaxRecurseCount = 3;
+    private int m_MaxRecurseCount = 0;
 
     private int m_MaxChainCount {
         get { return m_MaxRecurseCount; }
@@ -56,15 +56,15 @@ public class Kitegirl : Champion {
         // }
 
         if (!CanAttack) return;
-        this.m_CanMove = false;
-        this.m_LastAttackTime = Time.time;
+        m_CanMove = false;
+        m_LastAttackTime = Time.time;
         Vector3 dir = collider.transform.position - transform.position;
         SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
         // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
         // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
         m_Rigidbody.velocity = Vector3.zero;
 
-        ShootBullet_Recursive(false,
+        ShootBullet_Recursive(m_HasUltimateActive,
             new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
         m_AnimationController.Attack();
         CanAttack = false;
@@ -81,23 +81,14 @@ public class Kitegirl : Champion {
         }
     }
 
-    public void ActivateUltimate(float duration) {
+    public void ActivateUltimate(float duration, float burstAmount, float slowAmount) {
         m_HasUltimateActive = true;
-
-        ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.SLOW, duration, 0.5f));
-        this.m_ChampionStatistics.CriticalStrikeChance = 1f;
-
-        this.m_HasAttackCooldown = false;
+        m_MaxRecurseCount = (int)burstAmount;
+        ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.SLOW, duration, slowAmount));
     }
 
     public void DeactivateUltimate() {
         m_HasUltimateActive = false;
-
-        // ResetDamageMultiplier();
-        this.m_ChampionStatistics.CriticalStrikeChance =
-            0f; // TODO: REFACTOR, crit chance won't always be 0 before ultimate is activated
-
-        this.m_HasAttackCooldown = true;
     }
 
     public void TryReduceECooldown() {
@@ -112,7 +103,8 @@ public class Kitegirl : Champion {
         float pushbackStunTime = 0.55f;
         SetCanMove(false);
         m_Rigidbody.AddForce(GetCurrentMovementDirection() * (-1f * force), ForceMode.Impulse);
-        Utilities.InvokeDelayed(() => SetCanMove(true), pushbackStunTime, this); // 0.35 is the duration of the push back
+        Utilities.InvokeDelayed(() => SetCanMove(true), pushbackStunTime,
+            this); // 0.35 is the duration of the push back
     }
 
     protected override void OnMove() {
@@ -189,5 +181,9 @@ public class Kitegirl : Champion {
     public void EnableStuffAfterAttack() {
         SetCanMove(true);
         CanAttack = true;
+    }
+
+    public bool HasUltimateActive() {
+        return m_HasUltimateActive;
     }
 }

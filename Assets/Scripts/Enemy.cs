@@ -184,7 +184,7 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
 
-    private void Die() {
+    public void Die() {
         EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
 
         Destroy(gameObject);
