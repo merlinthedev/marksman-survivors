@@ -65,4 +65,15 @@ namespace Events {
             m_PreviousLevel = previousLevel;
         }
     }
+
+    public class UpdateXPBarEvent : Event {
+
+        public float m_CurrentXP { get; private set; }
+        public float m_TotalXP { get; private set; }
+
+        public UpdateXPBarEvent(float currentXP, float totalXP) {
+            m_CurrentXP = currentXP;
+            m_TotalXP = totalXP;
+        }
+    }
 }

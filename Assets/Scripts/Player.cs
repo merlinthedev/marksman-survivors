@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
-
+    [SerializeField] private Image m_XPBar;
     [SerializeField] private Image m_AttackBar;
     [SerializeField] private Image m_QBar;
     [SerializeField] private Image m_WBar;
@@ -144,6 +144,7 @@ public class Player : MonoBehaviour {
         if (!m_SelectedChampion.CanAttack) {
             UpdateAttackBar();
         }
+        //UpdateXPBar();
     }
 
 
@@ -160,6 +161,11 @@ public class Player : MonoBehaviour {
 
         m_AttackBar.fillAmount = 1 - attackPercentage;
     }
+
+    //private void UpdateXPBar() {
+    //    float xpPercentage = m_SelectedChampion.GetChampionStatistics().CurrentXP / m_SelectedChampion.GetChampionLevelManager().CurrentLevelXP;
+    //    m_XPBar.fillAmount = xpPercentage;
+    //}
 
     private void HandleAbilityCooldowns() {
         if (m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {

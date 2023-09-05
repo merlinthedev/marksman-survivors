@@ -12,7 +12,7 @@ public class ChampionLevelManager {
     public ChampionLevelManager(Champion champion) {
         m_Champion = champion;
         m_CurrentLevel = 1;
-        m_CurrentLevelXP = 20f;
+        m_CurrentLevelXP = 5f;
         m_PreviousLevelXP = 0f;
     }
 
@@ -33,4 +33,15 @@ public class ChampionLevelManager {
         EventBus<ChampionLevelUpEvent>.Raise(new ChampionLevelUpEvent(m_CurrentLevel, m_CurrentLevel - 1));
         Debug.Log("Leveled up to level " + m_CurrentLevel + "!");
     }
+
+    #region Getters and Setters
+    public float CurrentLevelXP {
+        get => m_CurrentLevelXP;
+        set => m_CurrentLevelXP = value;
+    }
+    public float CurrentLevel {
+        get => m_CurrentLevel;
+        set => m_CurrentLevel = (int)value;
+    }
+    #endregion
 }
