@@ -1,40 +1,29 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class KitegirlSmokescreen : MonoBehaviour, IThrowable {
-    [SerializeField] private Rigidbody m_Rigidbody;
-
+public class KitegirlSmokescreen : MonoBehaviour {
     private AEntity m_SourceEntity;
 
-    private Vector3 m_TargetPoint;
 
     [SerializeField] private float m_SmokescreenDuration = 5f;
     [SerializeField] private float m_FragileStacks = 10f;
     [SerializeField] private float m_SlowPercentage = 0.33f; // Normalized! 0-1
-    private float m_DestinationReachedTime = 0f;
+    private float m_UseTime = 0f;
+    [SerializeReference] private Dictionary<Enemy, Debuff> m_AffectedEnemies = new();
 
-    private bool m_DestinationReached = false;
-
-    private Dictionary<Enemy, Debuff> m_AffectedEnemies = new();
-
-    public void OnThrow(Vector3 point, AEntity sourceEntity) {
-        m_TargetPoint = point;
+    public void OnThrow(AEntity sourceEntity) {
         m_SourceEntity = sourceEntity;
-        m_Rigidbody.useGravity = false;
+        m_UseTime = Time.time;
         // Debug.Log("OnThrow()", this);
-
-        m_Rigidbody.velocity =
-            (m_TargetPoint - transform.position).normalized * 10f;
     }
 
     private void Update() {
-        if (!m_DestinationReached) {
-            float distance = (m_TargetPoint - transform.position).magnitude;
-            if (distance < 0.1f) {
-                m_DestinationReached = true;
-                m_DestinationReachedTime = Time.time;
-                m_Rigidbody.velocity = Vector3.zero;
+        if (Time.time > m_UseTime + m_SmokescreenDuration) {
+            foreach (KeyValuePair<Enemy, Debuff> enemy in m_AffectedEnemies) {
+                enemy.Key.RemoveDebuff(enemy.Value);
             }
+
+            Destroy(gameObject);
         }
     }
 

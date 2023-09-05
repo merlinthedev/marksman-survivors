@@ -167,6 +167,11 @@ public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
         }
     }
 
+    public void Stop() {
+        m_Rigidbody.velocity = Vector3.zero;
+        m_MouseHitPoint = Vector3.zero;
+    }
+
     protected virtual void OnMove() {
         if (m_MouseHitPoint == Vector3.zero || !m_CanMove) {
             return;

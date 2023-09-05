@@ -108,6 +108,13 @@ public class Kitegirl : Champion {
         }
     }
 
+    public void SmokeScreenPushBack(float force) {
+        float pushbackStunTime = 0.55f;
+        SetCanMove(false);
+        m_Rigidbody.AddForce(GetCurrentMovementDirection() * (-1f * force), ForceMode.Impulse);
+        Utilities.InvokeDelayed(() => SetCanMove(true), pushbackStunTime, this); // 0.35 is the duration of the push back
+    }
+
     protected override void OnMove() {
         if (!m_IsDashing) {
             base.OnMove();
