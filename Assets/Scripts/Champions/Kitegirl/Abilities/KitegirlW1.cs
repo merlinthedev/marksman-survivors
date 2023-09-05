@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class KitegirlW1 : AAbility {
     [SerializeField] private KitegirlGrenade m_GrenadePrefab;
-    [SerializeField] private float m_AbilityRange = 10f;
 
     private float m_AttackDamageRatio = 0.6f; // 0.6f => 60% of AD
 
