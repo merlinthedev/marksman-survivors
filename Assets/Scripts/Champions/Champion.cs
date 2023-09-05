@@ -1,4 +1,4 @@
-using Events;
+﻿using Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -295,8 +295,9 @@ public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
     private void OnEnemyKilledEvent(EnemyKilledEvent e) {
         // TODO: XP
         m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
-
         m_ChampionLevelManager.CheckForLevelUp();
+        EventBus<UpdateXPBarEvent>.Raise(new UpdateXPBarEvent(m_ChampionStatistics.CurrentXP, m_ChampionLevelManager.CurrentLevelXP));
+
     }
 
     public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;
@@ -307,4 +308,5 @@ public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
     protected float GetDamageMultiplier() => m_DamageMultiplier;
     public Rigidbody GetRigidbody() => m_Rigidbody;
     public ChampionStatistics GetChampionStatistics() => m_ChampionStatistics;
+    public ChampionLevelManager GetChampionLevelManager() => m_ChampionLevelManager;
 }
