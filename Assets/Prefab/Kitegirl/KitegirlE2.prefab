@@ -49,3 +49,5 @@ MonoBehaviour:
   m_AbilityRange: 1000
   m_SmokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
     type: 3}
+  m_DashRange: 8.7
+  m_YForceOffset: -4

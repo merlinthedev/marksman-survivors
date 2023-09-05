@@ -1,4 +1,5 @@
 ﻿using Events;
+using TreeEditor;
 using UnityEngine;
 using Util;
 
@@ -99,10 +100,19 @@ public class Kitegirl : Champion {
         }
     }
 
-    public void SmokeScreenPushBack(float force) {
+    public void SmokeScreenPushBack(float force, float yForceOffset, Vector3 mousePosition) {
+        // take the direction from the mouse position to the champion
+        Vector3 pushbackDirection =
+            (transform.position - new Vector3(mousePosition.x, yForceOffset, mousePosition.z)).normalized;
+
+        // Debug.DrawRay(transform.position, pushbackDirection, Color.yellow);
+        Debug.DrawLine(transform.position, mousePosition, Color.yellow, 1f);
+
+        Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
+
         float pushbackStunTime = 0.55f;
         SetCanMove(false);
-        m_Rigidbody.AddForce(GetCurrentMovementDirection() * (-1f * force), ForceMode.Impulse);
+        m_Rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
         Utilities.InvokeDelayed(() => SetCanMove(true), pushbackStunTime,
             this); // 0.35 is the duration of the push back
     }
