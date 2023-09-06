@@ -25,6 +25,7 @@ namespace Champions.Kitegirl.Entities {
             m_SourceEntity = (Kitegirl)sourceEntity;
             m_ThrownTime = Time.time;
             m_Rigidbody.useGravity = false;
+            m_Collider.isTrigger = true;
             // Debug.Log("OnThrow()", this);
 
             m_Rigidbody.velocity =

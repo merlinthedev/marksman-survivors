@@ -102,7 +102,6 @@ MonoBehaviour:
   m_Rigidbody: {fileID: 7671635065557360561}
   m_DetonateTime: 2
   m_DamageRadius: 5
-  m_Damage: 45
 --- !u!135 &6257779200537993082
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -118,7 +117,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

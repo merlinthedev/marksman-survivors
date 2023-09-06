@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
+
     [SerializeField] private Champion m_SelectedChampion;
 
     [Header("Other")]
@@ -63,7 +64,6 @@ public class Player : MonoBehaviour {
 
 
                     m_SelectedChampion.SetMouseHitPoint(point);
-                    
                 }
             }
         }
@@ -98,10 +98,10 @@ public class Player : MonoBehaviour {
 
 
                     m_SelectedChampion.SetMouseHitPoint(point);
-                    
                 }
 
-                if (hit.collider.gameObject.CompareTag("Enemy")) {
+                if (hit.collider.gameObject.CompareTag("Enemy") ||
+                    hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                     m_SelectedChampion.OnAutoAttack(hit.collider);
                 }
             }
@@ -158,11 +158,13 @@ public class Player : MonoBehaviour {
     }
 
     private void OnChampionDamageTakenEvent(ChampionDamageTakenEvent e) {
-        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
+            m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
-        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
+            m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
