@@ -9,6 +9,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            base.OnUse();
 
             (this.m_Champion as Kitegirl)?.ActivateUltimate(m_UltimateDuration, m_BurstAmount, m_SlowAmount);
             m_LastUseTime = Time.time;

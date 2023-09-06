@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Events;
 using UnityEngine;
@@ -164,18 +164,17 @@ namespace Champions {
 
 
         protected virtual void Start() {
-            // Debug.Log("Champion start");
-
             m_ChampionLevelManager = new ChampionLevelManager(this);
 
             m_ChampionStatistics.Initialize();
+
+            //Update Health
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_ChampionStatistics.CurrentHealth, m_ChampionStatistics.MaxHealth));
         }
 
         protected virtual void Update() {
             if (m_MouseHitPoint != Vector3.zero) {
-                // Debug.Log("Received mouse hit point");
                 if (m_CanMove) {
-                    // Debug.Log("Can move");
                     OnMove();
                 }
             }
@@ -332,8 +331,8 @@ namespace Champions {
             // TODO: XP
             m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
             m_ChampionLevelManager.CheckForLevelUp();
-            EventBus<UpdateXPBarEvent>.Raise(new UpdateXPBarEvent(m_ChampionStatistics.CurrentXP,
-                m_ChampionLevelManager.CurrentLevelXP));
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", m_ChampionStatistics.CurrentXP, m_ChampionLevelManager.CurrentLevelXP));
+
         }
 
         public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;

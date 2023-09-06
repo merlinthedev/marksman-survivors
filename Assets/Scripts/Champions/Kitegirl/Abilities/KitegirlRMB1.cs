@@ -7,6 +7,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            base.OnUse();
 
             Vector3 mousePosition = Vector3.zero;
 

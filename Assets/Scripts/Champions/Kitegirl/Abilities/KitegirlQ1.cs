@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Events;
+using System;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
@@ -6,7 +7,7 @@ namespace Champions.Kitegirl.Abilities {
     public class KitegirlQ1 : AAbility {
         public override void OnUse() {
             if (IsOnCooldown()) return;
-
+            base.OnUse();
 
             (this.m_Champion as global::Champions.Kitegirl.Kitegirl)?.SetAutoAttackChain(true);
             m_LastUseTime = Time.time;

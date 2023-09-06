@@ -1,4 +1,5 @@
-using Champions;
+﻿using Champions;
+using Events;
 using UnityEngine;
 
 public abstract class AAbility : MonoBehaviour {
@@ -22,7 +23,10 @@ public abstract class AAbility : MonoBehaviour {
         // Debug.Log("Base Hook() called");
     }
 
-    public abstract void OnUse();
+    public virtual void OnUse() { 
+        //Raise cooldown event
+        EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(this));
+    }
 
     protected void SetBaseCooldown() {
         m_AbilityCooldown = m_CurrentCooldown;

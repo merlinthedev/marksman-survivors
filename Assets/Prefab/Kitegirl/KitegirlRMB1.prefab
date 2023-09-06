@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_KeyCode: 324
-  m_AbilityCooldown: 12
+  m_AbilityCooldown: 8
   m_AbilityRange: 0
   m_KitegirlSlowAreaPrefab: {fileID: 3173280358153001526, guid: 2accd668d70f22f49b2bb7315446744e,
     type: 3}

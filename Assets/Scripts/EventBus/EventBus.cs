@@ -66,14 +66,24 @@ namespace Events {
         }
     }
 
-    public class UpdateXPBarEvent : Event {
+    public class UpdateResourceBarEvent : Event {
 
-        public float m_CurrentXP { get; private set; }
-        public float m_TotalXP { get; private set; }
+        public string m_Type { get; private set; }
+        public float m_Current { get; private set; }
+        public float m_Total { get; private set; }
 
-        public UpdateXPBarEvent(float currentXP, float totalXP) {
-            m_CurrentXP = currentXP;
-            m_TotalXP = totalXP;
+        public UpdateResourceBarEvent(string type, float current, float total) {
+            m_Type = type;
+            m_Current = current;
+            m_Total = total;
+        }
+    }
+
+    public class ChampionAbilityUsedEvent : Event {
+        public AAbility m_Ability { get; private set; }
+
+        public ChampionAbilityUsedEvent(AAbility ability) {
+            m_Ability = ability;
         }
     }
 }

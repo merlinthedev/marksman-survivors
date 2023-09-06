@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Events;
+using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {
@@ -8,6 +9,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            base.OnUse();
 
             // Dash forward 
             (this.m_Champion as Kitegirl)?.SetIsDashing(true);

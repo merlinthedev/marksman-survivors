@@ -13,13 +13,6 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
-
-    [SerializeField] private Image m_XPBar;
-    [SerializeField] private Image m_AttackBar;
-    [SerializeField] private Image m_QBar;
-    [SerializeField] private Image m_WBar;
-    [SerializeField] private Image m_EBar;
-    [SerializeField] private Image m_RBar;
     [SerializeField] private Champion m_SelectedChampion;
 
     [Header("Other")]
@@ -124,35 +117,24 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Q)) {
             m_SelectedChampion.OnAbility(KeyCode.Q);
-            UpdateQCooldown();
         }
 
         if (Input.GetKeyDown(KeyCode.W)) {
             m_SelectedChampion.OnAbility(KeyCode.W);
-            UpdateWCooldown();
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
             m_SelectedChampion.OnAbility(KeyCode.E);
-            UpdateECooldown();
         }
 
         if (Input.GetKeyDown(KeyCode.R)) {
             m_SelectedChampion.OnAbility(KeyCode.R);
-            UpdateRCooldown();
         }
     }
 
     private void Update() {
-        // HandleMoveClick();
-        // HandleAttackClick();
         HandleMouseClicks();
         HandleAbilityClicks();
-        HandleAbilityCooldowns();
-        if (!m_SelectedChampion.CanAttack) {
-            UpdateAttackBar();
-        }
-        //UpdateXPBar();
     }
 
 
@@ -161,60 +143,6 @@ public class Player : MonoBehaviour {
         // Debug.Log("Health percentage: " + healthPercentage + "", this);
 
         m_HealthBar.fillAmount = healthPercentage;
-    }
-
-    private void UpdateAttackBar() {
-        float attackPercentage = (Time.time - m_SelectedChampion.GetLastAttackTime()) /
-                                 (1f / m_SelectedChampion.GetAttackSpeed());
-
-        m_AttackBar.fillAmount = 1 - attackPercentage;
-    }
-
-    //private void UpdateXPBar() {
-    //    float xpPercentage = m_SelectedChampion.GetChampionStatistics().CurrentXP / m_SelectedChampion.GetChampionLevelManager().CurrentLevelXP;
-    //    m_XPBar.fillAmount = xpPercentage;
-    //}
-
-    private void HandleAbilityCooldowns() {
-        if (m_SelectedChampion.GetAbilities()[0].IsOnCooldown()) {
-            UpdateQCooldown();
-        }
-
-        if (m_SelectedChampion.GetAbilities()[1].IsOnCooldown()) {
-            UpdateWCooldown();
-        }
-
-        if (m_SelectedChampion.GetAbilities()[2].IsOnCooldown()) {
-            UpdateECooldown();
-        }
-
-        if (m_SelectedChampion.GetAbilities()[3].IsOnCooldown()) {
-            UpdateRCooldown();
-        }
-    }
-
-    private void UpdateQCooldown() {
-        float QCoolDownPercentage = m_SelectedChampion.GetAbilities()[0].GetCurrentCooldown() /
-                                    m_SelectedChampion.GetAbilities()[0].GetAbilityCooldown();
-        m_QBar.fillAmount = 1 - QCoolDownPercentage;
-    }
-
-    private void UpdateWCooldown() {
-        float WCoolDownPercentage = m_SelectedChampion.GetAbilities()[1].GetCurrentCooldown() /
-                                    m_SelectedChampion.GetAbilities()[1].GetAbilityCooldown();
-        m_WBar.fillAmount = 1 - WCoolDownPercentage;
-    }
-
-    private void UpdateECooldown() {
-        float ECoolDownPercentage = m_SelectedChampion.GetAbilities()[2].GetCurrentCooldown() /
-                                    m_SelectedChampion.GetAbilities()[2].GetAbilityCooldown();
-        m_EBar.fillAmount = 1 - ECoolDownPercentage;
-    }
-
-    private void UpdateRCooldown() {
-        float RCoolDownPercentage = m_SelectedChampion.GetAbilities()[3].GetCurrentCooldown() /
-                                    m_SelectedChampion.GetAbilities()[3].GetAbilityCooldown();
-        m_RBar.fillAmount = 1 - RCoolDownPercentage;
     }
 
     private void SetDefaultCursorTexture() {
@@ -230,11 +158,11 @@ public class Player : MonoBehaviour {
     }
 
     private void OnChampionDamageTakenEvent(ChampionDamageTakenEvent e) {
-        UpdateHealthBar();
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
-        UpdateHealthBar();
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
@@ -242,10 +170,10 @@ public class Player : MonoBehaviour {
     }
 
     private void OnChampionAbilitiesHooked(ChampionAbilitiesHookedEvent e) {
-        UpdateQCooldown();
-        UpdateWCooldown();
-        UpdateECooldown();
-        UpdateRCooldown();
+        //UpdateQCooldown();
+        //UpdateWCooldown();
+        //UpdateECooldown();
+        //UpdateRCooldown();
     }
 
     public Champion GetCurrentlySelectedChampion() {

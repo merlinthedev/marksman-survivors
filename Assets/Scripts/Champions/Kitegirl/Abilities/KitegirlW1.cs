@@ -1,4 +1,4 @@
-using Champions.Kitegirl.Entities;
+﻿using Champions.Kitegirl.Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
@@ -9,6 +9,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            base.OnUse();
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
