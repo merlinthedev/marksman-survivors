@@ -3631,6 +3631,8 @@ MonoBehaviour:
   m_EBar: {fileID: 1283336601}
   m_RBar: {fileID: 1857878532}
   m_SelectedChampion: {fileID: 2114737659}
+  m_ClickAnimPrefab: {fileID: 4175078626578945524, guid: 874709a6833ca564cb0d17fb6a62bd58,
+    type: 3}
 --- !u!54 &2114737658
 Rigidbody:
   m_ObjectHideFlags: 0
