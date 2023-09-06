@@ -6,7 +6,7 @@ using Util;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer, IDebuffable, IEntity,
+    public abstract class Champion : AAbilityHolder, IDebuffable, IEntity,
         IStackableLivingEntity {
         [SerializeField] protected Rigidbody m_Rigidbody;
 
@@ -31,7 +31,6 @@ namespace Champions {
         public bool IsBurning { get; }
         public bool IsFragile { get; }
 
-        public List<IDebuffable> AffectedEntities { get; set; } = new();
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
 
@@ -74,18 +73,23 @@ namespace Champions {
             Debuffs.Add(debuff);
 
             switch (debuff.GetDebuffType()) {
-                case Debuff.DebuffType.SLOW:
+                case Debuff.DebuffType.Slow:
                     ApplySlow(debuff);
                     break;
-                case Debuff.DebuffType.BURN:
+                case Debuff.DebuffType.Burn:
                     ApplyBurn(debuff);
                     break;
             }
         }
 
         public void CheckDebuffsForExpiration() {
-            AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
+            // AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
+            // Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); });
+            for (int i = Debuffs.Count - 1; i >= 0; i--) {
+                Debuffs[i].CheckForExpiration();
+            }
         }
+
 
         public void AddStacks(int stacks, Stack.StackType stackType) {
             switch (stackType) {
@@ -116,7 +120,10 @@ namespace Champions {
         }
 
         public void CheckStacksForExpiration() {
-            Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+            // Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
+                Stacks[i].CheckForExpiration();
+            }
         }
 
         private void AddFragileStacks(int count) {

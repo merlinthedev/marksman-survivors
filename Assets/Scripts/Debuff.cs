@@ -1,71 +1,75 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 
 public class Debuff {
-    private IDebuffer source;
-    private IDebuffable target;
-    private DebuffType debuffType;
+    private IDamageable m_Target;
+    private DebuffType m_DebuffType;
 
-    private float startTime = 0;
-    private float duration;
-    private float value;
+    private float m_StartTime = 0;
+    private float m_Duration;
+    private float m_Value;
 
-    private float interval;
-    private IEnumerator intervalCoroutine;
+    private float m_Interval;
+    private IEnumerator m_IntervalCoroutine;
 
-    public static Debuff CreateDebuff(IDebuffer source, DebuffType debuffType, float duration, float value,
+    public static Debuff CreateDebuff(IDamageable target, DebuffType debuffType, float duration, float value,
         float interval = -1) {
-        return new Debuff(source, debuffType, duration, value);
+        return new Debuff(target, debuffType, duration, value, interval);
     }
 
-    private Debuff(IDebuffer source, DebuffType debuffType, float duration, float value, float interval = -1) {
-        this.source = source;
-        this.debuffType = debuffType;
-        this.duration = duration;
-        this.value = value;
-        this.interval = interval;
+    private Debuff(IDamageable target, DebuffType debuffType, float duration, float value, float interval = -1) {
+        m_Target = target;
+        m_DebuffType = debuffType;
+        m_Duration = duration;
+        m_Value = value;
+        m_Interval = interval;
 
-        startTime = Time.time;
-        if (interval > 0) {
-            intervalCoroutine = IntervalCoroutine();
-            (source as MonoBehaviour)?.StartCoroutine(intervalCoroutine);
-        }
+        m_StartTime = Time.time;
+
+        if (interval > 0) StartCoroutines();
+    }
+
+    private void StartCoroutines() {
+        m_IntervalCoroutine = IntervalCoroutine();
+        (m_Target as MonoBehaviour)?.StartCoroutine(m_IntervalCoroutine);
     }
 
     private IEnumerator IntervalCoroutine() {
         while (true) {
+            yield return new WaitForSeconds(m_Interval);
+            // Debug.Log("Interval coroutine");
             // if the source is also an instance of IDamageable, apply damage
-            if (source is IDamageable) {
-                (source as IDamageable)?.TakeFlatDamage(value);
-            }
+
+            m_Target.TakeFlatDamage(m_Value);
         }
     }
 
     public void CheckForExpiration() {
-        if (Time.time > startTime + duration) {
-            target.RemoveDebuff(this);
-            source.AffectedEntities.Remove(target);
-            if (intervalCoroutine != null) {
-                (source as MonoBehaviour)?.StopCoroutine(intervalCoroutine);
+        if (Time.time > m_StartTime + m_Duration) {
+            Debug.Log("Stopping debuff");
+            (m_Target as IDebuffable)?.RemoveDebuff(this);
+            if (m_IntervalCoroutine != null) {
+                (m_Target as MonoBehaviour)?.StopCoroutine(m_IntervalCoroutine);
             }
         }
     }
 
     public DebuffType GetDebuffType() {
-        return debuffType;
+        return m_DebuffType;
     }
 
     public float GetDuration() {
-        return duration;
+        return m_Duration;
     }
 
     public float GetValue() {
-        return value;
+        return m_Value;
     }
 
 
     public enum DebuffType {
-        SLOW,
-        BURN
+        Slow,
+        Burn
     }
 }

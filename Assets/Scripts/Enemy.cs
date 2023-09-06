@@ -2,11 +2,12 @@ using Events;
 using System;
 using System.Collections.Generic;
 using Champions;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
 
-public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEntity, IDebuffable {
+public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
     private Transform m_Target;
     [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
     private Canvas m_Canvas;
@@ -47,8 +48,6 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
     public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
 
     public List<Stack> Stacks { get; } = new();
-
-    public List<IDebuffable> AffectedEntities { get; set; } = new();
 
 
     private void OnMouseEnter() {
@@ -131,7 +130,7 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
 
         Xspeed = m_Rigidbody.velocity.x;
         Zspeed = m_Rigidbody.velocity.z;
-        
+
         CheckStacksForExpiration();
         CheckDebuffsForExpiration();
     }
@@ -149,12 +148,14 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
 
 
     public void TakeFlatDamage(float damage) {
+        // Debug.Log("Taking flat damage");
         TakeDamage(damage);
     }
 
 
     private void TakeDamage(float damage) {
         if (m_IsDead) return;
+        // Debug.Log("Taking damage");
         float damageTaken = CalculateDamage(damage);
         m_CurrentHealth -= damageTaken;
 
@@ -215,7 +216,10 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
     }
 
     public void CheckStacksForExpiration() {
-        Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+        // Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+        for (int i = Stacks.Count - 1; i >= 0; i--) {
+            Stacks[i].CheckForExpiration();
+        }
     }
 
     private void AddFragileStacks(int count) {
@@ -245,8 +249,9 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
     }
 
     public void ApplyDebuff(Debuff debuff) {
+        Debuffs.Add(debuff);
         switch (debuff.GetDebuffType()) {
-            case Debuff.DebuffType.SLOW:
+            case Debuff.DebuffType.Slow:
                 ApplySlow(debuff);
                 break;
         }
@@ -254,8 +259,9 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
 
     public void RemoveDebuff(Debuff debuff) {
         Debuffs.Remove(debuff);
+        Debug.Log("Removed debuff: " + debuff.GetDebuffType());
         switch (debuff.GetDebuffType()) {
-            case Debuff.DebuffType.SLOW:
+            case Debuff.DebuffType.Slow:
                 RemoveSlow(debuff);
                 break;
         }
@@ -263,7 +269,10 @@ public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEnti
     }
 
     public void CheckDebuffsForExpiration() {
-        AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
+        // Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); });
+        for (int i = Debuffs.Count - 1; i >= 0; i--) {
+            Debuffs[i].CheckForExpiration();
+        }
     }
 
     private void ApplySlow(Debuff debuff) {

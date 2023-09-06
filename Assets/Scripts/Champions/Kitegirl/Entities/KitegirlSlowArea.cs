@@ -27,7 +27,7 @@ namespace Champions.Kitegirl.Entities {
             if (other.gameObject.CompareTag("Enemy")) {
                 Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
 
-                enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl as Champion, Debuff.DebuffType.SLOW,
+                enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.Slow,
                     m_SlowDuration, m_SlowPercentage));
                 enemy.TakeFlatDamage(m_Kitegirl.GetChampionStatistics().AttackDamage *
                                      m_ADDamageRatio);

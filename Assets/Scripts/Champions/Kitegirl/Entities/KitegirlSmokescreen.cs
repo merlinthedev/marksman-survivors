@@ -34,7 +34,7 @@ namespace Champions.Kitegirl.Entities {
                 // enemy fragile stacks
                 enemy.AddStacks(m_FragileStacks, Stack.StackType.FRAGILE);
 
-                Debuff debuff = Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.SLOW, -1,
+                Debuff debuff = Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.Slow, -1,
                     m_SlowPercentage);
                 m_AffectedEnemies.Add(enemy, debuff);
                 enemy.ApplyDebuff(debuff); // -1 because we dont want the debuff to run out because of time, we want to

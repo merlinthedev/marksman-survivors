@@ -58,7 +58,7 @@ namespace Champions.Kitegirl.Entities {
                                m_SourceEntity.GetChampionStatistics().AttackDamage *
                                0.01f; // 1% of AD
                 enemy.TakeFlatDamage((shot ? 2f : 1f) * m_Damage);
-                enemy.ApplyDebuff(Debuff.CreateDebuff(m_SourceEntity, Debuff.DebuffType.BURN, 5f, damage, 1f));
+                enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, Debuff.DebuffType.Burn, 5f, damage, 1f));
             }
 
             Destroy(gameObject);

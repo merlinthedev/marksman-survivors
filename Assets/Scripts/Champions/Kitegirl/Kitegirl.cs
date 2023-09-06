@@ -86,7 +86,7 @@ namespace Champions.Kitegirl {
         public void ActivateUltimate(float duration, float burstAmount, float slowAmount) {
             m_HasUltimateActive = true;
             m_MaxRecurseCount = (int)burstAmount;
-            ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.SLOW, duration, slowAmount));
+            ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.Slow, duration, slowAmount));
         }
 
         public void DeactivateUltimate() {
@@ -123,7 +123,8 @@ namespace Champions.Kitegirl {
                 base.OnMove();
             }
             else {
-                this.m_Rigidbody.velocity = GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
+                this.m_Rigidbody.velocity =
+                    GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
             }
         }
 
