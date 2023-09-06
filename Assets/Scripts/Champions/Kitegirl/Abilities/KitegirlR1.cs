@@ -10,10 +10,10 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            (this.m_Champion as global::Champions.Kitegirl.Kitegirl)?.ActivateUltimate(m_UltimateDuration, m_BurstAmount, m_SlowAmount);
+            (this.m_Champion as Kitegirl)?.ActivateUltimate(m_UltimateDuration, m_BurstAmount, m_SlowAmount);
             m_LastUseTime = Time.time;
 
-            Utilities.InvokeDelayed(() => { (this.m_Champion as global::Champions.Kitegirl.Kitegirl)?.DeactivateUltimate(); }, m_UltimateDuration,
+            Utilities.InvokeDelayed(() => { (this.m_Champion as Kitegirl)?.DeactivateUltimate(); }, m_UltimateDuration,
                 this.m_Champion);
         }
     }

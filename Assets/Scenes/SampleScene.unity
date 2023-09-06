@@ -3675,6 +3675,7 @@ MonoBehaviour:
   - {fileID: -2301999179170599804, guid: e252c537c7aec1a449fbb7598a4d005e, type: 3}
   - {fileID: 5491228764203184346, guid: 7954af5003773b942946b48c6deac079, type: 3}
   - {fileID: -1318103399301311301, guid: e9962c6ce2b135546bd7849cdd5db18e, type: 3}
+  - {fileID: -8325301189158293201, guid: 2f8a91740c41dd14ca598abdf45003b2, type: 3}
   m_Rigidbody: {fileID: 2114737658}
   m_MouseHitPoint: {x: 0, y: 0, z: 0}
   m_ChampionStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc,

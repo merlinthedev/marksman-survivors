@@ -28,7 +28,7 @@ namespace Champions.Kitegirl.Abilities {
 
 
             // TODO: Spawn smokescreen
-            this.m_LastUseTime = Time.time;
+            m_LastUseTime = Time.time;
             KitegirlSmokescreen kitegirlSmokescreen =
                 Instantiate(m_SmokescreenPrefab, m_Champion.transform.position, Quaternion.identity);
             kitegirlSmokescreen.OnThrow(m_Champion);

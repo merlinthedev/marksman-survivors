@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: 5491228764203184346}
+  - component: {fileID: -8325301189158293201}
   m_Layer: 0
-  m_Name: KitegirlE2
+  m_Name: KitegirlRMB1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5491228764203184346
+--- !u!114 &-8325301189158293201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6df378cc065c4746ae858ca7bde4453c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c3db3b03559425eaf6c11993b5518b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 101
-  m_AbilityCooldown: 8
-  m_AbilityRange: 1000
-  m_SmokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
+  m_KeyCode: 324
+  m_AbilityCooldown: 12
+  m_AbilityRange: 0
+  m_KitegirlSlowAreaPrefab: {fileID: 3173280358153001526, guid: 2accd668d70f22f49b2bb7315446744e,
     type: 3}
-  m_DashRange: 8.7
-  m_YForceOffset: -4
