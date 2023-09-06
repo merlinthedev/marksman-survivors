@@ -47,7 +47,6 @@ public class Debuff {
 
     public void CheckForExpiration() {
         if (Time.time > m_StartTime + m_Duration) {
-            Debug.Log("Stopping debuff");
             (m_Target as IDebuffable)?.RemoveDebuff(this);
             if (m_IntervalCoroutine != null) {
                 (m_Target as MonoBehaviour)?.StopCoroutine(m_IntervalCoroutine);

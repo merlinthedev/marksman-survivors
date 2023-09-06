@@ -259,7 +259,7 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
 
     public void RemoveDebuff(Debuff debuff) {
         Debuffs.Remove(debuff);
-        Debug.Log("Removed debuff: " + debuff.GetDebuffType());
+        // Debug.Log("Removed debuff: " + debuff.GetDebuffType());
         switch (debuff.GetDebuffType()) {
             case Debuff.DebuffType.Slow:
                 RemoveSlow(debuff);

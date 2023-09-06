@@ -65,8 +65,6 @@ namespace Champions {
 
         public void RemoveDebuff(Debuff debuff) {
             Debuffs.Remove(debuff);
-
-            throw new NotImplementedException();
         }
 
         public void ApplyDebuff(Debuff debuff) {
