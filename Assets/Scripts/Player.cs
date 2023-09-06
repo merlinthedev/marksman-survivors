@@ -22,6 +22,9 @@ public class Player : MonoBehaviour {
     [SerializeField] private Image m_RBar;
     [SerializeField] private Champion m_SelectedChampion;
 
+    [Header("Other")]
+    [SerializeField] private GameObject m_ClickAnimPrefab;
+
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour {
 
 
                     m_SelectedChampion.SetMouseHitPoint(point);
+                    
                 }
             }
         }
@@ -89,6 +93,7 @@ public class Player : MonoBehaviour {
                 // Debug.Log("<color=yellow>Hit: " + hit.collider.gameObject.name + "</color>");
                 if (hit.collider.gameObject.CompareTag("Ground")) {
                     var point = hit.point;
+                    Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                     point.y = transform.position.y;
                     // m_HitPoint = point;
 
@@ -100,6 +105,7 @@ public class Player : MonoBehaviour {
 
 
                     m_SelectedChampion.SetMouseHitPoint(point);
+                    
                 }
 
                 if (hit.collider.gameObject.CompareTag("Enemy")) {
