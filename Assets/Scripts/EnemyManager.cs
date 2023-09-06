@@ -66,12 +66,12 @@ public class EnemyManager : MonoBehaviour {
         Vector3 rightPoint = playerPos + rightDirection * 30f;
         Vector3 leftPoint = playerPos + leftDirection * 30f;
 
-        Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
-        Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
-        Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
-
-        // draw the randomPointOnPlane
-        Debug.DrawLine(playerPos, randomPointOnPlane, Color.red, 0.5f);
+        // Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
+        // Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
+        // Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
+        //
+        // // draw the randomPointOnPlane
+        // Debug.DrawLine(playerPos, randomPointOnPlane, Color.red, 0.5f);
 
         bool isInTriangle = Utilities.IsInsideTriangle(
             new Vector2(playerPos.x, playerPos.z)
