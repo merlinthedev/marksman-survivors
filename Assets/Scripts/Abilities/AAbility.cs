@@ -1,3 +1,4 @@
+using Champions;
 using UnityEngine;
 
 public abstract class AAbility : MonoBehaviour {

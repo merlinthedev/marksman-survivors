@@ -2,6 +2,7 @@ using Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Champions;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;

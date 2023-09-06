@@ -5,14 +5,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIResourceBars : MonoBehaviour
-{
+public class UIResourceBars : MonoBehaviour {
     [SerializeField] private Image m_XPBar;
     [SerializeField] private TMP_Text m_LevelText;
+
     private void OnEnable() {
         EventBus<UpdateXPBarEvent>.Subscribe(UpdateXPBar);
         EventBus<ChampionLevelUpEvent>.Subscribe(UpdateLevel);
     }
+
     private void OnDisable() {
         EventBus<UpdateXPBarEvent>.Unsubscribe(UpdateXPBar);
         EventBus<ChampionLevelUpEvent>.Unsubscribe(UpdateLevel);

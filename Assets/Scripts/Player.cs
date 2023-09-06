@@ -1,5 +1,6 @@
 ﻿using Events;
 using System;
+using Champions;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour {
 
     [Header("UI")]
     [SerializeField] private Image m_HealthBar;
+
     [SerializeField] private Image m_XPBar;
     [SerializeField] private Image m_AttackBar;
     [SerializeField] private Image m_QBar;
@@ -107,7 +109,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            Debug.Log("RMB pressed");
+            m_SelectedChampion.OnAbility(KeyCode.Mouse1);
         }
     }
 
