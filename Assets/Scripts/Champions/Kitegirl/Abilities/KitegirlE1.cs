@@ -10,11 +10,11 @@ namespace Champions.Kitegirl.Abilities {
             if (IsOnCooldown()) return;
 
             // Dash forward 
-            (this.m_Champion as global::Champions.Kitegirl.Kitegirl)?.SetIsDashing(true);
-            (m_Champion as global::Champions.Kitegirl.Kitegirl)?.SetNextAttackWillCrit(true);
+            (this.m_Champion as Kitegirl)?.SetIsDashing(true);
+            (m_Champion as Kitegirl)?.SetNextAttackWillCrit(true);
             m_LastUseTime = Time.time;
 
-            Utilities.InvokeDelayed(() => { (this.m_Champion as global::Champions.Kitegirl.Kitegirl)?.SetIsDashing(false); }, m_DashDuration,
+            Utilities.InvokeDelayed(() => { (this.m_Champion as Kitegirl)?.SetIsDashing(false); }, m_DashDuration,
                 this.m_Champion);
         }
 

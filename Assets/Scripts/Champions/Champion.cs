@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Events;
 using UnityEngine;
@@ -7,7 +6,8 @@ using Util;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer {
+    public abstract class Champion : AAbilityHolder, IDamageable, IDebuffer, IDebuffable, IEntity,
+        IStackableLivingEntity {
         [SerializeField] protected Rigidbody m_Rigidbody;
 
         [SerializeField] protected Vector3 m_MouseHitPoint;
@@ -28,14 +28,12 @@ namespace Champions {
         protected bool m_HasAttackCooldown = false;
         private bool m_NextAttackWillCrit = false;
 
-        public bool IsBurning { get; set; }
-        public bool IsFragile { get; set; }
-        public float FragileStacks { get; set; }
+        public bool IsBurning { get; }
+        public bool IsFragile { get; }
 
-        public float LastFragileApplyTime { get; set; }
-
-        public List<IDamageable> AffectedEntities { get; set; } = new();
+        public List<IDebuffable> AffectedEntities { get; set; } = new();
         public List<Debuff> Debuffs { get; } = new();
+        public List<Stack> Stacks { get; } = new();
 
 
         public bool CanAttack {
@@ -65,10 +63,6 @@ namespace Champions {
             OnDamageTaken(damage);
         }
 
-        public void TakeBurnDamage(float damage, float interval, float time) {
-            IsBurning = true;
-            StartCoroutine(BurnDamageCoroutine(damage, interval, time));
-        }
 
         public void RemoveDebuff(Debuff debuff) {
             Debuffs.Remove(debuff);
@@ -83,6 +77,64 @@ namespace Champions {
                 case Debuff.DebuffType.SLOW:
                     ApplySlow(debuff);
                     break;
+                case Debuff.DebuffType.BURN:
+                    ApplyBurn(debuff);
+                    break;
+            }
+        }
+
+        public void CheckDebuffsForExpiration() {
+            AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
+        }
+
+        public void AddStacks(int stacks, Stack.StackType stackType) {
+            switch (stackType) {
+                case Stack.StackType.FRAGILE:
+                    AddFragileStacks(stacks);
+                    break;
+                case Stack.StackType.DEFTNESS:
+                    throw new NotImplementedException();
+                case Stack.StackType.OVERPOWER:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public void RemoveStacks(int stacks, Stack.StackType stackType) {
+            switch (stackType) {
+                case Stack.StackType.FRAGILE:
+                    RemoveFragileStacks(stacks);
+                    break;
+                case Stack.StackType.DEFTNESS:
+                    throw new NotImplementedException();
+                case Stack.StackType.OVERPOWER:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public void RemoveStack(Stack stack) {
+            Stacks.Remove(stack);
+        }
+
+        public void CheckStacksForExpiration() {
+            Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+        }
+
+        private void AddFragileStacks(int count) {
+            for (int i = 0; i < count; i++) {
+                Stack stack = new Stack(Stack.StackType.FRAGILE, this);
+                Stacks.Add(stack);
+            }
+        }
+
+        private void RemoveFragileStacks(int count) {
+            // Remove the last count stacks
+            int removed = 0;
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
+                if (removed == count) break;
+                if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE) {
+                    Stacks.RemoveAt(i);
+                    removed++;
+                }
             }
         }
 
@@ -101,14 +153,8 @@ namespace Champions {
                 debuff.GetDuration(), this);
         }
 
-        private IEnumerator BurnDamageCoroutine(float damage, float interval, float time) {
-            float startTime = Time.time;
-            while (Time.time < startTime + time) {
-                OnDamageTaken(damage);
-                yield return new WaitForSeconds(interval);
-            }
-
-            IsBurning = false;
+        private void ApplyBurn(Debuff debuff) {
+            Debuffs.Add(debuff);
         }
 
 
@@ -130,12 +176,8 @@ namespace Champions {
             }
 
             RegenerateResources();
-
-            // check for fragile stacks
-            if (Time.time > LastFragileApplyTime + 10f) {
-                // 10 for the duration of the stacks
-                FragileStacks = 0;
-            }
+            CheckStacksForExpiration();
+            CheckDebuffsForExpiration();
         }
 
         private void RegenerateResources() {
@@ -196,7 +238,8 @@ namespace Champions {
         }
 
         protected virtual void OnDamageTaken(float damage) {
-            damage = IsFragile ? damage * 1 + FragileStacks / 10 : damage;
+            float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
+            damage = IsFragile ? damage * 1 + fragileStacks / 10 : damage;
             m_ChampionStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (m_ChampionStatistics.CurrentHealth <= 0) {
@@ -210,20 +253,6 @@ namespace Champions {
             Destroy(gameObject);
         }
 
-        public void AddFragileStacks(float stacks) {
-            if (FragileStacks < 1) IsFragile = true;
-            FragileStacks += stacks;
-        }
-
-        public void RemoveFragileStacks(float stacks) {
-            if (FragileStacks < stacks) {
-                FragileStacks = 0;
-                IsFragile = false;
-            }
-            else {
-                FragileStacks -= stacks;
-            }
-        }
 
         protected void DrawDirectionRays() {
             // Direction ray
@@ -253,7 +282,9 @@ namespace Champions {
         }
 
         public Vector3 GetCurrentMovementDirection() {
-            return m_Rigidbody.velocity.normalized == Vector3.zero ? m_LastKnownDirection : m_Rigidbody.velocity.normalized;
+            return m_Rigidbody.velocity.normalized == Vector3.zero
+                ? m_LastKnownDirection
+                : m_Rigidbody.velocity.normalized;
         }
 
         public float GetGlobalDirectionAngle() {
@@ -296,8 +327,8 @@ namespace Champions {
             // TODO: XP
             m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
             m_ChampionLevelManager.CheckForLevelUp();
-            EventBus<UpdateXPBarEvent>.Raise(new UpdateXPBarEvent(m_ChampionStatistics.CurrentXP, m_ChampionLevelManager.CurrentLevelXP));
-
+            EventBus<UpdateXPBarEvent>.Raise(new UpdateXPBarEvent(m_ChampionStatistics.CurrentXP,
+                m_ChampionLevelManager.CurrentLevelXP));
         }
 
         public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;

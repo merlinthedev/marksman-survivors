@@ -36,7 +36,7 @@ namespace Champions.Kitegirl.Abilities {
                 m_KitegirlSlowAreaPrefab.transform.localScale.x / 2,
                 Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
 
-            kitegirlSlowArea.OnThrow(m_Champion);
+            kitegirlSlowArea.OnThrow(m_Champion as Kitegirl);
 
             m_LastUseTime = Time.time;
         }

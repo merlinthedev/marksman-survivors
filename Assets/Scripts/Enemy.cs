@@ -1,14 +1,12 @@
 using Events;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Champions;
-using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
 
-public class Enemy : MonoBehaviour, IDamageable {
+public class Enemy : MonoBehaviour, IDamageable, IDebuffer, IStackableLivingEntity, IDebuffable {
     private Transform m_Target;
     [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
     private Canvas m_Canvas;
@@ -42,11 +40,16 @@ public class Enemy : MonoBehaviour, IDamageable {
         get => !m_CanMove;
     }
 
-    public bool IsBurning { get; set; }
-    public bool IsFragile { get; set; }
-    public float FragileStacks { get; set; }
-    public float LastFragileApplyTime { get; set; }
     public List<Debuff> Debuffs { get; } = new();
+
+    public bool IsBurning { get; }
+
+    public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
+
+    public List<Stack> Stacks { get; } = new();
+
+    public List<IDebuffable> AffectedEntities { get; set; } = new();
+
 
     private void OnMouseEnter() {
         EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent());
@@ -128,6 +131,9 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         Xspeed = m_Rigidbody.velocity.x;
         Zspeed = m_Rigidbody.velocity.z;
+        
+        CheckStacksForExpiration();
+        CheckDebuffsForExpiration();
     }
 
     private void Move() {
@@ -146,20 +152,6 @@ public class Enemy : MonoBehaviour, IDamageable {
         TakeDamage(damage);
     }
 
-    public void TakeBurnDamage(float damage, float interval, float time) {
-        IsBurning = true;
-        StartCoroutine(BurnDamageCoroutine(damage, interval, time));
-    }
-
-    private IEnumerator BurnDamageCoroutine(float damage, float interval, float time) {
-        float startTime = Time.time;
-        while (Time.time < startTime + time) {
-            TakeDamage(damage);
-            yield return new WaitForSeconds(interval);
-        }
-
-        IsBurning = false;
-    }
 
     private void TakeDamage(float damage) {
         if (m_IsDead) return;
@@ -185,25 +177,64 @@ public class Enemy : MonoBehaviour, IDamageable {
     }
 
     private float CalculateDamage(float incomingDamage) {
+        int amountOfFragileStacks = Stacks.FindAll(x => x.GetStackType() == Stack.StackType.FRAGILE).Count;
         if (IsFragile) {
-            incomingDamage *= 1 + FragileStacks / 100f;
+            incomingDamage *= 1 + amountOfFragileStacks / 100f;
         }
 
         return incomingDamage;
     }
 
-    public void AddFragileStacks(float stacks) {
-        if (FragileStacks < 1) IsFragile = true;
-        FragileStacks += stacks;
+
+    public void AddStacks(int stacks, Stack.StackType stackType) {
+        switch (stackType) {
+            case Stack.StackType.FRAGILE:
+                AddFragileStacks(stacks);
+                break;
+            case Stack.StackType.DEFTNESS:
+                throw new NotImplementedException();
+            case Stack.StackType.OVERPOWER:
+                throw new NotImplementedException();
+        }
     }
 
-    public void RemoveFragileStacks(float stacks) {
-        if (FragileStacks < stacks) {
-            FragileStacks = 0;
-            IsFragile = false;
+    public void RemoveStacks(int stacks, Stack.StackType stackType) {
+        switch (stackType) {
+            case Stack.StackType.FRAGILE:
+                RemoveFragileStacks(stacks);
+                break;
+            case Stack.StackType.DEFTNESS:
+                throw new NotImplementedException();
+            case Stack.StackType.OVERPOWER:
+                throw new NotImplementedException();
         }
-        else {
-            FragileStacks -= stacks;
+    }
+
+    public void RemoveStack(Stack stack) {
+        Stacks.Remove(stack);
+    }
+
+    public void CheckStacksForExpiration() {
+        Stacks.ForEach(stack => { stack.CheckForExpiration(); });
+    }
+
+    private void AddFragileStacks(int count) {
+        for (int i = 0; i < count; i++) {
+            Stack stack = new Stack(Stack.StackType.FRAGILE, this);
+            Stacks.Add(stack);
+            Debug.LogWarning("Added fragile stack: " + i, this);
+        }
+    }
+
+    private void RemoveFragileStacks(int count) {
+        // Remove the last count stacks
+        int removed = 0;
+        for (int i = Stacks.Count - 1; i >= 0; i--) {
+            if (removed == count) break;
+            if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE) {
+                Stacks.RemoveAt(i);
+                removed++;
+            }
         }
     }
 
@@ -229,6 +260,10 @@ public class Enemy : MonoBehaviour, IDamageable {
                 break;
         }
         // throw new NotImplementedException();
+    }
+
+    public void CheckDebuffsForExpiration() {
+        AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
     }
 
     private void ApplySlow(Debuff debuff) {

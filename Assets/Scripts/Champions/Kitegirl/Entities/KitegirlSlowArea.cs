@@ -2,7 +2,7 @@
 
 namespace Champions.Kitegirl.Entities {
     public class KitegirlSlowArea : MonoBehaviour {
-        private AEntity m_SourceEntity;
+        private Kitegirl m_Kitegirl;
 
         [SerializeField] private float m_SlowPercentage = 0.33f; // 0-1 Normalized
         [SerializeField] private float m_SlowDuration = 2f; // Seconds
@@ -11,8 +11,8 @@ namespace Champions.Kitegirl.Entities {
 
         private float m_ThrowTime = 0f;
 
-        public void OnThrow(AEntity sourceEntity) {
-            m_SourceEntity = sourceEntity;
+        public void OnThrow(Kitegirl sourceEntity) {
+            m_Kitegirl = sourceEntity;
 
             m_ThrowTime = Time.time;
         }
@@ -27,9 +27,9 @@ namespace Champions.Kitegirl.Entities {
             if (other.gameObject.CompareTag("Enemy")) {
                 Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
 
-                enemy.ApplyDebuff(Debuff.CreateDebuff(m_SourceEntity as Champion, Debuff.DebuffType.SLOW,
+                enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl as Champion, Debuff.DebuffType.SLOW,
                     m_SlowDuration, m_SlowPercentage));
-                enemy.TakeFlatDamage((float)(m_SourceEntity as Champion)?.GetChampionStatistics().AttackDamage *
+                enemy.TakeFlatDamage(m_Kitegirl.GetChampionStatistics().AttackDamage *
                                      m_ADDamageRatio);
             }
         }

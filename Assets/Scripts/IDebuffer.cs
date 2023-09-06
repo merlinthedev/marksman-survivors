@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
 public interface IDebuffer {
-    List<IDamageable> AffectedEntities { get; set; }
+    List<IDebuffable> AffectedEntities { get; set; }
+    void CheckDebuffsForExpiration();
 }

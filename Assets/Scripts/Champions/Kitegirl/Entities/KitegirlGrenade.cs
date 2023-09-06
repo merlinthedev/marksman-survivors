@@ -6,7 +6,7 @@ namespace Champions.Kitegirl.Entities {
     public class KitegirlGrenade : MonoBehaviour, IThrowable {
         private Vector3 m_TargetPoint;
 
-        private AEntity m_SourceEntity;
+        private Kitegirl m_SourceEntity;
 
         [SerializeField] private Collider m_Collider;
         [SerializeField] private Rigidbody m_Rigidbody;
@@ -20,9 +20,9 @@ namespace Champions.Kitegirl.Entities {
         private bool m_RegularDetonationCancelled = false;
 
 
-        public void OnThrow(Vector3 targetPoint, AEntity sourceEntity) {
+        public void OnThrow(Vector3 targetPoint, IEntity sourceEntity) {
             m_TargetPoint = targetPoint;
-            m_SourceEntity = sourceEntity;
+            m_SourceEntity = (Kitegirl)sourceEntity;
             m_ThrownTime = Time.time;
             m_Rigidbody.useGravity = false;
             // Debug.Log("OnThrow()", this);
@@ -49,14 +49,16 @@ namespace Champions.Kitegirl.Entities {
             if (m_RegularDetonationCancelled) return;
             // Debug.Log("Detonating");
 
-            List<Enemy> enemiesInRange = EnemyManager.GetInstance().GetEnemiesInArea(transform.position, m_DamageRadius);
+            List<Enemy> enemiesInRange =
+                EnemyManager.GetInstance().GetEnemiesInArea(transform.position, m_DamageRadius);
 
 
             foreach (Enemy enemy in enemiesInRange) {
                 float damage = enemy.GetMaxHealth() * 0.01f /* 1% of max health */ +
-                               ((Champion)m_SourceEntity).GetChampionStatistics().AttackDamage * 0.01f; // 1% of AD
+                               m_SourceEntity.GetChampionStatistics().AttackDamage *
+                               0.01f; // 1% of AD
                 enemy.TakeFlatDamage((shot ? 2f : 1f) * m_Damage);
-                enemy.TakeBurnDamage(damage, 1, 5);
+                enemy.ApplyDebuff(Debuff.CreateDebuff(m_SourceEntity, Debuff.DebuffType.BURN, 5f, damage, 1f));
             }
 
             Destroy(gameObject);

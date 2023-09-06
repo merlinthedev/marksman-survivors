@@ -17,7 +17,7 @@ namespace Champions.Kitegirl.Entities {
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 if (m_ShouldChain) {
                     // enemy.TakeFlatDamage(this.m_Damage);
-                    if ((bool)(m_SourceEntity as global::Champions.Kitegirl.Kitegirl)?.HasUltimateActive()) {
+                    if ((bool)(m_SourceEntity as Kitegirl)?.HasUltimateActive()) {
                         if (enemy.IsFragile) {
                             enemy.Die();
                         }

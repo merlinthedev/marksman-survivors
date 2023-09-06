@@ -31,10 +31,11 @@ namespace Champions.Kitegirl.Abilities {
             m_LastUseTime = Time.time;
             KitegirlSmokescreen kitegirlSmokescreen =
                 Instantiate(m_SmokescreenPrefab, m_Champion.transform.position, Quaternion.identity);
-            kitegirlSmokescreen.OnThrow(m_Champion);
+            kitegirlSmokescreen.OnThrow(m_Champion as Kitegirl);
 
             m_Champion.Stop();
-            (m_Champion as global::Champions.Kitegirl.Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset, mousePosition);
+            (m_Champion as global::Champions.Kitegirl.Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset,
+                mousePosition);
         }
     }
 }
