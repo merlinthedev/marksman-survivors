@@ -15,9 +15,7 @@ namespace Champions.Kitegirl {
         private int m_RecurseCount = 0;
         private int m_MaxRecurseCount = 0;
 
-        private int m_MaxChainCount {
-            get { return m_MaxRecurseCount; }
-        }
+        [SerializeField] private int m_MaxChainCount = 3;
 
         private int m_CurrentChainCount = 0;
 
