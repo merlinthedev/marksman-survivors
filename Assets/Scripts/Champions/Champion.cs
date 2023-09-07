@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Events;
 using UnityEngine;
@@ -7,41 +7,43 @@ using Random = UnityEngine.Random;
 
 namespace Champions {
     public abstract class Champion : AAbilityHolder, IDebuffable, IEntity, IStackableLivingEntity {
+
+        [Header("References")]
         [SerializeField] protected Rigidbody m_Rigidbody;
 
-        [SerializeField] protected Vector3 m_MouseHitPoint;
-        private Vector3 m_LastKnownDirection = Vector3.zero;
-
+        [Header("Stats")]
         [SerializeField] protected ChampionStatistics m_ChampionStatistics;
-
-        private ChampionLevelManager m_ChampionLevelManager;
-
-        [SerializeField] private float m_GroundedRange = 1.4f;
-        protected float m_LastAttackTime = 0f;
-        private float m_GlobalMovementDirectionAngle = 0f;
-        private float m_MovementMultiplier = 1f;
-        private float m_DamageMultiplier = 1f;
-        private float m_PreviousAngle = 0f;
         private float m_LastManaRegenerationTime = 0f;
         private float m_LastHealthRegenerationTime = 0f;
+        private ChampionLevelManager m_ChampionLevelManager;
 
+        [Header("Movement")]
+        [SerializeField] protected Vector3 m_MouseHitPoint;
+        private Vector3 m_LastKnownDirection = Vector3.zero;
         [SerializeField] protected bool m_CanMove = true;
         [SerializeField] protected bool m_Grounded = false;
+        [SerializeField] private float m_GroundedRange = 1.4f;
+        private float m_GlobalMovementDirectionAngle = 0f;
+        private float m_MovementMultiplier = 1f;
+        private float m_PreviousAngle = 0f;
+        public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
+
+        [Header("Attack")]
         protected bool m_HasAttackCooldown = false;
         private bool m_NextAttackWillCrit = false;
-
-        public bool IsBurning { get; }
-        public bool IsFragile { get; }
-
-        public List<Debuff> Debuffs { get; } = new();
-        public List<Stack> Stacks { get; } = new();
-
+        protected float m_LastAttackTime = 0f;
+        private float m_DamageMultiplier = 1f;
         public bool CanAttack {
             get => !m_HasAttackCooldown;
             protected set => m_HasAttackCooldown = !value;
         }
 
-        public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
+        //Buff/Debuff
+        public List<Debuff> Debuffs { get; } = new();
+        public List<Stack> Stacks { get; } = new();
+        public bool IsBurning { get; }
+        public bool IsFragile { get; }
+
 
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
