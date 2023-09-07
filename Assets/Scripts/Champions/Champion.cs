@@ -182,7 +182,7 @@ namespace Champions {
                     OnMove();
                 }
             }
-            Debug.Log("IsGrounded: " + m_Grounded);
+            // Debug.Log("IsGrounded: " + m_Grounded);
 
 
             RegenerateResources();
