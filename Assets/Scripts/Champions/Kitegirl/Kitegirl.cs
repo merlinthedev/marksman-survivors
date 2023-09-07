@@ -75,8 +75,7 @@ namespace Champions.Kitegirl {
 
             if (ability != null) {
                 ability.OnUse();
-            }
-            else {
+            } else {
                 // Debug.Log("Ability not found");
             }
         }
@@ -105,22 +104,18 @@ namespace Champions.Kitegirl {
                 (transform.position - new Vector3(mousePosition.x, yForceOffset, mousePosition.z)).normalized;
 
             // Debug.DrawRay(transform.position, pushbackDirection, Color.yellow);
-            Debug.DrawLine(transform.position, mousePosition, Color.yellow, 1f);
+            // Debug.DrawLine(transform.position, mousePosition, Color.yellow, 1f);
 
-            Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
+            // Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
 
-            float pushbackStunTime = 0.55f;
-            SetCanMove(false);
             m_Rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
-            Utilities.InvokeDelayed(() => SetCanMove(true), pushbackStunTime,
-                this); // 0.35 is the duration of the push back
+
         }
 
         protected override void OnMove() {
             if (!m_IsDashing) {
                 base.OnMove();
-            }
-            else {
+            } else {
                 this.m_Rigidbody.velocity =
                     GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
             }
@@ -173,8 +168,7 @@ namespace Champions.Kitegirl {
 
             if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
                 Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
-            }
-            else {
+            } else {
                 m_RecurseCount = 0;
             }
         }

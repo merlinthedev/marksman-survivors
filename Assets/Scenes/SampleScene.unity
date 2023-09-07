@@ -3588,7 +3588,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2114737654}
-  - component: {fileID: 2114737651}
   - component: {fileID: 2114737658}
   - component: {fileID: 2114737655}
   - component: {fileID: 2114737656}
@@ -3596,6 +3595,7 @@ GameObject:
   - component: {fileID: 2114737659}
   - component: {fileID: 2114737660}
   - component: {fileID: 2114737661}
+  - component: {fileID: 2114737662}
   m_Layer: 3
   m_Name: Kitegirl
   m_TagString: Player
@@ -3603,27 +3603,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &2114737651
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114737650}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.4335316, y: 2.257775, z: 0.1}
-  m_Center: {x: -0.17560606, y: -0.01737082, z: -0.000000024208891}
 --- !u!4 &2114737654
 Transform:
   m_ObjectHideFlags: 0
@@ -3810,10 +3789,13 @@ MonoBehaviour:
   m_MouseHitPoint: {x: 0, y: 0, z: 0}
   m_ChampionStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc,
     type: 2}
+  m_GroundedRange: 1.16
   m_CanMove: 1
+  m_Grounded: 0
   m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
   m_AnimationController: {fileID: 2114737660}
+  m_MaxChainCount: 3
   m_DashSpeed: 20
 --- !u!114 &2114737660
 MonoBehaviour:
@@ -3850,6 +3832,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &2114737662
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114737650}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2141387217
 GameObject:
   m_ObjectHideFlags: 0

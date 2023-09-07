@@ -17,6 +17,7 @@ namespace Champions {
 
         private ChampionLevelManager m_ChampionLevelManager;
 
+        [SerializeField] private float m_GroundedRange = 1.4f;
         protected float m_LastAttackTime = 0f;
         private float m_GlobalMovementDirectionAngle = 0f;
         private float m_MovementMultiplier = 1f;
@@ -25,6 +26,7 @@ namespace Champions {
 
 
         [SerializeField] protected bool m_CanMove = true;
+        [SerializeField] protected bool m_Grounded = false;
         protected bool m_HasAttackCooldown = false;
         private bool m_NextAttackWillCrit = false;
 
@@ -33,7 +35,6 @@ namespace Champions {
 
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
-
 
         public bool CanAttack {
             get => !m_HasAttackCooldown;
@@ -169,19 +170,25 @@ namespace Champions {
             m_ChampionStatistics.Initialize();
 
             //Update Health
-            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_ChampionStatistics.CurrentHealth, m_ChampionStatistics.MaxHealth));
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_ChampionStatistics.CurrentHealth,
+                m_ChampionStatistics.MaxHealth));
         }
 
         protected virtual void Update() {
+            GroundCheck();
+
             if (m_MouseHitPoint != Vector3.zero) {
-                if (m_CanMove) {
+                if (m_CanMove && m_Grounded) {
                     OnMove();
                 }
             }
+            Debug.Log("IsGrounded: " + m_Grounded);
+
 
             RegenerateResources();
             CheckStacksForExpiration();
             CheckDebuffsForExpiration();
+            m_Grounded = false;
         }
 
         private void RegenerateResources() {
@@ -216,6 +223,18 @@ namespace Champions {
         public void Stop() {
             m_Rigidbody.velocity = Vector3.zero;
             m_MouseHitPoint = Vector3.zero;
+        }
+
+        private void GroundCheck() {
+            // Debug.Log("Ground check");
+            // Debug.DrawRay(transform.position, Vector3.down * 10f, Color.red, 0);
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, m_GroundedRange, 1 << 6)) {
+                // Debug.Log("Ground check hit");
+                if (hit.collider.CompareTag("Ground")) {
+                    // Debug.Log("Ground check hit ground");
+                    m_Grounded = true;
+                }
+            }
         }
 
         protected virtual void OnMove() {
@@ -331,7 +350,8 @@ namespace Champions {
             // TODO: XP
             m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
             m_ChampionLevelManager.CheckForLevelUp();
-            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", m_ChampionStatistics.CurrentXP, m_ChampionLevelManager.CurrentLevelXP));
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", m_ChampionStatistics.CurrentXP,
+                m_ChampionLevelManager.CurrentLevelXP));
 
         }
 

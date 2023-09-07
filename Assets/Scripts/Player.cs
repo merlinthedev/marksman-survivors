@@ -92,7 +92,7 @@ public class Player : MonoBehaviour {
 
                     if (m_FirstMove) {
                         m_FirstMove = false;
-                        EnemyManager.GetInstance().SetShouldSpawn(true);
+                        // EnemyManager.GetInstance().SetShouldSpawn(true);
                         // Debug.Log("Start enemy spawning");
                     }
 

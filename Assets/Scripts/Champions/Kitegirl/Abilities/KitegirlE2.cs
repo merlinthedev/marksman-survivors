@@ -24,7 +24,7 @@ namespace Champions.Kitegirl.Abilities {
                 mousePosition = point;
             }
 
-            Debug.Log("<color=red>MousePosition: " + mousePosition + "</color>", this);
+            // Debug.Log("<color=red>MousePosition: " + mousePosition + "</color>", this);
 
             if (mousePosition == Vector3.zero) return;
 
@@ -35,7 +35,7 @@ namespace Champions.Kitegirl.Abilities {
             kitegirlSmokescreen.OnThrow(m_Champion as Kitegirl);
 
             m_Champion.Stop();
-            (m_Champion as global::Champions.Kitegirl.Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset,
+            (m_Champion as Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset,
                 mousePosition);
         }
     }
