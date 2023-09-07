@@ -9,6 +9,7 @@ namespace Champions {
     public abstract class Champion : AAbilityHolder, IDebuffable, IEntity, IStackableLivingEntity {
 
         #region Properties
+
         [Header("References")]
         [SerializeField] protected Rigidbody m_Rigidbody;
 
@@ -44,9 +45,11 @@ namespace Champions {
         public List<Stack> Stacks { get; } = new();
         public bool IsBurning { get; }
         public bool IsFragile { get; }
+
         #endregion
 
         #region OnEnable/OnDisable
+
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
         }
@@ -54,9 +57,11 @@ namespace Champions {
         private void OnDisable() {
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
         }
+
         #endregion
 
         #region Start and Update
+
         protected virtual void Start() {
             m_ChampionLevelManager = new ChampionLevelManager(this);
             m_ChampionStatistics.Initialize();
@@ -81,12 +86,15 @@ namespace Champions {
 
             m_Grounded = false;
         }
+
         #endregion
 
         #region Abstract Methods
+
         public abstract void OnAutoAttack(Collider collider);
 
         public abstract void OnAbility(KeyCode keyCode);
+
         #endregion
 
         #region Debuffs
