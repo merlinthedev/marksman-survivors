@@ -39,6 +39,8 @@ public class Player : MonoBehaviour {
 
     private bool m_FirstMove = true;
 
+    private bool hasClickedThisFrame = false;
+
     private void HandleMouseClicks() {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour {
             layerMask = ~layerMask;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
                 if (hit.collider.gameObject.CompareTag("Ground")) {
+                    hasClickedThisFrame = true;
                     var point = hit.point;
                     Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                     point.y = transform.position.y;
@@ -65,9 +68,37 @@ public class Player : MonoBehaviour {
             }
         }
 
+        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
+            // if it is the 10th frame, do the thing
+            if (Time.frameCount % 10 == 0) {
+                Debug.Log("Doing the thing");
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+                layerMask = ~layerMask;
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                    if (hit.collider.gameObject.CompareTag("Ground")) {
+                        var point = hit.point;
+                        point.y = transform.position.y;
+
+                        // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+
+                        m_SelectedChampion.SetMouseHitPoint(point);
+                    }
+
+                    if (hit.collider.gameObject.CompareTag("Enemy") ||
+                        hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
+                        m_SelectedChampion.OnAutoAttack(hit.collider);
+                    }
+                }
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             m_SelectedChampion.OnAbility(KeyCode.Mouse1);
         }
+        
+        hasClickedThisFrame = false;
     }
 
     private void HandleAbilityClicks() {

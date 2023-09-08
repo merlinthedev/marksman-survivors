@@ -22,39 +22,6 @@ namespace Champions.Kitegirl {
         [SerializeField] private float m_DashSpeed = 20f;
 
         public override void OnAutoAttack(Collider collider) {
-            // if (!CanAttack) return;
-            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            // RaycastHit hit;
-            // if (Physics.Raycast(ray, out hit)) {
-            //     if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
-            //         Vector3 point = hit.point;
-            //         point.y = transform.position.y;
-            //         
-            //         
-            //         // Debug.Log("Point on line: " + pointOnLine);
-            //         
-            //         
-            //         if (!this.m_CanMove) {
-            //             return;
-            //         }
-            //
-            //         this.m_CanMove = false;
-            //         this.m_LastAttackTime = Time.time;
-            //
-            //         Vector3 dir = point - transform.position;
-            //
-            //         SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
-            //
-            //         Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
-            //         m_Rigidbody.velocity = Vector3.zero;
-            //
-            //         // shoot 3 bullets in burst mode
-            //         ShootBullet_Recursive(true, point);
-            //         m_AnimationController.Attack();
-            //
-            //     }
-            // }
-
             if (!CanAttack) return;
             m_CanMove = false;
             m_LastAttackTime = Time.time;
