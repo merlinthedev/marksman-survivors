@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 namespace Champions {
     public abstract class Champion : AAbilityHolder, IDebuffable, IEntity, IStackableLivingEntity {
-
         #region Properties
 
         [Header("References")]
@@ -15,14 +14,15 @@ namespace Champions {
 
         [Header("Stats")]
         [SerializeField] protected ChampionStatistics m_ChampionStatistics;
+
         private float m_LastManaRegenerationTime = 0f;
         private float m_LastHealthRegenerationTime = 0f;
         private ChampionLevelManager m_ChampionLevelManager;
 
         [Header("Movement")]
         [SerializeField] protected Vector3 m_MouseHitPoint;
+
         private Vector3 m_LastKnownDirection = Vector3.zero;
-        [SerializeField] protected bool m_CanMove = true;
         [SerializeField] protected bool m_Grounded = false;
         [SerializeField] private float m_GroundedRange = 1.4f;
         private float m_GlobalMovementDirectionAngle = 0f;
@@ -31,13 +31,17 @@ namespace Champions {
         public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
 
         [Header("Attack")]
-        protected bool m_HasAttackCooldown = false;
+        protected Enemy m_CurrentTarget = null;
+
+
         private bool m_NextAttackWillCrit = false;
         protected float m_LastAttackTime = 0f;
         private float m_DamageMultiplier = 1f;
+
+        protected bool m_IsAutoAttacking = false;
+
         public bool CanAttack {
-            get => !m_HasAttackCooldown;
-            protected set => m_HasAttackCooldown = !value;
+            get => !m_IsAutoAttacking && Time.time > m_LastAttackTime + (1f / m_ChampionStatistics.AttackSpeed);
         }
 
         //Buff/Debuff
@@ -67,7 +71,8 @@ namespace Champions {
             m_ChampionStatistics.Initialize();
 
             //Update Health
-            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health", m_ChampionStatistics.CurrentHealth,
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
+                m_ChampionStatistics.CurrentHealth,
                 m_ChampionStatistics.MaxHealth));
         }
 
@@ -75,9 +80,13 @@ namespace Champions {
             GroundCheck();
 
             if (m_MouseHitPoint != Vector3.zero) {
-                if (m_CanMove && m_Grounded) {
+                if (m_Grounded) {
                     OnMove();
                 }
+            }
+
+            if (!IsMoving && m_CurrentTarget != null) {
+                OnAutoAttack(m_CurrentTarget.GetCollider());
             }
 
             RegenerateResources();
@@ -236,7 +245,7 @@ namespace Champions {
         #region Movement
 
         protected virtual void OnMove() {
-            if (m_MouseHitPoint == Vector3.zero || !m_CanMove) {
+            if (m_MouseHitPoint == Vector3.zero) {
                 return;
             }
 
@@ -370,6 +379,8 @@ namespace Champions {
         }
 
         public void SetMouseHitPoint(Vector3 point) {
+            // set the target enemy to null to stop us from auto attacking it again when we reach our destination
+            m_CurrentTarget = null;
             m_MouseHitPoint = point;
         }
 
@@ -377,16 +388,10 @@ namespace Champions {
             m_GlobalMovementDirectionAngle = angle;
         }
 
-        protected void SetCanMove(bool value) {
-            m_CanMove = value;
-            // Debug.Log("Move set ton true");
-        }
-
         public void SetNextAttackWillCrit(bool b) {
             m_NextAttackWillCrit = b;
         }
 
         #endregion
-
     }
 }

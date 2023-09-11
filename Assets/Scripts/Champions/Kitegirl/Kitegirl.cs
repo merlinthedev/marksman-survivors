@@ -2,6 +2,7 @@
 using Events;
 using UnityEngine;
 using Util;
+using Logger = Util.Logger;
 
 namespace Champions.Kitegirl {
     public class Kitegirl : Champion {
@@ -22,10 +23,23 @@ namespace Champions.Kitegirl {
         [SerializeField] private float m_DashSpeed = 20f;
 
         public override void OnAutoAttack(Collider collider) {
-            if (!CanAttack) return;
-            m_CanMove = false;
+            if (!CanAttack) {
+                if (!m_IsAutoAttacking) {
+                    // Queue the clicked target for our next attack
+                    m_CurrentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+                    // Stop moving towards the previous mouse hitpoint
+                    Stop();
+                }
+                return;
+            }
+
+            // Set to Vector3.zero to stop us from moving towards the previous mouse hitpoint
+            m_MouseHitPoint = Vector3.zero;
+
             m_LastAttackTime = Time.time;
             Vector3 dir = collider.transform.position - transform.position;
+            m_CurrentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
             // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
@@ -34,7 +48,7 @@ namespace Champions.Kitegirl {
             ShootBullet_Recursive(m_HasUltimateActive,
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();
-            CanAttack = false;
+            m_IsAutoAttacking = true;
         }
 
         public override void OnAbility(KeyCode keyCode) {
@@ -76,14 +90,13 @@ namespace Champions.Kitegirl {
             // Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
 
             m_Rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
-
         }
 
         protected override void OnMove() {
             if (!m_IsDashing) {
                 base.OnMove();
             } else {
-                this.m_Rigidbody.velocity =
+                m_Rigidbody.velocity =
                     GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
             }
         }
@@ -150,8 +163,8 @@ namespace Champions.Kitegirl {
         }
 
         public void EnableStuffAfterAttack() {
-            SetCanMove(true);
-            CanAttack = true;
+            Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
+            m_IsAutoAttacking = false;
         }
 
         public bool HasUltimateActive() {

@@ -56,7 +56,7 @@ public class Player : MonoBehaviour {
                     point.y = transform.position.y;
 
                     if (m_FirstMove) {
-                        EnemyManager.GetInstance().SetShouldSpawn(true);
+                         EnemyManager.GetInstance().SetShouldSpawn(true);
                         m_FirstMove = false;
                     }
 

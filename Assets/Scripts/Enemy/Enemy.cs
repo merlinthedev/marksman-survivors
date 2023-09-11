@@ -1,8 +1,7 @@
-using Events;
+﻿using Events;
 using System;
 using System.Collections.Generic;
 using Champions;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -101,8 +100,7 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
         //Check dir
         if (m_Rigidbody.velocity.x > 0) {
             m_CurrentDir = (m_Rigidbody.velocity.z > 0) ? 0 : 1;
-        }
-        else if (m_Rigidbody.velocity.x < 0) {
+        } else if (m_Rigidbody.velocity.x < 0) {
             m_CurrentDir = (m_Rigidbody.velocity.z < 0) ? 2 : 3;
         }
 
@@ -114,16 +112,13 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
             if (m_CurrentDir == 0) {
                 m_SpriteRenderer.flipX = true;
                 m_Animator.SetInteger("Dir", 1);
-            }
-            else if (m_CurrentDir == 1) {
+            } else if (m_CurrentDir == 1) {
                 m_SpriteRenderer.flipX = true;
                 m_Animator.SetInteger("Dir", 0);
-            }
-            else if (m_CurrentDir == 2) {
+            } else if (m_CurrentDir == 2) {
                 m_SpriteRenderer.flipX = false;
                 m_Animator.SetInteger("Dir", 0);
-            }
-            else if (m_CurrentDir == 3) {
+            } else if (m_CurrentDir == 3) {
                 m_SpriteRenderer.flipX = false;
                 m_Animator.SetInteger("Dir", 1);
             }
@@ -337,5 +332,13 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
 
     public float GetMaxHealth() {
         return m_MaxHealth;
+    }
+
+    public Collider GetCollider() {
+        return m_Collider;
+    }
+
+    public void SetCanMove(bool canMove) {
+        m_CanMove = canMove;
     }
 }

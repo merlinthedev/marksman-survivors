@@ -9,10 +9,13 @@ using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour {
-    [SerializeField] [Tooltip("Time it takes between enemy spawn")]
+    [SerializeField]
+    [Tooltip("Time it takes between enemy spawn")]
     private float m_SpawnTimer = 1.4f;
 
     private bool m_ShouldSpawn = false;
+    [SerializeField] private int m_MaxAmountOfEnemies = 1;
+    private int m_AmountOfEnemies = 0;
     [SerializeField] private Enemy m_EnemyPrefab;
     [SerializeField] private Player m_Player; // THIS IS BAD LETS NOT DO THIS
 
@@ -40,11 +43,17 @@ public class EnemyManager : MonoBehaviour {
 
     private IEnumerator SpawnEnemy() {
         while (m_ShouldSpawn) {
+            if (m_AmountOfEnemies >= m_MaxAmountOfEnemies) {
+                m_ShouldSpawn = false;
+                break;
+            }
             yield return new WaitForSeconds(m_SpawnTimer);
             // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
             Enemy enemy = Instantiate(m_EnemyPrefab, FindPositionRecursively(), Quaternion.Euler(0, 45, 0));
             enemy.SetTarget(m_Player.transform);
+            //enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
             m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+            m_AmountOfEnemies++; // For when we want to limit the amount of enemies on the screen for testing purposes
         }
     }
 
@@ -110,8 +119,8 @@ public class EnemyManager : MonoBehaviour {
 
     public List<Enemy> GetEnemiesInArea(Vector3 point, float radius = 10f) {
         return (from enemy in m_EnemyDictionary
-            where Vector3.Distance(point, enemy.Value.transform.position) < radius
-            select enemy.Value).ToList();
+                where Vector3.Distance(point, enemy.Value.transform.position) < radius
+                select enemy.Value).ToList();
     }
 
     public Enemy GetEnemy(Collider other) {
@@ -129,8 +138,7 @@ public class EnemyManager : MonoBehaviour {
 
         if (value) {
             StartCoroutine(SpawnEnemy());
-        }
-        else {
+        } else {
             StopCoroutine(SpawnEnemy());
         }
     }
