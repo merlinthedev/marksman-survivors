@@ -41,8 +41,8 @@ public class EnemyManager : MonoBehaviour {
     private IEnumerator SpawnEnemy() {
         while (m_ShouldSpawn) {
             yield return new WaitForSeconds(m_SpawnTimer);
-            // Debug.Log("Spawning enemy");
-            Enemy enemy = Instantiate(m_EnemyPrefab, CalculateValidSpawnPosition(), Quaternion.Euler(0, 45, 0));
+            // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
+            Enemy enemy = Instantiate(m_EnemyPrefab, FindPositionRecursively(), Quaternion.Euler(0, 45, 0));
             enemy.SetTarget(m_Player.transform);
             m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
         }
@@ -67,12 +67,9 @@ public class EnemyManager : MonoBehaviour {
         Vector3 rightPoint = playerPos + rightDirection * 30f;
         Vector3 leftPoint = playerPos + leftDirection * 30f;
 
-        // Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
-        // Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
-        // Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
-        //
-        // // draw the randomPointOnPlane
-        // Debug.DrawLine(playerPos, randomPointOnPlane, Color.red, 0.5f);
+        Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
+        Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
+        Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
 
         bool isInTriangle = Utilities.IsInsideTriangle(
             new Vector2(playerPos.x, playerPos.z)
@@ -80,21 +77,15 @@ public class EnemyManager : MonoBehaviour {
             , new Vector2(leftPoint.x, leftPoint.z)
             , new Vector2(randomPointOnPlane.x, randomPointOnPlane.z));
 
-        // Debug.Log("Point in triangle?: " + isInTriangle);
 
+        // if the point is in the triangle, we want to try again
         if (isInTriangle) {
             return FindPositionRecursively();
         }
 
 
         // If the random point is in the triangle, return it
-        // If it isn't, try again
-
         return randomPointOnPlane;
-    }
-
-    private Vector3 CalculateValidSpawnPosition() {
-        return FindPositionRecursively();
     }
 
     private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {

@@ -56,6 +56,7 @@ public class Player : MonoBehaviour {
                     point.y = transform.position.y;
 
                     if (m_FirstMove) {
+                        EnemyManager.GetInstance().SetShouldSpawn(true);
                         m_FirstMove = false;
                     }
 
@@ -82,6 +83,7 @@ public class Player : MonoBehaviour {
                         var point = hit.point;
                         point.y = transform.position.y;
 
+                        // Uncomment to also spawn click prefab when holding down the mouse 
                         // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
 
                         m_SelectedChampion.SetMouseHitPoint(point);
