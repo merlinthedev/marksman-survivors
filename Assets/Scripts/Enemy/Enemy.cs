@@ -6,6 +6,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Logger = Util.Logger;
 
 public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
     private Transform m_Target;
@@ -226,7 +227,7 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
         for (int i = 0; i < count; i++) {
             Stack stack = new Stack(Stack.StackType.FRAGILE, this);
             Stacks.Add(stack);
-            Debug.LogWarning("Added fragile stack: " + i, this);
+            Logger.Log("Added fragile stack: " + i, Logger.Color.YELLOW, this);
         }
     }
 
@@ -284,8 +285,9 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
             return;
         }
 
-        Debug.Log("<color=green> Slow applied </color>");
-        Debug.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + m_InitialMovementSpeed);
+        Logger.Log("Slow applied", Logger.Color.GREEN, this);
+        Logger.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + m_InitialMovementSpeed,
+            Logger.Color.BLUE, this);
 
         Utilities.InvokeDelayed(() => { m_MovementSpeed = m_InitialMovementSpeed; }, debuff.GetDuration(), this);
     }
@@ -318,7 +320,7 @@ public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
 
             Champion champion = other.gameObject.GetComponent<Champion>();
             if (champion == null) {
-                Debug.LogError("Missing champion component");
+                Logger.Log("Missing champion component", Logger.Color.RED, this);
                 return;
             }
 

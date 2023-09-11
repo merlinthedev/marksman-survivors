@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Util;
+using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour {
@@ -125,7 +126,7 @@ public class EnemyManager : MonoBehaviour {
     public Enemy GetEnemy(Collider other) {
         Enemy enemy = m_EnemyDictionary[other];
         if (enemy == null) {
-            Debug.LogError("Enemy not found in dictionary");
+            Util.Logger.Log("Enemy not found in dictionary", Logger.Color.RED, this);
             throw new Exception("Enemy not found in dictionary");
         }
 

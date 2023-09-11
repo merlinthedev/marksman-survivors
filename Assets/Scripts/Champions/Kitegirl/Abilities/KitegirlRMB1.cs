@@ -1,5 +1,6 @@
 ﻿using Champions.Kitegirl.Entities;
 using UnityEngine;
+using static Util.Logger;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlRMB1 : AAbility {
@@ -30,7 +31,7 @@ namespace Champions.Kitegirl.Abilities {
             float mouseToChampionAngle = Vector3.SignedAngle(Vector3.forward, mouseToChampionDirection, Vector3.up);
 
 
-            Debug.Log("Angle: " + mouseToChampionAngle);
+            Log("Angle: " + mouseToChampionAngle, Util.Logger.Color.YELLOW, this);
 
             KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
                 m_Champion.transform.position + mouseToChampionDirection.normalized *

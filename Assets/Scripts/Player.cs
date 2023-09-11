@@ -1,9 +1,10 @@
 ﻿using Events;
-using System;
 using Champions;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
+using static Util.Logger;
+using Logger = Util.Logger;
 
 public class Player : MonoBehaviour {
     [Header("Stats")]
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
             // if it is the 10th frame, do the thing
             if (Time.frameCount % 10 == 0) {
-                Debug.Log("Doing the thing");
+                Log("Mouse held down", Logger.Color.GREEN, this);
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
@@ -97,7 +98,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             m_SelectedChampion.OnAbility(KeyCode.Mouse1);
         }
-        
+
         hasClickedThisFrame = false;
     }
 

@@ -1,5 +1,6 @@
 ﻿using Events;
 using UnityEngine;
+using Logger = Util.Logger;
 
 namespace Champions {
     public class ChampionLevelManager {
@@ -22,7 +23,9 @@ namespace Champions {
                 LevelUp();
             }
 
-            Debug.Log("Current level: " + m_CurrentLevel + ", Current XP: " + m_Champion.GetChampionStatistics().CurrentXP);
+            Logger.Log(
+                "Current level: " + m_CurrentLevel + ", Current XP: " + m_Champion.GetChampionStatistics().CurrentXP,
+                Logger.Color.PINK, m_Champion);
         }
 
         private void LevelUp() {
@@ -32,18 +35,21 @@ namespace Champions {
             m_Champion.GetChampionStatistics().CurrentXP = 0f;
 
             EventBus<ChampionLevelUpEvent>.Raise(new ChampionLevelUpEvent(m_CurrentLevel, m_CurrentLevel - 1));
-            Debug.Log("Leveled up to level " + m_CurrentLevel + "!");
+            Logger.Log("Leveled up to level " + m_CurrentLevel + "!", Logger.Color.PINK, m_Champion);
         }
 
         #region Getters and Setters
+
         public float CurrentLevelXP {
             get => m_CurrentLevelXP;
             set => m_CurrentLevelXP = value;
         }
+
         public float CurrentLevel {
             get => m_CurrentLevel;
             set => m_CurrentLevel = (int)value;
         }
+
         #endregion
     }
 }
