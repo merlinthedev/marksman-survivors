@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Events;
 using UnityEngine;
 using Util;
+using Logger = UnityEngine.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
@@ -26,7 +27,6 @@ namespace Champions {
         [SerializeField] protected bool m_Grounded = false;
         [SerializeField] private float m_GroundedRange = 1.4f;
         private float m_GlobalMovementDirectionAngle = 0f;
-        private float m_MovementMultiplier = 1f;
         private float m_PreviousAngle = 0f;
         public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
 
@@ -41,7 +41,7 @@ namespace Champions {
         protected bool m_IsAutoAttacking = false;
 
         public bool CanAttack {
-            get => !m_IsAutoAttacking && Time.time > m_LastAttackTime + (1f / m_ChampionStatistics.AttackSpeed);
+            get => !m_IsAutoAttacking && Time.time > m_LastAttackTime + (1f / GetAttackSpeed());
         }
 
         //Buff/Debuff
@@ -162,7 +162,8 @@ namespace Champions {
                     AddFragileStacks(stacks);
                     break;
                 case Stack.StackType.DEFTNESS:
-                    throw new NotImplementedException();
+                    AddDeftnessStacks(stacks);
+                    break;
                 case Stack.StackType.OVERPOWER:
                     throw new NotImplementedException();
             }
@@ -174,7 +175,8 @@ namespace Champions {
                     RemoveFragileStacks(stacks);
                     break;
                 case Stack.StackType.DEFTNESS:
-                    throw new NotImplementedException();
+                    RemoveDeftnessStacks(stacks);
+                    break;
                 case Stack.StackType.OVERPOWER:
                     throw new NotImplementedException();
             }
@@ -204,6 +206,24 @@ namespace Champions {
             for (int i = Stacks.Count - 1; i >= 0; i--) {
                 if (removed == count) break;
                 if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE) {
+                    Stacks.RemoveAt(i);
+                    removed++;
+                }
+            }
+        }
+
+        private void AddDeftnessStacks(int count) {
+            for (int i = 0; i < count; i++) {
+                Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
+                Stacks.Add(stack);
+            }
+        }
+
+        private void RemoveDeftnessStacks(int count) {
+            int removed = 0;
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
+                if (removed == count) break;
+                if (Stacks[i].GetStackType() == Stack.StackType.DEFTNESS) {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
@@ -263,7 +283,19 @@ namespace Champions {
                 return;
             }
 
-            m_Rigidbody.velocity = direction.normalized * (m_ChampionStatistics.MovementSpeed * m_MovementMultiplier);
+
+            int deftnessStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count;
+
+            if (deftnessStacks > 0) {
+                Util.Logger.Log("Deftness stacks: " + deftnessStacks, Util.Logger.Color.GREEN, this);
+            }
+
+            
+
+            m_Rigidbody.velocity = direction.normalized *
+                                   (m_ChampionStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
+
+            Util.Logger.Log("Velocity: " + m_Rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             m_LastKnownDirection = direction.normalized;
         }
 
@@ -357,9 +389,14 @@ namespace Champions {
 
         public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;
         public float GetMaxHealth() => m_ChampionStatistics.MaxHealth;
-        public float GetAttackSpeed() => m_ChampionStatistics.AttackSpeed;
+
+        public float GetAttackSpeed() => m_ChampionStatistics.GetAttackSpeed(1 +
+                                                                             (Stacks.FindAll(stack =>
+                                                                                  stack.GetStackType() ==
+                                                                                  Stack.StackType.DEFTNESS).Count /
+                                                                              100f));
+
         public float GetLastAttackTime() => m_LastAttackTime;
-        protected float GetCurrentMovementMultiplier() => m_MovementMultiplier;
         protected float GetDamageMultiplier() => m_DamageMultiplier;
         public Rigidbody GetRigidbody() => m_Rigidbody;
         public ChampionStatistics GetChampionStatistics() => m_ChampionStatistics;

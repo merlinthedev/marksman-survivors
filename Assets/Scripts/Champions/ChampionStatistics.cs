@@ -104,8 +104,11 @@ namespace Champions {
         }
 
         public float AttackSpeed {
-            get => attackSpeed;
-            set => attackSpeed = value;
+            set { attackSpeed = value; }
+        }
+
+        public float GetAttackSpeed(float deftnessMultiplier) {
+            return attackSpeed * deftnessMultiplier;
         }
 
         public float InitialMovementSpeed {

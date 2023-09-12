@@ -3,7 +3,7 @@
 namespace Util {
     public static class Logger {
 
-        private static bool m_ShouldLog = false;
+        private static bool m_ShouldLog = true;
 
         public static void Log(object message, Color color, Object context) {
             if (m_ShouldLog) {

@@ -30,6 +30,7 @@ namespace Champions.Kitegirl {
                     // Stop moving towards the previous mouse hitpoint
                     Stop();
                 }
+
                 return;
             }
 
@@ -49,7 +50,7 @@ namespace Champions.Kitegirl {
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();
             m_IsAutoAttacking = true;
-            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, 1f / m_ChampionStatistics.AttackSpeed));
+            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
         }
 
         public override void OnAbility(KeyCode keyCode) {
@@ -57,7 +58,8 @@ namespace Champions.Kitegirl {
 
             if (ability != null) {
                 ability.OnUse();
-            } else {
+            }
+            else {
                 // Debug.Log("Ability not found");
             }
         }
@@ -73,7 +75,7 @@ namespace Champions.Kitegirl {
         }
 
         public void TryReduceECooldown() {
-            AAbility kitegirlE = this.m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
+            AAbility kitegirlE = m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
             if (kitegirlE == null) return;
             if (kitegirlE.IsOnCooldown()) {
                 kitegirlE.DeductFromCooldown(kitegirlE.GetAbilityCooldown() * 0.02f); // 2% of cooldown 
@@ -96,9 +98,9 @@ namespace Champions.Kitegirl {
         protected override void OnMove() {
             if (!m_IsDashing) {
                 base.OnMove();
-            } else {
-                m_Rigidbody.velocity =
-                    GetCurrentMovementDirection() * (m_DashSpeed * GetCurrentMovementMultiplier());
+            }
+            else {
+                m_Rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
             }
         }
 
@@ -149,7 +151,8 @@ namespace Champions.Kitegirl {
 
             if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
                 Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
-            } else {
+            }
+            else {
                 m_RecurseCount = 0;
             }
         }
