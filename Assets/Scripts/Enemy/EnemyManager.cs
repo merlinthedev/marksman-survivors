@@ -49,7 +49,7 @@ public class EnemyManager : MonoBehaviour {
             }
             yield return new WaitForSeconds(m_SpawnTimer);
             // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
-            Enemy enemy = Instantiate(m_EnemyPrefab, FindPositionRecursively(), Quaternion.Euler(0, 45, 0));
+            Enemy enemy = Instantiate(m_EnemyPrefab, FindPositionIteratively(), Quaternion.Euler(0, 45, 0));
             enemy.SetTarget(m_Player.transform);
             //enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
             m_EnemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
@@ -60,10 +60,6 @@ public class EnemyManager : MonoBehaviour {
     private Vector3 FindPositionRecursively() {
         Vector3 randomPointOnPlane = new Vector3(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
 
-
-        // If it isn't, check if the random point is in the triangle
-
-        // TODO: GET TWO TRIANGLE POINTS TAKEN FROM THE PLAYERS POSITION ETC ETC 
 
         // Take the player position, shoot two rays from this position, one 45 deg to the right of the players direction, one 45 deg to the left
         Vector3 playerPos = m_Player.gameObject.transform.position;
@@ -94,6 +90,40 @@ public class EnemyManager : MonoBehaviour {
 
 
         // If the random point is in the triangle, return it
+        return randomPointOnPlane;
+    }
+
+    private Vector3 FindPositionIteratively() {
+        Vector3 randomPointOnPlane;
+
+        do {
+            randomPointOnPlane = new Vector3(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
+
+            Vector3 playerPos = m_Player.gameObject.transform.position;
+            Vector3 playerDirection = m_Player.GetCurrentlySelectedChampion().GetCurrentMovementDirection();
+
+            Vector3 rightDirection = Quaternion.Euler(0, 45, 0) * playerDirection;
+            Vector3 leftDirection = Quaternion.Euler(0, -45, 0) * playerDirection;
+
+            Vector3 rightPoint = playerPos + rightDirection * 30f;
+            Vector3 leftPoint = playerPos + leftDirection * 30f;
+
+            Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
+            Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
+            Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
+
+            bool isInTriangle = Utilities.IsInsideTriangle(
+                new Vector2(playerPos.x, playerPos.z),
+                new Vector2(rightPoint.x, rightPoint.z),
+                new Vector2(leftPoint.x, leftPoint.z),
+                new Vector2(randomPointOnPlane.x, randomPointOnPlane.z));
+
+            if (!isInTriangle) {
+                // If the random point is not in the triangle, exit the loop
+                break;
+            }
+        } while (true);
+
         return randomPointOnPlane;
     }
 

@@ -2,12 +2,19 @@
 
 namespace Util {
     public static class Logger {
+
+        private static bool m_ShouldLog = false;
+
         public static void Log(object message, Color color, Object context) {
-            Debug.Log("<color=" + color.ToString().ToLower() + ">" + message + "</color>", context);
+            if (m_ShouldLog) {
+                Debug.Log("<color=" + color.ToString().ToLower() + ">" + message + "</color>", context);
+            }
         }
 
         public static void Log(object message, Object context) {
-            Logger.Log(message, Color.WHITE, context);
+            if (m_ShouldLog) {
+                Log(message, Color.WHITE, context);
+            }
         }
 
         public enum Color {
