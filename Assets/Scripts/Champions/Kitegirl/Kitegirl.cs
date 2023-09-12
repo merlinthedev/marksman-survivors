@@ -1,4 +1,6 @@
-﻿using BuffsDebuffs;
+﻿using System;
+using BuffsDebuffs;
+using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using Enemy;
@@ -6,6 +8,7 @@ using EventBus;
 using UnityEngine;
 using Util;
 using Logger = Util.Logger;
+using Random = UnityEngine.Random;
 
 namespace Champions.Kitegirl {
     public class Kitegirl : Champion {
@@ -15,6 +18,7 @@ namespace Champions.Kitegirl {
         private bool m_AutoAttackShouldChain = false;
         private bool m_IsDashing = false;
         private bool m_HasUltimateActive = false;
+        private bool m_AutoAttackShouldApplyDeftness = false;
 
         private int m_RecurseCount = 0;
         private int m_MaxRecurseCount = 0;
@@ -48,6 +52,10 @@ namespace Champions.Kitegirl {
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
             // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
             m_Rigidbody.velocity = Vector3.zero;
+
+            if (m_AutoAttackShouldApplyDeftness) {
+                AddStacks(1, Stack.StackType.DEFTNESS);
+            }
 
             ShootBullet_Recursive(m_HasUltimateActive,
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
@@ -169,8 +177,12 @@ namespace Champions.Kitegirl {
             m_IsDashing = p0;
         }
 
+        public void SetAutoAttackDeftnessApply(bool value) {
+            m_AutoAttackShouldApplyDeftness = value;
+        }
+
         public void EnableStuffAfterAttack() {
-            Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
+            // Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
             m_IsAutoAttacking = false;
         }
 

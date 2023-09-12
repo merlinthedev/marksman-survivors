@@ -8,6 +8,7 @@ namespace Champions.Kitegirl.Abilities {
         [SerializeField] private int m_AmountOfDeftnessStacks = 100;
 
         public override void OnUse() {
+            if (IsOnCooldown()) return;
             m_Champion.AddStacks(m_AmountOfDeftnessStacks, Stack.StackType.DEFTNESS);
             base.OnUse();
         }
