@@ -49,6 +49,7 @@ namespace Champions.Kitegirl {
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();
             m_IsAutoAttacking = true;
+            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, 1f / m_ChampionStatistics.AttackSpeed));
         }
 
         public override void OnAbility(KeyCode keyCode) {

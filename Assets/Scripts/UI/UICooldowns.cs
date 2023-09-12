@@ -1,11 +1,9 @@
 ﻿using Events;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UICooldowns : MonoBehaviour
-{
+public class UICooldowns : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Image m_LMB;
     [SerializeField] private Image m_RMB;
@@ -29,9 +27,19 @@ public class UICooldowns : MonoBehaviour
     private void OnDisable() {
         EventBus<ChampionAbilityUsedEvent>.Unsubscribe(HandleAbilityCooldowns);
     }
+
     private void HandleAbilityCooldowns(ChampionAbilityUsedEvent e) {
-        KeyCode m_KeyCode = e.m_Ability.GetKeyCode();
-        float duration = e.m_Ability.GetAbilityCooldown();
+        KeyCode m_KeyCode;
+        float duration;
+
+        if (e.m_Ability == null) {
+            m_KeyCode = e.m_KeyCode;
+            duration = e.m_Duration;
+        } else {
+            m_KeyCode = e.m_Ability.GetKeyCode();
+            duration = e.m_Ability.GetAbilityCooldown();
+        }
+
         switch (m_KeyCode) {
             case KeyCode.Mouse0:
                 m_AbilityCooldowns.Add(new AbilityCooldown() {
@@ -77,8 +85,9 @@ public class UICooldowns : MonoBehaviour
                 break;
         }
     }
+
     private void Update() {
-        for(int i = 0; i < m_AbilityCooldowns.Count; i++) {
+        for (int i = 0; i < m_AbilityCooldowns.Count; i++) {
             AbilityCooldown abilityCooldown = m_AbilityCooldowns[i];
             abilityCooldown.m_CurrentTime -= Time.deltaTime;
             float cooldownPercentage = abilityCooldown.m_CurrentTime / abilityCooldown.m_TotalDuration;
