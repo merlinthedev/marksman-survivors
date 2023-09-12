@@ -1,31 +1,33 @@
 using UnityEngine;
 
-public class Stack {
-    private StackType m_StackType;
-    private float m_LifeTime = 10f;
-    private float m_ApplyTime = 0f;
-    private IStackableLivingEntity m_AffectedEntity;
+namespace BuffsDebuffs.Stacks {
+    public class Stack {
+        private StackType m_StackType;
+        private float m_LifeTime = 10f;
+        private float m_ApplyTime = 0f;
+        private IStackableLivingEntity m_AffectedEntity;
 
-    public Stack(StackType stackType, IStackableLivingEntity affectedEntity) {
-        m_StackType = stackType;
-        m_AffectedEntity = affectedEntity;
+        public Stack(StackType stackType, IStackableLivingEntity affectedEntity) {
+            m_StackType = stackType;
+            m_AffectedEntity = affectedEntity;
 
-        m_ApplyTime = Time.time;
-    }
-
-    public void CheckForExpiration() {
-        if (Time.time > m_ApplyTime + m_LifeTime) {
-            m_AffectedEntity.RemoveStack(this);
+            m_ApplyTime = Time.time;
         }
-    }
 
-    public StackType GetStackType() {
-        return m_StackType;
-    }
+        public void CheckForExpiration() {
+            if (Time.time > m_ApplyTime + m_LifeTime) {
+                m_AffectedEntity.RemoveStack(this);
+            }
+        }
 
-    public enum StackType {
-        FRAGILE,
-        DEFTNESS,
-        OVERPOWER
+        public StackType GetStackType() {
+            return m_StackType;
+        }
+
+        public enum StackType {
+            FRAGILE,
+            DEFTNESS,
+            OVERPOWER
+        }
     }
 }

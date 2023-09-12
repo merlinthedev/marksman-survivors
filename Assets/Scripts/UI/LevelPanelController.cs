@@ -1,4 +1,4 @@
-using Events;
+using EventBus;
 using UnityEngine;
 
 namespace UI {

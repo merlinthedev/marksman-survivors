@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using BuffsDebuffs;
+using BuffsDebuffs.Stacks;
+using Enemy;
+using Entities;
 using UnityEngine;
 using Util;
 
@@ -50,11 +54,11 @@ namespace Champions.Kitegirl.Entities {
             if (m_RegularDetonationCancelled) return;
             // Debug.Log("Detonating");
 
-            List<Enemy> enemiesInRange =
+            List<Enemy.Enemy> enemiesInRange =
                 EnemyManager.GetInstance().GetEnemiesInArea(transform.position, m_DamageRadius);
 
 
-            foreach (Enemy enemy in enemiesInRange) {
+            foreach (Enemy.Enemy enemy in enemiesInRange) {
                 float damage = enemy.GetMaxHealth() * 0.01f /* 1% of max health */ +
                                m_SourceEntity.GetAttackDamage() *
                                0.01f; // 1% of AD

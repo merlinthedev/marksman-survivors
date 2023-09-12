@@ -1,5 +1,5 @@
-﻿using Champions.Kitegirl.Entities;
-using Events;
+﻿using Champions.Abilities;
+using Champions.Kitegirl.Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {

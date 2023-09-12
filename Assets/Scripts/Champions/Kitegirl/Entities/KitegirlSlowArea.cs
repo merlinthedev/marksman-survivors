@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using BuffsDebuffs;
+using Enemy;
+using UnityEngine;
 
 namespace Champions.Kitegirl.Entities {
     public class KitegirlSlowArea : MonoBehaviour {
@@ -25,7 +27,7 @@ namespace Champions.Kitegirl.Entities {
 
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+                Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
 
                 enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.Slow,
                     m_SlowDuration, m_SlowPercentage));

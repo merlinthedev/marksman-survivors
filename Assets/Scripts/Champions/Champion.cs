@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Events;
+using BuffsDebuffs;
+using BuffsDebuffs.Stacks;
+using Champions.Abilities;
+using EventBus;
 using UnityEngine;
 using Util;
 using Logger = UnityEngine.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDebuffable, IEntity, IStackableLivingEntity {
+    public abstract class Champion : AAbilityHolder, IDebuffable, IStackableLivingEntity {
         #region Properties
 
         [Header("References")]
@@ -31,7 +34,7 @@ namespace Champions {
         public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
 
         [Header("Attack")]
-        protected Enemy m_CurrentTarget = null;
+        protected Enemy.Enemy m_CurrentTarget = null;
 
 
         private bool m_NextAttackWillCrit = false;

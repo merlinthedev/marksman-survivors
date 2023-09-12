@@ -1,5 +1,6 @@
-﻿using Events;
-using Champions;
+﻿using Champions;
+using Enemy;
+using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;

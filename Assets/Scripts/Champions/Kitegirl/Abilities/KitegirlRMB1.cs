@@ -1,4 +1,5 @@
-﻿using Champions.Kitegirl.Entities;
+﻿using Champions.Abilities;
+using Champions.Kitegirl.Entities;
 using UnityEngine;
 using static Util.Logger;
 

@@ -1,1 +1,3 @@
-﻿public interface IEntity { }
+﻿namespace BuffsDebuffs.Stacks {
+    public interface IEntity { }
+}

@@ -1,4 +1,4 @@
-﻿using Events;
+﻿using Champions.Abilities;
 using UnityEngine;
 using Util;
 

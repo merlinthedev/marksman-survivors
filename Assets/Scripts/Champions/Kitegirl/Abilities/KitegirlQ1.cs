@@ -1,5 +1,5 @@
-﻿using Events;
-using System;
+﻿using System;
+using Champions.Abilities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {

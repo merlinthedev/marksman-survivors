@@ -1,5 +1,5 @@
-using UnityEngine;
-
-public interface IDamageable {
-    void TakeFlatDamage(float damage);
+namespace Entities {
+    public interface IDamageable {
+        void TakeFlatDamage(float damage);
+    }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Champions.Abilities;
+using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {

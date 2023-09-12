@@ -1,4 +1,6 @@
 ﻿using System;
+using BuffsDebuffs.Stacks;
+using Champions.Abilities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
