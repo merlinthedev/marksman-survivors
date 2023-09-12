@@ -29,8 +29,7 @@ namespace Champions.Kitegirl.Entities {
 
                 enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.Slow,
                     m_SlowDuration, m_SlowPercentage));
-                enemy.TakeFlatDamage(m_Kitegirl.GetChampionStatistics().AttackDamage *
-                                     m_ADDamageRatio);
+                enemy.TakeFlatDamage(m_Kitegirl.GetAttackDamage() * m_ADDamageRatio);
             }
         }
     }

@@ -56,7 +56,7 @@ namespace Champions.Kitegirl.Entities {
 
             foreach (Enemy enemy in enemiesInRange) {
                 float damage = enemy.GetMaxHealth() * 0.01f /* 1% of max health */ +
-                               m_SourceEntity.GetChampionStatistics().AttackDamage *
+                               m_SourceEntity.GetAttackDamage() *
                                0.01f; // 1% of AD
                 enemy.TakeFlatDamage((shot ? 2f : 1f) * m_Damage);
                 enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, Debuff.DebuffType.Burn, 5f, damage, 1f));

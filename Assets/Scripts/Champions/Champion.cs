@@ -165,7 +165,8 @@ namespace Champions {
                     AddDeftnessStacks(stacks);
                     break;
                 case Stack.StackType.OVERPOWER:
-                    throw new NotImplementedException();
+                    AddOverpowerStacks(stacks);
+                    break;
             }
         }
 
@@ -178,7 +179,8 @@ namespace Champions {
                     RemoveDeftnessStacks(stacks);
                     break;
                 case Stack.StackType.OVERPOWER:
-                    throw new NotImplementedException();
+                    RemoveOverpowerStacks(stacks);
+                    break;
             }
         }
 
@@ -214,6 +216,13 @@ namespace Champions {
 
         private void AddDeftnessStacks(int count) {
             for (int i = 0; i < count; i++) {
+                if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count >= 100) {
+                    // get the difference between the inital count and the current count
+                    int difference = count - i;
+                    AddOverpowerStacks(difference);
+                    break;
+                }
+
                 Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
                 Stacks.Add(stack);
             }
@@ -224,6 +233,24 @@ namespace Champions {
             for (int i = Stacks.Count - 1; i >= 0; i--) {
                 if (removed == count) break;
                 if (Stacks[i].GetStackType() == Stack.StackType.DEFTNESS) {
+                    Stacks.RemoveAt(i);
+                    removed++;
+                }
+            }
+        }
+
+        private void AddOverpowerStacks(int count) {
+            for (int i = 0; i < count; i++) {
+                Stack stack = new Stack(Stack.StackType.OVERPOWER, this);
+                Stacks.Add(stack);
+            }
+        }
+
+        private void RemoveOverpowerStacks(int count) {
+            int removed = 0;
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
+                if (removed == count) break;
+                if (Stacks[i].GetStackType() == Stack.StackType.OVERPOWER) {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
@@ -290,7 +317,6 @@ namespace Champions {
                 Util.Logger.Log("Deftness stacks: " + deftnessStacks, Util.Logger.Color.GREEN, this);
             }
 
-            
 
             m_Rigidbody.velocity = direction.normalized *
                                    (m_ChampionStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
@@ -335,7 +361,7 @@ namespace Champions {
         }
 
         protected float CalculateDamage() {
-            float damage = m_ChampionStatistics.AttackDamage;
+            float damage = GetAttackDamage();
 
             if (Random.value < m_ChampionStatistics.CriticalStrikeChance || m_NextAttackWillCrit) {
                 damage *= (1 + m_ChampionStatistics.CriticalStrikeDamage);
@@ -395,6 +421,13 @@ namespace Champions {
                                                                                   stack.GetStackType() ==
                                                                                   Stack.StackType.DEFTNESS).Count /
                                                                               100f));
+
+        public float GetAttackDamage() => m_ChampionStatistics.GetAttackDamage(1 +
+                                                                               (Stacks.FindAll(stack =>
+                                                                                           stack.GetStackType() ==
+                                                                                           Stack.StackType.OVERPOWER)
+                                                                                       .Count /
+                                                                                   100f));
 
         public float GetLastAttackTime() => m_LastAttackTime;
         protected float GetDamageMultiplier() => m_DamageMultiplier;

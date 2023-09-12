@@ -130,8 +130,11 @@ namespace Champions {
         }
 
         public float AttackDamage {
-            get => attackDamage;
             set => attackDamage = value;
+        }
+
+        public float GetAttackDamage(float overpowerMultiplier) {
+            return m_AttackDamage * overpowerMultiplier;
         }
 
         public float CriticalStrikeChance {

@@ -24,7 +24,7 @@ namespace Champions.Kitegirl.Abilities {
                     if (DistanceCheck(point)) {
                         KitegirlGrenade grenade =
                             Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
-                        grenade.SetDamage(this.m_Champion.GetChampionStatistics().AttackDamage * m_AttackDamageRatio);
+                        grenade.SetDamage(this.m_Champion.GetAttackDamage() * m_AttackDamageRatio);
                         grenade.OnThrow(point, m_Champion);
                         this.m_LastUseTime = Time.time;
                     }
