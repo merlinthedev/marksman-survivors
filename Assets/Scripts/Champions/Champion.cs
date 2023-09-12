@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using EventBus;
 using UnityEngine;
 using Util;
-using Logger = UnityEngine.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
