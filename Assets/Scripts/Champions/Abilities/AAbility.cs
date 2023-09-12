@@ -3,17 +3,16 @@ using UnityEngine;
 
 namespace Champions.Abilities {
     public abstract class AAbility : MonoBehaviour {
-
         [SerializeField] protected KeyCode m_KeyCode;
         [SerializeField] protected float m_AbilityCooldown = 0f;
         [SerializeField] protected float m_AbilityRange = 10f;
         protected float m_LastUseTime;
         private float m_CurrentCooldown = 0f;
-        protected Champion m_Champion;    
+        protected Champion m_Champion;
 
 
         protected bool m_IsCancelled = false;
-    
+
 
         public void Hook(Champion champion) {
             m_Champion = champion;
@@ -23,7 +22,9 @@ namespace Champions.Abilities {
             // Debug.Log("Base Hook() called");
         }
 
-        public virtual void OnUse() { 
+        public virtual void OnUse() {
+            m_LastUseTime = Time.time;
+
             //Raise cooldown event
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(this));
         }
@@ -31,7 +32,7 @@ namespace Champions.Abilities {
         protected void SetBaseCooldown() {
             m_AbilityCooldown = m_CurrentCooldown;
         }
-    
+
         protected bool DistanceCheck(Vector3 point) {
             return (this.m_Champion.transform.position - point).magnitude <= m_AbilityRange;
         }
@@ -60,7 +61,5 @@ namespace Champions.Abilities {
         public KeyCode GetKeyCode() {
             return m_KeyCode;
         }
-
-
     }
 }

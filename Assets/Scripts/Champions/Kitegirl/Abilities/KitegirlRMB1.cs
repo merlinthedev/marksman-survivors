@@ -9,7 +9,6 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            base.OnUse();
 
             Vector3 mousePosition = Vector3.zero;
 
@@ -40,8 +39,7 @@ namespace Champions.Kitegirl.Abilities {
                 Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
 
             kitegirlSlowArea.OnThrow(m_Champion as Kitegirl);
-
-            m_LastUseTime = Time.time;
+            base.OnUse();
         }
     }
 }

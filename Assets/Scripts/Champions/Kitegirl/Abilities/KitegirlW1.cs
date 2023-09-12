@@ -10,7 +10,6 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            base.OnUse();
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -27,10 +26,8 @@ namespace Champions.Kitegirl.Abilities {
                             Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
                         grenade.SetDamage(this.m_Champion.GetAttackDamage() * m_AttackDamageRatio);
                         grenade.OnThrow(point, m_Champion);
-                        this.m_LastUseTime = Time.time;
-                    }
-                    else {
-                        // Debug.Log("Out of range");
+
+                        base.OnUse();
                     }
                 }
             }

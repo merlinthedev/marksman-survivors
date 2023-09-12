@@ -10,7 +10,6 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            base.OnUse();
 
             Vector3 mousePosition = Vector3.zero;
 
@@ -30,13 +29,14 @@ namespace Champions.Kitegirl.Abilities {
 
 
             // TODO: Spawn smokescreen
-            m_LastUseTime = Time.time;
             KitegirlSmokescreen kitegirlSmokescreen = Instantiate(m_SmokescreenPrefab, new Vector3(m_Champion.transform.position.x, 0.5f, m_Champion.transform.position.z), Quaternion.identity);
             kitegirlSmokescreen.OnThrow(m_Champion as Kitegirl);
 
             m_Champion.Stop();
             (m_Champion as Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset,
                 mousePosition);
+            
+            base.OnUse();
         }
     }
 }

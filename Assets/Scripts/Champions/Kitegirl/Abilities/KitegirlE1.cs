@@ -9,15 +9,15 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            base.OnUse();
 
             // Dash forward 
             (this.m_Champion as Kitegirl)?.SetIsDashing(true);
             (m_Champion as Kitegirl)?.SetNextAttackWillCrit(true);
-            m_LastUseTime = Time.time;
 
             Utilities.InvokeDelayed(() => { (this.m_Champion as Kitegirl)?.SetIsDashing(false); }, m_DashDuration,
                 this.m_Champion);
+
+            base.OnUse();
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE
