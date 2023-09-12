@@ -57,6 +57,9 @@ namespace Champions.Kitegirl {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
+            // Logger.Log("Deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.YELLOW, this);
+            // Logger.Log("Overpower stacks: " + GetStackAmount(Stack.StackType.OVERPOWER), Logger.Color.YELLOW, this);
+
             ShootBullet_Recursive(m_HasUltimateActive,
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();

@@ -10,5 +10,6 @@ namespace BuffsDebuffs.Stacks {
         void RemoveStacks(int stacks, Stack.StackType stackType);
         void RemoveStack(Stack stack);
         void CheckStacksForExpiration();
+        int GetStackAmount(Stack.StackType stackType);
     }
 }

@@ -5,6 +5,7 @@ using Champions.Abilities;
 using EventBus;
 using UnityEngine;
 using Util;
+using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
@@ -41,7 +42,7 @@ namespace Champions {
 
         protected bool m_IsAutoAttacking = false;
 
-        public bool CanAttack {
+        protected bool CanAttack {
             get => !m_IsAutoAttacking && Time.time > m_LastAttackTime + (1f / GetAttackSpeed());
         }
 
@@ -447,6 +448,10 @@ namespace Champions {
             return m_GlobalMovementDirectionAngle < 0
                 ? m_GlobalMovementDirectionAngle + 360
                 : m_GlobalMovementDirectionAngle;
+        }
+
+        public int GetStackAmount(Stack.StackType stackType) {
+            return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
 
         public void SetMouseHitPoint(Vector3 point) {

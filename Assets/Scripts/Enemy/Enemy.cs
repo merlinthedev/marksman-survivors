@@ -103,7 +103,8 @@ namespace Enemy {
             //Check dir
             if (m_Rigidbody.velocity.x > 0) {
                 m_CurrentDir = (m_Rigidbody.velocity.z > 0) ? 0 : 1;
-            } else if (m_Rigidbody.velocity.x < 0) {
+            }
+            else if (m_Rigidbody.velocity.x < 0) {
                 m_CurrentDir = (m_Rigidbody.velocity.z < 0) ? 2 : 3;
             }
 
@@ -115,13 +116,16 @@ namespace Enemy {
                 if (m_CurrentDir == 0) {
                     m_SpriteRenderer.flipX = true;
                     m_Animator.SetInteger("Dir", 1);
-                } else if (m_CurrentDir == 1) {
+                }
+                else if (m_CurrentDir == 1) {
                     m_SpriteRenderer.flipX = true;
                     m_Animator.SetInteger("Dir", 0);
-                } else if (m_CurrentDir == 2) {
+                }
+                else if (m_CurrentDir == 2) {
                     m_SpriteRenderer.flipX = false;
                     m_Animator.SetInteger("Dir", 0);
-                } else if (m_CurrentDir == 3) {
+                }
+                else if (m_CurrentDir == 3) {
                     m_SpriteRenderer.flipX = false;
                     m_Animator.SetInteger("Dir", 1);
                 }
@@ -339,6 +343,10 @@ namespace Enemy {
 
         public Collider GetCollider() {
             return m_Collider;
+        }
+
+        public int GetStackAmount(Stack.StackType stackType) {
+            return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
 
         public void SetCanMove(bool canMove) {
