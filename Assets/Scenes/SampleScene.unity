@@ -4224,12 +4224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031a7555116348445a14a06a627f3b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Abilities:
-  - {fileID: -5498696720246338259, guid: 1fb49ee4e290ece4f87254b83b587c4d, type: 3}
-  - {fileID: -2301999179170599804, guid: e252c537c7aec1a449fbb7598a4d005e, type: 3}
-  - {fileID: -6238975156126620012, guid: 91481cedeb0cdf74db51635ff984c3d4, type: 3}
-  - {fileID: -5836431172475230976, guid: ee230c949f26d78479ca5eef23c3f31a, type: 3}
-  - {fileID: -8325301189158293201, guid: 2f8a91740c41dd14ca598abdf45003b2, type: 3}
+  m_Abilities: []
   m_Rigidbody: {fileID: 2114737658}
   m_ChampionStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc,
     type: 2}

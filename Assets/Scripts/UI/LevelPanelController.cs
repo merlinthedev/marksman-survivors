@@ -1,12 +1,15 @@
+using System.Collections.Generic;
+using Champions.Abilities;
 using EventBus;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = Util.Logger;
 
 namespace UI {
     public class LevelPanelController : MonoBehaviour {
-        [SerializeField] private GameObject m_LevelPanel;
+        [SerializeField] private GameObject levelPanel;
 
+        [SerializeField] private List<AAbility> abilities = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
@@ -40,15 +43,20 @@ namespace UI {
         }
 
         private void HidePanel() {
-            m_LevelPanel.SetActive(false);
+            levelPanel.SetActive(false);
         }
 
         private void ShowPanel() {
-            m_LevelPanel.SetActive(true);
+            levelPanel.SetActive(true);
+        }
+
+        private void PopulatePanel() {
+            // 
         }
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {
             ShowPanel();
+            abilities = e.m_ChampionAbilities;
         }
     }
 }
