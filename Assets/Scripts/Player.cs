@@ -21,11 +21,15 @@ public class Player : MonoBehaviour {
     [Header("Other")]
     [SerializeField] private GameObject m_ClickAnimPrefab;
 
+    private bool isPaused = false;
+
     private void OnEnable() {
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
+        EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
+        EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
     }
 
     private void OnDisable() {
@@ -33,6 +37,8 @@ public class Player : MonoBehaviour {
         EventBus<EnemyStopHoverEvent>.Unsubscribe(OnEnemyStopHover);
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
+        EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
+        EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
     }
 
     private void Start() {
@@ -126,6 +132,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
+        if (isPaused) return;
         HandleMouseClicks();
         HandleAbilityClicks();
     }
@@ -150,6 +157,15 @@ public class Player : MonoBehaviour {
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
         EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
             m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
+    }
+
+    private void OnChampionLevelUp(ChampionLevelUpEvent e) {
+        isPaused = true;
+        m_SelectedChampion.Stop();
+    }
+
+    private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
+        isPaused = false;
     }
 
     public Champion GetCurrentlySelectedChampion() {

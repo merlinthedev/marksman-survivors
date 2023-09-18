@@ -323,7 +323,7 @@ namespace Champions {
             m_Rigidbody.velocity = direction.normalized *
                                    (m_ChampionStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
 
-            Util.Logger.Log("Velocity: " + m_Rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
+            Logger.Log("Velocity: " + m_Rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             m_LastKnownDirection = direction.normalized;
         }
 

@@ -27,6 +27,7 @@ namespace Enemy {
         [SerializeField] private Image m_HealthBarBackground;
         private float m_InitialHealthBarWidth;
         private bool m_CanMove = true;
+        private bool m_CanAttack = true;
 
         private float m_LastAttackTime = 0f;
         [SerializeField] private float m_AttackCooldown = 3f;
@@ -315,10 +316,22 @@ namespace Enemy {
             );
         }
 
+        public void OnPause() {
+            SetCanMove(false);
+            SetCanAttack(false);
+        }
+
+        public void OnResume() {
+            // Invoking delayed to give the player some time to move away from any very close enemies
+            Utilities.InvokeDelayed(() => {
+                SetCanMove(true);
+                SetCanAttack(true);
+            }, 0.2f, this);
+        }
 
         private void OnCollisionStay(Collision other) {
             if (other.gameObject.CompareTag("Player")) {
-                if (m_IsDead) return;
+                if (m_IsDead || !m_CanAttack) return;
 
                 Champion champion = other.gameObject.GetComponent<Champion>();
                 if (champion == null) {
@@ -351,6 +364,10 @@ namespace Enemy {
 
         public void SetCanMove(bool canMove) {
             m_CanMove = canMove;
+        }
+
+        public void SetCanAttack(bool value) {
+            m_CanAttack = value;
         }
     }
 }

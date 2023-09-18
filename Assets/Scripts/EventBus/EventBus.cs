@@ -56,30 +56,7 @@ namespace EventBus {
 
     public class ChampionDamageTakenEvent : Event {
     }
-
-    public class ChampionLevelUpEvent : Event {
-        public int m_CurrentLevel { get; private set; }
-        public int m_PreviousLevel { get; private set; }
-
-        public ChampionLevelUpEvent(int currentLevel, int previousLevel) {
-            m_CurrentLevel = currentLevel;
-            m_PreviousLevel = previousLevel;
-        }
-    }
-
-    public class UpdateResourceBarEvent : Event {
-
-        public string m_Type { get; private set; }
-        public float m_Current { get; private set; }
-        public float m_Total { get; private set; }
-
-        public UpdateResourceBarEvent(string type, float current, float total) {
-            m_Type = type;
-            m_Current = current;
-            m_Total = total;
-        }
-    }
-
+    
     public class ChampionAbilityUsedEvent : Event {
         public AAbility m_Ability { get; private set; }
 
@@ -96,4 +73,32 @@ namespace EventBus {
             m_Ability = null;
         }
     }
+
+    public class ChampionLevelUpEvent : Event {
+        public int m_CurrentLevel { get; private set; }
+        public int m_PreviousLevel { get; private set; }
+
+        public ChampionLevelUpEvent(int currentLevel, int previousLevel) {
+            m_CurrentLevel = currentLevel;
+            m_PreviousLevel = previousLevel;
+        }
+    }
+
+    public class ChampionAbilityChosenEvent : Event {
+        
+    }
+
+    public class UpdateResourceBarEvent : Event {
+
+        public string m_Type { get; private set; }
+        public float m_Current { get; private set; }
+        public float m_Total { get; private set; }
+
+        public UpdateResourceBarEvent(string type, float current, float total) {
+            m_Type = type;
+            m_Current = current;
+            m_Total = total;
+        }
+    }
+    
 }
