@@ -96,6 +96,16 @@ namespace Champions {
             CheckDebuffsForExpiration();
 
             m_Grounded = false;
+
+            if(Input.GetKeyDown(KeyCode.Alpha1)) {
+                AddStacks(1, Stack.StackType.FRAGILE);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                AddStacks(1, Stack.StackType.OVERPOWER);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                AddStacks(1, Stack.StackType.DEFTNESS);
+            }
         }
 
         #endregion
@@ -169,7 +179,9 @@ namespace Champions {
                 case Stack.StackType.OVERPOWER:
                     AddOverpowerStacks(stacks);
                     break;
+
             }
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stackType, stacks, true));
         }
 
         public void RemoveStacks(int stacks, Stack.StackType stackType) {
@@ -188,6 +200,7 @@ namespace Champions {
 
         public void RemoveStack(Stack stack) {
             Stacks.Remove(stack);
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stack.GetStackType(), 1, false));
         }
 
         public void CheckStacksForExpiration() {

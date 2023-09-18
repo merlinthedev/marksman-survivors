@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace BuffsDebuffs.Stacks {
@@ -27,6 +27,7 @@ namespace BuffsDebuffs.Stacks {
 
         [Serializable]
         public enum StackType {
+            defaultStack,
             FRAGILE,
             DEFTNESS,
             OVERPOWER

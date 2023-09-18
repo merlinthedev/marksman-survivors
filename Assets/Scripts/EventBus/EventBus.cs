@@ -1,5 +1,6 @@
 ﻿using Champions.Abilities;
 using UnityEngine;
+using BuffsDebuffs.Stacks;
 
 namespace EventBus {
     public abstract class EventBus<T> where T : Event {
@@ -81,6 +82,7 @@ namespace EventBus {
     }
 
     public class ChampionAbilityUsedEvent : Event {
+
         public AAbility m_Ability { get; private set; }
 
         public KeyCode m_KeyCode { get; private set; }
@@ -94,6 +96,19 @@ namespace EventBus {
             m_KeyCode = keyCode;
             m_Duration = duration;
             m_Ability = null;
+        }
+    }
+
+    public class ChangeStackUIEvent : Event {
+
+        public Stack.StackType type;
+        public int stacks;
+        public bool open;
+
+        public ChangeStackUIEvent(Stack.StackType type, int stacks, bool open) {
+            this.type = type;
+            this.stacks = stacks;
+            this.open = open;
         }
     }
 }
