@@ -218,7 +218,7 @@ namespace Champions {
 
         private void AddDeftnessStacks(int count) {
             for (int i = 0; i < count; i++) {
-                if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count >= 100) {
+                if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count >= 25) {
                     // get the difference between the inital count and the current count
                     int difference = count - i;
                     AddOverpowerStacks(difference);

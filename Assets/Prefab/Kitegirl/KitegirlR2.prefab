@@ -47,4 +47,4 @@ MonoBehaviour:
   m_KeyCode: 114
   m_AbilityCooldown: 5
   m_AbilityRange: 0
-  m_AmountOfDeftnessStacks: 100
+  m_AmountOfDeftnessStacks: 25
