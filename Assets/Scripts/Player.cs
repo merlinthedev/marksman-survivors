@@ -24,6 +24,8 @@ public class Player : MonoBehaviour {
     private bool isPaused = false;
 
     private void OnEnable() {
+        excludedContexts.Add(this);
+
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);

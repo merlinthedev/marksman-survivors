@@ -9,7 +9,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            m_Champion.AddStacks(m_AmountOfDeftnessStacks, Stack.StackType.DEFTNESS);
+            champion.AddStacks(m_AmountOfDeftnessStacks, Stack.StackType.DEFTNESS);
             base.OnUse();
         }
     }

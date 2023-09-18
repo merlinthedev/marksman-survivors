@@ -12,10 +12,10 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            (m_Champion as Kitegirl)?.SetAutoAttackDeftnessApply(true);
+            (champion as Kitegirl)?.SetAutoAttackDeftnessApply(true);
 
-            Utilities.InvokeDelayed(() => (m_Champion as Kitegirl)?.SetAutoAttackDeftnessApply(false), m_ActiveTime,
-                m_Champion);
+            Utilities.InvokeDelayed(() => (champion as Kitegirl)?.SetAutoAttackDeftnessApply(false), m_ActiveTime,
+                champion);
 
             base.OnUse();
         }

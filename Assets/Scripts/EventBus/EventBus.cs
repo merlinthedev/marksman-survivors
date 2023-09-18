@@ -58,19 +58,19 @@ namespace EventBus {
     public class ChampionDamageTakenEvent : Event { }
 
     public class ChampionAbilityUsedEvent : Event {
-        public AAbility m_Ability { get; private set; }
+        public AAbility AbstractAbility { get; private set; }
 
-        public KeyCode m_KeyCode { get; private set; }
-        public float m_Duration { get; private set; }
+        public KeyCode KeyCode { get; private set; }
+        public float Duration { get; private set; }
 
         public ChampionAbilityUsedEvent(AAbility ability) {
-            m_Ability = ability;
+            AbstractAbility = ability;
         }
 
         public ChampionAbilityUsedEvent(KeyCode keyCode, float duration) {
-            m_KeyCode = keyCode;
-            m_Duration = duration;
-            m_Ability = null;
+            KeyCode = keyCode;
+            Duration = duration;
+            AbstractAbility = null;
         }
     }
 
@@ -86,7 +86,13 @@ namespace EventBus {
         }
     }
 
-    public class ChampionAbilityChosenEvent : Event { }
+    public class ChampionAbilityChosenEvent : Event {
+        public AAbility Ability { get; private set; }
+        
+        public ChampionAbilityChosenEvent(AAbility ability) {
+            Ability = ability;
+        }
+    }
 
     public class UpdateResourceBarEvent : Event {
         public string m_Type { get; private set; }

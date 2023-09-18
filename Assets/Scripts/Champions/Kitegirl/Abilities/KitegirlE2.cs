@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlE2 : AAbility {
-        [SerializeField] private KitegirlSmokescreen m_SmokescreenPrefab = null;
-        [SerializeField] private float m_DashRange = 3f;
-        [SerializeField] private float m_YForceOffset = 4f;
+        [SerializeField] private KitegirlSmokescreen smokescreenPrefab = null;
+        [SerializeField] private float dashRange = 3f;
+        [SerializeField] private float yForceOffset = 4f;
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
@@ -18,7 +18,7 @@ namespace Champions.Kitegirl.Abilities {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 Vector3 point = hit.point;
-                point.y = this.m_Champion.transform.position.y;
+                point.y = this.champion.transform.position.y;
 
                 mousePosition = point;
             }
@@ -29,13 +29,14 @@ namespace Champions.Kitegirl.Abilities {
 
 
             // TODO: Spawn smokescreen
-            KitegirlSmokescreen kitegirlSmokescreen = Instantiate(m_SmokescreenPrefab, new Vector3(m_Champion.transform.position.x, 0.5f, m_Champion.transform.position.z), Quaternion.identity);
-            kitegirlSmokescreen.OnThrow(m_Champion as Kitegirl);
+            KitegirlSmokescreen kitegirlSmokescreen = Instantiate(smokescreenPrefab,
+                new Vector3(champion.transform.position.x, 0.5f, champion.transform.position.z), Quaternion.identity);
+            kitegirlSmokescreen.OnThrow(champion as Kitegirl);
 
-            m_Champion.Stop();
-            (m_Champion as Kitegirl)?.SmokeScreenPushBack(m_DashRange, m_YForceOffset,
+            champion.Stop();
+            (champion as Kitegirl)?.SmokeScreenPushBack(dashRange, yForceOffset,
                 mousePosition);
-            
+
             base.OnUse();
         }
     }

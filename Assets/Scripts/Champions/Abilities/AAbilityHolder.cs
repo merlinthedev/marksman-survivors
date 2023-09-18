@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Champions.Abilities {
     [Serializable]
     public class AAbilityHolder : MonoBehaviour {
-        [SerializeField] protected List<AAbility> m_Abilities = new List<AAbility>();
+        [SerializeField] protected List<AAbility> abilities = new List<AAbility>();
 
         public List<AAbility> GetAbilities() {
-            return m_Abilities;
+            return abilities;
         }
     }
 }

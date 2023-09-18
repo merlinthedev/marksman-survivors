@@ -4,18 +4,18 @@ using Util;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlE1 : AAbility {
-        private float m_DashDuration = 0.2f;
-        private float m_LastDashTime = 0f;
+        private float dashDuration = 0.2f;
+        private float lastDashTime = 0f;
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
             // Dash forward 
-            (this.m_Champion as Kitegirl)?.SetIsDashing(true);
-            (m_Champion as Kitegirl)?.SetNextAttackWillCrit(true);
+            (this.champion as Kitegirl)?.SetIsDashing(true);
+            (champion as Kitegirl)?.SetNextAttackWillCrit(true);
 
-            Utilities.InvokeDelayed(() => { (this.m_Champion as Kitegirl)?.SetIsDashing(false); }, m_DashDuration,
-                this.m_Champion);
+            Utilities.InvokeDelayed(() => { (this.champion as Kitegirl)?.SetIsDashing(false); }, dashDuration,
+                this.champion);
 
             base.OnUse();
         }

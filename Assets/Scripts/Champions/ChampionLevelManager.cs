@@ -1,5 +1,4 @@
 ﻿using EventBus;
-using UnityEngine;
 using Logger = Util.Logger;
 
 namespace Champions {
@@ -14,7 +13,7 @@ namespace Champions {
         public ChampionLevelManager(Champion champion) {
             this.champion = champion;
             currentLevel = 1;
-            currentLevelXp = 5f;
+            currentLevelXp = 2f;
             previousLevelXp = 0f;
         }
 

@@ -9,17 +9,17 @@ namespace UI {
         [SerializeField] private Image lmbImage;
 
         [SerializeField] private Image rmbImage;
-        [SerializeField] private Image mQ;
-        [SerializeField] private Image mW;
-        [SerializeField] private Image mE;
-        [SerializeField] private Image mR;
+        [SerializeField] private Image qImage;
+        [SerializeField] private Image wImage;
+        [SerializeField] private Image eImage;
+        [SerializeField] private Image rImage;
 
-        private List<AbilityCooldown> mAbilityCooldowns = new();
+        private List<AbilityCooldown> abilityCooldowns = new();
 
         private class AbilityCooldown {
-            public float MTotalDuration;
-            public float MCurrentTime;
-            public Image MImage;
+            public float TotalDuration;
+            public float CurrentTime;
+            public Image Image;
         }
 
         private void OnEnable() {
@@ -34,79 +34,79 @@ namespace UI {
             // fill all the cooldowns fully
             // m_LMB.fillAmount = 1;
             rmbImage.fillAmount = 1;
-            mQ.fillAmount = 1;
-            mW.fillAmount = 1;
-            mE.fillAmount = 1;
-            mR.fillAmount = 1;
+            qImage.fillAmount = 1;
+            wImage.fillAmount = 1;
+            eImage.fillAmount = 1;
+            rImage.fillAmount = 1;
         }
 
         private void HandleAbilityCooldowns(ChampionAbilityUsedEvent e) {
-            KeyCode mKeyCode;
+            KeyCode keyCode;
             float duration;
 
-            if (e.m_Ability == null) {
-                mKeyCode = e.m_KeyCode;
-                duration = e.m_Duration;
+            if (e.AbstractAbility == null) {
+                keyCode = e.KeyCode;
+                duration = e.Duration;
             }
             else {
-                mKeyCode = e.m_Ability.GetKeyCode();
-                duration = e.m_Ability.GetAbilityCooldown();
+                keyCode = e.AbstractAbility.GetKeyCode();
+                duration = e.AbstractAbility.GetAbilityCooldown();
             }
 
-            switch (mKeyCode) {
+            switch (keyCode) {
                 case KeyCode.Mouse0:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = lmbImage
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = lmbImage
                     });
                     break;
                 case KeyCode.Mouse1:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = rmbImage
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = rmbImage
                     });
                     break;
                 case KeyCode.Q:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = mQ
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = qImage
                     });
                     break;
                 case KeyCode.W:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = mW
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = wImage
                     });
                     break;
                 case KeyCode.E:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = mE
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = eImage
                     });
                     break;
                 case KeyCode.R:
-                    mAbilityCooldowns.Add(new AbilityCooldown() {
-                        MTotalDuration = duration,
-                        MCurrentTime = duration,
-                        MImage = mR
+                    abilityCooldowns.Add(new AbilityCooldown() {
+                        TotalDuration = duration,
+                        CurrentTime = duration,
+                        Image = rImage
                     });
                     break;
             }
         }
 
         private void Update() {
-            for (int i = 0; i < mAbilityCooldowns.Count; i++) {
-                AbilityCooldown abilityCooldown = mAbilityCooldowns[i];
-                abilityCooldown.MCurrentTime -= Time.deltaTime;
-                float cooldownPercentage = abilityCooldown.MCurrentTime / abilityCooldown.MTotalDuration;
-                abilityCooldown.MImage.fillAmount = cooldownPercentage;
-                if (abilityCooldown.MCurrentTime <= 0) {
-                    mAbilityCooldowns.RemoveAt(i);
+            for (int i = 0; i < abilityCooldowns.Count; i++) {
+                AbilityCooldown abilityCooldown = abilityCooldowns[i];
+                abilityCooldown.CurrentTime -= Time.deltaTime;
+                float cooldownPercentage = abilityCooldown.CurrentTime / abilityCooldown.TotalDuration;
+                abilityCooldown.Image.fillAmount = cooldownPercentage;
+                if (abilityCooldown.CurrentTime <= 0) {
+                    abilityCooldowns.RemoveAt(i);
                     i--;
                 }
             }
