@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Champions.Abilities;
 using EventBus;
 using UnityEngine;
@@ -8,80 +7,97 @@ using Logger = Util.Logger;
 namespace UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
+        [SerializeField] private GameObject upgradeComponentPrefab;
 
         [SerializeField] private List<AAbility> abilities = new();
         private List<AAbility> randomAbilities = new();
+        private List<UIUpgradeComponent> uiUpgradeComponents = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
+            EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
         }
 
         private void OnDisable() {
             EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
+            EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
         }
 
         private void Start() {
             HidePanel();
         }
 
-        public void OnButtonClick(int index) {
-            switch (index) {
-                case 0:
-                    Logger.Log("Clicked the first ability", Logger.Color.PINK, this);
-                    EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(randomAbilities[0]));
-                    break;
-                case 1:
-                    Logger.Log("Clicked the second ability", Logger.Color.PINK, this);
-                    EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(randomAbilities[1]));
-                    break;
-                case 2:
-                    Logger.Log("Clicked the third ability", Logger.Color.PINK, this);
-                    EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(randomAbilities[2]));
-                    break;
-            }
-
-            HidePanel();
-        }
-
         private void HidePanel() {
             levelPanel.SetActive(false);
+
+            for (int i = uiUpgradeComponents.Count - 1; i >= 0; i--) {
+                Destroy(uiUpgradeComponents[i].gameObject);
+                uiUpgradeComponents.RemoveAt(i);
+            }
         }
 
         private void ShowPanel(List<AAbility> currentChampionAbilities) {
             levelPanel.SetActive(true);
-            PopulatePanel(currentChampionAbilities);
+            int toInstantiate = PopulatePanel(currentChampionAbilities);
+
+            // Instantiate the abilities
+            for (int i = 0; i < toInstantiate; i++) {
+                // Instantiate the ability panel prefab
+                GameObject upgradeComponent = Instantiate(upgradeComponentPrefab, levelPanel.transform);
+                UIUpgradeComponent uiUpgradeComponent = upgradeComponent.GetComponent<UIUpgradeComponent>();
+                uiUpgradeComponent.HookButton(this);
+                uiUpgradeComponent.SetIndex(i);
+                uiUpgradeComponent.GetTextComponent().SetText(randomAbilities[i].GetType().ToString());
+                uiUpgradeComponent.GetBannerImage().sprite = randomAbilities[i].GetAbilityLevelUpBannerSprite();
+
+                uiUpgradeComponents.Add(uiUpgradeComponent);
+            }
         }
 
-        private void PopulatePanel(List<AAbility> currentChampionAbilities) {
+        private int PopulatePanel(List<AAbility> currentChampionAbilities) {
             // fetch 3 random abilities from the list
             randomAbilities.Clear();
+
+            int maxAttempts = 10; // Set a maximum number of attempts
+
             for (int i = 0; i < 3; i++) {
-                int randomIndex = Random.Range(0, abilities.Count);
-                var x = abilities[randomIndex];
-                // check if the currentChampionAbilites already contains a ability with the same keycode
-                if (currentChampionAbilities.Exists(ability => ability.GetKeyCode() == x.GetKeyCode())) {
-                    i--;
-                    continue;
-                }
+                int attempts = 0; // Track the number of attempts made to find a valid ability
 
-                if (randomAbilities.Contains(x)) {
-                    i--;
-                    continue;
-                }
+                while (attempts < maxAttempts) {
+                    int randomIndex = Random.Range(0, abilities.Count);
+                    var x = abilities[randomIndex];
 
-                randomAbilities.Add(x);
+                    // Check if the currentChampionAbilities already contain an ability with the same keycode
+                    if (currentChampionAbilities.Exists(ability => ability.GetKeyCode() == x.GetKeyCode())) {
+                        attempts++;
+                        continue;
+                    }
+
+                    if (randomAbilities.Contains(x)) {
+                        attempts++;
+                        continue;
+                    }
+
+                    randomAbilities.Add(x);
+                    break; // Valid ability found, exit the while loop
+                }
             }
 
-            List<UIUpgradeComponent> uiUpgradeComponents = GetComponentsInChildren<UIUpgradeComponent>().ToList();
+            Logger.Log("Random abilities: " + randomAbilities.Count, Logger.Color.RED, this);
 
-            for (int i = 0; i < randomAbilities.Count; i++) {
-                uiUpgradeComponents[i].GetTextComponent().SetText(randomAbilities[i].GetType().ToString());
-                uiUpgradeComponents[i].GetBannerImage().sprite = randomAbilities[i].GetAbilityLevelUpBannerSprite();
-            }
+            return randomAbilities.Count;
+        }
+
+        public AAbility GetAbilityFromIndex(int index) {
+            return randomAbilities[index];
         }
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {
             ShowPanel(e.m_ChampionAbilities);
+        }
+
+        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
+            HidePanel();
         }
     }
 }
