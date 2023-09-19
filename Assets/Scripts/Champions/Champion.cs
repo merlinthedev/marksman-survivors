@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
@@ -396,7 +396,7 @@ namespace Champions {
 
             if (nextAttackWillCrit) nextAttackWillCrit = false;
 
-            return damage;
+            return Mathf.Floor(damage);
         }
 
         protected virtual void OnDeath() {
