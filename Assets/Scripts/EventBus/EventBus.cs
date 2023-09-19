@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Champions.Abilities;
 using UnityEngine;
 using BuffsDebuffs.Stacks;
@@ -104,24 +104,6 @@ namespace EventBus {
             m_Type = type;
             m_Current = current;
             m_Total = total;
-        }
-    }
-
-    public class ChampionAbilityUsedEvent : Event {
-
-        public AAbility m_Ability { get; private set; }
-
-        public KeyCode m_KeyCode { get; private set; }
-        public float m_Duration { get; private set; }
-
-        public ChampionAbilityUsedEvent(AAbility ability) {
-            m_Ability = ability;
-        }
-
-        public ChampionAbilityUsedEvent(KeyCode keyCode, float duration) {
-            m_KeyCode = keyCode;
-            m_Duration = duration;
-            m_Ability = null;
         }
     }
 
