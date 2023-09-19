@@ -17,7 +17,7 @@ namespace Champions.Kitegirl.Abilities {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 Vector3 point = hit.point;
-                point.y = this.m_Champion.transform.position.y;
+                point.y = this.champion.transform.position.y;
 
                 mousePosition = point;
             }
@@ -27,18 +27,18 @@ namespace Champions.Kitegirl.Abilities {
             if (mousePosition == Vector3.zero) return;
 
             // get the global angle of the direction from the champion to the mouse position
-            Vector3 mouseToChampionDirection = mousePosition - m_Champion.transform.position;
+            Vector3 mouseToChampionDirection = mousePosition - champion.transform.position;
             float mouseToChampionAngle = Vector3.SignedAngle(Vector3.forward, mouseToChampionDirection, Vector3.up);
 
 
             Log("Angle: " + mouseToChampionAngle, Util.Logger.Color.YELLOW, this);
 
             KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
-                m_Champion.transform.position + mouseToChampionDirection.normalized *
+                champion.transform.position + mouseToChampionDirection.normalized *
                 m_KitegirlSlowAreaPrefab.transform.localScale.x / 2,
                 Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
 
-            kitegirlSlowArea.OnThrow(m_Champion as Kitegirl);
+            kitegirlSlowArea.OnThrow(champion as Kitegirl);
             base.OnUse();
         }
     }

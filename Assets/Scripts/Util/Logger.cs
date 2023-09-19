@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Util {
     public static class Logger {
-
         private static bool m_ShouldLog = true;
+        public static List<Object> excludedContexts = new();
 
         public static void Log(object message, Color color, Object context) {
-            if (m_ShouldLog) {
+            if (m_ShouldLog && !excludedContexts.Contains(context)) {
                 Debug.Log("<color=" + color.ToString().ToLower() + ">" + message + "</color>", context);
             }
         }

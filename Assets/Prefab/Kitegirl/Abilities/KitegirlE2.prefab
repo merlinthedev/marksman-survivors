@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: -2301999179170599804}
+  - component: {fileID: 5491228764203184346}
   m_Layer: 0
-  m_Name: KitegirlW1
+  m_Name: KitegirlE2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,9 +30,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2301999179170599804
+--- !u!114 &5491228764203184346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f88c640ffa15b2438a98f73b6a335f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6df378cc065c4746ae858ca7bde4453c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 119
-  m_AbilityCooldown: 8
-  m_GrenadePrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
+  keyCode: 101
+  abilityCooldown: 8
+  abilityRange: 10
+  smokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
     type: 3}
-  m_AbilityRange: 100
+  dashRange: 3
+  yForceOffset: 4

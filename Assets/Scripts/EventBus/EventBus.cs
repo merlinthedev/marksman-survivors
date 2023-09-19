@@ -1,4 +1,5 @@
-﻿using Champions.Abilities;
+using System.Collections.Generic;
+using Champions.Abilities;
 using UnityEngine;
 using BuffsDebuffs.Stacks;
 
@@ -55,21 +56,46 @@ namespace EventBus {
 
     public class ChampionAbilitiesHookedEvent : Event { }
 
-    public class ChampionDamageTakenEvent : Event {
+    public class ChampionDamageTakenEvent : Event { }
+
+    public class ChampionAbilityUsedEvent : Event {
+        public AAbility AbstractAbility { get; private set; }
+
+        public KeyCode KeyCode { get; private set; }
+        public float Duration { get; private set; }
+
+        public ChampionAbilityUsedEvent(AAbility ability) {
+            AbstractAbility = ability;
+        }
+
+        public ChampionAbilityUsedEvent(KeyCode keyCode, float duration) {
+            KeyCode = keyCode;
+            Duration = duration;
+            AbstractAbility = null;
+        }
     }
 
     public class ChampionLevelUpEvent : Event {
         public int m_CurrentLevel { get; private set; }
         public int m_PreviousLevel { get; private set; }
+        public List<AAbility> m_ChampionAbilities { get; private set; }
 
-        public ChampionLevelUpEvent(int currentLevel, int previousLevel) {
+        public ChampionLevelUpEvent(int currentLevel, int previousLevel, List<AAbility> championAbilities) {
             m_CurrentLevel = currentLevel;
             m_PreviousLevel = previousLevel;
+            m_ChampionAbilities = championAbilities;
+        }
+    }
+
+    public class ChampionAbilityChosenEvent : Event {
+        public AAbility Ability { get; private set; }
+        
+        public ChampionAbilityChosenEvent(AAbility ability) {
+            Ability = ability;
         }
     }
 
     public class UpdateResourceBarEvent : Event {
-
         public string m_Type { get; private set; }
         public float m_Current { get; private set; }
         public float m_Total { get; private set; }

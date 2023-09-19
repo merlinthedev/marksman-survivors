@@ -31,9 +31,9 @@ namespace Champions.Kitegirl {
 
         public override void OnAutoAttack(Collider collider) {
             if (!CanAttack) {
-                if (!m_IsAutoAttacking) {
+                if (!isAutoAttacking) {
                     // Queue the clicked target for our next attack
-                    m_CurrentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+                    currentTarget = EnemyManager.GetInstance().GetEnemy(collider);
                     // Stop moving towards the previous mouse hitpoint
                     Stop();
                 }
@@ -42,16 +42,16 @@ namespace Champions.Kitegirl {
             }
 
             // Set to Vector3.zero to stop us from moving towards the previous mouse hitpoint
-            m_MouseHitPoint = Vector3.zero;
+            mouseHitPoint = Vector3.zero;
 
-            m_LastAttackTime = Time.time;
+            lastAttackTime = Time.time;
             Vector3 dir = collider.transform.position - transform.position;
-            m_CurrentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+            currentTarget = EnemyManager.GetInstance().GetEnemy(collider);
 
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
             // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
-            m_Rigidbody.velocity = Vector3.zero;
+            rigidbody.velocity = Vector3.zero;
 
             if (m_AutoAttackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
@@ -63,18 +63,20 @@ namespace Champions.Kitegirl {
             ShootBullet_Recursive(m_HasUltimateActive,
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();
-            m_IsAutoAttacking = true;
+            isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
         }
 
         public override void OnAbility(KeyCode keyCode) {
-            AAbility ability = this.m_Abilities.Find(ability => ability.GetKeyCode() == keyCode);
+            AAbility ability = abilities.Find(ability => ability.GetKeyCode() == keyCode);
 
             if (ability != null) {
                 ability.OnUse();
             }
             else {
-                // Debug.Log("Ability not found");
+                Debug.Log("Ability not found, please check the KeyCode");
+                // log the keycode
+                Debug.Log("Keycode: " + keyCode);
             }
         }
 
@@ -89,7 +91,7 @@ namespace Champions.Kitegirl {
         }
 
         public void TryReduceECooldown() {
-            AAbility kitegirlE = m_Abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
+            AAbility kitegirlE = abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
             if (kitegirlE == null) return;
             if (kitegirlE.IsOnCooldown()) {
                 kitegirlE.DeductFromCooldown(kitegirlE.GetAbilityCooldown() * 0.02f); // 2% of cooldown 
@@ -106,7 +108,7 @@ namespace Champions.Kitegirl {
 
             // Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
 
-            m_Rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
+            rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
         }
 
         protected override void OnMove() {
@@ -114,7 +116,7 @@ namespace Champions.Kitegirl {
                 base.OnMove();
             }
             else {
-                m_Rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
+                rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
             }
         }
 
@@ -124,7 +126,7 @@ namespace Champions.Kitegirl {
 
         private void Start() {
             base.Start();
-            foreach (AAbility ability in m_Abilities) {
+            foreach (AAbility ability in abilities) {
                 ability.Hook(this);
             }
 
@@ -186,7 +188,7 @@ namespace Champions.Kitegirl {
 
         public void EnableStuffAfterAttack() {
             // Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
-            m_IsAutoAttacking = false;
+            isAutoAttacking = false;
         }
 
         public bool HasUltimateActive() {

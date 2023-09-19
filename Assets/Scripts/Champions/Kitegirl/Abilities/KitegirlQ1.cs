@@ -8,7 +8,7 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            (m_Champion as Kitegirl)?.SetAutoAttackChain(true);
+            (champion as Kitegirl)?.SetAutoAttackChain(true);
 
             base.OnUse();
         }

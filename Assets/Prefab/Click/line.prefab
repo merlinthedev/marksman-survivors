@@ -119,5 +119,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5973c40ea48a944b57cb8626c425b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CirclePrefab: {fileID: 8770535782707916300, guid: eca1cadb13abe3448a369d963f240239,
+  circlePrefab: {fileID: 8770535782707916300, guid: eca1cadb13abe3448a369d963f240239,
     type: 3}

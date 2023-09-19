@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: -6238975156126620012}
+  - component: {fileID: -5836431172475230976}
   m_Layer: 0
-  m_Name: KitegirlE1
+  m_Name: KitegirlR2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6238975156126620012
+--- !u!114 &-5836431172475230976
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,8 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05f230a80e004562b11503ff60ad07ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 01ac90c8b2ef426eac77ffe423f60cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 101
-  m_AbilityCooldown: 8
+  keyCode: 114
+  abilityCooldown: 60
+  abilityRange: 10
+  m_AmountOfDeftnessStacks: 25

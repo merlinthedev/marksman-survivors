@@ -11,10 +11,10 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            (this.m_Champion as Kitegirl)?.ActivateUltimate(m_UltimateDuration, m_BurstAmount, m_SlowAmount);
+            (this.champion as Kitegirl)?.ActivateUltimate(m_UltimateDuration, m_BurstAmount, m_SlowAmount);
 
-            Utilities.InvokeDelayed(() => { (m_Champion as Kitegirl)?.DeactivateUltimate(); }, m_UltimateDuration,
-                m_Champion);
+            Utilities.InvokeDelayed(() => { (champion as Kitegirl)?.DeactivateUltimate(); }, m_UltimateDuration,
+                champion);
             base.OnUse();
         }
     }

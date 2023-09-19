@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
@@ -13,37 +14,44 @@ namespace Champions {
         #region Properties
 
         [Header("References")]
-        [SerializeField] protected Rigidbody m_Rigidbody;
+        [SerializeField] protected Rigidbody rigidbody;
 
         [Header("Stats")]
-        [SerializeField] protected ChampionStatistics m_ChampionStatistics;
+        [SerializeField] protected ChampionStatistics championStatistics;
 
-        private float m_LastManaRegenerationTime = 0f;
-        private float m_LastHealthRegenerationTime = 0f;
-        private ChampionLevelManager m_ChampionLevelManager;
+        private float lastManaRegenerationTime = 0f;
+        private float lastHealthRegenerationTime = 0f;
+        private ChampionLevelManager championLevelManager;
 
+        [FormerlySerializedAs("m_MouseHitPoint")]
         [Header("Movement")]
-        [SerializeField] protected Vector3 m_MouseHitPoint;
+        [SerializeField]
+        protected Vector3 mouseHitPoint;
 
-        private Vector3 m_LastKnownDirection = Vector3.zero;
-        [SerializeField] protected bool m_Grounded = false;
-        [SerializeField] private float m_GroundedRange = 1.4f;
-        private float m_GlobalMovementDirectionAngle = 0f;
-        private float m_PreviousAngle = 0f;
-        public bool IsMoving => m_Rigidbody.velocity.magnitude > 0.001f;
+        private Vector3 lastKnownDirection = Vector3.zero;
+
+        [FormerlySerializedAs("m_Grounded")] [SerializeField]
+        protected bool grounded = false;
+
+        [FormerlySerializedAs("m_GroundedRange")] [SerializeField]
+        private float groundedRange = 1.4f;
+
+        private float globalMovementDirectionAngle = 0f;
+        private float previousAngle = 0f;
+        public bool IsMoving => rigidbody.velocity.magnitude > 0.001f;
 
         [Header("Attack")]
-        protected Enemy.Enemy m_CurrentTarget = null;
+        protected Enemy.Enemy currentTarget = null;
 
 
-        private bool m_NextAttackWillCrit = false;
-        protected float m_LastAttackTime = 0f;
-        private float m_DamageMultiplier = 1f;
+        private bool nextAttackWillCrit = false;
+        protected float lastAttackTime = 0f;
+        private float damageMultiplier = 1f;
 
-        protected bool m_IsAutoAttacking = false;
+        protected bool isAutoAttacking = false;
 
         protected bool CanAttack {
-            get => !m_IsAutoAttacking && Time.time > m_LastAttackTime + (1f / GetAttackSpeed());
+            get => !isAutoAttacking && Time.time > lastAttackTime + (1f / GetAttackSpeed());
         }
 
         //Buff/Debuff
@@ -57,11 +65,15 @@ namespace Champions {
         #region OnEnable/OnDisable
 
         private void OnEnable() {
+            // Logger.excludedContexts.Add(this);
+
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
+            EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
         }
 
         private void OnDisable() {
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
+            EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
         }
 
         #endregion
@@ -69,33 +81,32 @@ namespace Champions {
         #region Start and Update
 
         protected virtual void Start() {
-            m_ChampionLevelManager = new ChampionLevelManager(this);
-            m_ChampionStatistics.Initialize();
+            championLevelManager = new ChampionLevelManager(this);
+            championStatistics.Initialize();
 
             //Update Health
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
-                m_ChampionStatistics.CurrentHealth,
-                m_ChampionStatistics.MaxHealth));
+                championStatistics.CurrentHealth,
+                championStatistics.MaxHealth));
         }
 
         protected virtual void Update() {
             GroundCheck();
 
-            if (m_MouseHitPoint != Vector3.zero) {
-                if (m_Grounded) {
+            if (mouseHitPoint != Vector3.zero) {
+                if (grounded) {
                     OnMove();
                 }
             }
 
-            if (!IsMoving && m_CurrentTarget != null) {
-                OnAutoAttack(m_CurrentTarget.GetCollider());
+            if (!IsMoving && currentTarget != null) {
+                OnAutoAttack(currentTarget.GetCollider());
             }
 
             RegenerateResources();
             CheckStacksForExpiration();
             CheckDebuffsForExpiration();
 
-            m_Grounded = false;
 
             if(Input.GetKeyDown(KeyCode.Alpha1)) {
                 AddStacks(1, Stack.StackType.FRAGILE);
@@ -106,6 +117,7 @@ namespace Champions {
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
+            grounded = false;
         }
 
         #endregion
@@ -138,7 +150,7 @@ namespace Champions {
         }
 
         private void ApplySlow(Debuff debuff) {
-            m_ChampionStatistics.MovementSpeed *= 1 - debuff.GetValue();
+            championStatistics.MovementSpeed *= 1 - debuff.GetValue();
 
             if (debuff.GetDuration() < 0) {
                 return;
@@ -146,7 +158,7 @@ namespace Champions {
 
             Utilities.InvokeDelayed(
                 () => {
-                    m_ChampionStatistics.MovementSpeed = m_ChampionStatistics.InitialMovementSpeed;
+                    championStatistics.MovementSpeed = championStatistics.InitialMovementSpeed;
                     Debuffs.Remove(debuff);
                 },
                 debuff.GetDuration(), this);
@@ -282,10 +294,10 @@ namespace Champions {
         }
 
         private void TryRegenerateHealth() {
-            if (m_ChampionStatistics.CurrentHealth < m_ChampionStatistics.MaxHealth) {
-                if (Time.time > m_LastHealthRegenerationTime + 1f) {
-                    m_ChampionStatistics.CurrentHealth += m_ChampionStatistics.HealthRegen;
-                    m_LastHealthRegenerationTime = Time.time;
+            if (championStatistics.CurrentHealth < championStatistics.MaxHealth) {
+                if (Time.time > lastHealthRegenerationTime + 1f) {
+                    championStatistics.CurrentHealth += championStatistics.HealthRegen;
+                    lastHealthRegenerationTime = Time.time;
                     EventBus<ChampionHealthRegenerated>.Raise(new ChampionHealthRegenerated());
                 }
             }
@@ -293,10 +305,10 @@ namespace Champions {
 
 
         private void TryRegenerateMana() {
-            if (m_ChampionStatistics.CurrentMana < m_ChampionStatistics.MaxMana) {
-                if (Time.time > m_LastManaRegenerationTime + 1f) {
-                    m_ChampionStatistics.CurrentMana += m_ChampionStatistics.ManaRegen;
-                    m_LastManaRegenerationTime = Time.time;
+            if (championStatistics.CurrentMana < championStatistics.MaxMana) {
+                if (Time.time > lastManaRegenerationTime + 1f) {
+                    championStatistics.CurrentMana += championStatistics.ManaRegen;
+                    lastManaRegenerationTime = Time.time;
                     EventBus<ChampionManaRegenerated>.Raise(new ChampionManaRegenerated());
                 }
             }
@@ -307,21 +319,21 @@ namespace Champions {
         #region Movement
 
         protected virtual void OnMove() {
-            if (m_MouseHitPoint == Vector3.zero) {
+            if (mouseHitPoint == Vector3.zero) {
                 return;
             }
 
             // Debug.Log("Moving");
-            Vector3 direction = m_MouseHitPoint - transform.position;
+            Vector3 direction = mouseHitPoint - transform.position;
 
-            m_PreviousAngle = m_GlobalMovementDirectionAngle;
-            m_GlobalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            previousAngle = globalMovementDirectionAngle;
+            globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
             if (direction.magnitude < 0.1f) {
                 // Debug.Log("Stop moving");
-                m_GlobalMovementDirectionAngle = m_PreviousAngle;
-                m_MouseHitPoint = Vector3.zero;
-                m_Rigidbody.velocity = Vector3.zero;
+                globalMovementDirectionAngle = previousAngle;
+                mouseHitPoint = Vector3.zero;
+                rigidbody.velocity = Vector3.zero;
                 return;
             }
 
@@ -329,30 +341,30 @@ namespace Champions {
             int deftnessStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count;
 
             if (deftnessStacks > 0) {
-                Util.Logger.Log("Deftness stacks: " + deftnessStacks, Util.Logger.Color.GREEN, this);
+                // Logger.Log("Deftness stacks: " + deftnessStacks, Util.Logger.Color.GREEN, this);
             }
 
 
-            m_Rigidbody.velocity = direction.normalized *
-                                   (m_ChampionStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
+            rigidbody.velocity = direction.normalized *
+                                 (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
 
-            Util.Logger.Log("Velocity: " + m_Rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
-            m_LastKnownDirection = direction.normalized;
+            // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
+            lastKnownDirection = direction.normalized;
         }
 
         public void Stop() {
-            m_Rigidbody.velocity = Vector3.zero;
-            m_MouseHitPoint = Vector3.zero;
+            rigidbody.velocity = Vector3.zero;
+            mouseHitPoint = Vector3.zero;
         }
 
         private void GroundCheck() {
             // Debug.Log("Ground check");
             // Debug.DrawRay(transform.position, Vector3.down * 10f, Color.red, 0);
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, m_GroundedRange, 1 << 6)) {
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundedRange, 1 << 6)) {
                 // Debug.Log("Ground check hit");
                 if (hit.collider.CompareTag("Ground")) {
                     // Debug.Log("Ground check hit ground");
-                    m_Grounded = true;
+                    grounded = true;
                 }
             }
         }
@@ -364,9 +376,9 @@ namespace Champions {
         protected virtual void OnDamageTaken(float damage) {
             float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
             damage = IsFragile ? damage * 1 + fragileStacks / 10 : damage;
-            m_ChampionStatistics.CurrentHealth -= damage;
+            championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
-            if (m_ChampionStatistics.CurrentHealth <= 0) {
+            if (championStatistics.CurrentHealth <= 0) {
                 OnDeath();
             }
         }
@@ -378,11 +390,11 @@ namespace Champions {
         protected float CalculateDamage() {
             float damage = GetAttackDamage();
 
-            if (Random.value < m_ChampionStatistics.CriticalStrikeChance || m_NextAttackWillCrit) {
-                damage *= (1 + m_ChampionStatistics.CriticalStrikeDamage);
+            if (Random.value < championStatistics.CriticalStrikeChance || nextAttackWillCrit) {
+                damage *= (1 + championStatistics.CriticalStrikeDamage);
             }
 
-            if (m_NextAttackWillCrit) m_NextAttackWillCrit = false;
+            if (nextAttackWillCrit) nextAttackWillCrit = false;
 
             return damage;
         }
@@ -398,11 +410,18 @@ namespace Champions {
         #region Events
 
         private void OnEnemyKilledEvent(EnemyKilledEvent e) {
-            // TODO: XP
-            m_ChampionStatistics.CurrentXP += e.m_Enemy.GetXP();
-            m_ChampionLevelManager.CheckForLevelUp();
-            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", m_ChampionStatistics.CurrentXP,
-                m_ChampionLevelManager.CurrentLevelXP));
+            championStatistics.CurrentXP += e.m_Enemy.GetXP();
+            championLevelManager.CheckForLevelUp();
+            EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", championStatistics.CurrentXP,
+                championLevelManager.CurrentLevelXP));
+        }
+
+        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
+            AAbility abilty = e.Ability;
+            Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
+            Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
+            abilities.Add(abilty);
+            abilty.Hook(this);
         }
 
         #endregion
@@ -428,39 +447,39 @@ namespace Champions {
 
         #region Getters & Setters
 
-        public float GetCurrentHealth() => m_ChampionStatistics.CurrentHealth;
-        public float GetMaxHealth() => m_ChampionStatistics.MaxHealth;
+        public float GetCurrentHealth() => championStatistics.CurrentHealth;
+        public float GetMaxHealth() => championStatistics.MaxHealth;
 
-        public float GetAttackSpeed() => m_ChampionStatistics.GetAttackSpeed(1 +
+        public float GetAttackSpeed() => championStatistics.GetAttackSpeed(1 +
+                                                                           (Stacks.FindAll(stack =>
+                                                                                stack.GetStackType() ==
+                                                                                Stack.StackType.DEFTNESS).Count /
+                                                                            100f));
+
+        public float GetAttackDamage() => championStatistics.GetAttackDamage(1 +
                                                                              (Stacks.FindAll(stack =>
-                                                                                  stack.GetStackType() ==
-                                                                                  Stack.StackType.DEFTNESS).Count /
+                                                                                      stack.GetStackType() ==
+                                                                                      Stack.StackType.OVERPOWER)
+                                                                                  .Count /
                                                                               100f));
 
-        public float GetAttackDamage() => m_ChampionStatistics.GetAttackDamage(1 +
-                                                                               (Stacks.FindAll(stack =>
-                                                                                           stack.GetStackType() ==
-                                                                                           Stack.StackType.OVERPOWER)
-                                                                                       .Count /
-                                                                                   100f));
-
-        public float GetLastAttackTime() => m_LastAttackTime;
-        protected float GetDamageMultiplier() => m_DamageMultiplier;
-        public Rigidbody GetRigidbody() => m_Rigidbody;
-        public ChampionStatistics GetChampionStatistics() => m_ChampionStatistics;
-        public ChampionLevelManager GetChampionLevelManager() => m_ChampionLevelManager;
+        public float GetLastAttackTime() => lastAttackTime;
+        protected float GetDamageMultiplier() => damageMultiplier;
+        public Rigidbody GetRigidbody() => rigidbody;
+        public ChampionStatistics GetChampionStatistics() => championStatistics;
+        public ChampionLevelManager GetChampionLevelManager() => championLevelManager;
 
         public Vector3 GetCurrentMovementDirection() {
-            return m_Rigidbody.velocity.normalized == Vector3.zero
-                ? m_LastKnownDirection
-                : m_Rigidbody.velocity.normalized;
+            return rigidbody.velocity.normalized == Vector3.zero
+                ? lastKnownDirection
+                : rigidbody.velocity.normalized;
         }
 
         public float GetGlobalDirectionAngle() {
             // return the angle but instead of -180-180 i want it to be 0-360
-            return m_GlobalMovementDirectionAngle < 0
-                ? m_GlobalMovementDirectionAngle + 360
-                : m_GlobalMovementDirectionAngle;
+            return globalMovementDirectionAngle < 0
+                ? globalMovementDirectionAngle + 360
+                : globalMovementDirectionAngle;
         }
 
         public int GetStackAmount(Stack.StackType stackType) {
@@ -469,16 +488,16 @@ namespace Champions {
 
         public void SetMouseHitPoint(Vector3 point) {
             // set the target enemy to null to stop us from auto attacking it again when we reach our destination
-            m_CurrentTarget = null;
-            m_MouseHitPoint = point;
+            currentTarget = null;
+            mouseHitPoint = point;
         }
 
         protected void SetGlobalDirectionAngle(float angle) {
-            m_GlobalMovementDirectionAngle = angle;
+            globalMovementDirectionAngle = angle;
         }
 
         public void SetNextAttackWillCrit(bool b) {
-            m_NextAttackWillCrit = b;
+            nextAttackWillCrit = b;
         }
 
         #endregion

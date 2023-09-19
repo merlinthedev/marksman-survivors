@@ -1,12 +1,13 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlW1 : AAbility {
-        [SerializeField] private KitegirlGrenade m_GrenadePrefab;
+        [FormerlySerializedAs("m_GrenadePrefab")] [SerializeField] private KitegirlGrenade grenadePrefab;
 
-        private float m_AttackDamageRatio = 0.6f; // 0.6f => 60% of AD
+        private float attackDamageRatio = 0.6f; // 0.6f => 60% of AD
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
@@ -17,15 +18,15 @@ namespace Champions.Kitegirl.Abilities {
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.CompareTag("Ground") || hit.collider.gameObject.CompareTag("Enemy")) {
                     Vector3 point = hit.point;
-                    point.y = this.m_Champion.transform.position.y - 0.2f;
+                    point.y = this.champion.transform.position.y - 0.2f;
 
                     // Debug.Log("Point: " + point, this);
 
                     if (DistanceCheck(point)) {
                         KitegirlGrenade grenade =
-                            Instantiate(m_GrenadePrefab, this.m_Champion.transform.position, Quaternion.identity);
-                        grenade.SetDamage(this.m_Champion.GetAttackDamage() * m_AttackDamageRatio);
-                        grenade.OnThrow(point, m_Champion);
+                            Instantiate(grenadePrefab, this.champion.transform.position, Quaternion.identity);
+                        grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
+                        grenade.OnThrow(point, champion);
 
                         base.OnUse();
                     }

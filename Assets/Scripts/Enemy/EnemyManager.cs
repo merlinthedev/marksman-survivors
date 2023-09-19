@@ -25,10 +25,14 @@ namespace Enemy {
 
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
+            EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
+            EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
         }
 
         private void OnDisable() {
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
+            EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
+            EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
         }
 
         private void Start() {
@@ -130,6 +134,20 @@ namespace Enemy {
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
             m_EnemyDictionary.Remove(enemyKilledEvent.m_Collider);
+        }
+
+        private void OnChampionLevelUp(ChampionLevelUpEvent e) {
+            m_ShouldSpawn = false;
+            foreach (var kvp in m_EnemyDictionary) {
+                kvp.Value.OnPause();
+            }
+        }
+
+        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
+            m_ShouldSpawn = true;
+            foreach (var kvp in m_EnemyDictionary) {
+                kvp.Value.OnResume();
+            }
         }
 
         public Enemy GetClosestEnemy(Vector3 position, List<Enemy> enemiesToIgnore = null) {
