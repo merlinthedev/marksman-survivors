@@ -76,6 +76,7 @@ namespace UI {
 
             for (int i = 0; i < randomAbilities.Count; i++) {
                 uiUpgradeComponents[i].GetTextComponent().SetText(randomAbilities[i].GetType().ToString());
+                uiUpgradeComponents[i].GetBannerImage().sprite = randomAbilities[i].GetAbilityLevelUpBannerSprite();
             }
         }
 

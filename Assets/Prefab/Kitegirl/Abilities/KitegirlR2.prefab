@@ -47,4 +47,6 @@ MonoBehaviour:
   keyCode: 114
   abilityCooldown: 60
   abilityRange: 10
+  abilityLevelUpBanner: {fileID: 21300000, guid: 1e5ff4cb1804f394882115b789e5adc0,
+    type: 3}
   m_AmountOfDeftnessStacks: 25
