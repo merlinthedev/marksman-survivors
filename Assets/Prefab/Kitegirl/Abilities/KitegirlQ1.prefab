@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568e0da6a017fbb4f8aaf7c72e79a609, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 113
-  m_AbilityCooldown: 2
+  keyCode: 113
+  abilityCooldown: 6
+  abilityRange: 10

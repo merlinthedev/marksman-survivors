@@ -9,7 +9,7 @@ namespace UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
 
-        [SerializeField] private List<GameObject> abilities = new();
+        [SerializeField] private List<AAbility> abilities = new();
         private List<AAbility> randomAbilities = new();
 
         private void OnEnable() {
@@ -57,7 +57,7 @@ namespace UI {
             randomAbilities.Clear();
             for (int i = 0; i < 3; i++) {
                 int randomIndex = Random.Range(0, abilities.Count);
-                var x = abilities[randomIndex].GetComponent<AAbility>();
+                var x = abilities[randomIndex];
                 // check if the currentChampionAbilites already contains a ability with the same keycode
                 if (currentChampionAbilities.Exists(ability => ability.GetKeyCode() == x.GetKeyCode())) {
                     i--;

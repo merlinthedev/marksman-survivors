@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5491228764203184346
 MonoBehaviour:
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df378cc065c4746ae858ca7bde4453c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 101
-  m_AbilityCooldown: 8
-  m_AbilityRange: 1000
-  m_SmokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
+  keyCode: 101
+  abilityCooldown: 8
+  abilityRange: 10
+  smokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
     type: 3}
-  m_DashRange: 8.7
-  m_YForceOffset: -4
+  dashRange: 3
+  yForceOffset: 4

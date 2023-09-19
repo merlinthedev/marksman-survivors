@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d893510366146289f6e91abab41b2a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 113
-  m_AbilityCooldown: 3
-  m_AbilityRange: 0
+  keyCode: 113
+  abilityCooldown: 6
+  abilityRange: 10
   m_ActiveTime: 2
   m_StacksToAdd: 1
   m_StackType: 1

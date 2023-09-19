@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3db3b03559425eaf6c11993b5518b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 324
-  m_AbilityCooldown: 8
-  m_AbilityRange: 0
+  keyCode: 324
+  abilityCooldown: 12
+  abilityRange: 10
   m_KitegirlSlowAreaPrefab: {fileID: 3173280358153001526, guid: 2accd668d70f22f49b2bb7315446744e,
     type: 3}

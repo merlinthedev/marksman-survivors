@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c323c77bc154e389cc51c8dc03b2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_KeyCode: 114
-  m_AbilityCooldown: 60
-  m_AbilityRange: 10
+  keyCode: 114
+  abilityCooldown: 60
+  abilityRange: 10
   m_UltimateDuration: 10
+  m_BurstAmount: 5
+  m_SlowAmount: 0.5
