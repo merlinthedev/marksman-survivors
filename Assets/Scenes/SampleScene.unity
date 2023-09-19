@@ -778,6 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeText: {fileID: 1544757725}
+  bannerImage: {fileID: 161479880}
 --- !u!1 &180478513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,6 +2055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeText: {fileID: 184444307}
+  bannerImage: {fileID: 546235997}
 --- !u!1 &612943218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,6 +4236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeText: {fileID: 83110504}
+  bannerImage: {fileID: 1659630447}
 --- !u!1 &1702028389
 GameObject:
   m_ObjectHideFlags: 0

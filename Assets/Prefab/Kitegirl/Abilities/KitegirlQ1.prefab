@@ -47,3 +47,5 @@ MonoBehaviour:
   keyCode: 113
   abilityCooldown: 6
   abilityRange: 10
+  abilityLevelUpBanner: {fileID: 21300000, guid: 1e5ff4cb1804f394882115b789e5adc0,
+    type: 3}

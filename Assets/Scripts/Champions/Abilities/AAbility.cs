@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using EventBus;
+﻿using EventBus;
 using UnityEngine;
 using Logger = Util.Logger;
 
@@ -8,6 +7,7 @@ namespace Champions.Abilities {
         [SerializeField] protected KeyCode keyCode;
         [SerializeField] protected float abilityCooldown = 0f;
         [SerializeField] protected float abilityRange = 10f;
+        [SerializeField] private Sprite abilityLevelUpBanner;
         protected float lastUseTime;
         private float currentCooldown = 0f;
         protected Champion champion;
@@ -63,6 +63,10 @@ namespace Champions.Abilities {
 
         public KeyCode GetKeyCode() {
             return keyCode;
+        }
+        
+        public Sprite GetAbilityLevelUpBannerSprite() {
+            return abilityLevelUpBanner;
         }
     }
 }
