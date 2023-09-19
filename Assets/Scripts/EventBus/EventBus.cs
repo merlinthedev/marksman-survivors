@@ -89,9 +89,17 @@ namespace EventBus {
 
     public class ChampionAbilityChosenEvent : Event {
         public AAbility Ability { get; private set; }
-        
+
         public ChampionAbilityChosenEvent(AAbility ability) {
             Ability = ability;
+        }
+    }
+
+    public class AddGoldEvent : Event {
+        public int AmountToAdd { get; private set; }
+
+        public AddGoldEvent(int amountToAdd) {
+            AmountToAdd = amountToAdd;
         }
     }
 
@@ -108,7 +116,6 @@ namespace EventBus {
     }
 
     public class ChangeStackUIEvent : Event {
-
         public Stack.StackType type;
         public int stacks;
         public bool open;
@@ -117,6 +124,22 @@ namespace EventBus {
             this.type = type;
             this.stacks = stacks;
             this.open = open;
+        }
+    }
+
+    public class UIGoldChangedEvent : Event {
+        public int Gold { get; private set; }
+
+        public UIGoldChangedEvent(int gold) {
+            this.Gold = gold;
+        }
+    }
+
+    public class UIKillCounterChangedEvent : Event {
+        public int KillCount { get; private set; }
+
+        public UIKillCounterChangedEvent(int killCount) {
+            KillCount = killCount;
         }
     }
 }

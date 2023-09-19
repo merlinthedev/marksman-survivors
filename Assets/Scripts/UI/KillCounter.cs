@@ -5,19 +5,17 @@ using UnityEngine;
 namespace UI {
     public class KillCounter : MonoBehaviour {
         [SerializeField] private TMP_Text killCounterText;
-        private int killCounter = 0;
 
         private void OnEnable() {
-            EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilled);
+            EventBus<UIKillCounterChangedEvent>.Subscribe(OnKillCounterChanged);
         }
 
         private void OnDisable() {
-            EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilled);
+            EventBus<UIKillCounterChangedEvent>.Unsubscribe(OnKillCounterChanged);
         }
 
-        private void OnEnemyKilled(EnemyKilledEvent e) {
-            killCounter++;
-            killCounterText.SetText(killCounter.ToString());
+        private void OnKillCounterChanged(UIKillCounterChangedEvent e) {
+            killCounterText.SetText(e.KillCount.ToString());
         }
     }
 }

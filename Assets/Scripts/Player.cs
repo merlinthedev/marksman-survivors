@@ -1,27 +1,29 @@
 ﻿using Champions;
 using Enemy;
 using EventBus;
+using Logger = Util.Logger;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using static Util.Logger;
-using Logger = Util.Logger;
 
 public class Player : MonoBehaviour {
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
 
-    [SerializeField] private LayerMask m_AttackLayerMask;
+    [SerializeField] private LayerMask attackLayerMask;
 
     [Header("UI")]
-    [SerializeField] private Image m_HealthBar;
+    [SerializeField] private Image healthBar;
 
-    [SerializeField] private Champion m_SelectedChampion;
+    [SerializeField] private Champion selectedChampion;
 
     [Header("Other")]
-    [SerializeField] private GameObject m_ClickAnimPrefab;
+    [SerializeField] private GameObject clickAnimPrefab;
 
     private bool isPaused = false;
+
+    private Inventory.Inventory inventory;
 
     private void OnEnable() {
         excludedContexts.Add(this);
@@ -45,9 +47,11 @@ public class Player : MonoBehaviour {
 
     private void Start() {
         SetDefaultCursorTexture();
+
+        inventory = new Inventory.Inventory();
     }
 
-    private bool m_FirstMove = true;
+    private bool firstMove = true;
 
     private bool hasClickedThisFrame = false;
 
@@ -61,20 +65,20 @@ public class Player : MonoBehaviour {
                 if (hit.collider.gameObject.CompareTag("Ground")) {
                     hasClickedThisFrame = true;
                     var point = hit.point;
-                    Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+                    Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                     point.y = transform.position.y;
 
-                    if (m_FirstMove) {
+                    if (firstMove) {
                         EnemyManager.GetInstance().SetShouldSpawn(true);
-                        m_FirstMove = false;
+                        firstMove = false;
                     }
 
-                    m_SelectedChampion.SetMouseHitPoint(point);
+                    selectedChampion.SetMouseHitPoint(point);
                 }
 
                 if (hit.collider.gameObject.CompareTag("Enemy") ||
                     hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                    m_SelectedChampion.OnAutoAttack(hit.collider);
+                    selectedChampion.OnAutoAttack(hit.collider);
                 }
             }
         }
@@ -95,19 +99,19 @@ public class Player : MonoBehaviour {
                         // Uncomment to also spawn click prefab when holding down the mouse 
                         // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
 
-                        m_SelectedChampion.SetMouseHitPoint(point);
+                        selectedChampion.SetMouseHitPoint(point);
                     }
 
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
                         hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                        m_SelectedChampion.OnAutoAttack(hit.collider);
+                        selectedChampion.OnAutoAttack(hit.collider);
                     }
                 }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            m_SelectedChampion.OnAbility(KeyCode.Mouse1);
+            selectedChampion.OnAbility(KeyCode.Mouse1);
         }
 
         hasClickedThisFrame = false;
@@ -117,19 +121,19 @@ public class Player : MonoBehaviour {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
-            m_SelectedChampion.OnAbility(KeyCode.Q);
+            selectedChampion.OnAbility(KeyCode.Q);
         }
 
         if (Input.GetKeyDown(KeyCode.W)) {
-            m_SelectedChampion.OnAbility(KeyCode.W);
+            selectedChampion.OnAbility(KeyCode.W);
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
-            m_SelectedChampion.OnAbility(KeyCode.E);
+            selectedChampion.OnAbility(KeyCode.E);
         }
 
         if (Input.GetKeyDown(KeyCode.R)) {
-            m_SelectedChampion.OnAbility(KeyCode.R);
+            selectedChampion.OnAbility(KeyCode.R);
         }
     }
 
@@ -153,17 +157,17 @@ public class Player : MonoBehaviour {
 
     private void OnChampionDamageTakenEvent(ChampionDamageTakenEvent e) {
         EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
-            m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
+            selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
         EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
-            m_SelectedChampion.GetCurrentHealth(), m_SelectedChampion.GetMaxHealth()));
+            selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
     }
 
     private void OnChampionLevelUp(ChampionLevelUpEvent e) {
         isPaused = true;
-        m_SelectedChampion.Stop();
+        selectedChampion.Stop();
     }
 
     private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
@@ -171,6 +175,6 @@ public class Player : MonoBehaviour {
     }
 
     public Champion GetCurrentlySelectedChampion() {
-        return m_SelectedChampion;
+        return selectedChampion;
     }
 }
