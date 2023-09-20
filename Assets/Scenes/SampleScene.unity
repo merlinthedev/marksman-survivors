@@ -244,6 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpawnTimer: 0.5
+  m_ShouldSpawn: 0
   m_MaxAmountOfEnemies: 21456939
   m_EnemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
@@ -4578,12 +4579,12 @@ MonoBehaviour:
   m_CursorTexture: {fileID: 2800000, guid: 54cad0d84eedca24dba3aa4b8eba260f, type: 3}
   m_AttackCursorTexture: {fileID: 2800000, guid: cc3b6b70dd497e14c9ea212938c90923,
     type: 3}
-  m_AttackLayerMask:
+  attackLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  m_HealthBar: {fileID: 1819694995}
-  m_SelectedChampion: {fileID: 2114737659}
-  m_ClickAnimPrefab: {fileID: 4175078626578945524, guid: 874709a6833ca564cb0d17fb6a62bd58,
+  healthBar: {fileID: 1819694995}
+  selectedChampion: {fileID: 2114737659}
+  clickAnimPrefab: {fileID: 4175078626578945524, guid: 874709a6833ca564cb0d17fb6a62bd58,
     type: 3}
 --- !u!54 &2114737658
 Rigidbody:
