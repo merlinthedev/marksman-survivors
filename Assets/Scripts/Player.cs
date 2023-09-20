@@ -83,7 +83,7 @@ public class Player : MonoBehaviour {
                     point.y = transform.position.y;
 
                     if (firstMove) {
-                        EnemyManager.GetInstance().SetShouldSpawn(true);
+                        // EnemyManager.GetInstance().SetShouldSpawn(true);
                         firstMove = false;
                     }
 
@@ -116,13 +116,13 @@ public class Player : MonoBehaviour {
                     if (hit.collider.gameObject.CompareTag("Ground")) {
                         var point = hit.point;
                         point.y = transform.position.y;
-
+        
                         // Uncomment to also spawn click prefab when holding down the mouse 
                         // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-
+        
                         selectedChampion.SetMouseHitPoint(point);
                     }
-
+        
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
                         hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                         selectedChampion.OnAutoAttack(hit.collider);
