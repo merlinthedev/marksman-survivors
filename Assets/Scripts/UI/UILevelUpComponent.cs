@@ -1,21 +1,26 @@
-﻿using EventBus;
+﻿using Champions.Abilities;
+using EventBus;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI {
-    public class UIUpgradeComponent : MonoBehaviour {
-        [SerializeField] private TMP_Text upgradeText;
+    public class UILevelUpComponent : MonoBehaviour {
+        [FormerlySerializedAs("upgradeText")] [SerializeField]
+        private TMP_Text abilityText;
+
         [SerializeField] private Image bannerImage;
         [SerializeField] private Button button;
 
         private LevelPanelController levelPanelController;
+        private AAbility ability;
         private int index;
 
         private void Start() {
             button.onClick.AddListener(() => {
                 EventBus<ChampionAbilityChosenEvent>.Raise(
-                    new ChampionAbilityChosenEvent(levelPanelController.GetAbilityFromIndex(index)));
+                    new ChampionAbilityChosenEvent(ability));
             });
         }
 
@@ -24,7 +29,7 @@ namespace UI {
         }
 
         public TMP_Text GetTextComponent() {
-            return upgradeText;
+            return abilityText;
         }
 
         public Image GetBannerImage() {
@@ -37,6 +42,10 @@ namespace UI {
 
         public void SetIndex(int index) {
             this.index = index;
+        }
+
+        public void SetAbility(AAbility ability) {
+            this.ability = ability;
         }
     }
 }

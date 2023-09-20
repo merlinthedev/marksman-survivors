@@ -88,7 +88,7 @@ public class Player : MonoBehaviour {
                     point.y = transform.position.y;
 
                     if (firstMove) {
-                        // EnemyManager.GetInstance().SetShouldSpawn(true);
+                        EnemyManager.GetInstance().SetShouldSpawn(true);
                         firstMove = false;
                     }
 
@@ -115,7 +115,7 @@ public class Player : MonoBehaviour {
 
             // if it is the 10th frame, do the thing
             if (Time.frameCount % 10 == 0) {
-                Log("Mouse held down", Logger.Color.GREEN, this);
+                // Log("Mouse held down", Logger.Color.GREEN, this);
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");

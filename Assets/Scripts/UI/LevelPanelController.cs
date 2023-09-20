@@ -2,16 +2,18 @@ using System.Collections.Generic;
 using Champions.Abilities;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = Util.Logger;
 
 namespace UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
-        [SerializeField] private GameObject upgradeComponentPrefab;
+
+        [FormerlySerializedAs("upgradeComponentPrefab")] [SerializeField]
+        private GameObject abilityComponentPrefab;
 
         [SerializeField] private List<AAbility> abilities = new();
-        private List<AAbility> randomAbilities = new();
-        private List<UIUpgradeComponent> uiUpgradeComponents = new();
+        private List<UILevelUpComponent> uiUpgradeComponents = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
@@ -37,9 +39,9 @@ namespace UI {
         }
 
         private void ShowPanel(List<AAbility> currentChampionAbilities) {
-            int toInstantiate = PopulatePanel(currentChampionAbilities);
+            List<AAbility> toInstantiate = GetRandomAbilities(currentChampionAbilities);
 
-            if (toInstantiate < 1) {
+            if (toInstantiate.Count < 1) {
                 // Add gold
                 EventBus<AddGoldEvent>.Raise(new AddGoldEvent(10)); // 10 gold to add
 
@@ -49,22 +51,22 @@ namespace UI {
             levelPanel.SetActive(true);
 
             // Instantiate the abilities
-            for (int i = 0; i < toInstantiate; i++) {
+            for (int i = 0; i < toInstantiate.Count; i++) {
                 // Instantiate the ability panel prefab
-                GameObject upgradeComponent = Instantiate(upgradeComponentPrefab, levelPanel.transform);
-                UIUpgradeComponent uiUpgradeComponent = upgradeComponent.GetComponent<UIUpgradeComponent>();
-                uiUpgradeComponent.HookButton(this);
-                uiUpgradeComponent.SetIndex(i);
-                uiUpgradeComponent.GetTextComponent().SetText(randomAbilities[i].GetType().ToString());
-                uiUpgradeComponent.GetBannerImage().sprite = randomAbilities[i].GetAbilityLevelUpBannerSprite();
+                GameObject upgradeComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
+                UILevelUpComponent uiLevelUpComponent = upgradeComponent.GetComponent<UILevelUpComponent>();
+                uiLevelUpComponent.HookButton(this);
+                uiLevelUpComponent.SetAbility(toInstantiate[i]);
+                uiLevelUpComponent.GetTextComponent().SetText(toInstantiate[i].GetType().ToString());
+                uiLevelUpComponent.GetBannerImage().sprite = toInstantiate[i].GetAbilityLevelUpBannerSprite();
 
-                uiUpgradeComponents.Add(uiUpgradeComponent);
+                uiUpgradeComponents.Add(uiLevelUpComponent);
             }
         }
 
-        private int PopulatePanel(List<AAbility> currentChampionAbilities) {
+        private List<AAbility> GetRandomAbilities(List<AAbility> currentChampionAbilities) {
             // fetch 3 random abilities from the list
-            randomAbilities.Clear();
+            List<AAbility> randomAbilities = new();
 
             int maxAttempts = 10; // Set a maximum number of attempts
 
@@ -93,11 +95,7 @@ namespace UI {
 
             Logger.Log("Random abilities: " + randomAbilities.Count, Logger.Color.RED, this);
 
-            return randomAbilities.Count;
-        }
-
-        public AAbility GetAbilityFromIndex(int index) {
-            return randomAbilities[index];
+            return randomAbilities;
         }
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {

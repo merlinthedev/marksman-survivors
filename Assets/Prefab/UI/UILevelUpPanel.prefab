@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 7093889659013495950}
   - component: {fileID: 2148004170974662494}
   m_Layer: 5
-  m_Name: UIUpgradePanel
+  m_Name: UILevelUpPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
