@@ -37,8 +37,16 @@ namespace UI {
         }
 
         private void ShowPanel(List<AAbility> currentChampionAbilities) {
-            levelPanel.SetActive(true);
             int toInstantiate = PopulatePanel(currentChampionAbilities);
+
+            if (toInstantiate < 1) {
+                // Add gold
+                EventBus<AddGoldEvent>.Raise(new AddGoldEvent(10)); // 10 gold to add
+
+                return;
+            }
+
+            levelPanel.SetActive(true);
 
             // Instantiate the abilities
             for (int i = 0; i < toInstantiate; i++) {

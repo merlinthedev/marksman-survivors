@@ -108,15 +108,18 @@ namespace Champions {
             CheckDebuffsForExpiration();
 
 
-            if(Input.GetKeyDown(KeyCode.Alpha1)) {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 AddStacks(1, Stack.StackType.FRAGILE);
             }
+
             if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 AddStacks(1, Stack.StackType.OVERPOWER);
             }
+
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
+
             grounded = false;
         }
 
@@ -191,8 +194,8 @@ namespace Champions {
                 case Stack.StackType.OVERPOWER:
                     AddOverpowerStacks(stacks);
                     break;
-
             }
+
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stackType, stacks, true));
         }
 
@@ -329,21 +332,23 @@ namespace Champions {
             previousAngle = globalMovementDirectionAngle;
             globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-            if (direction.magnitude < 0.1f) {
-                // Debug.Log("Stop moving");
+            // if (direction.magnitude < 0.1f) {
+            //     // Debug.Log("Stop moving");
+            //     globalMovementDirectionAngle = previousAngle;
+            //     mouseHitPoint = Vector3.zero;
+            //     rigidbody.velocity = Vector3.zero;
+            //     return;
+            // }
+
+            float squaredDistance = direction.sqrMagnitude;
+            if (squaredDistance < 0.1f * 0.1f) {
                 globalMovementDirectionAngle = previousAngle;
                 mouseHitPoint = Vector3.zero;
                 rigidbody.velocity = Vector3.zero;
                 return;
             }
 
-
             int deftnessStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count;
-
-            if (deftnessStacks > 0) {
-                // Logger.Log("Deftness stacks: " + deftnessStacks, Util.Logger.Color.GREEN, this);
-            }
-
 
             rigidbody.velocity = direction.normalized *
                                  (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));

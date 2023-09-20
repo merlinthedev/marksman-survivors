@@ -10,11 +10,12 @@ using Random = UnityEngine.Random;
 
 namespace Enemy {
     public class EnemyManager : MonoBehaviour {
-        [SerializeField]
-        [Tooltip("Time it takes between enemy spawn")]
+        [SerializeField] [Tooltip("Time it takes between enemy spawn")]
         private float m_SpawnTimer = 1.4f;
 
-        private bool m_ShouldSpawn = false;
+        // exposed to the editor because there were some unexplainable things happening :D
+        [SerializeField] private bool m_ShouldSpawn = false;
+
         [SerializeField] private int m_MaxAmountOfEnemies = 1;
         private int m_AmountOfEnemies = 0;
         [SerializeField] private Enemy m_EnemyPrefab;
@@ -52,6 +53,7 @@ namespace Enemy {
                     m_ShouldSpawn = false;
                     break;
                 }
+
                 yield return new WaitForSeconds(m_SpawnTimer);
                 // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
                 Enemy enemy = Instantiate(m_EnemyPrefab, FindPositionIteratively(), Quaternion.Euler(0, 45, 0));
@@ -187,7 +189,8 @@ namespace Enemy {
 
             if (value) {
                 StartCoroutine(SpawnEnemy());
-            } else {
+            }
+            else {
                 StopCoroutine(SpawnEnemy());
             }
         }
