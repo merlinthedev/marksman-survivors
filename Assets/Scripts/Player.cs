@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
     private Inventory.Inventory inventory;
 
     private void OnEnable() {
-        excludedContexts.Add(this);
+        // excludedContexts.Add(this);
 
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
@@ -71,6 +71,11 @@ public class Player : MonoBehaviour {
 
     private void HandleMouseClicks() {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            // check if the mouse is on a canvas object
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                return;
+            }
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
@@ -97,14 +102,17 @@ public class Player : MonoBehaviour {
 
                 //If we clicked on an interactable object, call the OnInteract method
                 var interactable = hit.collider.gameObject.GetComponent<IInteractable>();
-                if (interactable != null){
-                    
+                if (interactable != null) {
                     interactable.OnInteract();
                 }
             }
         }
 
         if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                return;
+            }
+
             // if it is the 10th frame, do the thing
             if (Time.frameCount % 10 == 0) {
                 Log("Mouse held down", Logger.Color.GREEN, this);
@@ -116,13 +124,13 @@ public class Player : MonoBehaviour {
                     if (hit.collider.gameObject.CompareTag("Ground")) {
                         var point = hit.point;
                         point.y = transform.position.y;
-        
+
                         // Uncomment to also spawn click prefab when holding down the mouse 
                         // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-        
+
                         selectedChampion.SetMouseHitPoint(point);
                     }
-        
+
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
                         hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                         selectedChampion.OnAutoAttack(hit.collider);
@@ -208,8 +216,10 @@ public class Player : MonoBehaviour {
     }
 
     #region Scene Management
+
     public void LoadScene(LoadSceneEvent e) {
-       SceneManager.LoadScene(e.sceneName);
+        SceneManager.LoadScene(e.sceneName);
     }
+
     #endregion
 }
