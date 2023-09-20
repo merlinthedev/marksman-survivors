@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dialogue;
 
-public class NPC : MonoBehaviour, IInteractable
-{
+public abstract class NPC : MonoBehaviour {
     private void OnMouseEnter() {
         EventBus<InteractableStartHoverEvent>.Raise(new InteractableStartHoverEvent());
     }
@@ -13,7 +13,7 @@ public class NPC : MonoBehaviour, IInteractable
         EventBus<InteractableStopHoverEvent>.Raise(new InteractableStopHoverEvent());
     }
 
-    public void OnInteract() {
-        Debug.Log("Interacting with NPC");
-    }
+    [SerializeField] public List<Dialogue.Dialogue> dialogue;
+
+    public abstract void OnEndDialogue();
 }

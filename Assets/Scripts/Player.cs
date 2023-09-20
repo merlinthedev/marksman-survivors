@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using static Util.Logger;
+using UnityEngine.SceneManagement;
+
 
 public class Player : MonoBehaviour {
     [Header("Stats")]
@@ -38,6 +40,8 @@ public class Player : MonoBehaviour {
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
         EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
         EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
+
+        EventBus<LoadSceneEvent>.Subscribe(LoadScene);
     }
 
     private void OnDisable() {
@@ -51,6 +55,8 @@ public class Player : MonoBehaviour {
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
         EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
         EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
+
+        EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
     }
 
     private void Start() {
@@ -200,4 +206,10 @@ public class Player : MonoBehaviour {
     public Champion GetCurrentlySelectedChampion() {
         return selectedChampion;
     }
+
+    #region Scene Management
+    public void LoadScene(LoadSceneEvent e) {
+       SceneManager.LoadScene(e.sceneName);
+    }
+    #endregion
 }

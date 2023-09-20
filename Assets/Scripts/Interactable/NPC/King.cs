@@ -1,18 +1,16 @@
-﻿using System.Collections;
+﻿using EventBus;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class King : NPC
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class King : NPC, IInteractable {
+    public void OnInteract() {
+        Debug.Log("Interacting with King");
+        EventBus<StartDialogueEvent>.Raise(new StartDialogueEvent(dialogue, gameObject));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public override void OnEndDialogue() {
+        Debug.Log("Ending dialogue with King");
+        EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("Run"));
     }
 }

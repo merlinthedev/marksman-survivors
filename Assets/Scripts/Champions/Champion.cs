@@ -407,7 +407,7 @@ namespace Champions {
         protected virtual void OnDeath() {
             // Death logic
 
-            Destroy(gameObject);
+            EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("D Hub"));
         }
 
         #endregion
