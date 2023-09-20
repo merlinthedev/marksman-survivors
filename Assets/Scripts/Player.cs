@@ -98,32 +98,32 @@ public class Player : MonoBehaviour {
             }
         }
 
-        // if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
-        //     // if it is the 10th frame, do the thing
-        //     if (Time.frameCount % 10 == 0) {
-        //         Log("Mouse held down", Logger.Color.GREEN, this);
-        //         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //         RaycastHit hit;
-        //         int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
-        //         layerMask = ~layerMask;
-        //         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
-        //             if (hit.collider.gameObject.CompareTag("Ground")) {
-        //                 var point = hit.point;
-        //                 point.y = transform.position.y;
-        //
-        //                 // Uncomment to also spawn click prefab when holding down the mouse 
-        //                 // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-        //
-        //                 selectedChampion.SetMouseHitPoint(point);
-        //             }
-        //
-        //             if (hit.collider.gameObject.CompareTag("Enemy") ||
-        //                 hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-        //                 selectedChampion.OnAutoAttack(hit.collider);
-        //             }
-        //         }
-        //     }
-        // }
+        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
+            // if it is the 10th frame, do the thing
+            if (Time.frameCount % 10 == 0) {
+                Log("Mouse held down", Logger.Color.GREEN, this);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+                layerMask = ~layerMask;
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                    if (hit.collider.gameObject.CompareTag("Ground")) {
+                        var point = hit.point;
+                        point.y = transform.position.y;
+        
+                        // Uncomment to also spawn click prefab when holding down the mouse 
+                        // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+        
+                        selectedChampion.SetMouseHitPoint(point);
+                    }
+        
+                    if (hit.collider.gameObject.CompareTag("Enemy") ||
+                        hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
+                        selectedChampion.OnAutoAttack(hit.collider);
+                    }
+                }
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             selectedChampion.OnAbility(KeyCode.Mouse1);
