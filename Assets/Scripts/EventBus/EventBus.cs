@@ -26,6 +26,10 @@ namespace EventBus {
 
     public class EnemyStopHoverEvent : Event { }
 
+    public class InteractableStartHoverEvent : Event { }
+
+    public class InteractableStopHoverEvent : Event { }
+
     public class EnemyHitEvent : Event {
         public Collider m_Collider { get; private set; }
         public Enemy.Enemy m_Enemy { get; private set; }

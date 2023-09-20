@@ -9,7 +9,7 @@ using static Util.Logger;
 
 public class Player : MonoBehaviour {
     [Header("Stats")]
-    [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture;
+    [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
 
     [SerializeField] private LayerMask attackLayerMask;
 
@@ -30,6 +30,10 @@ public class Player : MonoBehaviour {
 
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
+
+        EventBus<InteractableStartHoverEvent>.Subscribe(OnInteractableStartHover);
+        EventBus<InteractableStopHoverEvent>.Subscribe(OnInteractableStopHover);
+
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
         EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
@@ -39,6 +43,10 @@ public class Player : MonoBehaviour {
     private void OnDisable() {
         EventBus<EnemyStartHoverEvent>.Unsubscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Unsubscribe(OnEnemyStopHover);
+
+        EventBus<InteractableStartHoverEvent>.Unsubscribe(OnInteractableStartHover);
+        EventBus<InteractableStopHoverEvent>.Unsubscribe(OnInteractableStopHover);
+
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
         EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
@@ -79,6 +87,13 @@ public class Player : MonoBehaviour {
                 if (hit.collider.gameObject.CompareTag("Enemy") ||
                     hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                     selectedChampion.OnAutoAttack(hit.collider);
+                }
+
+                //If we clicked on an interactable object, call the OnInteract method
+                var interactable = hit.collider.gameObject.GetComponent<IInteractable>();
+                if (interactable != null){
+                    
+                    interactable.OnInteract();
                 }
             }
         }
@@ -152,6 +167,14 @@ public class Player : MonoBehaviour {
     }
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
+        SetDefaultCursorTexture();
+    }
+
+    private void OnInteractableStartHover(InteractableStartHoverEvent e) {
+        Cursor.SetCursor(m_InteractCursorTexture, Vector2.zero, CursorMode.Auto);
+    }
+
+    private void OnInteractableStopHover(InteractableStopHoverEvent e) {
         SetDefaultCursorTexture();
     }
 
