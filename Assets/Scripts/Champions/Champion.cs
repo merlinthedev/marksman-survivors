@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using EventBus;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
+using Debug = UnityEngine.Debug;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
@@ -90,7 +93,7 @@ namespace Champions {
                 championStatistics.MaxHealth));
         }
 
-        protected virtual void Update() {
+        protected virtual void FixedUpdate() {
             GroundCheck();
 
             if (mouseHitPoint != Vector3.zero) {
@@ -99,6 +102,10 @@ namespace Champions {
                 }
             }
 
+            grounded = false;
+        }
+
+        protected virtual void Update() {
             if (!IsMoving && currentTarget != null) {
                 OnAutoAttack(currentTarget.GetCollider());
             }
@@ -119,8 +126,6 @@ namespace Champions {
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
-
-            grounded = false;
         }
 
         #endregion
@@ -341,7 +346,7 @@ namespace Champions {
             // }
 
             float squaredDistance = direction.sqrMagnitude;
-            if (squaredDistance < 0.1f * 0.1f) {
+            if (squaredDistance < 0.2f * 0.2f) {
                 globalMovementDirectionAngle = previousAngle;
                 mouseHitPoint = Vector3.zero;
                 rigidbody.velocity = Vector3.zero;
