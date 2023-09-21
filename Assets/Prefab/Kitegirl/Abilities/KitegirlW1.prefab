@@ -47,7 +47,7 @@ MonoBehaviour:
   keyCode: 119
   abilityCooldown: 10
   abilityRange: 10
-  abilityLevelUpBanner: {fileID: 21300000, guid: 1e5ff4cb1804f394882115b789e5adc0,
+  abilityLevelUpBanner: {fileID: 21300000, guid: 078c67240bb936a41895a81bce8a2379,
     type: 3}
   grenadePrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
     type: 3}
