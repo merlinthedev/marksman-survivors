@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 94774397}
   - component: {fileID: 94774396}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Static text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1083,7 +1083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 1819694995}
   xpBar: {fileID: 429343428}
-  levelText: {fileID: 94774396}
+  levelText: {fileID: 1898289926}
 --- !u!114 &362836951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2359,8 +2359,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 120
+    m_Right: 120
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
@@ -4579,6 +4579,7 @@ MonoBehaviour:
   m_CursorTexture: {fileID: 2800000, guid: 54cad0d84eedca24dba3aa4b8eba260f, type: 3}
   m_AttackCursorTexture: {fileID: 2800000, guid: cc3b6b70dd497e14c9ea212938c90923,
     type: 3}
+  m_InteractCursorTexture: {fileID: 0}
   attackLayerMask:
     serializedVersion: 2
     m_Bits: 64
