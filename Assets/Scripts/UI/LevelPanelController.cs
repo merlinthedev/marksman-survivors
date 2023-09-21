@@ -9,11 +9,10 @@ namespace UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
 
-        [FormerlySerializedAs("upgradeComponentPrefab")] [SerializeField]
-        private GameObject abilityComponentPrefab;
+        [SerializeField] private GameObject abilityComponentPrefab;
 
         [SerializeField] private List<AAbility> abilities = new();
-        private List<UILevelUpComponent> uiUpgradeComponents = new();
+        private List<ILevelPanelComponent> uiUpgradeComponents = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
@@ -33,7 +32,7 @@ namespace UI {
             levelPanel.SetActive(false);
 
             for (int i = uiUpgradeComponents.Count - 1; i >= 0; i--) {
-                Destroy(uiUpgradeComponents[i].gameObject);
+                Destroy(uiUpgradeComponents[i].GetGameObject());
                 uiUpgradeComponents.RemoveAt(i);
             }
         }
@@ -48,20 +47,21 @@ namespace UI {
                 return;
             }
 
-            levelPanel.SetActive(true);
 
             // Instantiate the abilities
             for (int i = 0; i < toInstantiate.Count; i++) {
                 // Instantiate the ability panel prefab
                 GameObject upgradeComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
-                UILevelUpComponent uiLevelUpComponent = upgradeComponent.GetComponent<UILevelUpComponent>();
+                ILevelPanelComponent uiLevelUpComponent = upgradeComponent.GetComponent<ILevelPanelComponent>();
                 uiLevelUpComponent.HookButton(this);
                 uiLevelUpComponent.SetAbility(toInstantiate[i]);
-                uiLevelUpComponent.GetTextComponent().SetText(toInstantiate[i].GetType().ToString());
                 uiLevelUpComponent.GetBannerImage().sprite = toInstantiate[i].GetAbilityLevelUpBannerSprite();
 
                 uiUpgradeComponents.Add(uiLevelUpComponent);
             }
+
+
+            levelPanel.SetActive(true);
         }
 
         private List<AAbility> GetRandomAbilities(List<AAbility> currentChampionAbilities) {

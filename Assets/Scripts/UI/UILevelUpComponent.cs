@@ -2,13 +2,11 @@
 using EventBus;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI {
-    public class UILevelUpComponent : MonoBehaviour {
-        [FormerlySerializedAs("upgradeText")] [SerializeField]
-        private TMP_Text abilityText;
+    public class UILevelUpComponent : MonoBehaviour, ILevelPanelComponent {
+        [SerializeField] private TMP_Text abilityText;
 
         [SerializeField] private Image bannerImage;
         [SerializeField] private Button button;
@@ -38,6 +36,10 @@ namespace UI {
 
         public int GetIndex() {
             return index;
+        }
+
+        public GameObject GetGameObject() {
+            return gameObject;
         }
 
         public void SetIndex(int index) {
