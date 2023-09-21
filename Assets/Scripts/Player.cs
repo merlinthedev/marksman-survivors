@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using UnityEngine.SceneManagement;
 
-
 public class Player : MonoBehaviour {
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
@@ -22,6 +21,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private GameObject clickAnimPrefab;
 
     private bool isPaused = false;
+    private bool firstMove = true;
+    private bool hasClickedThisFrame = false;
 
     private Inventory.Inventory inventory;
 
@@ -64,10 +65,6 @@ public class Player : MonoBehaviour {
 
         inventory = new Inventory.Inventory();
     }
-
-    private bool firstMove = true;
-
-    private bool hasClickedThisFrame = false;
 
     private void HandleMouseClicks() {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
