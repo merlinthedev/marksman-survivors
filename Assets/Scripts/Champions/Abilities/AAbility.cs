@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Champions.Abilities.Upgrades;
 using EventBus;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Champions.Abilities {
         [SerializeField] protected float abilityCooldown = 0f;
         [SerializeField] protected float abilityRange = 10f;
         [SerializeField] private Sprite abilityLevelUpBanner;
-        [SerializeField] private List<Upgrade> Upgrades = new();
+        [SerializeField] private List<Upgrade> upgrades = new();
         private float lastUseTime;
         private float currentCooldown = 0f;
         protected Champion champion;
@@ -73,6 +74,15 @@ namespace Champions.Abilities {
         public Sprite GetAbilityLevelUpBannerSprite() {
             return abilityLevelUpBanner;
         }
+
+        public List<Upgrade> GetUpgrades() {
+            return upgrades;
+        }
+
+        public Upgrade GetNextUpgrade() {
+            return upgrades.FirstOrDefault(upgrade => !upgrade.IsUnlocked());
+        }
+
 
         public enum AbilityType {
             PASSIVE, // Passive abilities are always on

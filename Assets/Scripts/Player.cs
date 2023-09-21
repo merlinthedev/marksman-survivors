@@ -1,11 +1,9 @@
 ﻿using Champions;
 using Enemy;
 using EventBus;
-using Logger = Util.Logger;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
-using static Util.Logger;
 using UnityEngine.SceneManagement;
 
 
@@ -38,10 +36,11 @@ public class Player : MonoBehaviour {
 
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
-        EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
-        EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
 
         EventBus<LoadSceneEvent>.Subscribe(LoadScene);
+
+        EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
+        EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
     }
 
     private void OnDisable() {
@@ -53,10 +52,11 @@ public class Player : MonoBehaviour {
 
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
-        EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
-        EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
 
         EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
+
+        EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
+        EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
     }
 
     private void Start() {
@@ -202,12 +202,12 @@ public class Player : MonoBehaviour {
             selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
     }
 
-    private void OnChampionLevelUp(ChampionLevelUpEvent e) {
+    private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
         isPaused = true;
         selectedChampion.Stop();
     }
 
-    private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
+    private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
         isPaused = false;
     }
 

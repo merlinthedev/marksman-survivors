@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Champions.Abilities;
+using Champions.Abilities.Upgrades;
 using EventBus;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -10,18 +12,18 @@ namespace UI {
         [SerializeField] private GameObject levelPanel;
 
         [SerializeField] private GameObject abilityComponentPrefab;
+        [SerializeField] private GameObject upgradeComponentPrefab;
 
         [SerializeField] private List<AAbility> abilities = new();
-        private List<ILevelPanelComponent> uiUpgradeComponents = new();
+        [SerializeField] private List<Upgrade> upgrades = new();
+        private List<ILevelPanelComponent> levelPanelComponents = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
-            EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
         }
 
         private void OnDisable() {
             EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
-            EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
         }
 
         private void Start() {
@@ -31,36 +33,70 @@ namespace UI {
         private void HidePanel() {
             levelPanel.SetActive(false);
 
-            for (int i = uiUpgradeComponents.Count - 1; i >= 0; i--) {
-                Destroy(uiUpgradeComponents[i].GetGameObject());
-                uiUpgradeComponents.RemoveAt(i);
+            for (int i = levelPanelComponents.Count - 1; i >= 0; i--) {
+                Destroy(levelPanelComponents[i].GetGameObject());
+                levelPanelComponents.RemoveAt(i);
             }
         }
 
         private void ShowPanel(List<AAbility> currentChampionAbilities) {
             List<AAbility> toInstantiate = GetRandomAbilities(currentChampionAbilities);
 
-            if (toInstantiate.Count < 1) {
-                // Add gold
-                EventBus<AddGoldEvent>.Raise(new AddGoldEvent(10)); // 10 gold to add
+            List<Upgrade> upgradesToInstantiate = new();
 
-                return;
+            // if (toInstantiate.Count < 1) {
+            //     // Add gold
+            //     EventBus<AddGoldEvent>.Raise(new AddGoldEvent(10)); // 10 gold to add
+            //
+            //     return;
+            // }
+
+            int diff = 3 - toInstantiate.Count;
+
+            if (toInstantiate.Count < 3) {
+                upgradesToInstantiate = GetRandomUpgrades(currentChampionAbilities, diff);
             }
+
+            // Logger.Log("Amount of abilities to instantiate: " + toInstantiate.Count, Logger.Color.RED, this);
 
 
             // Instantiate the abilities
             for (int i = 0; i < toInstantiate.Count; i++) {
                 // Instantiate the ability panel prefab
-                GameObject upgradeComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
-                ILevelPanelComponent uiLevelUpComponent = upgradeComponent.GetComponent<ILevelPanelComponent>();
-                uiLevelUpComponent.HookButton(this);
-                uiLevelUpComponent.SetAbility(toInstantiate[i]);
+                GameObject abilityComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
+                AAbility ability = toInstantiate[i];
+                ILevelPanelComponent uiLevelUpComponent = abilityComponent.GetComponent<ILevelPanelComponent>();
+                uiLevelUpComponent.SetLevelPanelController(this);
+                // set action
+                uiLevelUpComponent.SetAction(() => {
+                    EventBus<ChampionAbilityChosenEvent>.Raise(
+                        new ChampionAbilityChosenEvent(ability));
+                    HidePanel();
+                });
                 uiLevelUpComponent.GetBannerImage().sprite = toInstantiate[i].GetAbilityLevelUpBannerSprite();
 
-                uiUpgradeComponents.Add(uiLevelUpComponent);
+                levelPanelComponents.Add(uiLevelUpComponent);
             }
 
+            // instantiate the upgrade panel items if the difference between 3 and the amount of abilities is greater than 0
+            for (int i = 0; i < diff; i++) {
+                GameObject upgradeComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
+                ILevelPanelComponent uiUpgradeComponent = upgradeComponent.GetComponent<ILevelPanelComponent>();
+                Upgrade upgrade = upgradesToInstantiate[i];
+                uiUpgradeComponent.SetLevelPanelController(this);
+                uiUpgradeComponent.SetAction(() => {
+                    EventBus<ChampionUpgradeChosenEvent>.Raise(
+                        new ChampionUpgradeChosenEvent(upgrade));
+                    HidePanel();
+                });
 
+                levelPanelComponents.Add(uiUpgradeComponent);
+            }
+
+            // raise an event to stop the enemies from spawning and moving
+            EventBus<UILevelUpPanelOpenEvent>.Raise(new UILevelUpPanelOpenEvent());
+
+            // activate the panel gameobject
             levelPanel.SetActive(true);
         }
 
@@ -98,12 +134,16 @@ namespace UI {
             return randomAbilities;
         }
 
-        private void OnChampionLevelUp(ChampionLevelUpEvent e) {
-            ShowPanel(e.m_ChampionAbilities);
+        private List<Upgrade> GetRandomUpgrades(List<AAbility> currentChampionAbilities, int amountToReturn) {
+            List<Upgrade> randomUpgrades = new();
+            currentChampionAbilities.ForEach(ability => randomUpgrades.Add(ability.GetNextUpgrade()));
+
+            // get amountToReturn amount of random upgrades from the list
+            return randomUpgrades.OrderBy(x => Random.value).ToList();
         }
 
-        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
-            HidePanel();
+        private void OnChampionLevelUp(ChampionLevelUpEvent e) {
+            ShowPanel(e.m_ChampionAbilities);
         }
     }
 }
