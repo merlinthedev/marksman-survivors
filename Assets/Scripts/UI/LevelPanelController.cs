@@ -4,6 +4,7 @@ using Champions.Abilities;
 using Champions.Abilities.Upgrades;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.Serialization;
 using Logger = Util.Logger;
 
@@ -15,7 +16,6 @@ namespace UI {
         [SerializeField] private GameObject upgradeComponentPrefab;
 
         [SerializeField] private List<AAbility> abilities = new();
-        [SerializeField] private List<Upgrade> upgrades = new();
         private List<ILevelPanelComponent> levelPanelComponents = new();
 
         private void OnEnable() {
@@ -78,8 +78,11 @@ namespace UI {
                 levelPanelComponents.Add(uiLevelUpComponent);
             }
 
+            Logger.Log("Amount of upgrades found: " + upgradesToInstantiate.Count, Logger.Color.BLUE, this);
+            upgradesToInstantiate.ForEach(upgrade => { Logger.Log(upgrade.ToString(), Logger.Color.BLUE, this); });
+
             // instantiate the upgrade panel items if the difference between 3 and the amount of abilities is greater than 0
-            for (int i = 0; i < diff; i++) {
+            for (int i = 0; i < upgradesToInstantiate.Count; i++) {
                 GameObject upgradeComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
                 ILevelPanelComponent uiUpgradeComponent = upgradeComponent.GetComponent<ILevelPanelComponent>();
                 Upgrade upgrade = upgradesToInstantiate[i];
@@ -89,6 +92,9 @@ namespace UI {
                         new ChampionUpgradeChosenEvent(upgrade));
                     HidePanel();
                 });
+
+                uiUpgradeComponent.GetBannerImage().sprite = upgrade.GetUpgradeLevelUpSprite();
+                (uiUpgradeComponent as UIUpgradeComponent)?.GetUpgradeText().SetText("Upgrade");
 
                 levelPanelComponents.Add(uiUpgradeComponent);
             }
@@ -136,10 +142,15 @@ namespace UI {
 
         private List<Upgrade> GetRandomUpgrades(List<AAbility> currentChampionAbilities, int amountToReturn) {
             List<Upgrade> randomUpgrades = new();
-            currentChampionAbilities.ForEach(ability => randomUpgrades.Add(ability.GetNextUpgrade()));
+            currentChampionAbilities.ForEach(ability => {
+                if (ability.GetUpgrades().Count > 0) {
+                    randomUpgrades.Add(ability.GetNextUpgrade());
+                }
+            });
 
-            // get amountToReturn amount of random upgrades from the list
-            return randomUpgrades.OrderBy(x => Random.value).ToList();
+
+            // take the amountToReturn and return that amount of random upgrades
+            return randomUpgrades.OrderBy(x => Random.Range(0, 100)).Take(amountToReturn).ToList();
         }
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {

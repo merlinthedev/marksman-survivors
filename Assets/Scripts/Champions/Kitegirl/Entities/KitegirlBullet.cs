@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Champions.Kitegirl.Entities {
     public class KitegirlBullet : ABullet {
-        private bool m_ShouldChain;
+        private bool shouldChain;
         private float chainCount = 0;
 
         public void SetShouldChain(bool shouldChain) {
-            m_ShouldChain = shouldChain;
+            this.shouldChain = shouldChain;
         }
 
 
@@ -17,18 +17,18 @@ namespace Champions.Kitegirl.Entities {
             // Debug.Log("KitegirlBullet OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 Enemy.Enemy enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-                if (m_ShouldChain) {
+                if (shouldChain) {
                     // enemy.TakeFlatDamage(this.m_Damage);
-                    if ((bool)(m_SourceEntity as Kitegirl)?.HasUltimateActive()) {
+                    if ((bool)(sourceEntity as Kitegirl)?.HasUltimateActive()) {
                         if (enemy.IsFragile) {
                             enemy.Die();
                         }
                         else {
-                            enemy.TakeFlatDamage(m_Damage);
+                            enemy.TakeFlatDamage(damage);
                         }
                     }
                     else {
-                        enemy.TakeFlatDamage(m_Damage);
+                        enemy.TakeFlatDamage(damage);
                     }
 
                     TryReduceECooldown();
@@ -37,16 +37,16 @@ namespace Champions.Kitegirl.Entities {
                 }
                 else {
                     // enemy.TakeFlatDamage(this.m_Damage);
-                    if ((bool)(m_SourceEntity as global::Champions.Kitegirl.Kitegirl)?.HasUltimateActive()) {
+                    if ((bool)(sourceEntity as Kitegirl)?.HasUltimateActive()) {
                         if (enemy.IsFragile) {
                             enemy.Die();
                         }
                         else {
-                            enemy.TakeFlatDamage(m_Damage);
+                            enemy.TakeFlatDamage(damage);
                         }
                     }
                     else {
-                        enemy.TakeFlatDamage(m_Damage);
+                        enemy.TakeFlatDamage(damage);
                     }
 
                     TryReduceECooldown();
@@ -65,8 +65,8 @@ namespace Champions.Kitegirl.Entities {
 
         private void Chain(Vector3 bulletHitPoint, List<Enemy.Enemy> alreadyHit, bool shouldRecurse = true) {
             Enemy.Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
-            this.m_Damage *= 0.8f;
-            enemy.TakeFlatDamage(this.m_Damage);
+            damage *= 0.8f;
+            enemy.TakeFlatDamage(damage);
 
             alreadyHit.Add(enemy);
 
@@ -78,7 +78,7 @@ namespace Champions.Kitegirl.Entities {
         }
 
         private void TryReduceECooldown() {
-            (this.m_SourceEntity as global::Champions.Kitegirl.Kitegirl)?.TryReduceECooldown();
+            (sourceEntity as Kitegirl)?.TryReduceECooldown();
         }
     }
 }

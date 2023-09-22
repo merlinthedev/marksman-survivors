@@ -66,6 +66,7 @@ namespace Enemy {
             }
         }
 
+        [Obsolete("This method is not used anymore, but it is kept for reference")]
         private Vector3 FindPositionRecursively() {
             Vector3 randomPointOnPlane = new Vector3(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
 
@@ -147,7 +148,7 @@ namespace Enemy {
         }
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
-            enemyDictionary.Remove(enemyKilledEvent.m_Collider);
+            enemyDictionary.Remove(enemyKilledEvent.Collider);
         }
 
         private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {

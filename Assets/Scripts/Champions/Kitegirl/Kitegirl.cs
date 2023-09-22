@@ -6,6 +6,7 @@ using Champions.Kitegirl.Entities;
 using Enemy;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
@@ -15,19 +16,20 @@ namespace Champions.Kitegirl {
         [SerializeField] private KitegirlBullet m_BulletPrefab;
         [SerializeField] private Champion_AnimationController m_AnimationController;
 
-        private bool m_AutoAttackShouldChain = false;
-        private bool m_IsDashing = false;
-        private bool m_HasUltimateActive = false;
-        private bool m_AutoAttackShouldApplyDeftness = false;
+        private bool autoAttackShouldChain = false;
+        private bool isDashing = false;
+        private bool hasUltimateActive = false;
+        private bool autoAttackShouldApplyDeftness = false;
 
-        private int m_RecurseCount = 0;
-        private int m_MaxRecurseCount = 0;
+        private int recurseCount = 0;
+        private int maxRecurseCount = 0;
 
-        [SerializeField] private int m_MaxChainCount = 3;
+        [FormerlySerializedAs("m_MaxChainCount")] [SerializeField]
+        private int maxChainCount = 3;
 
-        private int m_CurrentChainCount = 0;
+        private int currentChainCount = 0;
 
-        [SerializeField] private float m_DashSpeed = 20f;
+        [SerializeField] private float dashSpeed = 20f;
 
         public override void OnAutoAttack(Collider collider) {
             if (!CanAttack) {
@@ -50,17 +52,16 @@ namespace Champions.Kitegirl {
 
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
-            // TODO: Instead of 0.1f, either anim event or smth else to determnie when the attack is over
             rigidbody.velocity = Vector3.zero;
 
-            if (m_AutoAttackShouldApplyDeftness) {
+            if (autoAttackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
             // Logger.Log("Deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.YELLOW, this);
             // Logger.Log("Overpower stacks: " + GetStackAmount(Stack.StackType.OVERPOWER), Logger.Color.YELLOW, this);
 
-            ShootBullet_Recursive(m_HasUltimateActive,
+            ShootBullet_Recursive(hasUltimateActive,
                 new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
             m_AnimationController.Attack();
             isAutoAttacking = true;
@@ -81,13 +82,13 @@ namespace Champions.Kitegirl {
         }
 
         public void ActivateUltimate(float duration, float burstAmount, float slowAmount) {
-            m_HasUltimateActive = true;
-            m_MaxRecurseCount = (int)burstAmount;
+            hasUltimateActive = true;
+            maxRecurseCount = (int)burstAmount;
             ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.Slow, duration, slowAmount));
         }
 
         public void DeactivateUltimate() {
-            m_HasUltimateActive = false;
+            hasUltimateActive = false;
         }
 
         public void TryReduceECooldown() {
@@ -112,11 +113,11 @@ namespace Champions.Kitegirl {
         }
 
         protected override void OnMove() {
-            if (!m_IsDashing) {
+            if (!isDashing) {
                 base.OnMove();
             }
             else {
-                rigidbody.velocity = GetCurrentMovementDirection() * m_DashSpeed;
+                rigidbody.velocity = GetCurrentMovementDirection() * dashSpeed;
             }
         }
 
@@ -135,7 +136,7 @@ namespace Champions.Kitegirl {
 
 
         private void ShootBullet_Recursive(bool shouldCallRecursive, Vector3 target) {
-            m_RecurseCount++;
+            recurseCount++;
 
             Vector3 randomBulletSpread = new Vector3(
                 Random.Range(-0.1f, 0.1f),
@@ -150,40 +151,40 @@ namespace Champions.Kitegirl {
 
             KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
             bullet.SetSourceEntity(this);
-            bullet.SetShouldChain(m_AutoAttackShouldChain);
+            bullet.SetShouldChain(autoAttackShouldChain);
             bullet.SetTarget(target + randomBulletSpread);
             bullet.SetDamage(CalculateDamage());
 
 
-            if (m_AutoAttackShouldChain) {
-                m_CurrentChainCount++;
+            if (autoAttackShouldChain) {
+                currentChainCount++;
                 // Debug.Log("Chain count: " + m_CurrentChainCount + " / " + m_MaxChainCount + "");
-                if (m_CurrentChainCount >= m_MaxChainCount) {
-                    m_CurrentChainCount = 0;
-                    m_AutoAttackShouldChain = false;
+                if (currentChainCount >= maxChainCount) {
+                    currentChainCount = 0;
+                    autoAttackShouldChain = false;
                     // Debug.Log("Chain count reset");
                 }
             }
 
-            if (shouldCallRecursive && m_RecurseCount < m_MaxRecurseCount) {
+            if (shouldCallRecursive && recurseCount < maxRecurseCount) {
                 Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
             }
             else {
-                m_RecurseCount = 0;
+                recurseCount = 0;
             }
         }
 
 
         public void SetAutoAttackChain(bool b) {
-            m_AutoAttackShouldChain = b;
+            autoAttackShouldChain = b;
         }
 
         public void SetIsDashing(bool p0) {
-            m_IsDashing = p0;
+            isDashing = p0;
         }
 
         public void SetAutoAttackDeftnessApply(bool value) {
-            m_AutoAttackShouldApplyDeftness = value;
+            autoAttackShouldApplyDeftness = value;
         }
 
         public void EnableStuffAfterAttack() {
@@ -192,7 +193,7 @@ namespace Champions.Kitegirl {
         }
 
         public bool HasUltimateActive() {
-            return m_HasUltimateActive;
+            return hasUltimateActive;
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using EventBus;
+﻿using EventBus;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,12 +7,13 @@ namespace UI {
     public class UIUpgradeComponent : MonoBehaviour, ILevelPanelComponent {
         [SerializeField] private Image bannerImage;
         [SerializeField] private Button button;
+        [SerializeField] private TMP_Text upgradeText = null;
         private LevelPanelController levelPanelController;
         private System.Action action;
 
         private void Start() {
             button.onClick.AddListener(() => {
-                action?.Invoke(); 
+                action?.Invoke();
                 EventBus<UILevelUpPanelClosedEvent>.Raise(new UILevelUpPanelClosedEvent());
             });
         }
@@ -27,6 +28,10 @@ namespace UI {
 
         public GameObject GetGameObject() {
             return gameObject;
+        }
+
+        public TMP_Text GetUpgradeText() {
+            return upgradeText;
         }
 
         public void SetAction(System.Action action) {

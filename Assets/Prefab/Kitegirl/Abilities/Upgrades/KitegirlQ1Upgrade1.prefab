@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29e09f4264cc4dc091afe4a90b65c9cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeBannerImage: {fileID: 21300000, guid: c899c6614340a0d4a9e2bc30ab46d8fd, type: 3}

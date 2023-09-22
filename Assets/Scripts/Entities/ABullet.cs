@@ -3,59 +3,59 @@ using UnityEngine;
 
 namespace Entities {
     public abstract class ABullet : MonoBehaviour {
-        protected IEntity m_SourceEntity;
+        protected IEntity sourceEntity;
         [SerializeField] private float m_TravelSpeed = 30f;
         [SerializeField] private float m_BulletLifeTime = 2f;
-        private float m_BulletSpawnTime = 0f;
-        protected float m_Damage;
+        private float bulletSpawnTime = 0f;
+        protected float damage;
 
-        private bool m_ShouldMove = false;
+        private bool shouldMove = false;
 
-        private Vector3 m_Direction;
-        private Vector3 m_Target;
+        private Vector3 direction;
+        private Vector3 target;
 
         public void SetSourceEntity(IEntity sourceEntity) {
-            m_SourceEntity = sourceEntity;
+            this.sourceEntity = sourceEntity;
         }
 
         public virtual void SetTarget(Vector3 target) {
-            m_Target = target;
-            m_ShouldMove = true;
-            m_Direction = (m_Target - transform.position).normalized;
-            m_BulletSpawnTime = Time.time;
+            this.target = target;
+            shouldMove = true;
+            direction = (this.target - transform.position).normalized;
+            bulletSpawnTime = Time.time;
         }
 
         public virtual void SetDamage(float damage) {
-            m_Damage = damage;
+            this.damage = damage;
         }
 
         private void Update() {
-            if (Time.time > m_BulletSpawnTime + m_BulletLifeTime) {
-                m_ShouldMove = false;
+            if (Time.time > bulletSpawnTime + m_BulletLifeTime) {
+                shouldMove = false;
             }
 
-            if (m_ShouldMove) {
+            if (shouldMove) {
                 Move();
-            } else {
+            }
+            else {
                 Destroy(gameObject);
             }
         }
 
 
         private void Move() {
-            transform.Translate(m_Direction.normalized * (m_TravelSpeed * Time.deltaTime));
+            transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
         }
 
         protected private virtual void OnTriggerEnter(Collider other) {
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 Enemy.Enemy enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-                enemy.TakeFlatDamage(m_Damage);
+                enemy.TakeFlatDamage(damage);
                 // Debug.Log("Hit an enemy");
 
                 Destroy(gameObject);
             }
         }
-
     }
 }

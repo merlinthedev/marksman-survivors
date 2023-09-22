@@ -420,7 +420,7 @@ namespace Champions {
         #region Events
 
         private void OnEnemyKilledEvent(EnemyKilledEvent e) {
-            championStatistics.CurrentXP += e.m_Enemy.GetXP();
+            championStatistics.CurrentXP += e.Enemy.GetXP();
             championLevelManager.CheckForLevelUp();
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", championStatistics.CurrentXP,
                 championLevelManager.CurrentLevelXP));

@@ -49,5 +49,5 @@ MonoBehaviour:
   abilityRange: 10
   abilityLevelUpBanner: {fileID: 21300000, guid: 5d1babf43be20d44d82fb492c5b2f589,
     type: 3}
-  Upgrades:
+  upgrades:
   - {fileID: -8079239298508076044, guid: 44f789cc0ad618c45aed6e5582c6283f, type: 3}

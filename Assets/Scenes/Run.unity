@@ -243,12 +243,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpawnTimer: 0.5
-  m_ShouldSpawn: 0
-  m_MaxAmountOfEnemies: 21456939
-  m_EnemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
+  player: {fileID: 2114737657}
+  enemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
-  m_Player: {fileID: 2114737657}
+  shouldSpawn: 0
+  maxAmountOfEnemies: 999999999
+  spawnTimer: 0.5
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,7 +1556,6 @@ MonoBehaviour:
   - {fileID: -5836431172475230976, guid: ee230c949f26d78479ca5eef23c3f31a, type: 3}
   - {fileID: -8325301189158293201, guid: 2f8a91740c41dd14ca598abdf45003b2, type: 3}
   - {fileID: -2301999179170599804, guid: e252c537c7aec1a449fbb7598a4d005e, type: 3}
-  upgrades: []
 --- !u!224 &502938396 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4401297704665096259, guid: 866213df7dddb1c4eab9be6d3dcd200a,

@@ -49,5 +49,7 @@ MonoBehaviour:
   abilityRange: 10
   abilityLevelUpBanner: {fileID: 21300000, guid: 5bd626d016925754fbd03ef67be21a86,
     type: 3}
+  upgrades:
+  - {fileID: -8079239298508076044, guid: e07326544e7158f41b5a278fd036f7d9, type: 3}
   m_KitegirlSlowAreaPrefab: {fileID: 3173280358153001526, guid: 2accd668d70f22f49b2bb7315446744e,
     type: 3}

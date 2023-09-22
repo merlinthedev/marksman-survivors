@@ -45,14 +45,14 @@ namespace EventBus {
     }
 
     public class EnemyKilledEvent : Event {
-        public Collider m_Collider { get; private set; }
-        public Enemy.Enemy m_Enemy { get; private set; }
-        public Vector3 m_EnemyDeathPosition { get; private set; }
+        public Collider Collider { get; private set; }
+        public Enemy.Enemy Enemy { get; private set; }
+        public Vector3 EnemyDeathPosition { get; private set; }
 
         public EnemyKilledEvent(Collider collider, Enemy.Enemy enemy, Vector3 enemyDeathPosition) {
-            m_Collider = collider;
-            m_Enemy = enemy;
-            m_EnemyDeathPosition = enemyDeathPosition;
+            Collider = collider;
+            Enemy = enemy;
+            EnemyDeathPosition = enemyDeathPosition;
         }
     }
 
