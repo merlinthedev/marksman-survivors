@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using Entities;
 using EventBus;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
@@ -426,6 +424,11 @@ namespace Champions {
             championLevelManager.CheckForLevelUp();
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", championStatistics.CurrentXP,
                 championLevelManager.CurrentLevelXP));
+
+            // if the enemy that was killed was the instance of currentTarget, set currentTarget to null
+            if ((Enemy.Enemy)currentTarget == e.Enemy) {
+                currentTarget = null;
+            }
         }
 
         private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {

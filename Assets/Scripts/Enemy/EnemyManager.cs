@@ -21,6 +21,8 @@ namespace Enemy {
         [SerializeField] [Tooltip("Time it takes between enemy spawn")]
         private float spawnTimer = 1.4f;
 
+        private float lastSpawnTime = 0f;
+
 
         private int amountOfEnemies = 0;
         private static EnemyManager instance;
@@ -46,7 +48,24 @@ namespace Enemy {
 
             instance = this;
 
-            StartCoroutine(SpawnEnemy());
+            // StartCoroutine(SpawnEnemy());
+        }
+
+        private void Update() {
+            if (!shouldSpawn) return;
+            if (Time.time < lastSpawnTime + spawnTimer) return;
+            if (amountOfEnemies >= maxAmountOfEnemies) {
+                shouldSpawn = false;
+                return;
+            }
+
+
+            Enemy enemy = Instantiate(enemyPrefab, FindPositionIteratively(), Quaternion.Euler(0, 45, 0));
+            enemy.SetTarget(player.transform);
+
+            enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+
+            lastSpawnTime = Time.time;
         }
 
         private IEnumerator SpawnEnemy() {
@@ -199,13 +218,6 @@ namespace Enemy {
 
         public void SetShouldSpawn(bool value) {
             shouldSpawn = value;
-
-            if (value) {
-                StartCoroutine(SpawnEnemy());
-            }
-            else {
-                StopCoroutine(SpawnEnemy());
-            }
         }
 
         public static EnemyManager GetInstance() {
