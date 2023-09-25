@@ -8,7 +8,7 @@ namespace Champions {
         private float currentLevelXp;
         private float previousLevelXp;
         private float growthRate = 1.2f;
-        private float constantLevelXpIncrease = 5f;
+        private float constantLevelXpIncrease = 10f;
 
         public ChampionLevelManager(Champion champion) {
             this.champion = champion;
@@ -30,7 +30,7 @@ namespace Champions {
         private void LevelUp() {
             previousLevelXp = currentLevelXp;
             currentLevel++;
-            currentLevelXp *= growthRate;
+            currentLevelXp = previousLevelXp * growthRate + constantLevelXpIncrease;
             champion.GetChampionStatistics().CurrentXP = 0f;
 
             EventBus<ChampionLevelUpEvent>.Raise(new ChampionLevelUpEvent(currentLevel, currentLevel - 1,

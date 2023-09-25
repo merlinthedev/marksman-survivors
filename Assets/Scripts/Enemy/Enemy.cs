@@ -11,18 +11,19 @@ using Logger = Util.Logger;
 
 namespace Enemy {
     public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
-        private Transform m_Target;
+        private Transform target;
         [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
-        private Canvas m_Canvas;
+        private Canvas canvas;
 
-        private Rigidbody m_Rigidbody;
+        private Rigidbody rigidbody;
         [SerializeField] private Collider m_Collider;
         [SerializeField] private float m_MovementSpeed = 7f;
-        private float m_InitialMovementSpeed;
+        private float initialMovementSpeed;
 
 
-        private float m_MaxHealth = 250f;
-        private float m_CurrentHealth = 250f;
+        [SerializeField] private float maxHealth = 12f;
+        [SerializeField] private float currentHealth = 12f;
+        private float damage = 1f;
         [SerializeField] private Image m_HealthBar;
         [SerializeField] private Image m_HealthBarBackground;
         private float m_InitialHealthBarWidth;
@@ -63,18 +64,18 @@ namespace Enemy {
         }
 
         private void Start() {
-            m_Rigidbody = GetComponent<Rigidbody>();
+            rigidbody = GetComponent<Rigidbody>();
 
             m_HealthBar.enabled = false;
             m_HealthBarBackground.enabled = false;
 
-            if (m_Rigidbody == null) {
+            if (rigidbody == null) {
                 Debug.LogError("Missing rigidbody");
                 throw new Exception("Missing rigidbody");
             }
 
-            m_Canvas = GetComponentInChildren<Canvas>();
-            if (m_Canvas == null) {
+            canvas = GetComponentInChildren<Canvas>();
+            if (canvas == null) {
                 Debug.LogError("Missing canvas");
                 throw new Exception("Missing canvas");
             }
@@ -91,25 +92,25 @@ namespace Enemy {
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
             m_Animator = GetComponent<Animator>();
 
-            m_InitialMovementSpeed = m_MovementSpeed;
+            initialMovementSpeed = m_MovementSpeed;
         }
 
 
         public void SetTarget(Transform target) {
-            m_Target = target;
+            this.target = target;
         }
 
         private void Update() {
-            if (m_Target != null && m_CanMove) {
+            if (target != null && m_CanMove) {
                 Move();
             }
 
             //Check dir
-            if (m_Rigidbody.velocity.x > 0) {
-                m_CurrentDir = (m_Rigidbody.velocity.z > 0) ? 0 : 1;
+            if (rigidbody.velocity.x > 0) {
+                m_CurrentDir = (rigidbody.velocity.z > 0) ? 0 : 1;
             }
-            else if (m_Rigidbody.velocity.x < 0) {
-                m_CurrentDir = (m_Rigidbody.velocity.z < 0) ? 2 : 3;
+            else if (rigidbody.velocity.x < 0) {
+                m_CurrentDir = (rigidbody.velocity.z < 0) ? 2 : 3;
             }
 
 
@@ -135,22 +136,22 @@ namespace Enemy {
                 }
             }
 
-            Xspeed = m_Rigidbody.velocity.x;
-            Zspeed = m_Rigidbody.velocity.z;
+            Xspeed = rigidbody.velocity.x;
+            Zspeed = rigidbody.velocity.z;
 
             CheckStacksForExpiration();
             CheckDebuffsForExpiration();
         }
 
         private void Move() {
-            Vector3 direction = m_Target.position - transform.position;
+            Vector3 direction = target.position - transform.position;
 
             if (direction.magnitude < 0.1f) {
-                m_Target = null;
+                target = null;
                 return;
             }
 
-            m_Rigidbody.velocity = direction.normalized * m_MovementSpeed;
+            rigidbody.velocity = direction.normalized * m_MovementSpeed;
         }
 
 
@@ -164,7 +165,7 @@ namespace Enemy {
             if (m_IsDead) return;
             // Debug.Log("Taking damage");
             float damageTaken = CalculateDamage(damage);
-            m_CurrentHealth -= damageTaken;
+            currentHealth -= damageTaken;
 
             m_HealthBar.enabled = true;
             m_HealthBarBackground.enabled = true;
@@ -173,12 +174,12 @@ namespace Enemy {
             ShowDamageUI(damageTaken);
             UpdateHealthBar();
 
-            if (m_CurrentHealth <= 0) {
+            if (currentHealth <= 0) {
                 m_CanMove = false;
-                m_Rigidbody.velocity = Vector3.zero;
+                rigidbody.velocity = Vector3.zero;
 
                 m_Collider.isTrigger = true;
-                m_Rigidbody.useGravity = false;
+                rigidbody.useGravity = false;
 
                 Invoke(nameof(Die), 0.5f);
             }
@@ -292,26 +293,26 @@ namespace Enemy {
             }
 
             Logger.Log("Slow applied", Logger.Color.GREEN, this);
-            Logger.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + m_InitialMovementSpeed,
+            Logger.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + initialMovementSpeed,
                 Logger.Color.BLUE, this);
 
-            Utilities.InvokeDelayed(() => { m_MovementSpeed = m_InitialMovementSpeed; }, debuff.GetDuration(), this);
+            Utilities.InvokeDelayed(() => { m_MovementSpeed = initialMovementSpeed; }, debuff.GetDuration(), this);
         }
 
         private void RemoveSlow(Debuff debuff) {
-            m_MovementSpeed = m_InitialMovementSpeed; // TODO: handle possible existing coroutines for the same debuff
+            m_MovementSpeed = initialMovementSpeed; // TODO: handle possible existing coroutines for the same debuff
         }
 
         private void ShowDamageUI(float damage) {
             // Instantiate the damage number prefab as a child of the canvas
-            EnemyDamageNumberHelper enemyDamageNumberHelper = Instantiate(m_EnemyDamageNumberPrefab, m_Canvas.transform)
+            EnemyDamageNumberHelper enemyDamageNumberHelper = Instantiate(m_EnemyDamageNumberPrefab, canvas.transform)
                 .GetComponent<EnemyDamageNumberHelper>();
 
             enemyDamageNumberHelper.Initialize(damage.ToString());
         }
 
         private void UpdateHealthBar() {
-            float healthPercentage = m_CurrentHealth / m_MaxHealth;
+            float healthPercentage = currentHealth / maxHealth;
 
             m_HealthBar.rectTransform.sizeDelta = new Vector2(
                 healthPercentage * m_InitialHealthBarWidth,
@@ -343,7 +344,7 @@ namespace Enemy {
                 }
 
                 if (Time.time > m_LastAttackTime + m_AttackCooldown) {
-                    champion.TakeFlatDamage(70f);
+                    champion.TakeFlatDamage(damage);
                     m_LastAttackTime = Time.time;
                 }
             }
@@ -354,7 +355,7 @@ namespace Enemy {
         }
 
         public float GetMaxHealth() {
-            return m_MaxHealth;
+            return maxHealth;
         }
 
         public Collider GetCollider() {
