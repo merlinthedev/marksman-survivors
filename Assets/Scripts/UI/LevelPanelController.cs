@@ -4,8 +4,6 @@ using Champions.Abilities;
 using Champions.Abilities.Upgrades;
 using EventBus;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
-using UnityEngine.Serialization;
 using Logger = Util.Logger;
 
 namespace UI {

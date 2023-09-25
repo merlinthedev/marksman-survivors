@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using EventBus;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
@@ -143,6 +142,7 @@ namespace Enemy {
 
         private Vector3 FindPositionIteratively() {
             Vector3 randomPointOnPlane;
+            bool isInTriangle = true;
 
             do {
                 // find a random point on our playing field
@@ -166,17 +166,14 @@ namespace Enemy {
                 Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
 
                 // check if the random point is inside the no-spawn triangle
-                bool isInTriangle = Utilities.IsInsideTriangle(
+                isInTriangle = Utilities.IsInsideTriangle(
                     new Vector2(playerPos.x, playerPos.z),
                     new Vector2(rightPoint.x, rightPoint.z),
                     new Vector2(leftPoint.x, leftPoint.z),
                     new Vector2(randomPointOnPlane.x, randomPointOnPlane.z));
 
                 // if it is not we can break out of our loop and return the point, it is now a valid spawn position
-                if (!isInTriangle) {
-                    break;
-                }
-            } while (true);
+            } while (isInTriangle);
 
             return randomPointOnPlane;
         }
