@@ -71,6 +71,7 @@ namespace UI {
                 uiLevelUpComponent.SetAction(() => {
                     EventBus<ChampionAbilityChosenEvent>.Raise(
                         new ChampionAbilityChosenEvent(ability));
+                    EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(ability.GetKeyCode(), 0));
                     HidePanel();
                 });
                 uiLevelUpComponent.GetBannerImage().sprite = toInstantiate[i].GetAbilityLevelUpBannerSprite();
