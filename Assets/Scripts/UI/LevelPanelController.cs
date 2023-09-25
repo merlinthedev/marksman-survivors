@@ -109,7 +109,10 @@ namespace UI {
             // fetch 3 random abilities from the list
             List<AAbility> randomAbilities = new();
 
-            int maxAttempts = 10; // Set a maximum number of attempts
+            int maxAttempts = 20; // Set a maximum number of attempts
+
+            // can only unlock ultimate when all the other abilities are unlocked
+            bool canUnlockUltimate = currentChampionAbilities.Count >= 4;
 
             for (int i = 0; i < 3; i++) {
                 int attempts = 0; // Track the number of attempts made to find a valid ability
@@ -117,6 +120,11 @@ namespace UI {
                 while (attempts < maxAttempts) {
                     int randomIndex = Random.Range(0, abilities.Count);
                     var x = abilities[randomIndex];
+
+                    if (!canUnlockUltimate && x.GetKeyCode() == KeyCode.R) {
+                        attempts++;
+                        continue;
+                    }
 
                     // Check if the currentChampionAbilities already contain an ability with the same keycode
                     if (currentChampionAbilities.Exists(ability => ability.GetKeyCode() == x.GetKeyCode())) {
