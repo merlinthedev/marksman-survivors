@@ -16,7 +16,7 @@ namespace Enemy {
         private Canvas m_Canvas;
 
         private Rigidbody m_Rigidbody;
-        private Collider m_Collider;
+        [SerializeField] private Collider m_Collider;
         [SerializeField] private float m_MovementSpeed = 7f;
         private float m_InitialMovementSpeed;
 
@@ -69,16 +69,19 @@ namespace Enemy {
             m_HealthBarBackground.enabled = false;
 
             if (m_Rigidbody == null) {
+                Debug.LogError("Missing rigidbody");
                 throw new Exception("Missing rigidbody");
             }
 
             m_Canvas = GetComponentInChildren<Canvas>();
             if (m_Canvas == null) {
+                Debug.LogError("Missing canvas");
                 throw new Exception("Missing canvas");
             }
 
             m_Collider = GetComponent<Collider>();
             if (m_Collider == null) {
+                Debug.LogError("Missing collider");
                 throw new Exception("Missing collider");
             }
 

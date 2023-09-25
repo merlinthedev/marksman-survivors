@@ -52,22 +52,37 @@ namespace Enemy {
         }
 
         private void Update() {
+            HandleEnemySpawn();
+        }
+
+        private void HandleEnemySpawn() {
             if (!shouldSpawn) return;
-            if (Time.time < lastSpawnTime + spawnTimer) return;
+
+            // if the time since the last spawn is less than the spawn timer, we don't want to spawn
+            if (Time.time - lastSpawnTime < spawnTimer) return;
+
             if (amountOfEnemies >= maxAmountOfEnemies) {
                 shouldSpawn = false;
                 return;
             }
 
+            // find a random position on the playing field for our group of enemies
+            Vector3 location = FindPositionIteratively();
 
-            Enemy enemy = Instantiate(enemyPrefab, FindPositionIteratively(), Quaternion.Euler(0, 45, 0));
-            enemy.SetTarget(player.transform);
+            // get a random int between 2 and 5
+            int randomInt = Random.Range(2, 6);
 
-            enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+            for (int i = 0; i < randomInt; i++) {
+                Vector3 randomSpread = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Enemy enemy = Instantiate(enemyPrefab, location + randomSpread, Quaternion.Euler(0, 45, 0));
+                enemy.SetTarget(player.transform);
+                enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+            }
 
             lastSpawnTime = Time.time;
         }
 
+        [Obsolete("Deprecated, spawning is now handled by HandleEnemySpawn()")]
         private IEnumerator SpawnEnemy() {
             while (shouldSpawn) {
                 if (amountOfEnemies >= maxAmountOfEnemies) {

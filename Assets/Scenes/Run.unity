@@ -248,7 +248,7 @@ MonoBehaviour:
     type: 3}
   shouldSpawn: 0
   maxAmountOfEnemies: 999999999
-  spawnTimer: 0.5
+  spawnTimer: 2.2
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0
@@ -4637,8 +4637,8 @@ MonoBehaviour:
   m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
   m_AnimationController: {fileID: 2114737660}
-  m_MaxChainCount: 3
-  m_DashSpeed: 20
+  maxChainCount: 3
+  dashSpeed: 20
 --- !u!114 &2114737660
 MonoBehaviour:
   m_ObjectHideFlags: 0
