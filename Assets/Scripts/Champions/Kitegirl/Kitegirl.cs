@@ -4,6 +4,7 @@ using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using Enemy;
+using Entities;
 using EventBus;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -31,11 +32,11 @@ namespace Champions.Kitegirl {
 
         [SerializeField] private float dashSpeed = 20f;
 
-        public override void OnAutoAttack(Collider collider) {
+        public override void OnAutoAttack(IDamageable damageable) {
             if (!CanAttack) {
                 if (!isAutoAttacking) {
                     // Queue the clicked target for our next attack
-                    currentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+                    currentTarget = damageable;
                     // Stop moving towards the previous mouse hitpoint
                     Stop();
                 }
@@ -47,8 +48,9 @@ namespace Champions.Kitegirl {
             mouseHitPoint = Vector3.zero;
 
             lastAttackTime = Time.time;
-            Vector3 dir = collider.transform.position - transform.position;
-            currentTarget = EnemyManager.GetInstance().GetEnemy(collider);
+            Vector3 dir = damageable.GetTransform().position - transform.position;
+            currentTarget = damageable;
+
 
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
@@ -62,7 +64,8 @@ namespace Champions.Kitegirl {
             // Logger.Log("Overpower stacks: " + GetStackAmount(Stack.StackType.OVERPOWER), Logger.Color.YELLOW, this);
 
             ShootBullet_Recursive(hasUltimateActive,
-                new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z));
+                new Vector3(damageable.GetTransform().position.x, transform.position.y,
+                    damageable.GetTransform().position.z));
             m_AnimationController.Attack();
             isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));

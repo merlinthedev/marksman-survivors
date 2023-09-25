@@ -1,5 +1,6 @@
 ﻿using Champions;
 using Enemy;
+using Entities;
 using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,7 +95,8 @@ public class Player : MonoBehaviour {
 
                 if (hit.collider.gameObject.CompareTag("Enemy") ||
                     hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                    selectedChampion.OnAutoAttack(hit.collider);
+                    IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                    selectedChampion.OnAutoAttack(damageable);
                 }
 
                 //If we clicked on an interactable object, call the OnInteract method
@@ -130,7 +132,8 @@ public class Player : MonoBehaviour {
 
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
                         hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                        selectedChampion.OnAutoAttack(hit.collider);
+                        IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                        selectedChampion.OnAutoAttack(damageable);
                     }
                 }
             }

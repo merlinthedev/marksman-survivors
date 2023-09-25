@@ -362,6 +362,10 @@ namespace Enemy {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
 
+        public Transform GetTransform() {
+            return gameObject.transform;
+        }
+
         public void SetCanMove(bool canMove) {
             m_CanMove = canMove;
         }

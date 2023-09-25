@@ -3,6 +3,7 @@ using System.Diagnostics;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
+using Entities;
 using EventBus;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace Champions {
         public bool IsMoving => rigidbody.velocity.magnitude > 0.001f;
 
         [Header("Attack")]
-        protected Enemy.Enemy currentTarget = null;
+        protected IDamageable currentTarget = null;
 
 
         private bool nextAttackWillCrit = false;
@@ -107,7 +108,7 @@ namespace Champions {
 
         protected virtual void Update() {
             if (!IsMoving && currentTarget != null) {
-                OnAutoAttack(currentTarget.GetCollider());
+                OnAutoAttack(currentTarget);
             }
 
             RegenerateResources();
@@ -132,7 +133,7 @@ namespace Champions {
 
         #region Abstract Methods
 
-        public abstract void OnAutoAttack(Collider collider);
+        public abstract void OnAutoAttack(IDamageable damageable);
 
         public abstract void OnAbility(KeyCode keyCode);
 
@@ -397,6 +398,7 @@ namespace Champions {
             OnDamageTaken(damage);
         }
 
+
         protected float CalculateDamage() {
             float damage = GetAttackDamage();
 
@@ -494,6 +496,10 @@ namespace Champions {
 
         public int GetStackAmount(Stack.StackType stackType) {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
+        }
+
+        public Transform GetTransform() {
+            return gameObject.transform;
         }
 
         public void SetMouseHitPoint(Vector3 point) {

@@ -7,7 +7,7 @@ using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Entities {
-    public class KitegirlGrenade : MonoBehaviour, IThrowable {
+    public class KitegirlGrenade : MonoBehaviour, IThrowable, IDamageable {
         private Vector3 m_TargetPoint;
 
         private Kitegirl m_SourceEntity;
@@ -69,7 +69,7 @@ namespace Champions.Kitegirl.Entities {
             Destroy(gameObject);
         }
 
-        public void EarlyDetonate() {
+        private void EarlyDetonate() {
             // Debug.Log("Early detonating");
             Detonate(true);
 
@@ -78,6 +78,14 @@ namespace Champions.Kitegirl.Entities {
 
         public void SetDamage(float damage) {
             m_Damage = damage;
+        }
+
+        public void TakeFlatDamage(float damage) {
+            EarlyDetonate();
+        }
+
+        public Transform GetTransform() {
+            return gameObject.transform;
         }
     }
 }

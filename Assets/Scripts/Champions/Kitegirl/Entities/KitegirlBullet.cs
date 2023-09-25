@@ -58,7 +58,7 @@ namespace Champions.Kitegirl.Entities {
                 // do stuff
                 // Debug.Log("Hit a grenade");
                 KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
-                kitegirlGrenade.EarlyDetonate();
+                kitegirlGrenade.TakeFlatDamage(1);
             }
         }
 
