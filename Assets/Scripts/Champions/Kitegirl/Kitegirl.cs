@@ -119,6 +119,14 @@ namespace Champions.Kitegirl {
             }
         }
 
+        public override void DealDamage(IDamageable damageable, float damage) {
+            if (attackShouldApplyDeftness) {
+                AddStacks(1, Stack.StackType.DEFTNESS);
+            }
+
+            base.DealDamage(damageable, damage);
+        }
+
         protected override void Update() {
             base.Update(); // this is important, even tho the editor says it's not...
         }

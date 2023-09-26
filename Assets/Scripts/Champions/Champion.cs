@@ -409,7 +409,7 @@ namespace Champions {
             return Mathf.Floor(damage);
         }
 
-        public void DealDamage(IDamageable damageable, float damage) {
+        public virtual void DealDamage(IDamageable damageable, float damage) {
             damageable.TakeFlatDamage(damage);
         }
 
