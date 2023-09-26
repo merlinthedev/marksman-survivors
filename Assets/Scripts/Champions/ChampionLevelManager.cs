@@ -9,12 +9,12 @@ namespace Champions {
         private float currentLevelXp;
         private float previousLevelXp;
         private float growthRate = 1.2f;
-        private float constantLevelXpIncrease = 10f;
+        private float constantLevelXpIncrease = 3f;
 
         public ChampionLevelManager(Champion champion) {
             this.champion = champion;
             currentLevel = 1;
-            currentLevelXp = 2f;
+            currentLevelXp = 5f;
             previousLevelXp = 0f;
         }
 
