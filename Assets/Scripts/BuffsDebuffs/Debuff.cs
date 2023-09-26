@@ -4,73 +4,78 @@ using UnityEngine;
 
 namespace BuffsDebuffs {
     public class Debuff {
-        private IDamageable m_Target;
-        private DebuffType m_DebuffType;
+        private IDamageable target;
+        private IDamager source;
+        private DebuffType debuffType;
 
-        private float m_StartTime = 0;
-        private float m_Duration;
-        private float m_Value;
+        private float startTime = 0;
+        private float duration;
+        private float value;
 
-        private float m_Interval;
-        private IEnumerator m_IntervalCoroutine;
+        private float interval;
+        private IEnumerator intervalCoroutine;
 
-        public static Debuff CreateDebuff(IDamageable target, DebuffType debuffType, float duration, float value,
+        public static Debuff CreateDebuff(IDamageable target, IDamager source, DebuffType debuffType, float duration,
+            float value,
             float interval = -1) {
-            return new Debuff(target, debuffType, duration, value, interval);
+            return new Debuff(target, source, debuffType, duration, value, interval);
         }
 
-        private Debuff(IDamageable target, DebuffType debuffType, float duration, float value, float interval = -1) {
-            m_Target = target;
-            m_DebuffType = debuffType;
-            m_Duration = duration;
-            m_Value = value;
-            m_Interval = interval;
+        private Debuff(IDamageable target, IDamager source, DebuffType debuffType, float duration, float value,
+            float interval = -1) {
+            this.target = target;
+            this.source = source;
+            this.debuffType = debuffType;
+            this.duration = duration;
+            this.value = value;
+            this.interval = interval;
 
-            m_StartTime = Time.time;
+            startTime = Time.time;
 
             if (interval > 0) StartCoroutines();
         }
 
         private void StartCoroutines() {
-            m_IntervalCoroutine = IntervalCoroutine();
-            (m_Target as MonoBehaviour)?.StartCoroutine(m_IntervalCoroutine);
+            intervalCoroutine = IntervalCoroutine();
+            (target as MonoBehaviour)?.StartCoroutine(intervalCoroutine);
         }
 
         private IEnumerator IntervalCoroutine() {
             while (true) {
-                yield return new WaitForSeconds(m_Interval);
+                yield return new WaitForSeconds(interval);
                 // Debug.Log("Interval coroutine");
                 // if the source is also an instance of IDamageable, apply damage
 
-                m_Target.TakeFlatDamage(m_Value);
+                // target.TakeFlatDamage(value);
+                source.DealDamage(target, value);
             }
         }
 
         public void CheckForExpiration() {
-            if (Time.time > m_StartTime + m_Duration) {
-                (m_Target as IDebuffable)?.RemoveDebuff(this);
-                if (m_IntervalCoroutine != null) {
-                    (m_Target as MonoBehaviour)?.StopCoroutine(m_IntervalCoroutine);
+            if (Time.time > startTime + duration) {
+                (target as IDebuffable)?.RemoveDebuff(this);
+                if (intervalCoroutine != null) {
+                    (target as MonoBehaviour)?.StopCoroutine(intervalCoroutine);
                 }
             }
         }
 
         public DebuffType GetDebuffType() {
-            return m_DebuffType;
+            return debuffType;
         }
 
         public float GetDuration() {
-            return m_Duration;
+            return duration;
         }
 
         public float GetValue() {
-            return m_Value;
+            return value;
         }
 
 
         public enum DebuffType {
-            Slow,
-            Burn
+            SLOW,
+            BURN
         }
     }
 }

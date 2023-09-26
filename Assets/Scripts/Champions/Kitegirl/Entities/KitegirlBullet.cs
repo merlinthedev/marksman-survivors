@@ -24,11 +24,13 @@ namespace Champions.Kitegirl.Entities {
                             enemy.Die();
                         }
                         else {
-                            enemy.TakeFlatDamage(damage);
+                            // enemy.TakeFlatDamage(damage);
+                            sourceEntity.DealDamage(enemy, damage);
                         }
                     }
                     else {
-                        enemy.TakeFlatDamage(damage);
+                        // enemy.TakeFlatDamage(damage);
+                        sourceEntity.DealDamage(enemy, damage);
                     }
 
                     TryReduceECooldown();
@@ -42,11 +44,13 @@ namespace Champions.Kitegirl.Entities {
                             enemy.Die();
                         }
                         else {
-                            enemy.TakeFlatDamage(damage);
+                            // enemy.TakeFlatDamage(damage);
+                            sourceEntity.DealDamage(enemy, damage);
                         }
                     }
                     else {
-                        enemy.TakeFlatDamage(damage);
+                        // enemy.TakeFlatDamage(damage);
+                        sourceEntity.DealDamage(enemy, damage);
                     }
 
                     TryReduceECooldown();
@@ -58,7 +62,8 @@ namespace Champions.Kitegirl.Entities {
                 // do stuff
                 // Debug.Log("Hit a grenade");
                 KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
-                kitegirlGrenade.TakeFlatDamage(1);
+                // kitegirlGrenade.TakeFlatDamage(1);
+                sourceEntity.DealDamage(kitegirlGrenade, damage);
             }
         }
 
@@ -66,8 +71,8 @@ namespace Champions.Kitegirl.Entities {
         private void Chain(Vector3 bulletHitPoint, List<Enemy.Enemy> alreadyHit, bool shouldRecurse = true) {
             Enemy.Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
             damage *= 0.8f;
-            enemy.TakeFlatDamage(damage);
-
+            // enemy.TakeFlatDamage(damage);
+            sourceEntity.DealDamage(enemy, damage);
             alreadyHit.Add(enemy);
 
             if (shouldRecurse) {

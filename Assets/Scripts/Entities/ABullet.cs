@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Entities {
     public abstract class ABullet : MonoBehaviour {
-        protected IEntity sourceEntity;
+        protected IDamager sourceEntity;
         [SerializeField] private float m_TravelSpeed = 30f;
         [SerializeField] private float m_BulletLifeTime = 2f;
         private float bulletSpawnTime = 0f;
@@ -14,7 +14,7 @@ namespace Entities {
         private Vector3 direction;
         private Vector3 target;
 
-        public void SetSourceEntity(IEntity sourceEntity) {
+        public void SetSourceEntity(IDamager sourceEntity) {
             this.sourceEntity = sourceEntity;
         }
 
@@ -50,9 +50,10 @@ namespace Entities {
         protected private virtual void OnTriggerEnter(Collider other) {
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy.Enemy enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-                enemy.TakeFlatDamage(damage);
+                IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+                // damageable.TakeFlatDamage(damage);
                 // Debug.Log("Hit an enemy");
+                sourceEntity.DealDamage(damageable, damage);
 
                 Destroy(gameObject);
             }

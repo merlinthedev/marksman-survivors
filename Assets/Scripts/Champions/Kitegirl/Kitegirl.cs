@@ -5,7 +5,6 @@ using Champions.Kitegirl.Entities;
 using Entities;
 using EventBus;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 using Random = UnityEngine.Random;
 
@@ -17,13 +16,12 @@ namespace Champions.Kitegirl {
         private bool autoAttackShouldChain = false;
         private bool isDashing = false;
         private bool hasUltimateActive = false;
-        private bool autoAttackShouldApplyDeftness = false;
+        private bool attackShouldApplyDeftness = false;
 
         private int recurseCount = 0;
         private int maxRecurseCount = 0;
 
-        [FormerlySerializedAs("m_MaxChainCount")] [SerializeField]
-        private int maxChainCount = 3;
+        [SerializeField] private int maxChainCount = 3;
 
         private int currentChainCount = 0;
 
@@ -53,7 +51,7 @@ namespace Champions.Kitegirl {
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
             rigidbody.velocity = Vector3.zero;
 
-            if (autoAttackShouldApplyDeftness) {
+            if (attackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
@@ -84,7 +82,7 @@ namespace Champions.Kitegirl {
         public void ActivateUltimate(float duration, float burstAmount, float slowAmount) {
             hasUltimateActive = true;
             maxRecurseCount = (int)burstAmount;
-            ApplyDebuff(Debuff.CreateDebuff(this, Debuff.DebuffType.Slow, duration, slowAmount));
+            ApplyDebuff(Debuff.CreateDebuff(this, this, Debuff.DebuffType.SLOW, duration, slowAmount));
         }
 
         public void DeactivateUltimate() {
@@ -183,8 +181,8 @@ namespace Champions.Kitegirl {
             isDashing = p0;
         }
 
-        public void SetAutoAttackDeftnessApply(bool value) {
-            autoAttackShouldApplyDeftness = value;
+        public void SetAttackDeftnessApply(bool value) {
+            attackShouldApplyDeftness = value;
         }
 
         public void EnableStuffAfterAttack() {

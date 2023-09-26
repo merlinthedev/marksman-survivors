@@ -12,7 +12,7 @@ using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDebuffable, IStackableLivingEntity {
+    public abstract class Champion : AAbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
         #region Properties
 
         [Header("References")]
@@ -147,10 +147,10 @@ namespace Champions {
             Debuffs.Add(debuff);
 
             switch (debuff.GetDebuffType()) {
-                case Debuff.DebuffType.Slow:
+                case Debuff.DebuffType.SLOW:
                     ApplySlow(debuff);
                     break;
-                case Debuff.DebuffType.Burn:
+                case Debuff.DebuffType.BURN:
                     ApplyBurn(debuff);
                     break;
             }
@@ -407,6 +407,10 @@ namespace Champions {
             if (nextAttackWillCrit) nextAttackWillCrit = false;
 
             return Mathf.Floor(damage);
+        }
+
+        public void DealDamage(IDamageable damageable, float damage) {
+            damageable.TakeFlatDamage(damage);
         }
 
         protected virtual void OnDeath() {

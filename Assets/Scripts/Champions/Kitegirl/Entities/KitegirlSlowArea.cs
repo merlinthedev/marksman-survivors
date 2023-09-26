@@ -1,37 +1,42 @@
 ﻿using BuffsDebuffs;
 using Enemy;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Champions.Kitegirl.Entities {
     public class KitegirlSlowArea : MonoBehaviour {
-        private Kitegirl m_Kitegirl;
+        private Kitegirl kitegirl;
 
-        [SerializeField] private float m_SlowPercentage = 0.33f; // 0-1 Normalized
-        [SerializeField] private float m_SlowDuration = 2f; // Seconds
-        [SerializeField] private float m_ADDamageRatio = 0.5f; // 0-1 Normalized
-        [SerializeField] private float m_LifeSpan = 0.5f;
+        [SerializeField] private float slowPercentage = 0.33f; // 0-1 Normalized
+        [SerializeField] private float slowDuration = 3f; // Seconds
+        [SerializeField] private float adDamageRatio = 1.2f; // 0-1 Normalized
+        [SerializeField] private float lifeSpan = 0.2f;
 
-        private float m_ThrowTime = 0f;
+        private float throwTime = 0f;
 
         public void OnThrow(Kitegirl sourceEntity) {
-            m_Kitegirl = sourceEntity;
+            kitegirl = sourceEntity;
 
-            m_ThrowTime = Time.time;
+            throwTime = Time.time;
         }
 
         private void Update() {
-            if (Time.time > m_ThrowTime + m_LifeSpan) {
+            if (Time.time > throwTime + lifeSpan) {
                 Destroy(gameObject);
             }
         }
 
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
-
-                enemy.ApplyDebuff(Debuff.CreateDebuff(m_Kitegirl, Debuff.DebuffType.Slow,
-                    m_SlowDuration, m_SlowPercentage));
-                enemy.TakeFlatDamage(m_Kitegirl.GetAttackDamage() * m_ADDamageRatio);
+                // Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+                //
+                // enemy.ApplyDebuff(Debuff.CreateDebuff(kitegirl, Debuff.DebuffType.Slow,
+                //     slowDuration, slowPercentage));
+                // enemy.TakeFlatDamage(kitegirl.GetAttackDamage() * adDamageRatio);
+                IDebuffable debuffable = other.gameObject.GetComponent<IDebuffable>();
+                debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
+                    slowDuration, slowPercentage));
+                kitegirl.DealDamage(debuffable, kitegirl.GetAttackDamage() * adDamageRatio);
             }
         }
     }

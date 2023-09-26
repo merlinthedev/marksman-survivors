@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions;
+using Entities;
 using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ using Util;
 using Logger = Util.Logger;
 
 namespace Enemy {
-    public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable {
+    public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
         private Transform target;
         [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
         private Canvas canvas;
@@ -250,6 +251,10 @@ namespace Enemy {
             }
         }
 
+        public void DealDamage(IDamageable damageable, float damage) {
+            damageable.TakeFlatDamage(damage);
+        }
+
         public void Die() {
             EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
 
@@ -259,7 +264,7 @@ namespace Enemy {
         public void ApplyDebuff(Debuff debuff) {
             Debuffs.Add(debuff);
             switch (debuff.GetDebuffType()) {
-                case Debuff.DebuffType.Slow:
+                case Debuff.DebuffType.SLOW:
                     ApplySlow(debuff);
                     break;
             }
@@ -269,7 +274,7 @@ namespace Enemy {
             Debuffs.Remove(debuff);
             // Debug.Log("Removed debuff: " + debuff.GetDebuffType());
             switch (debuff.GetDebuffType()) {
-                case Debuff.DebuffType.Slow:
+                case Debuff.DebuffType.SLOW:
                     RemoveSlow(debuff);
                     break;
             }
@@ -344,7 +349,8 @@ namespace Enemy {
                 }
 
                 if (Time.time > m_LastAttackTime + m_AttackCooldown) {
-                    champion.TakeFlatDamage(damage);
+                    // champion.TakeFlatDamage(damage);
+                    DealDamage(champion, damage);
                     m_LastAttackTime = Time.time;
                 }
             }
