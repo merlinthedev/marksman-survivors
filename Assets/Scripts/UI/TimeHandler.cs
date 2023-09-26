@@ -1,7 +1,7 @@
 ﻿using System.Collections;
+using EventBus;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI {
     public class TimeHandler : MonoBehaviour {
@@ -9,6 +9,17 @@ namespace UI {
 
         private int seconds;
         private int minutes;
+
+
+        private void OnEnable() {
+            EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
+            EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+        }
+
+        private void OnDisable() {
+            EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
+            EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+        }
 
         private void Start() {
             StartCoroutine(Clock());
@@ -27,6 +38,14 @@ namespace UI {
 
                 yield return new WaitForSeconds(1f);
             }
+        }
+
+        private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
+            StopAllCoroutines();
+        }
+
+        private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
+            StartCoroutine(Clock());
         }
     }
 }
