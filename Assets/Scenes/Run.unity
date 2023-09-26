@@ -248,7 +248,7 @@ MonoBehaviour:
     type: 3}
   shouldSpawn: 0
   maxAmountOfEnemies: 999999999
-  spawnTimer: 2.2
+  spawnTimer: 1
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,6 +2157,7 @@ GameObject:
   - component: {fileID: 749273354}
   - component: {fileID: 749273353}
   - component: {fileID: 749273352}
+  - component: {fileID: 749273355}
   m_Layer: 6
   m_Name: Ground (1)
   m_TagString: Ground
@@ -2243,6 +2244,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &749273355
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749273351}
+  m_Mesh: {fileID: 0}
 --- !u!1 &792593033
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,6 +5171,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348919437849178687, guid: 7e78c8c63a28f44478a8f184736b460e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -6,9 +6,11 @@ using Champions;
 using Entities;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Util;
 using Logger = Util.Logger;
+using Random = UnityEngine.Random;
 
 namespace Enemy {
     public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
@@ -18,7 +20,7 @@ namespace Enemy {
 
         private Rigidbody rigidbody;
         [SerializeField] private Collider m_Collider;
-        [SerializeField] private float m_MovementSpeed = 7f;
+        [SerializeField] private float movementSpeed = 2.2f;
         private float initialMovementSpeed;
 
 
@@ -27,29 +29,28 @@ namespace Enemy {
         private float damage = 1f;
         [SerializeField] private Image m_HealthBar;
         [SerializeField] private Image m_HealthBarBackground;
-        private float m_InitialHealthBarWidth;
-        private bool m_CanMove = true;
-        private bool m_CanAttack = true;
+        private float initialHealthBarWidth;
+        private bool canMove = true;
+        private bool canAttack = true;
 
-        private float m_LastAttackTime = 0f;
-        [SerializeField] private float m_AttackCooldown = 3f;
+        private float lastAttackTime = 0f;
 
-        [SerializeField] private float m_RewardXP = 1f;
+        [SerializeField] private float attackCooldown = 3f;
 
-        private SpriteRenderer m_SpriteRenderer;
-        private Animator m_Animator;
-        [SerializeField] private int m_CurrentDir = 0;
-        private int m_NewDir = 0;
+        [SerializeField] private float rewardXP = 1f;
+
+        private SpriteRenderer spriteRenderer;
+        private Animator animator;
+        [SerializeField] private int currentDir = 0;
+        private int newDir = 0;
         [SerializeField] float Xspeed;
         [SerializeField] float Zspeed;
 
-        private bool m_IsDead {
-            get => !m_CanMove;
+        private bool isDead {
+            get => !canMove;
         }
 
         public List<Debuff> Debuffs { get; } = new();
-
-        public bool IsBurning { get; }
 
         public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
 
@@ -87,13 +88,16 @@ namespace Enemy {
                 throw new Exception("Missing collider");
             }
 
-            m_InitialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
+            initialHealthBarWidth = m_HealthBar.rectTransform.sizeDelta.x;
             UpdateHealthBar();
 
-            m_SpriteRenderer = GetComponent<SpriteRenderer>();
-            m_Animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            animator = GetComponent<Animator>();
 
-            initialMovementSpeed = m_MovementSpeed;
+            // randomize the movement a little bit to make the crowd of enemies more interesting
+            movementSpeed = Random.Range(movementSpeed - 1f, movementSpeed + 1f);
+
+            initialMovementSpeed = movementSpeed;
         }
 
 
@@ -102,38 +106,38 @@ namespace Enemy {
         }
 
         private void Update() {
-            if (target != null && m_CanMove) {
+            if (target != null && canMove) {
                 Move();
             }
 
             //Check dir
             if (rigidbody.velocity.x > 0) {
-                m_CurrentDir = (rigidbody.velocity.z > 0) ? 0 : 1;
+                currentDir = (rigidbody.velocity.z > 0) ? 0 : 1;
             }
             else if (rigidbody.velocity.x < 0) {
-                m_CurrentDir = (rigidbody.velocity.z < 0) ? 2 : 3;
+                currentDir = (rigidbody.velocity.z < 0) ? 2 : 3;
             }
 
 
             //If dir changed, flip sprite
-            if (m_CurrentDir != m_NewDir) {
-                m_NewDir = m_CurrentDir;
-                m_Animator.SetTrigger("DirChange");
-                if (m_CurrentDir == 0) {
-                    m_SpriteRenderer.flipX = true;
-                    m_Animator.SetInteger("Dir", 1);
+            if (currentDir != newDir) {
+                newDir = currentDir;
+                animator.SetTrigger("DirChange");
+                if (currentDir == 0) {
+                    spriteRenderer.flipX = true;
+                    animator.SetInteger("Dir", 1);
                 }
-                else if (m_CurrentDir == 1) {
-                    m_SpriteRenderer.flipX = true;
-                    m_Animator.SetInteger("Dir", 0);
+                else if (currentDir == 1) {
+                    spriteRenderer.flipX = true;
+                    animator.SetInteger("Dir", 0);
                 }
-                else if (m_CurrentDir == 2) {
-                    m_SpriteRenderer.flipX = false;
-                    m_Animator.SetInteger("Dir", 0);
+                else if (currentDir == 2) {
+                    spriteRenderer.flipX = false;
+                    animator.SetInteger("Dir", 0);
                 }
-                else if (m_CurrentDir == 3) {
-                    m_SpriteRenderer.flipX = false;
-                    m_Animator.SetInteger("Dir", 1);
+                else if (currentDir == 3) {
+                    spriteRenderer.flipX = false;
+                    animator.SetInteger("Dir", 1);
                 }
             }
 
@@ -152,7 +156,7 @@ namespace Enemy {
                 return;
             }
 
-            rigidbody.velocity = direction.normalized * m_MovementSpeed;
+            rigidbody.velocity = direction.normalized * movementSpeed;
         }
 
 
@@ -163,7 +167,7 @@ namespace Enemy {
 
 
         private void TakeDamage(float damage) {
-            if (m_IsDead) return;
+            if (isDead) return;
             // Debug.Log("Taking damage");
             float damageTaken = CalculateDamage(damage);
             currentHealth -= damageTaken;
@@ -176,7 +180,7 @@ namespace Enemy {
             UpdateHealthBar();
 
             if (currentHealth <= 0) {
-                m_CanMove = false;
+                canMove = false;
                 rigidbody.velocity = Vector3.zero;
 
                 m_Collider.isTrigger = true;
@@ -291,21 +295,21 @@ namespace Enemy {
         private void ApplySlow(Debuff debuff) {
             // m_MovementSpeed *= value;
             // The value is 0.33, how can i decrease the speed by 33%?
-            m_MovementSpeed *= 1 - debuff.GetValue();
+            movementSpeed *= 1 - debuff.GetValue();
 
             if (debuff.GetDuration() < 0) {
                 return;
             }
 
             Logger.Log("Slow applied", Logger.Color.GREEN, this);
-            Logger.Log("MovementSpeed: " + m_MovementSpeed + ", Initial MovementSpeed: " + initialMovementSpeed,
+            Logger.Log("MovementSpeed: " + movementSpeed + ", Initial MovementSpeed: " + initialMovementSpeed,
                 Logger.Color.BLUE, this);
 
-            Utilities.InvokeDelayed(() => { m_MovementSpeed = initialMovementSpeed; }, debuff.GetDuration(), this);
+            Utilities.InvokeDelayed(() => { movementSpeed = initialMovementSpeed; }, debuff.GetDuration(), this);
         }
 
         private void RemoveSlow(Debuff debuff) {
-            m_MovementSpeed = initialMovementSpeed; // TODO: handle possible existing coroutines for the same debuff
+            movementSpeed = initialMovementSpeed; // TODO: handle possible existing coroutines for the same debuff
         }
 
         private void ShowDamageUI(float damage) {
@@ -320,7 +324,7 @@ namespace Enemy {
             float healthPercentage = currentHealth / maxHealth;
 
             m_HealthBar.rectTransform.sizeDelta = new Vector2(
-                healthPercentage * m_InitialHealthBarWidth,
+                healthPercentage * initialHealthBarWidth,
                 m_HealthBar.rectTransform.sizeDelta.y
             );
         }
@@ -340,7 +344,7 @@ namespace Enemy {
 
         private void OnCollisionStay(Collision other) {
             if (other.gameObject.CompareTag("Player")) {
-                if (m_IsDead || !m_CanAttack) return;
+                if (isDead || !canAttack) return;
 
                 Champion champion = other.gameObject.GetComponent<Champion>();
                 if (champion == null) {
@@ -348,16 +352,16 @@ namespace Enemy {
                     return;
                 }
 
-                if (Time.time > m_LastAttackTime + m_AttackCooldown) {
+                if (Time.time > lastAttackTime + attackCooldown) {
                     // champion.TakeFlatDamage(damage);
                     DealDamage(champion, damage);
-                    m_LastAttackTime = Time.time;
+                    lastAttackTime = Time.time;
                 }
             }
         }
 
         public float GetXP() {
-            return this.m_RewardXP;
+            return this.rewardXP;
         }
 
         public float GetMaxHealth() {
@@ -377,11 +381,11 @@ namespace Enemy {
         }
 
         public void SetCanMove(bool canMove) {
-            m_CanMove = canMove;
+            this.canMove = canMove;
         }
 
         public void SetCanAttack(bool value) {
-            m_CanAttack = value;
+            canAttack = value;
         }
     }
 }

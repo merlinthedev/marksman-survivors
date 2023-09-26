@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EventBus;
+using UnityEditor.Rendering;
 using UnityEngine;
 using Util;
 using Logger = Util.Logger;
@@ -51,6 +52,13 @@ namespace Enemy {
         }
 
         private void Update() {
+            // when i hold left shift, i want to log the mouse position on the camera viewport
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                Vector3 mousePos = Input.mousePosition;
+                Vector3 mousePosOnScreen = Camera.main.ScreenToViewportPoint(mousePos);
+                Logger.Log("Mouse position on screen: " + mousePosOnScreen, Logger.Color.BLUE, this);
+            }
+
             HandleEnemySpawn();
         }
 
@@ -75,6 +83,7 @@ namespace Enemy {
                 Vector3 randomSpread = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
                 Enemy enemy = Instantiate(enemyPrefab, location + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
+                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
@@ -141,7 +150,7 @@ namespace Enemy {
         }
 
         private Vector3 FindPositionIteratively() {
-            Vector3 randomPointOnPlane;
+            /*
             bool isInTriangle = true;
 
             do {
@@ -175,7 +184,61 @@ namespace Enemy {
                 // if it is not we can break out of our loop and return the point, it is now a valid spawn position
             } while (isInTriangle);
 
+             */
+
+            // where in the camera viewport is the player
+            Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(player.transform.position);
+
+            // Logger.Log("Player viewport position: " + playerViewportPosition, Logger.Color.BLUE, this);
+
+            // get a random point on the screen
+            Vector3 randomPointOutsideScreen = A();
+            Debug.Log("Random point on screen: " + randomPointOutsideScreen);
+
+            // get the world position of the random point on the screen
+            Vector3 randomPointOnPlane = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen);
+            randomPointOnPlane.y = 1f;
+
             return randomPointOnPlane;
+        }
+
+        private Vector3 A() {
+            // random int ranging from 0 to 3
+            int direction = Random.Range(0, 4);
+            Debug.Log("Direction: " + direction, this);
+
+            // switch (direction) {
+            //     case 0:
+            //         // Left
+            //         return new Vector3(Random.Range(-0.1f, 0), Random.Range(-0.1f, 1.1f), 100);
+            //     case 1:
+            //         // Up
+            //         return new Vector3(Random.Range(-0.1f, 1.1f), Random.Range(-0.1f, 0), 100);
+            //     case 2:
+            //         // Right
+            //         return new Vector3(Random.Range(1, 1.1f), Random.Range(-0.1f, 1.1f), 100);
+            //     case 3:
+            //         // Down
+            //         return new Vector3(Random.Range(-0.1f, 1.1f), Random.Range(1, 1.1f), 100);
+            // }
+
+            switch (direction) {
+                case 0:
+                    // a little bit to the left of the left side of the camera viewport
+                    return new Vector3(-0.1f, Random.Range(-0.1f, 1.1f), 100);
+                case 1:
+                    // a little bit above the top of the camera viewport
+                    return new Vector3(Random.Range(-0.1f, 1.1f), 1.1f, 100);
+                case 2:
+                    // a little bit to the right of the right side of the camera viewport
+                    return new Vector3(1.1f, Random.Range(-0.1f, 1.1f), 100);
+                case 3:
+                    // a little bit below the bottom of the camera viewport
+                    return new Vector3(Random.Range(-0.1f, 1.1f), -0.1f, 100);
+            }
+
+            Debug.LogError("This should never occur while trying to determine where to spawn our enemy.", this);
+            return Vector3.negativeInfinity;
         }
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
