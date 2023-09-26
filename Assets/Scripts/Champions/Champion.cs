@@ -125,6 +125,10 @@ namespace Champions {
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
+            if(Input.GetKeyDown(KeyCode.L)) {
+                championStatistics.CurrentXP += 100;
+                championLevelManager.CheckForLevelUp();
+            }
         }
 
         #endregion

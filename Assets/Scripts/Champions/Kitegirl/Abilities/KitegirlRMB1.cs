@@ -33,10 +33,14 @@ namespace Champions.Kitegirl.Abilities {
 
             Log("Angle: " + mouseToChampionAngle, Util.Logger.Color.YELLOW, this);
 
+            //KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
+            //    champion.transform.position + mouseToChampionDirection.normalized *
+            //    m_KitegirlSlowAreaPrefab.transform.localScale.x / 2,
+            //    Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
+
             KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
-                champion.transform.position + mouseToChampionDirection.normalized *
-                m_KitegirlSlowAreaPrefab.transform.localScale.x / 2,
-                Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
+            champion.transform.position + mouseToChampionDirection.normalized * m_KitegirlSlowAreaPrefab.transform.localScale.x,
+            Quaternion.Euler(90, mouseToChampionAngle, 0));
 
             kitegirlSlowArea.OnThrow(champion as Kitegirl);
             base.OnUse();

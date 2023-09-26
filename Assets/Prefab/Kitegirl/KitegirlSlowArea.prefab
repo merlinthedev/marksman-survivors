@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc5bef611b54e79a6a83ea2a0f65c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SlowPercentage: 0.33
-  m_SlowDuration: 3
-  m_ADDamageRatio: 1.2
-  m_LifeSpan: 0.2
+  slowPercentage: 0.33
+  slowDuration: 3
+  adDamageRatio: 1.2
+  lifeSpan: 0.2

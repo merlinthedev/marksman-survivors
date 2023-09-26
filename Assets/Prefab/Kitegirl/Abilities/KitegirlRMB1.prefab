@@ -51,5 +51,5 @@ MonoBehaviour:
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: e07326544e7158f41b5a278fd036f7d9, type: 3}
-  m_KitegirlSlowAreaPrefab: {fileID: 3173280358153001526, guid: 2accd668d70f22f49b2bb7315446744e,
+  m_KitegirlSlowAreaPrefab: {fileID: 7945802645305745901, guid: 0934f29483df7ce46a5ab8b426ed0eb7,
     type: 3}
