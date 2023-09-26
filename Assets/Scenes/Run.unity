@@ -246,9 +246,9 @@ MonoBehaviour:
   player: {fileID: 2114737657}
   enemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
     type: 3}
-  shouldSpawn: 0
+  shouldSpawn: 1
   maxAmountOfEnemies: 999999999
-  spawnTimer: 0.1
+  spawnTimer: 2.2
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0
