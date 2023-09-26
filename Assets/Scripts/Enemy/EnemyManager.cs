@@ -79,11 +79,11 @@ namespace Enemy {
             // get a random int between 2 and 5
             int randomInt = Random.Range(2, 6);
 
-            for (int i = 0; i < randomInt; i++) {
+            for (int i = 0; i < 1; i++) {
                 Vector3 randomSpread = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
                 Enemy enemy = Instantiate(enemyPrefab, location + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
-                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
+                enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
@@ -225,16 +225,16 @@ namespace Enemy {
             switch (direction) {
                 case 0:
                     // a little bit to the left of the left side of the camera viewport
-                    return new Vector3(-0.1f, Random.Range(-0.1f, 1.1f), 100);
+                    return new Vector3(-0.1f, Random.Range(-0.1f, 2.1f), 100);
                 case 1:
                     // a little bit above the top of the camera viewport
-                    return new Vector3(Random.Range(-0.1f, 1.1f), 1.1f, 100);
+                    return new Vector3(Random.Range(-0.1f, 1.1f), 2f, 100);
                 case 2:
                     // a little bit to the right of the right side of the camera viewport
-                    return new Vector3(1.1f, Random.Range(-0.1f, 1.1f), 100);
+                    return new Vector3(1.1f, Random.Range(-0.1f, 2.1f), 100);
                 case 3:
                     // a little bit below the bottom of the camera viewport
-                    return new Vector3(Random.Range(-0.1f, 1.1f), -0.1f, 100);
+                    return new Vector3(Random.Range(-0.1f, 1.1f), -1f, 100);
             }
 
             Debug.LogError("This should never occur while trying to determine where to spawn our enemy.", this);

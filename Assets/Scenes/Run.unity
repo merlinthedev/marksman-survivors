@@ -248,7 +248,7 @@ MonoBehaviour:
     type: 3}
   shouldSpawn: 0
   maxAmountOfEnemies: 999999999
-  spawnTimer: 1
+  spawnTimer: 0.1
 --- !u!1 &45997497
 GameObject:
   m_ObjectHideFlags: 0

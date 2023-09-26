@@ -352,7 +352,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.89384365
   m_Height: 2.5048463
@@ -372,12 +372,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EnemyDamageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
     type: 3}
-  m_MovementSpeed: 2.2
+  m_Collider: {fileID: 0}
+  movementSpeed: 2.2
+  maxHealth: 12
+  currentHealth: 12
   m_HealthBar: {fileID: 8277267421854434963}
   m_HealthBarBackground: {fileID: 5725382674590694086}
-  m_AttackCooldown: 3
-  m_RewardXP: 1
-  m_CurrentDir: 0
+  attackCooldown: 3
+  rewardXP: 1
+  currentDir: 0
   Xspeed: 0
   Zspeed: 0
 --- !u!212 &2727071012428929937
