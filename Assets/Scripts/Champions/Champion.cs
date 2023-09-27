@@ -25,10 +25,8 @@ namespace Champions {
         private float lastHealthRegenerationTime = 0f;
         private ChampionLevelManager championLevelManager;
 
-        [FormerlySerializedAs("m_MouseHitPoint")]
         [Header("Movement")]
-        [SerializeField]
-        protected Vector3 mouseHitPoint;
+        [SerializeField] protected Vector3 mouseHitPoint;
 
         private Vector3 lastKnownDirection = Vector3.zero;
 
@@ -59,7 +57,6 @@ namespace Champions {
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
-        public bool IsBurning { get; }
         public bool IsFragile { get; }
 
         #endregion
@@ -125,7 +122,8 @@ namespace Champions {
             if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
-            if(Input.GetKeyDown(KeyCode.L)) {
+
+            if (Input.GetKeyDown(KeyCode.L)) {
                 championStatistics.CurrentXP += 100;
                 championLevelManager.CheckForLevelUp();
             }
@@ -339,6 +337,7 @@ namespace Champions {
 
             previousAngle = globalMovementDirectionAngle;
             globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
 
             // if (direction.magnitude < 0.1f) {
             //     // Debug.Log("Stop moving");
@@ -417,7 +416,7 @@ namespace Champions {
             damageable.TakeFlatDamage(damage);
         }
 
-        protected virtual void OnDeath() {
+        private void OnDeath() {
             // Death logic
 
             EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("D Hub"));
@@ -525,6 +524,14 @@ namespace Champions {
 
         public void SetNextAttackWillCrit(bool b) {
             nextAttackWillCrit = b;
+        }
+
+        public enum MovementDirection {
+            ZERO,
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST
         }
 
         #endregion

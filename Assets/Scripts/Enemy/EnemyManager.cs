@@ -85,7 +85,7 @@ namespace Enemy {
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
                 Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
-                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
+                enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
@@ -154,42 +154,6 @@ namespace Enemy {
         }
 
         private Vector3[] FindPositionsIteratively(int amountOfIterations = 1) {
-            /*
-            bool isInTriangle = true;
-
-            do {
-                // find a random point on our playing field
-                randomPointOnPlane = new Vector3(Random.Range(-50f, 50f), 1, Random.Range(-50f, 50f));
-
-                // get the player position and the current direction the player is moving in
-                Vector3 playerPos = player.gameObject.transform.position;
-                Vector3 playerDirection = player.GetCurrentlySelectedChampion().GetCurrentMovementDirection();
-
-                // get two directions 45 degrees to the left and right of the player direction
-                Vector3 rightDirection = Quaternion.Euler(0, 45, 0) * playerDirection;
-                Vector3 leftDirection = Quaternion.Euler(0, -45, 0) * playerDirection;
-
-                // get two points in the previous directions and 30 units away from the player
-                Vector3 rightPoint = playerPos + rightDirection * 30f;
-                Vector3 leftPoint = playerPos + leftDirection * 30f;
-
-                // draw the triangle for debug purposes
-                Debug.DrawLine(playerPos, rightPoint, Color.yellow, 0.5f);
-                Debug.DrawLine(playerPos, leftPoint, Color.yellow, 0.5f);
-                Debug.DrawLine(leftPoint, rightPoint, Color.yellow, 0.5f);
-
-                // check if the random point is inside the no-spawn triangle
-                isInTriangle = Utilities.IsInsideTriangle(
-                    new Vector2(playerPos.x, playerPos.z),
-                    new Vector2(rightPoint.x, rightPoint.z),
-                    new Vector2(leftPoint.x, leftPoint.z),
-                    new Vector2(randomPointOnPlane.x, randomPointOnPlane.z));
-
-                // if it is not we can break out of our loop and return the point, it is now a valid spawn position
-            } while (isInTriangle);
-
-             */
-
             // where in the camera viewport is the player
             Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(player.transform.position);
 
@@ -223,16 +187,16 @@ namespace Enemy {
 
                 switch (direction) {
                     case 0:
-                        x = -0.3f;
+                        x = -0.3f; // L
                         break;
                     case 1:
-                        y = 2.3f;
+                        y = 2.3f; // U 
                         break;
                     case 2:
-                        x = 1.3f;
+                        x = 1.3f; // R
                         break;
                     case 3:
-                        y = -1.3f;
+                        y = -1.3f; // D
                         break;
                 }
 
