@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EventBus;
-using UnityEditor.Rendering;
 using UnityEngine;
 using Util;
 using Logger = Util.Logger;
@@ -22,6 +21,7 @@ namespace Enemy {
         private float spawnTimer = 1.4f;
 
         private float lastSpawnTime = 0f;
+        private float internalSpawnTimer;
 
 
         private int amountOfEnemies = 0;
@@ -47,6 +47,7 @@ namespace Enemy {
             }
 
             instance = this;
+            internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
 
             // StartCoroutine(SpawnEnemy());
         }
@@ -74,20 +75,23 @@ namespace Enemy {
             }
 
             // find a random position on the playing field for our group of enemies
-            Vector3 location = FindPositionIteratively();
 
             // get a random int between 2 and 5
-            int randomInt = Random.Range(2, 6);
+            int randomInt = Random.Range(3, 7);
 
-            for (int i = 0; i < randomInt; i++) {
-                Vector3 randomSpread = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
-                Enemy enemy = Instantiate(enemyPrefab, location + randomSpread, Quaternion.Euler(0, 45, 0));
+            Vector3[] location = FindPositionsIteratively(randomInt);
+
+            for (var i = 0; i < location.Length; i++) {
+                Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
+                Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
                 // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
+
             lastSpawnTime = Time.time;
+            internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
         }
 
         [Obsolete("Deprecated, spawning is now handled by HandleEnemySpawn()")]
@@ -100,7 +104,7 @@ namespace Enemy {
 
                 yield return new WaitForSeconds(spawnTimer);
                 // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
-                Enemy enemy = Instantiate(enemyPrefab, FindPositionIteratively(), Quaternion.Euler(0, 45, 0));
+                Enemy enemy = Instantiate(enemyPrefab, FindPositionsIteratively()[0], Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
                 //enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
@@ -149,7 +153,7 @@ namespace Enemy {
             return randomPointOnPlane;
         }
 
-        private Vector3 FindPositionIteratively() {
+        private Vector3[] FindPositionsIteratively(int amountOfIterations = 1) {
             /*
             bool isInTriangle = true;
 
@@ -192,20 +196,26 @@ namespace Enemy {
             // Logger.Log("Player viewport position: " + playerViewportPosition, Logger.Color.BLUE, this);
 
             // get a random point on the screen
-            Vector3 randomPointOutsideScreen = A();
+            Vector3[] randomPointOutsideScreen = GenerateSpawnPoints(amountOfIterations);
             Debug.Log("Random point on screen: " + randomPointOutsideScreen);
 
             // get the world position of the random point on the screen
-            Vector3 randomPointOnPlane = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen);
-            randomPointOnPlane.y = 1f;
+            // Vector3 randomPointOnPlane = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen);
 
-            return randomPointOnPlane;
+            for (int i = 0; i < randomPointOutsideScreen.Length; i++) {
+                randomPointOutsideScreen[i] = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen[i]);
+                randomPointOutsideScreen[i].y = 1f;
+            }
+
+
+            return randomPointOutsideScreen;
         }
 
-        private Vector3 A() {
+        private Vector3[] GenerateSpawnPoints(int amountOfIterations = 1) {
             // random int ranging from 0 to 3
             int direction = Random.Range(0, 4);
             Debug.Log("Direction: " + direction, this);
+
 
             // switch (direction) {
             //     case 0:
@@ -222,23 +232,50 @@ namespace Enemy {
             //         return new Vector3(Random.Range(-0.1f, 1.1f), Random.Range(1, 1.1f), 100);
             // }
 
+            Vector3[] spawnPoints = new Vector3[amountOfIterations];
+
             switch (direction) {
                 case 0:
                     // a little bit to the left of the left side of the camera viewport
-                    return new Vector3(-0.3f, Random.Range(-0.3f, 2.3f), 100);
+                    for (int i = 0; i < amountOfIterations; i++) {
+                        spawnPoints[i] = new Vector3(-0.3f, Random.Range(-0.3f, 2.3f), 100);
+                    }
+
+                    return spawnPoints;
+
+                // return new Vector3(-0.3f, Random.Range(-0.3f, 2.3f), 100);
                 case 1:
                     // a little bit above the top of the camera viewport
-                    return new Vector3(Random.Range(-0.3f, 1.3f), 2.3f, 100);
+
+                    // a little bit to the left of the left side of the camera viewport
+                    for (int i = 0; i < amountOfIterations; i++) {
+                        spawnPoints[i] = new Vector3(Random.Range(-0.3f, 1.3f), 2.3f, 100);
+                    }
+
+                    return spawnPoints;
                 case 2:
                     // a little bit to the right of the right side of the camera viewport
-                    return new Vector3(1.3f, Random.Range(-0.3f, 2.3f), 100);
+                    // return new Vector3(1.3f, Random.Range(-0.3f, 2.3f), 100);
+
+                    for (int i = 0; i < amountOfIterations; i++) {
+                        spawnPoints[i] = new Vector3(1.3f, Random.Range(-0.3f, 2.3f), 100);
+                    }
+
+                    return spawnPoints;
+
                 case 3:
+
                     // a little bit below the bottom of the camera viewport
-                    return new Vector3(Random.Range(-0.3f, 1.3f), -1.3f, 100);
+                    for (int i = 0; i < amountOfIterations; i++) {
+                        spawnPoints[i] = new Vector3(Random.Range(-0.3f, 1.3f), -1.3f, 100);
+                    }
+
+                    return spawnPoints;
             }
 
             Debug.LogError("This should never occur while trying to determine where to spawn our enemy.", this);
-            return Vector3.negativeInfinity;
+
+            return new[] { Vector3.zero, };
         }
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {

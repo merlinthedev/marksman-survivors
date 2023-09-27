@@ -7,28 +7,37 @@ using Logger = Util.Logger;
 using static Util.Logger;
 
 namespace Champions.Abilities {
-    public abstract class AAbility : MonoBehaviour, IUpgradeable {
+    public abstract class AAbility : MonoBehaviour, IUpgradeable, ICooldown {
         [SerializeField] protected KeyCode keyCode;
-        [SerializeField] protected float abilityCooldown = 0f;
+        [SerializeField] private float abilityCooldown = 0f; // Static cooldown in seconds, should not be edited
         [SerializeField] protected float abilityRange = 10f;
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
-        private float lastUseTime;
         private float currentCooldown = 0f;
         protected Champion champion;
 
         protected bool isCancelled = false;
 
+        public bool ShouldTick { get; set; } = false;
 
         public void Hook(Champion champion) {
             this.champion = champion;
+        }
 
-            lastUseTime = float.NegativeInfinity;
+        public void Tick(float deltaTime) {
+            currentCooldown -= (float)deltaTime;
+        }
+        
+        public void Subscribe(ICooldown cooldown) {
+            
+        }
+        
+        public void Unsubscribe(ICooldown cooldown) {
         }
 
         public virtual void OnUse() {
             Log("An ability was used!", Logger.Color.RED, this);
-            lastUseTime = Time.time;
+            currentCooldown = abilityCooldown;
 
             //Raise cooldown event
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(this));
@@ -38,25 +47,20 @@ namespace Champions.Abilities {
             upgrade.OnApply();
         }
 
-        protected void SetBaseCooldown() {
-            abilityCooldown = currentCooldown;
-        }
-
         protected bool DistanceCheck(Vector3 point) {
             return (champion.transform.position - point).magnitude <= abilityRange;
         }
 
         protected virtual void ResetCooldown() {
-            abilityCooldown = 0f;
+            currentCooldown = 0f;
         }
 
         protected internal virtual void DeductFromCooldown(float timeToDeduct) {
-            lastUseTime -= timeToDeduct;
+            currentCooldown -= timeToDeduct;
         }
 
         public bool IsOnCooldown() {
-            bool isOnCooldown = Time.time < lastUseTime + abilityCooldown;
-            return isOnCooldown;
+            return currentCooldown > 0;
         }
 
         public float GetAbilityCooldown() {
@@ -64,7 +68,7 @@ namespace Champions.Abilities {
         }
 
         public float GetCurrentCooldown() {
-            return Time.time - lastUseTime;
+            return currentCooldown;
         }
 
         public KeyCode GetKeyCode() {
@@ -83,7 +87,9 @@ namespace Champions.Abilities {
             return upgrades.FirstOrDefault(upgrade => !upgrade.IsUnlocked());
         }
 
-
+        /// <summary>
+        /// May need this in the future who knows
+        /// </summary>
         public enum AbilityType {
             PASSIVE, // Passive abilities are always on
             DAMAGE, // Damage abilities are used to deal damage

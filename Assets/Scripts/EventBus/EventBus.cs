@@ -186,4 +186,24 @@ namespace EventBus {
             this.sceneName = sceneName;
         }
     }
+
+    public class SubscribeICooldownEvent : Event {
+        public ICooldown Cooldown { get; private set; }
+
+        public SubscribeICooldownEvent(ICooldown cooldown) {
+            Cooldown = cooldown;
+        }
+    }
+
+    public class UnsubscribeICooldownEvent : Event {
+        public ICooldown Cooldown { get; private set; }
+
+        public UnsubscribeICooldownEvent(ICooldown cooldown) {
+            Cooldown = cooldown;
+        }
+    }
+
+    public class GamePausedEvent : Event { }
+
+    public class GameResumedEvent : Event { }
 }
