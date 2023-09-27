@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -212,70 +212,34 @@ namespace Enemy {
         }
 
         private Vector3[] GenerateSpawnPoints(int amountOfIterations = 1) {
-            // random int ranging from 0 to 3
             int direction = Random.Range(0, 4);
             Debug.Log("Direction: " + direction, this);
 
-
-            // switch (direction) {
-            //     case 0:
-            //         // Left
-            //         return new Vector3(Random.Range(-0.1f, 0), Random.Range(-0.1f, 1.1f), 100);
-            //     case 1:
-            //         // Up
-            //         return new Vector3(Random.Range(-0.1f, 1.1f), Random.Range(-0.1f, 0), 100);
-            //     case 2:
-            //         // Right
-            //         return new Vector3(Random.Range(1, 1.1f), Random.Range(-0.1f, 1.1f), 100);
-            //     case 3:
-            //         // Down
-            //         return new Vector3(Random.Range(-0.1f, 1.1f), Random.Range(1, 1.1f), 100);
-            // }
-
             Vector3[] spawnPoints = new Vector3[amountOfIterations];
 
-            switch (direction) {
-                case 0:
-                    // a little bit to the left of the left side of the camera viewport
-                    for (int i = 0; i < amountOfIterations; i++) {
-                        spawnPoints[i] = new Vector3(-0.3f, Random.Range(-0.3f, 2.3f), 100);
-                    }
+            for (int i = 0; i < amountOfIterations; i++) {
+                float x = Random.Range(-0.3f, 1.3f);
+                float y = Random.Range(-0.3f, 2.3f);
 
-                    return spawnPoints;
+                switch (direction) {
+                    case 0:
+                        x = -0.3f;
+                        break;
+                    case 1:
+                        y = 2.3f;
+                        break;
+                    case 2:
+                        x = 1.3f;
+                        break;
+                    case 3:
+                        y = -1.3f;
+                        break;
+                }
 
-                // return new Vector3(-0.3f, Random.Range(-0.3f, 2.3f), 100);
-                case 1:
-                    // a little bit above the top of the camera viewport
-
-                    // a little bit to the left of the left side of the camera viewport
-                    for (int i = 0; i < amountOfIterations; i++) {
-                        spawnPoints[i] = new Vector3(Random.Range(-0.3f, 1.3f), 2.3f, 100);
-                    }
-
-                    return spawnPoints;
-                case 2:
-                    // a little bit to the right of the right side of the camera viewport
-                    // return new Vector3(1.3f, Random.Range(-0.3f, 2.3f), 100);
-
-                    for (int i = 0; i < amountOfIterations; i++) {
-                        spawnPoints[i] = new Vector3(1.3f, Random.Range(-0.3f, 2.3f), 100);
-                    }
-
-                    return spawnPoints;
-
-                case 3:
-
-                    // a little bit below the bottom of the camera viewport
-                    for (int i = 0; i < amountOfIterations; i++) {
-                        spawnPoints[i] = new Vector3(Random.Range(-0.3f, 1.3f), -1.3f, 100);
-                    }
-
-                    return spawnPoints;
+                spawnPoints[i] = new Vector3(x, y, 100);
             }
 
-            Debug.LogError("This should never occur while trying to determine where to spawn our enemy.", this);
-
-            return new[] { Vector3.zero, };
+            return spawnPoints;
         }
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
