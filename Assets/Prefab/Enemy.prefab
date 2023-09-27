@@ -380,6 +380,7 @@ MonoBehaviour:
   m_HealthBarBackground: {fileID: 5725382674590694086}
   attackCooldown: 3
   rewardXP: 1
+  material: {fileID: 2100000, guid: 041cb9cab7f135d4d98f728c2fc033ea, type: 2}
   currentDir: 0
   Xspeed: 0
   Zspeed: 0
@@ -403,7 +404,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 041cb9cab7f135d4d98f728c2fc033ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

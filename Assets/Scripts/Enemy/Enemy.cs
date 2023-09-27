@@ -41,6 +41,7 @@ namespace Enemy {
 
         private SpriteRenderer spriteRenderer;
         private Animator animator;
+        [SerializeField] public Material material;
         [SerializeField] private int currentDir = 0;
         private int newDir = 0;
         [SerializeField] float Xspeed;

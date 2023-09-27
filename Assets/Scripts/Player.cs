@@ -25,6 +25,8 @@ public class Player : MonoBehaviour {
     private bool firstMove = true;
     private bool hasClickedThisFrame = false;
 
+    private GameObject currentFocus;
+
     private Inventory.Inventory inventory;
 
     private void OnEnable() {
@@ -97,6 +99,14 @@ public class Player : MonoBehaviour {
                     hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                     IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
                     selectedChampion.OnAutoAttack(damageable);
+
+                    if(currentFocus != null) {
+                        currentFocus.GetComponent<Renderer>().material.SetInt("_Focus", 0);
+                    }
+
+                    damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                    currentFocus = damageable.GetTransform().gameObject;
+
                 }
 
                 //If we clicked on an interactable object, call the OnInteract method
