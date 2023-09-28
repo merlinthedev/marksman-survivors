@@ -177,86 +177,35 @@ namespace Enemy {
         }
 
         private Vector3[] GenerateSpawnPoints(int amountOfIterations = 1) {
-            // int direction = Random.Range(0, 4);
-            // Debug.Log("Direction: " + direction, this);
-            //
-            // Vector3[] spawnPoints = new Vector3[amountOfIterations];
-            //
-            // for (int i = 0; i < amountOfIterations; i++) {
-            //     float x = Random.Range(-0.3f, 1.3f);
-            //     float y = Random.Range(-0.3f, 2.3f);
-            //
-            //     switch (direction) {
-            //         case 0:
-            //             x = -0.3f; // L
-            //             break;
-            //         case 1:
-            //             y = 2.3f; // U 
-            //             break;
-            //         case 2:
-            //             x = 1.3f; // R
-            //             break;
-            //         case 3:
-            //             y = -1.3f; // D
-            //             break;
-            //     }
-            //
-            //     spawnPoints[i] = new Vector3(x, y, 100);
-            // }
-            //
-            // return spawnPoints;
-
             Vector3[] spawnPoints = new Vector3[amountOfIterations];
-
             Vector4 movementData = player.GetCurrentlySelectedChampion().GetMovementData();
 
-            float n = movementData.x;
-            float e = movementData.y;
-            float s = movementData.z;
-            float w = movementData.w;
+            for (int i = 0; i < amountOfIterations; i++) {
+                float x, y;
 
-            float amountOfEnmiesNorth = amountOfIterations * n;
-            int north = Mathf.FloorToInt(amountOfEnmiesNorth);
-
-            float amountOfEnmiesEast = amountOfIterations * e;
-            int east = Mathf.FloorToInt(amountOfEnmiesEast);
-
-            float amountOfEnmiesSouth = amountOfIterations * s;
-            int south = Mathf.FloorToInt(amountOfEnmiesSouth);
-
-            float amountOfEnmiesWest = amountOfIterations * w;
-            int west = Mathf.FloorToInt(amountOfEnmiesWest);
-
-            for (int i = 0; i < north; i++) {
-                float x = Random.Range(-0.3f, 1.3f);
-                float y = 2.3f;
-
-                spawnPoints[i] = new Vector3(x, y, 100);
-            }
-
-            for (int i = 0; i < east; i++) {
-                float x = 1.3f;
-                float y = Random.RandomRange(-0.3f, 2.3f);
-
-                spawnPoints[i] = new Vector3(x, y, 100);
-            }
-
-            for (int i = 0; i < south; i++) {
-                float x = Random.Range(-0.3f, 1.3f);
-                float y = -1.3f;
-
-                spawnPoints[i] = new Vector3(x, y, 100);
-            }
-
-            for (int i = 0; i < west; i++) {
-                float x = -0.3f;
-                float y = Random.Range(-0.3f, 2.3f);
+                if (i < movementData.x * amountOfIterations) {
+                    x = Random.Range(-0.3f, 1.3f);
+                    y = 2.3f;
+                }
+                else if (i < (movementData.x + movementData.y) * amountOfIterations) {
+                    x = 1.3f;
+                    y = Random.Range(-0.3f, 2.3f);
+                }
+                else if (i < (movementData.x + movementData.y + movementData.z) * amountOfIterations) {
+                    x = Random.Range(-0.3f, 1.3f);
+                    y = -1.3f;
+                }
+                else {
+                    x = -0.3f;
+                    y = Random.Range(-0.3f, 2.3f);
+                }
 
                 spawnPoints[i] = new Vector3(x, y, 100);
             }
 
             return spawnPoints;
         }
+
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
             enemyDictionary.Remove(enemyKilledEvent.Collider);
