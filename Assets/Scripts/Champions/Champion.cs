@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
@@ -59,6 +60,29 @@ namespace Champions {
         public List<Stack> Stacks { get; } = new();
         public bool IsFragile { get; }
 
+        private MovementDirection CurrentMovementDirection {
+            get {
+                switch (GetGlobalDirectionAngle()) {
+                    case float n when n > 0 && n < 90:
+                        return MovementDirection.NORTH;
+                    case float n when n >= 90 && n < 180:
+                        return MovementDirection.EAST;
+                    case float n when n >= 180 && n < 270:
+                        return MovementDirection.SOUTH;
+                    case float n when n >= 270 && n < 360:
+                        return MovementDirection.WEST;
+                    default:
+                        return MovementDirection.ZERO;
+                }
+            }
+        }
+
+        private bool movingInSameDirectionForTooLong = false;
+        private float lastMovementDirectionChangeTime = 0f;
+
+
+        [SerializeField] private Vector4 directionTracker = Vector4.zero;
+
         #endregion
 
         #region OnEnable/OnDisable
@@ -97,6 +121,8 @@ namespace Champions {
                     OnMove();
                 }
             }
+
+            ChangeMovementInfluence();
 
             grounded = false;
         }
@@ -339,14 +365,6 @@ namespace Champions {
             globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
 
-            // if (direction.magnitude < 0.1f) {
-            //     // Debug.Log("Stop moving");
-            //     globalMovementDirectionAngle = previousAngle;
-            //     mouseHitPoint = Vector3.zero;
-            //     rigidbody.velocity = Vector3.zero;
-            //     return;
-            // }
-
             float squaredDistance = direction.sqrMagnitude;
             if (squaredDistance < 0.2f * 0.2f) {
                 globalMovementDirectionAngle = previousAngle;
@@ -362,6 +380,44 @@ namespace Champions {
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             lastKnownDirection = direction.normalized;
+        }
+
+        private const float increaseValue = 0.008f;
+        private const float decreaseValue = 0.009f;
+
+        private void ChangeMovementInfluence() {
+            if (CurrentMovementDirection == MovementDirection.ZERO) return;
+
+            if (CurrentMovementDirection == MovementDirection.NORTH) {
+                directionTracker.x += increaseValue;
+
+                if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
+                if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
+                if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
+            }
+            else if (CurrentMovementDirection == MovementDirection.EAST) {
+                directionTracker.y += increaseValue;
+
+                if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
+                if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
+                if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
+            }
+            else if (CurrentMovementDirection == MovementDirection.SOUTH) {
+                directionTracker.z += increaseValue;
+
+                if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
+                if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
+                if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
+            }
+            else if (CurrentMovementDirection == MovementDirection.WEST) {
+                directionTracker.w += increaseValue;
+
+                if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
+                if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
+                if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
+            }
+
+            directionTracker = Utilities.ClampVector4(directionTracker, 0, 1);
         }
 
         public void Stop() {
@@ -504,6 +560,10 @@ namespace Champions {
             return globalMovementDirectionAngle < 0
                 ? globalMovementDirectionAngle + 360
                 : globalMovementDirectionAngle;
+        }
+
+        public Vector4 GetMovementData() {
+            return directionTracker;
         }
 
         public int GetStackAmount(Stack.StackType stackType) {

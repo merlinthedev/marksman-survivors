@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EventBus;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
@@ -77,7 +78,7 @@ namespace Enemy {
             // find a random position on the playing field for our group of enemies
 
             // get a random int between 2 and 5
-            int randomInt = Random.Range(3, 7);
+            int randomInt = Random.Range(5, 8);
 
             Vector3[] location = FindPositionsIteratively(randomInt);
 
@@ -176,29 +177,80 @@ namespace Enemy {
         }
 
         private Vector3[] GenerateSpawnPoints(int amountOfIterations = 1) {
-            int direction = Random.Range(0, 4);
-            Debug.Log("Direction: " + direction, this);
+            // int direction = Random.Range(0, 4);
+            // Debug.Log("Direction: " + direction, this);
+            //
+            // Vector3[] spawnPoints = new Vector3[amountOfIterations];
+            //
+            // for (int i = 0; i < amountOfIterations; i++) {
+            //     float x = Random.Range(-0.3f, 1.3f);
+            //     float y = Random.Range(-0.3f, 2.3f);
+            //
+            //     switch (direction) {
+            //         case 0:
+            //             x = -0.3f; // L
+            //             break;
+            //         case 1:
+            //             y = 2.3f; // U 
+            //             break;
+            //         case 2:
+            //             x = 1.3f; // R
+            //             break;
+            //         case 3:
+            //             y = -1.3f; // D
+            //             break;
+            //     }
+            //
+            //     spawnPoints[i] = new Vector3(x, y, 100);
+            // }
+            //
+            // return spawnPoints;
 
             Vector3[] spawnPoints = new Vector3[amountOfIterations];
 
-            for (int i = 0; i < amountOfIterations; i++) {
-                float x = Random.Range(-0.3f, 1.3f);
-                float y = Random.Range(-0.3f, 2.3f);
+            Vector4 movementData = player.GetCurrentlySelectedChampion().GetMovementData();
 
-                switch (direction) {
-                    case 0:
-                        x = -0.3f; // L
-                        break;
-                    case 1:
-                        y = 2.3f; // U 
-                        break;
-                    case 2:
-                        x = 1.3f; // R
-                        break;
-                    case 3:
-                        y = -1.3f; // D
-                        break;
-                }
+            float n = movementData.x;
+            float e = movementData.y;
+            float s = movementData.z;
+            float w = movementData.w;
+
+            float amountOfEnmiesNorth = amountOfIterations * n;
+            int north = Mathf.FloorToInt(amountOfEnmiesNorth);
+
+            float amountOfEnmiesEast = amountOfIterations * e;
+            int east = Mathf.FloorToInt(amountOfEnmiesEast);
+
+            float amountOfEnmiesSouth = amountOfIterations * s;
+            int south = Mathf.FloorToInt(amountOfEnmiesSouth);
+
+            float amountOfEnmiesWest = amountOfIterations * w;
+            int west = Mathf.FloorToInt(amountOfEnmiesWest);
+
+            for (int i = 0; i < north; i++) {
+                float x = Random.Range(-0.3f, 1.3f);
+                float y = 2.3f;
+
+                spawnPoints[i] = new Vector3(x, y, 100);
+            }
+
+            for (int i = 0; i < east; i++) {
+                float x = 1.3f;
+                float y = Random.RandomRange(-0.3f, 2.3f);
+
+                spawnPoints[i] = new Vector3(x, y, 100);
+            }
+
+            for (int i = 0; i < south; i++) {
+                float x = Random.Range(-0.3f, 1.3f);
+                float y = -1.3f;
+
+                spawnPoints[i] = new Vector3(x, y, 100);
+            }
+
+            for (int i = 0; i < west; i++) {
+                float x = -0.3f;
+                float y = Random.Range(-0.3f, 2.3f);
 
                 spawnPoints[i] = new Vector3(x, y, 100);
             }

@@ -25,6 +25,22 @@ namespace Util {
             context.StartCoroutine(InvokeDelayedCoroutine(action, delay));
         }
 
+        /// <summary>
+        /// Clamp a Vector4 to a min and max value.
+        /// </summary>
+        /// <param name="input">Vector4 input</param>
+        /// <param name="minInclusive">Minimum inclusive value</param>
+        /// <param name="maxInclusive">Maximum inclusive value</param>
+        /// <returns>The input value clamped</returns>
+        public static Vector4 ClampVector4(Vector4 input, float minInclusive, float maxInclusive) {
+            return new Vector4(
+                Mathf.Clamp(input.x, minInclusive, maxInclusive),
+                Mathf.Clamp(input.y, minInclusive, maxInclusive),
+                Mathf.Clamp(input.z, minInclusive, maxInclusive),
+                Mathf.Clamp(input.w, minInclusive, maxInclusive)
+            );
+        }
+
         private static IEnumerator InvokeDelayedCoroutine(System.Action action, float delay) {
             yield return new WaitForSeconds(delay);
             action.Invoke();
@@ -38,6 +54,5 @@ namespace Util {
             yield return new WaitForEndOfFrame();
             action.Invoke();
         }
-        
     }
 }
