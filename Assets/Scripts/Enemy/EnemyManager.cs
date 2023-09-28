@@ -85,7 +85,7 @@ namespace Enemy {
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
                 Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.transform);
-                enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
+                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
