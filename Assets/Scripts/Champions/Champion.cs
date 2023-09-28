@@ -491,6 +491,8 @@ namespace Champions {
         public ChampionStatistics GetChampionStatistics() => championStatistics;
         public ChampionLevelManager GetChampionLevelManager() => championLevelManager;
 
+        public IDamageable GetCurrentTarget() => currentTarget;
+
         public Vector3 GetCurrentMovementDirection() {
             return rigidbody.velocity.normalized == Vector3.zero
                 ? lastKnownDirection

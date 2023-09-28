@@ -5,6 +5,7 @@ using BuffsDebuffs.Stacks;
 using Champions;
 using Entities;
 using EventBus;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -47,6 +48,10 @@ namespace Enemy {
         [SerializeField] float Xspeed;
         [SerializeField] float Zspeed;
 
+        public Renderer renderer;
+        [SerializeField] public bool focusAnim;
+        [SerializeField] private float intensityMultiplier = 1f;
+
         private bool isDead {
             get => !canMove;
         }
@@ -68,6 +73,7 @@ namespace Enemy {
 
         private void Start() {
             rigidbody = GetComponent<Rigidbody>();
+            renderer = GetComponent<Renderer>();
 
             m_HealthBar.enabled = false;
             m_HealthBarBackground.enabled = false;
@@ -147,6 +153,24 @@ namespace Enemy {
 
             CheckStacksForExpiration();
             CheckDebuffsForExpiration();
+
+            if (focusAnim) {
+                if(renderer.material.GetVector("_Color").magnitude < 2.5f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude ) {
+                    Debug.Log("Increasing intensity...");
+                    renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
+                    intensityMultiplier += 0.02f;
+                }
+                else {
+                    focusAnim = false;
+                }
+            }
+            if (!focusAnim) {
+                if (renderer.material.GetVector("_Color").x > (Color.red).r) {
+                    Debug.Log("Decreasing intensity...");
+                    renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
+                    intensityMultiplier -= 0.02f;
+                }
+            }
         }
 
         private void Move() {

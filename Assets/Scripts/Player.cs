@@ -100,13 +100,15 @@ public class Player : MonoBehaviour {
                     IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
                     selectedChampion.OnAutoAttack(damageable);
 
-                    if(currentFocus != null) {
-                        currentFocus.GetComponent<Renderer>().material.SetInt("_Focus", 0);
-                    }
+                    RemoveFocus();
 
                     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                    damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
                     currentFocus = damageable.GetTransform().gameObject;
 
+                }
+                else {
+                    RemoveFocus();
                 }
 
                 //If we clicked on an interactable object, call the OnInteract method
@@ -156,6 +158,11 @@ public class Player : MonoBehaviour {
         hasClickedThisFrame = false;
     }
 
+    private void RemoveFocus() {
+        if (currentFocus != null) {
+            currentFocus.GetComponent<Renderer>().material.SetInt("_Focus", 0);
+        }
+    }
     private void HandleAbilityClicks() {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
