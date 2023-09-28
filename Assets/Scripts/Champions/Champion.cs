@@ -362,6 +362,8 @@ namespace Champions {
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             lastKnownDirection = direction.normalized;
+
+            
         }
 
         public void Stop() {

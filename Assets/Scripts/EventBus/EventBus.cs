@@ -206,4 +206,6 @@ namespace EventBus {
     public class GamePausedEvent : Event { }
 
     public class GameResumedEvent : Event { }
+
+    public class ToggleSettingsMenuEvent : Event { }
 }
