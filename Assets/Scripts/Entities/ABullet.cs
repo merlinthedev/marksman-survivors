@@ -1,4 +1,4 @@
-using BuffsDebuffs.Stacks;
+﻿using BuffsDebuffs.Stacks;
 using UnityEngine;
 
 namespace Entities {
@@ -44,7 +44,8 @@ namespace Entities {
 
 
         private void Move() {
-            transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
+            //transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
+            transform.position = Vector3.MoveTowards(transform.position, target, m_TravelSpeed * Time.deltaTime);
         }
 
         protected private virtual void OnTriggerEnter(Collider other) {

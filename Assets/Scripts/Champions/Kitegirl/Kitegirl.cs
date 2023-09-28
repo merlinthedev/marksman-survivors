@@ -4,6 +4,7 @@ using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using Entities;
 using EventBus;
+using Unity.VisualScripting;
 using UnityEngine;
 using Util;
 using Random = UnityEngine.Random;
@@ -155,7 +156,11 @@ namespace Champions.Kitegirl {
             // aBullet.SetTarget(target + randomBulletSpread);
             // aBullet.SetDamage(m_Damage);
 
-            KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.identity);
+            Vector3 dir = target - transform.position;
+
+            float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+
+            KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.Euler(90, angle , 0));
             bullet.SetSourceEntity(this);
             bullet.SetShouldChain(autoAttackShouldChain);
             bullet.SetTarget(target + randomBulletSpread);
