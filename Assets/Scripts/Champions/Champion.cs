@@ -380,6 +380,8 @@ namespace Champions {
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             lastKnownDirection = direction.normalized;
+
+            
         }
 
         private const float increaseValue = 0.008f;

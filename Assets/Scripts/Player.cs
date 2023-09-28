@@ -156,6 +156,10 @@ public class Player : MonoBehaviour {
         }
 
         hasClickedThisFrame = false;
+
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
+        }
     }
 
     private void RemoveFocus() {
