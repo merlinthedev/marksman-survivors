@@ -2,6 +2,7 @@
 using Champions.Kitegirl.Entities;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 using static Util.Logger;
 using Color = UnityEngine.Color;
 using Logger = Util.Logger;
@@ -23,10 +24,13 @@ namespace Champions.Kitegirl.Abilities {
 
             Vector3 mousePosition = Vector3.zero;
 
+            int layer = LayerMask.GetMask("ExcludeFromRaycast");
+            layer = ~layer;
+
             // get the cursor hover position in the world
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) {
+            if (Physics.Raycast(ray, out hit, float.MaxValue, layer)) {
                 Vector3 point = hit.point;
                 point.y = champion.transform.position.y;
 

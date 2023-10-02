@@ -14,7 +14,7 @@ namespace Champions.Abilities {
         [SerializeField] protected float abilityRange = 10f;
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
-        private float currentCooldown = 0f;
+        [SerializeField] private float currentCooldown = 0f; // serialized because there was some weird stuff happening
         protected Champion champion;
 
         protected bool isCancelled = false;
@@ -23,6 +23,8 @@ namespace Champions.Abilities {
 
         public void Hook(Champion champion) {
             this.champion = champion;
+
+            currentCooldown = 0f;
 
             // Subscribe to the cooldown manager
             Subscribe(this);
@@ -71,6 +73,7 @@ namespace Champions.Abilities {
         }
 
         public bool IsOnCooldown() {
+            Debug.Log("we are on cooldown wtf are youdoing;  " + currentCooldown);
             return currentCooldown > 0;
         }
 
