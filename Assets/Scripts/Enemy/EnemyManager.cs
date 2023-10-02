@@ -28,11 +28,11 @@ namespace Enemy {
         private float internalSpawnTimer;
         private float lastDifficultyIncreaseTime = 0f;
 
-        private float internalMinimumSpawnNumber = 4f;
-        private float internalMaximumSpawnNumber = 8f;
+        [SerializeField] private float internalMinimumSpawnNumber = 1f;
+        [SerializeField] private float internalMaximumSpawnNumber = 2f;
 
         private float internalSpawnRatio = 1f;
-        private float internalGrowthRate = 1.21f;
+        [SerializeField] private float internalGrowthRate = 1.21f;
 
         private int amountOfEnemies = 0;
         private Dictionary<Collider, Enemy> enemyDictionary = new();
@@ -59,7 +59,7 @@ namespace Enemy {
             }
 
             instance = this;
-            internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
+            internalSpawnTimer = Random.Range(spawnTimer - 0.25f, spawnTimer + 0.25f);
 
             EnemyTimerHandle();
         }
