@@ -43,8 +43,9 @@ public class Player : MonoBehaviour {
 
         EventBus<LoadSceneEvent>.Subscribe(LoadScene);
 
-        EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
-        EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+
+        EventBus<GamePausedEvent>.Subscribe(OnGamePaused);
+        EventBus<GameResumedEvent>.Subscribe(OnGameResumed);
     }
 
     private void OnDisable() {
@@ -59,8 +60,9 @@ public class Player : MonoBehaviour {
 
         EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
 
-        EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
-        EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+
+        EventBus<GamePausedEvent>.Unsubscribe(OnGamePaused);
+        EventBus<GameResumedEvent>.Unsubscribe(OnGameResumed);
     }
 
     private void Start() {
@@ -105,7 +107,6 @@ public class Player : MonoBehaviour {
                     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
                     damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
                     currentFocus = damageable.GetTransform().gameObject;
-
                 }
                 else {
                     RemoveFocus();
@@ -157,7 +158,7 @@ public class Player : MonoBehaviour {
 
         hasClickedThisFrame = false;
 
-        if(Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
         }
 
@@ -171,6 +172,7 @@ public class Player : MonoBehaviour {
             currentFocus.GetComponent<Renderer>().material.SetInt("_Focus", 0);
         }
     }
+
     private void HandleAbilityClicks() {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
@@ -227,12 +229,12 @@ public class Player : MonoBehaviour {
             selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
     }
 
-    private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
+    private void OnGamePaused(GamePausedEvent e) {
         isPaused = true;
         selectedChampion.Stop();
     }
 
-    private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
+    private void OnGameResumed(GameResumedEvent e) {
         isPaused = false;
     }
 

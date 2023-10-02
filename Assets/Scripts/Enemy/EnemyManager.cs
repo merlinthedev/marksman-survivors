@@ -39,14 +39,16 @@ namespace Enemy {
 
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
-            EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
-            EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+
+            EventBus<GamePausedEvent>.Subscribe(OnGamePaused);
+            EventBus<GameResumedEvent>.Subscribe(OnGameResumed);
         }
 
         private void OnDisable() {
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
-            EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
-            EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+
+            EventBus<GamePausedEvent>.Unsubscribe(OnGamePaused);
+            EventBus<GameResumedEvent>.Unsubscribe(OnGameResumed);
         }
 
         private void Start() {
@@ -222,14 +224,14 @@ namespace Enemy {
             enemyDictionary.Remove(enemyKilledEvent.Collider);
         }
 
-        private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
+        private void OnGamePaused(GamePausedEvent e) {
             shouldSpawn = false;
             foreach (var kvp in enemyDictionary) {
                 kvp.Value.OnPause();
             }
         }
 
-        private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
+        private void OnGameResumed(GameResumedEvent e) {
             shouldSpawn = true;
             foreach (var kvp in enemyDictionary) {
                 kvp.Value.OnResume();

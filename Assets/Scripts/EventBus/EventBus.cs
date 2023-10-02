@@ -157,20 +157,15 @@ namespace EventBus {
         }
     }
 
-    public class UILevelUpPanelClosedEvent : Event {
-        public UILevelUpPanelClosedEvent() { }
-    }
+    public class UILevelUpPanelClosedEvent : Event { }
 
-    public class UILevelUpPanelOpenEvent : Event {
-        public UILevelUpPanelOpenEvent() { }
-    }
+    public class UILevelUpPanelOpenEvent : Event { }
 
-    public class ShowLevelUpPanelEvent : Event {
-        public ShowLevelUpPanelEvent() { }
-    }
+    public class ShowLevelUpPanelEvent : Event { }
 
     public class LevelUpPromptEvent : Event {
         public bool open;
+
         public LevelUpPromptEvent(bool open) {
             this.open = open;
         }

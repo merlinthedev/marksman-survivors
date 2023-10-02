@@ -155,7 +155,8 @@ namespace Enemy {
             CheckDebuffsForExpiration();
 
             if (focusAnim) {
-                if(renderer.material.GetVector("_Color").magnitude < 2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude ) {
+                if (renderer.material.GetVector("_Color").magnitude <
+                    2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude) {
                     Debug.Log("Increasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier += 0.03f;
@@ -164,9 +165,10 @@ namespace Enemy {
                     focusAnim = false;
                 }
             }
+
             if (!focusAnim) {
                 if (renderer.material.GetVector("_Color").x > (Color.red).r) {
-                    Debug.Log("Decreasing intensity...");
+                    // Debug.Log("Decreasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier -= 0.03f;
                 }
