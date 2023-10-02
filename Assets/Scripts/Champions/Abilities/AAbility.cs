@@ -37,11 +37,11 @@ namespace Champions.Abilities {
         }
 
         public void Subscribe(ICooldown cooldown) {
-            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown));
         }
 
         public void Unsubscribe(ICooldown cooldown) {
-            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown));
         }
 
         public event Action OnCooldownCompleted;

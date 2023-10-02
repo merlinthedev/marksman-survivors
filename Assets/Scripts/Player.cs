@@ -43,8 +43,9 @@ public class Player : MonoBehaviour {
 
         EventBus<LoadSceneEvent>.Subscribe(LoadScene);
 
-        EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
-        EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+
+        EventBus<GamePausedEvent>.Subscribe(OnGamePaused);
+        EventBus<GameResumedEvent>.Subscribe(OnGameResumed);
     }
 
     private void OnDisable() {
@@ -59,8 +60,9 @@ public class Player : MonoBehaviour {
 
         EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
 
-        EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
-        EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+
+        EventBus<GamePausedEvent>.Unsubscribe(OnGamePaused);
+        EventBus<GameResumedEvent>.Unsubscribe(OnGameResumed);
     }
 
     private void Start() {
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour {
     }
 
     private void HandleMouseClicks() {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
             // check if the mouse is on a canvas object
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
                 return;
@@ -105,7 +107,6 @@ public class Player : MonoBehaviour {
                     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
                     damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
                     currentFocus = damageable.GetTransform().gameObject;
-
                 }
                 else {
                     RemoveFocus();
@@ -119,7 +120,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
+        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame && !isPaused) {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
                 return;
             }
@@ -151,17 +152,14 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            selectedChampion.OnAbility(KeyCode.Mouse1);
-        }
 
         hasClickedThisFrame = false;
 
-        if(Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab)) {
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPaused) {
             EventBus<ShowLevelUpPanelEvent>.Raise(new ShowLevelUpPanelEvent());
         }
     }
@@ -171,7 +169,9 @@ public class Player : MonoBehaviour {
             currentFocus.GetComponent<Renderer>().material.SetInt("_Focus", 0);
         }
     }
+
     private void HandleAbilityClicks() {
+        if (isPaused) return;
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -189,10 +189,13 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R)) {
             selectedChampion.OnAbility(KeyCode.R);
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            selectedChampion.OnAbility(KeyCode.Mouse1);
+        }
     }
 
     private void Update() {
-        if (isPaused) return;
         HandleMouseClicks();
         HandleAbilityClicks();
     }
@@ -227,12 +230,12 @@ public class Player : MonoBehaviour {
             selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
     }
 
-    private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
+    private void OnGamePaused(GamePausedEvent e) {
         isPaused = true;
         selectedChampion.Stop();
     }
 
-    private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
+    private void OnGameResumed(GameResumedEvent e) {
         isPaused = false;
     }
 

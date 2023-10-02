@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core;
 using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,6 +101,7 @@ namespace UI {
         }
 
         private void Update() {
+            if (GameManager.GetInstance().Paused) return;
             for (int i = 0; i < abilityCooldowns.Count; i++) {
                 AbilityCooldown abilityCooldown = abilityCooldowns[i];
                 abilityCooldown.CurrentTime -= Time.deltaTime;

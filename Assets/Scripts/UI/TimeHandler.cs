@@ -12,13 +12,13 @@ namespace UI {
 
 
         private void OnEnable() {
-            EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
-            EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+            EventBus<GamePausedEvent>.Subscribe(OnGamePaused);
+            EventBus<GameResumedEvent>.Subscribe(OnGameResumed);
         }
 
         private void OnDisable() {
-            EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
-            EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+            EventBus<GamePausedEvent>.Unsubscribe(OnGamePaused);
+            EventBus<GameResumedEvent>.Unsubscribe(OnGameResumed);
         }
 
         private void Start() {
@@ -40,11 +40,12 @@ namespace UI {
             }
         }
 
-        private void OnLevelUpPanelOpen(UILevelUpPanelOpenEvent e) {
+
+        private void OnGamePaused(GamePausedEvent e) {
             StopAllCoroutines();
         }
 
-        private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent e) {
+        private void OnGameResumed(GameResumedEvent e) {
             StartCoroutine(Clock());
         }
     }
