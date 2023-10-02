@@ -189,17 +189,21 @@ namespace EventBus {
 
     public class SubscribeICooldownEvent : Event {
         public ICooldown Cooldown { get; private set; }
+        public event System.Action OnCooldownCompleted;
 
-        public SubscribeICooldownEvent(ICooldown cooldown) {
+        public SubscribeICooldownEvent(ICooldown cooldown, System.Action OnCooldownCompleted) {
             Cooldown = cooldown;
+            this.OnCooldownCompleted += OnCooldownCompleted;
         }
     }
 
     public class UnsubscribeICooldownEvent : Event {
         public ICooldown Cooldown { get; private set; }
+        public event System.Action OnCooldownCompleted;
 
-        public UnsubscribeICooldownEvent(ICooldown cooldown) {
+        public UnsubscribeICooldownEvent(ICooldown cooldown, System.Action OnCooldownCompleted) {
             Cooldown = cooldown;
+            this.OnCooldownCompleted += OnCooldownCompleted;
         }
     }
 

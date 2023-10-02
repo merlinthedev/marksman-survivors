@@ -37,12 +37,14 @@ namespace Champions.Abilities {
         }
 
         public void Subscribe(ICooldown cooldown) {
-            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown));
+            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown, OnCooldownCompleted));
         }
 
         public void Unsubscribe(ICooldown cooldown) {
-            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown));
+            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown, OnCooldownCompleted));
         }
+
+        public event Action OnCooldownCompleted;
 
         public virtual void OnUse() {
             Log("An ability was used!", Logger.Color.RED, this);
