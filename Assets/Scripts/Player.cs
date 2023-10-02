@@ -160,6 +160,10 @@ public class Player : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Escape)) {
             EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            EventBus<ShowLevelUpPanelEvent>.Raise(new ShowLevelUpPanelEvent());
+        }
     }
 
     private void RemoveFocus() {

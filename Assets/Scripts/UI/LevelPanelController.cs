@@ -1,8 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities;
 using Champions.Abilities.Upgrades;
 using EventBus;
+using TMPro;
 using UnityEngine;
 using Logger = Util.Logger;
 
@@ -13,15 +14,23 @@ namespace UI {
         [SerializeField] private GameObject abilityComponentPrefab;
         [SerializeField] private GameObject upgradeComponentPrefab;
 
+        private List<AAbility> abilitiesToLevelUp;
+        private bool leveledUp;
+        [SerializeField] private TMP_Text prompt;
+
         [SerializeField] private List<AAbility> abilities = new();
         private List<ILevelPanelComponent> levelPanelComponents = new();
 
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
+            EventBus<ShowLevelUpPanelEvent>.Subscribe(ShowPanel);
+            EventBus<LevelUpPromptEvent>.Subscribe(ShowPrompt);
         }
 
         private void OnDisable() {
             EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
+            EventBus<ShowLevelUpPanelEvent>.Unsubscribe(ShowPanel);
+            EventBus<LevelUpPromptEvent>.Unsubscribe(ShowPrompt);
         }
 
         private void Start() {
@@ -37,8 +46,12 @@ namespace UI {
             }
         }
 
-        private void ShowPanel(List<AAbility> currentChampionAbilities) {
-            List<AAbility> toInstantiate = GetRandomAbilities(currentChampionAbilities);
+        private void ShowPrompt(LevelUpPromptEvent e) {
+            prompt.gameObject.SetActive(e.open);
+        }
+        private void ShowPanel(ShowLevelUpPanelEvent e) {
+            if (!leveledUp) return;
+            List<AAbility> toInstantiate = GetRandomAbilities(abilitiesToLevelUp);
 
             List<Upgrade> upgradesToInstantiate = new();
 
@@ -52,7 +65,7 @@ namespace UI {
             int diff = 3 - toInstantiate.Count;
 
             if (toInstantiate.Count < 3) {
-                upgradesToInstantiate = GetRandomUpgrades(currentChampionAbilities, diff);
+                upgradesToInstantiate = GetRandomUpgrades(abilitiesToLevelUp, diff);
             }
 
             // Logger.Log("Amount of abilities to instantiate: " + toInstantiate.Count, Logger.Color.RED, this);
@@ -103,6 +116,10 @@ namespace UI {
 
             // activate the panel gameobject
             levelPanel.SetActive(true);
+
+            // set the leveled up bool to false and remove the level up prompt
+            leveledUp = false;
+            EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(false));
         }
 
         private List<AAbility> GetRandomAbilities(List<AAbility> currentChampionAbilities) {
@@ -161,7 +178,9 @@ namespace UI {
         }
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {
-            ShowPanel(e.m_ChampionAbilities);
+            EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
+            abilitiesToLevelUp = e.m_ChampionAbilities;
+            leveledUp = true;
         }
     }
 }
