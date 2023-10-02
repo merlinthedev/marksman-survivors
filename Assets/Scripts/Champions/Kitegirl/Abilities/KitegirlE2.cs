@@ -30,7 +30,7 @@ namespace Champions.Kitegirl.Abilities {
 
             // TODO: Spawn smokescreen
             KitegirlSmokescreen kitegirlSmokescreen = Instantiate(smokescreenPrefab,
-                new Vector3(champion.transform.position.x, 0.5f, champion.transform.position.z), Quaternion.identity);
+                new Vector3(champion.transform.position.x, 0f, champion.transform.position.z), Quaternion.Euler(90, 0 ,0));
             kitegirlSmokescreen.OnThrow(champion as Kitegirl);
 
             champion.Stop();
