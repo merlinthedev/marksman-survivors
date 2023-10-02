@@ -4204,7 +4204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1233336287
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5028,6 +5028,7 @@ GameObject:
   - component: {fileID: 1574137035}
   - component: {fileID: 1574137037}
   - component: {fileID: 1574137036}
+  - component: {fileID: 1574137038}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -5067,6 +5068,7 @@ MonoBehaviour:
     type: 3}
   shouldSpawn: 1
   maxAmountOfEnemies: 999999999
+  secondsBeforeDifficultyIncrease: 60
   spawnTimer: 2.2
 --- !u!114 &1574137037
 MonoBehaviour:
@@ -5078,6 +5080,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d3e0b02255f432dbfa38f4b09a784c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1574137038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574137034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8434d72977514ea99969e517e981a3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1607778209

@@ -49,8 +49,13 @@ namespace UI {
         private void ShowPrompt(LevelUpPromptEvent e) {
             prompt.gameObject.SetActive(e.open);
         }
+
         private void ShowPanel(ShowLevelUpPanelEvent e) {
-            if (!leveledUp) return;
+            if (!leveledUp) {
+                Logger.Log("Did not level up, returning", Logger.Color.RED, this);
+                return;
+            }
+
             List<AAbility> toInstantiate = GetRandomAbilities(abilitiesToLevelUp);
 
             List<Upgrade> upgradesToInstantiate = new();

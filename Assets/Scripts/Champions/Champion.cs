@@ -363,7 +363,7 @@ namespace Champions {
 
             previousAngle = globalMovementDirectionAngle;
             globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
+            // Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
 
             float squaredDistance = direction.sqrMagnitude;
             if (squaredDistance < 0.2f * 0.2f) {
