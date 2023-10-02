@@ -165,6 +165,18 @@ namespace EventBus {
         public UILevelUpPanelOpenEvent() { }
     }
 
+    public class ShowLevelUpPanelEvent : Event {
+        public ShowLevelUpPanelEvent() { }
+    }
+
+    public class LevelUpPromptEvent : Event {
+        public bool open;
+        public LevelUpPromptEvent(bool open) {
+            this.open = open;
+        }
+    }
+
+
     public class StartDialogueEvent : Event {
         //List of titles and bodies for dialogue that the DialogueManager will copy
         public List<Dialogue.Dialogue> dialogue { get; private set; }
