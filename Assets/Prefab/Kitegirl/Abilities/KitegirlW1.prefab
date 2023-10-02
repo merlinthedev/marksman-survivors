@@ -46,10 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyCode: 119
   abilityCooldown: 10
-  abilityRange: 10
+  abilityRange: 9999
   abilityLevelUpBanner: {fileID: 21300000, guid: 078c67240bb936a41895a81bce8a2379,
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: df2e0d9d83cfd2c41af50f07f12393f3, type: 3}
   grenadePrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
     type: 3}
+  attackDamageRatio: 0.6

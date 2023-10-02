@@ -19,6 +19,8 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
+            Log("RMB1", Logger.Color.PINK, this);
+
             Vector3 mousePosition = Vector3.zero;
 
             // get the cursor hover position in the world
@@ -60,6 +62,9 @@ namespace Champions.Kitegirl.Abilities {
             kitegirlSlowArea.SetSlowDuration(slowDuration);
             kitegirlSlowArea.SetSlowPercentage(slowPercentage);
             kitegirlSlowArea.SetADDamageRatio(ADDamageRatio);
+
+            Log("Done, Calling base.OnUse()", Logger.Color.PINK, this);
+
             base.OnUse();
         }
     }

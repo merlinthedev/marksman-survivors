@@ -95,7 +95,7 @@ namespace UI {
                 levelPanelComponents.Add(uiLevelUpComponent);
             }
 
-            Logger.Log("Amount of upgrades found: " + upgradesToInstantiate.Count, Logger.Color.BLUE, this);
+            // Logger.Log("Amount of upgrades found: " + upgradesToInstantiate.Count, Logger.Color.BLUE, this);
             upgradesToInstantiate.ForEach(upgrade => { Logger.Log(upgrade.ToString(), Logger.Color.BLUE, this); });
 
             // instantiate the upgrade panel items if the difference between 3 and the amount of abilities is greater than 0

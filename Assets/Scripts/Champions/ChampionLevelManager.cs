@@ -23,9 +23,9 @@ namespace Champions {
                 LevelUp();
             }
 
-            Logger.Log(
-                "Current level: " + currentLevel + ", Current XP: " + champion.GetChampionStatistics().CurrentXP,
-                Logger.Color.PINK, champion);
+            // Logger.Log(
+            //     "Current level: " + currentLevel + ", Current XP: " + champion.GetChampionStatistics().CurrentXP,
+            //     Logger.Color.PINK, champion);
         }
 
         private void LevelUp() {
