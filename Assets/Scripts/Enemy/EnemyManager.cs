@@ -89,9 +89,9 @@ namespace Enemy {
             float randomAmountOfEnemies = Random.Range(internalMinimumSpawnNumber * internalSpawnRatio,
                 internalMaximumSpawnNumber * internalSpawnRatio);
 
-            Logger.Log("spawning " + randomAmountOfEnemies + " enemies", Logger.Color.RED, this);
-            Logger.Log("min and max spawn number: " + internalMinimumSpawnNumber * internalSpawnRatio + " " +
-                       internalMaximumSpawnNumber * internalSpawnRatio, Logger.Color.YELLOW, this);
+            // Logger.Log("spawning " + randomAmountOfEnemies + " enemies", Logger.Color.RED, this);
+            // Logger.Log("min and max spawn number: " + internalMinimumSpawnNumber * internalSpawnRatio + " " +
+            //            internalMaximumSpawnNumber * internalSpawnRatio, Logger.Color.YELLOW, this);
 
             Vector3[] location = FindPositionsIteratively(Mathf.FloorToInt(randomAmountOfEnemies));
 
@@ -319,7 +319,7 @@ namespace Enemy {
         /// </summary>
         private void IncreaseDifficulty() {
             internalSpawnRatio *= internalGrowthRate;
-            Logger.Log("Increased difficulty, new spawn ratio: " + internalSpawnRatio, Logger.Color.BLUE, this);
+            // Logger.Log("Increased difficulty, new spawn ratio: " + internalSpawnRatio, Logger.Color.BLUE, this);
         }
 
 
@@ -356,14 +356,14 @@ namespace Enemy {
         public bool ShouldTick => timeLeft > 0;
 
         public void Tick(float deltaTime) {
-            Debug.LogWarning("Ticking enemy timer: " + timeLeft + ", " + deltaTime);
+            // Debug.LogWarning("Ticking enemy timer: " + timeLeft + ", " + deltaTime);
             timeLeft -= deltaTime;
 
-            Debug.LogWarning("time left: " + timeLeft);
+            // Debug.LogWarning("time left: " + timeLeft);
 
             if (timeLeft < 0) {
-                Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE,
-                    GameManager.GetInstance());
+                // Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE,
+                //     GameManager.GetInstance());
                 OnCooldownCompleted?.Invoke();
             }
         }

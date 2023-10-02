@@ -3,6 +3,8 @@ using Champions.Kitegirl.Entities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using static Util.Logger;
+using Color = UnityEngine.Color;
+using Logger = Util.Logger;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlRMB1 : AAbility {
@@ -24,14 +26,17 @@ namespace Champions.Kitegirl.Abilities {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 Vector3 point = hit.point;
-                point.y = this.champion.transform.position.y;
+                point.y = champion.transform.position.y;
 
                 mousePosition = point;
             }
 
             // Debug.Log("<color=red>MousePosition: " + mousePosition + "</color>", this);
 
-            if (mousePosition == Vector3.zero) return;
+            if (mousePosition == Vector3.zero) {
+                Log("RMB1 break 1", Logger.Color.RED, this);
+                return;
+            }
 
             // get the global angle of the direction from the champion to the mouse position
             Vector3 mouseToChampionDirection = mousePosition - champion.transform.position;
