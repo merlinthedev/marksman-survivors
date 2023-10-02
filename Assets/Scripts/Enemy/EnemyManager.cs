@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Champions.Abilities;
 using EventBus;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
@@ -18,16 +18,24 @@ namespace Enemy {
         [SerializeField] private bool shouldSpawn = false;
         [SerializeField] private int maxAmountOfEnemies = 1;
 
+        [SerializeField] private float secondsBeforeDifficultyIncrease = 60f;
+
         [SerializeField] [Tooltip("Time it takes between enemy spawn")]
         private float spawnTimer = 1.4f;
 
         private float lastSpawnTime = 0f;
         private float internalSpawnTimer;
+        private float lastDifficultyIncreaseTime = 0f;
 
+        private float internalMinimumSpawnNumber = 4f;
+        private float internalMaximumSpawnNumber = 8f;
+
+        private float internalSpawnRatio = 1f;
+        private float internalGrowthRate = 1.21f;
 
         private int amountOfEnemies = 0;
-        private static EnemyManager instance;
         private Dictionary<Collider, Enemy> enemyDictionary = new();
+        private static EnemyManager instance;
 
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
@@ -50,7 +58,7 @@ namespace Enemy {
             instance = this;
             internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
 
-            // StartCoroutine(SpawnEnemy());
+            CreateEnemyTimer();
         }
 
         private void Update() {
@@ -75,12 +83,10 @@ namespace Enemy {
                 return;
             }
 
-            // find a random position on the playing field for our group of enemies
+            float randomAmountOfEnemies = Random.Range(internalMinimumSpawnNumber * internalSpawnRatio,
+                internalMaximumSpawnNumber * internalSpawnRatio);
 
-            // get a random int between 2 and 5
-            int randomInt = Random.Range(5, 8);
-
-            Vector3[] location = FindPositionsIteratively(randomInt);
+            Vector3[] location = FindPositionsIteratively(Mathf.FloorToInt(randomAmountOfEnemies));
 
             for (var i = 0; i < location.Length; i++) {
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
@@ -90,10 +96,13 @@ namespace Enemy {
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
             }
 
+            // randomize the spawn timer a bit to make spawns feel more natural
+            internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
 
             lastSpawnTime = Time.time;
-            internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
         }
+
+        #region Obsolete
 
         [Obsolete("Deprecated, spawning is now handled by HandleEnemySpawn()")]
         private IEnumerator SpawnEnemy() {
@@ -154,28 +163,31 @@ namespace Enemy {
             return randomPointOnPlane;
         }
 
+        #endregion
+
         private Vector3[] FindPositionsIteratively(int amountOfIterations = 1) {
-            // where in the camera viewport is the player
-            Vector3 playerViewportPosition = Camera.main.WorldToViewportPoint(player.transform.position);
-
-            // Logger.Log("Player viewport position: " + playerViewportPosition, Logger.Color.BLUE, this);
-
             // get a random point on the screen
             Vector3[] randomPointOutsideScreen = GenerateSpawnPoints(amountOfIterations);
-            Debug.Log("Random point on screen: " + randomPointOutsideScreen);
+            // Debug.Log("Random point on screen: " + randomPointOutsideScreen);
 
-            // get the world position of the random point on the screen
-            // Vector3 randomPointOnPlane = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen);
-
+            // convert the from screen space to world space
             for (int i = 0; i < randomPointOutsideScreen.Length; i++) {
                 randomPointOutsideScreen[i] = Camera.main.ViewportToWorldPoint(randomPointOutsideScreen[i]);
                 randomPointOutsideScreen[i].y = 1f;
             }
 
-
             return randomPointOutsideScreen;
         }
 
+        /// <summary>
+        /// Generates an array of spawnpoints based on the movement data of the player.
+        /// </summary>
+        /// <param name="amountOfIterations">
+        /// The amount spawnpoints that should be returned.
+        /// </param>
+        /// <returns>
+        /// An array of spawnpoints.
+        /// </returns>
         private Vector3[] GenerateSpawnPoints(int amountOfIterations = 1) {
             Vector3[] spawnPoints = new Vector3[amountOfIterations];
             Vector4 movementData = player.GetCurrentlySelectedChampion().GetMovementData();
@@ -206,7 +218,6 @@ namespace Enemy {
             return spawnPoints;
         }
 
-
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
             enemyDictionary.Remove(enemyKilledEvent.Collider);
         }
@@ -225,6 +236,18 @@ namespace Enemy {
             }
         }
 
+        /// <summary>
+        /// Get the closest enemy to a position.
+        /// </summary>
+        /// <param name="position">
+        /// The position to get the closest enemy to.
+        /// </param>
+        /// <param name="enemiesToIgnore">
+        /// A list of enemies to ignore when getting the closest enemy.
+        /// </param>
+        /// <returns>
+        /// The closest enemy to the position.
+        /// </returns>
         public Enemy GetClosestEnemy(Vector3 position, List<Enemy> enemiesToIgnore = null) {
             float closestDistance = Mathf.Infinity;
 
@@ -241,28 +264,94 @@ namespace Enemy {
             return closestEnemy;
         }
 
+        /// <summary>
+        /// Get enemies in a radius around a point.
+        /// </summary>
+        /// <param name="point">
+        /// The point to get enemies around.
+        /// </param>
+        /// <param name="radius">
+        /// The radius to get enemies in.
+        /// </param>
+        /// <returns>
+        /// A list of enemies in the radius around the point.
+        /// </returns>
         public List<Enemy> GetEnemiesInArea(Vector3 point, float radius = 10f) {
             return (from enemy in enemyDictionary
                 where Vector3.Distance(point, enemy.Value.transform.position) < radius
                 select enemy.Value).ToList();
         }
 
+        /// <summary>
+        /// Get enemy from collider
+        /// </summary>
+        /// <param name="other">Collider</param>
+        /// <returns>The enemy value from the collider key.</returns>
+        /// <exception cref="Exception">Throws an exception if the collider is not present in the dictionary.</exception>
         public Enemy GetEnemy(Collider other) {
             Enemy enemy = enemyDictionary[other];
             if (enemy == null) {
-                Util.Logger.Log("Enemy not found in dictionary", Logger.Color.RED, this);
+                Logger.Log("Enemy not found in dictionary", Logger.Color.RED, this);
                 throw new Exception("Enemy not found in dictionary");
             }
 
             return enemy;
         }
 
-        public void SetShouldSpawn(bool value) {
-            shouldSpawn = value;
+        /// <summary>
+        /// Create the enemy timer.
+        /// </summary>
+        private void CreateEnemyTimer() {
+            var timer = new EnemyTimer(secondsBeforeDifficultyIncrease, secondsBeforeDifficultyIncrease);
+        }
+
+
+        /// <summary>
+        /// Set if this object should spawn enemies or not.
+        /// </summary>
+        /// <param name="shouldSpawn">bool to decide whether to spawn enemies.</param>
+        public void SetShouldSpawn(bool shouldSpawn) {
+            this.shouldSpawn = shouldSpawn;
         }
 
         public static EnemyManager GetInstance() {
             return instance;
+        }
+    }
+
+    internal class EnemyTimer : ICooldown {
+        private readonly float cooldown;
+        private float timeLeft;
+
+        public EnemyTimer(float cooldown, float timeLeft) {
+            this.cooldown = cooldown;
+            this.timeLeft = timeLeft;
+
+            Subscribe(this);
+        }
+
+        ~EnemyTimer() {
+            Unsubscribe(this);
+        }
+
+        public bool ShouldTick => timeLeft > 0;
+
+        public void Tick(float deltaTime) {
+            timeLeft -= deltaTime;
+        }
+
+        public void Subscribe(ICooldown cooldown) {
+            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+        }
+
+        public void Unsubscribe(ICooldown cooldown) {
+            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+        }
+
+        public event Action OnCooldownCompleted;
+
+        public float GetCooldown() {
+            return cooldown;
         }
     }
 }
