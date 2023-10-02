@@ -61,7 +61,7 @@ namespace Enemy {
             instance = this;
             internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
 
-            CreateEnemyTimer();
+            EnemyTimerHandle();
         }
 
         private void Update() {
@@ -88,6 +88,10 @@ namespace Enemy {
 
             float randomAmountOfEnemies = Random.Range(internalMinimumSpawnNumber * internalSpawnRatio,
                 internalMaximumSpawnNumber * internalSpawnRatio);
+
+            Logger.Log("spawning " + randomAmountOfEnemies + " enemies", Logger.Color.RED, this);
+            Logger.Log("min and max spawn number: " + internalMinimumSpawnNumber * internalSpawnRatio + " " +
+                       internalMaximumSpawnNumber * internalSpawnRatio, Logger.Color.YELLOW, this);
 
             Vector3[] location = FindPositionsIteratively(Mathf.FloorToInt(randomAmountOfEnemies));
 
@@ -304,8 +308,18 @@ namespace Enemy {
         /// <summary>
         /// Create the enemy timer.
         /// </summary>
-        private void CreateEnemyTimer() {
+        private void EnemyTimerHandle() {
             var timer = new EnemyTimer(secondsBeforeDifficultyIncrease, secondsBeforeDifficultyIncrease);
+
+            timer.OnCooldownCompleted += IncreaseDifficulty;
+        }
+
+        /// <summary>
+        /// Increase the spawn ratio by the internal growth rate.
+        /// </summary>
+        private void IncreaseDifficulty() {
+            internalSpawnRatio *= internalGrowthRate;
+            Logger.Log("Increased difficulty, new spawn ratio: " + internalSpawnRatio, Logger.Color.BLUE, this);
         }
 
 
@@ -335,14 +349,23 @@ namespace Enemy {
 
         ~EnemyTimer() {
             Unsubscribe(this);
+
+            OnCooldownCompleted = null;
         }
 
         public bool ShouldTick => timeLeft > 0;
 
         public void Tick(float deltaTime) {
+            Debug.LogWarning("Ticking enemy timer: " + timeLeft + ", " + deltaTime);
             timeLeft -= deltaTime;
 
-            // Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE, GameManager.GetInstance());
+            Debug.LogWarning("time left: " + timeLeft);
+
+            if (timeLeft < 0) {
+                Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE,
+                    GameManager.GetInstance());
+                OnCooldownCompleted?.Invoke();
+            }
         }
 
         public void Subscribe(ICooldown cooldown) {
