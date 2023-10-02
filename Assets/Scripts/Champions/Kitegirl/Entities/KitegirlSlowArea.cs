@@ -1,18 +1,32 @@
 ﻿using BuffsDebuffs;
-using Enemy;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Champions.Kitegirl.Entities {
     public class KitegirlSlowArea : MonoBehaviour {
         private Kitegirl kitegirl;
 
-        [SerializeField] private float slowPercentage = 0.33f; // 0-1 Normalized
-        [SerializeField] private float slowDuration = 3f; // Seconds
-        [SerializeField] private float adDamageRatio = 1.2f; // 0-1 Normalized
-        [SerializeField] private float lifeSpan = 0.2f;
-
         private float throwTime = 0f;
+
+        private float lifespan;
+        private float slowPercentage;
+        private float slowDuration;
+        private float ADDamageRatio;
+
+        public void SetLifespan(float lifespan) {
+            this.lifespan = lifespan;
+        }
+
+        public void SetSlowPercentage(float slowPercentage) {
+            this.slowPercentage = slowPercentage;
+        }
+
+        public void SetSlowDuration(float slowDuration) {
+            this.slowDuration = slowDuration;
+        }
+
+        public void SetADDamageRatio(float ADDamageRatio) {
+            this.ADDamageRatio = ADDamageRatio;
+        }
 
         public void OnThrow(Kitegirl sourceEntity) {
             kitegirl = sourceEntity;
@@ -21,7 +35,7 @@ namespace Champions.Kitegirl.Entities {
         }
 
         private void Update() {
-            if (Time.time > throwTime + lifeSpan) {
+            if (Time.time > throwTime + lifespan) {
                 Destroy(gameObject);
             }
         }
@@ -36,7 +50,7 @@ namespace Champions.Kitegirl.Entities {
                 IDebuffable debuffable = other.gameObject.GetComponent<IDebuffable>();
                 debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
                     slowDuration, slowPercentage));
-                kitegirl.DealDamage(debuffable, kitegirl.GetAttackDamage() * adDamageRatio);
+                kitegirl.DealDamage(debuffable, kitegirl.GetAttackDamage() * ADDamageRatio);
             }
         }
     }

@@ -7,15 +7,16 @@ namespace Champions.Kitegirl.Abilities {
         private float dashDuration = 0.2f;
         private float lastDashTime = 0f;
 
+
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
             // Dash forward 
-            (this.champion as Kitegirl)?.SetIsDashing(true);
+            (champion as Kitegirl)?.SetIsDashing(true);
             (champion as Kitegirl)?.SetNextAttackWillCrit(true);
 
-            Utilities.InvokeDelayed(() => { (this.champion as Kitegirl)?.SetIsDashing(false); }, dashDuration,
-                this.champion);
+            Utilities.InvokeDelayed(() => { (champion as Kitegirl)?.SetIsDashing(false); }, dashDuration,
+                champion);
 
             base.OnUse();
         }

@@ -1,11 +1,18 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using static Util.Logger;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlRMB1 : AAbility {
         [SerializeField] private KitegirlSlowArea m_KitegirlSlowAreaPrefab;
+
+        [SerializeField] private float lifespan = 0.2f;
+        [SerializeField] private float slowPercentage = 0.33f; // 0-1 Normalized
+        [SerializeField] private float slowDuration = 3f; // Seconds
+        [SerializeField] private float ADDamageRatio = 1.2f; // 0-1 Normalized
+
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
@@ -39,10 +46,15 @@ namespace Champions.Kitegirl.Abilities {
             //    Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
 
             KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
-            champion.transform.position + mouseToChampionDirection.normalized * m_KitegirlSlowAreaPrefab.transform.localScale.x,
-            Quaternion.Euler(90, mouseToChampionAngle, 0));
+                champion.transform.position + mouseToChampionDirection.normalized *
+                m_KitegirlSlowAreaPrefab.transform.localScale.x,
+                Quaternion.Euler(90, mouseToChampionAngle, 0));
 
             kitegirlSlowArea.OnThrow(champion as Kitegirl);
+            kitegirlSlowArea.SetLifespan(lifespan);
+            kitegirlSlowArea.SetSlowDuration(slowDuration);
+            kitegirlSlowArea.SetSlowPercentage(slowPercentage);
+            kitegirlSlowArea.SetADDamageRatio(ADDamageRatio);
             base.OnUse();
         }
     }

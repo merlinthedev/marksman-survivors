@@ -1,13 +1,12 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlW1 : AAbility {
-        [FormerlySerializedAs("m_GrenadePrefab")] [SerializeField] private KitegirlGrenade grenadePrefab;
+        [SerializeField] private KitegirlGrenade grenadePrefab;
 
-        private float attackDamageRatio = 0.6f; // 0.6f => 60% of AD
+        [SerializeField] private float attackDamageRatio = 0.6f; // 0.6f => 60% of AD
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
@@ -24,7 +23,8 @@ namespace Champions.Kitegirl.Abilities {
 
                     if (DistanceCheck(point)) {
                         KitegirlGrenade grenade =
-                            Instantiate(grenadePrefab, this.champion.transform.position, grenadePrefab.transform.rotation);
+                            Instantiate(grenadePrefab, this.champion.transform.position,
+                                grenadePrefab.transform.rotation);
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
                         grenade.OnThrow(point, champion);
 
