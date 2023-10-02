@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities.Upgrades;
 using EventBus;
@@ -18,21 +19,29 @@ namespace Champions.Abilities {
 
         protected bool isCancelled = false;
 
-        public bool ShouldTick { get; set; } = false;
+        public bool ShouldTick => currentCooldown > 0;
 
         public void Hook(Champion champion) {
             this.champion = champion;
+
+            // Subscribe to the cooldown manager
+            Subscribe(this);
+        }
+
+        private void OnDestroy() {
+            Unsubscribe(this);
         }
 
         public void Tick(float deltaTime) {
-            currentCooldown -= (float)deltaTime;
+            currentCooldown -= deltaTime;
         }
-        
+
         public void Subscribe(ICooldown cooldown) {
-            
+            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown));
         }
-        
+
         public void Unsubscribe(ICooldown cooldown) {
+            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown));
         }
 
         public virtual void OnUse() {
