@@ -72,7 +72,7 @@ public class Player : MonoBehaviour {
     }
 
     private void HandleMouseClicks() {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
             // check if the mouse is on a canvas object
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
                 return;
@@ -120,7 +120,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame) {
+        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame && !isPaused) {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
                 return;
             }
@@ -152,9 +152,6 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            selectedChampion.OnAbility(KeyCode.Mouse1);
-        }
 
         hasClickedThisFrame = false;
 
@@ -162,7 +159,7 @@ public class Player : MonoBehaviour {
             EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab)) {
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPaused) {
             EventBus<ShowLevelUpPanelEvent>.Raise(new ShowLevelUpPanelEvent());
         }
     }
@@ -174,6 +171,7 @@ public class Player : MonoBehaviour {
     }
 
     private void HandleAbilityClicks() {
+        if (isPaused) return;
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -191,10 +189,13 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R)) {
             selectedChampion.OnAbility(KeyCode.R);
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            selectedChampion.OnAbility(KeyCode.Mouse1);
+        }
     }
 
     private void Update() {
-        if (isPaused) return;
         HandleMouseClicks();
         HandleAbilityClicks();
     }

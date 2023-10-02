@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using EventBus;
 
-public class MenuManager : MonoBehaviour
-{
+public class MenuManager : MonoBehaviour {
     [SerializeField] public GameObject settings;
 
     private void OnEnable() {
@@ -17,5 +14,12 @@ public class MenuManager : MonoBehaviour
 
     private void ToggleSettingsMenu(ToggleSettingsMenuEvent e) {
         settings.SetActive(!settings.activeSelf);
+
+        if (settings.activeSelf) {
+            EventBus<UISettingsMenuOpenedEvent>.Raise(new UISettingsMenuOpenedEvent());
+        }
+        else {
+            EventBus<UISettingsMenuClosedEvent>.Raise(new UISettingsMenuClosedEvent());
+        }
     }
 }

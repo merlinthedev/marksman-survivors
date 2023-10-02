@@ -38,7 +38,7 @@ namespace Champions.Kitegirl.Abilities {
             float mouseToChampionAngle = Vector3.SignedAngle(Vector3.forward, mouseToChampionDirection, Vector3.up);
 
 
-            Log("Angle: " + mouseToChampionAngle, Util.Logger.Color.YELLOW, this);
+            // Log("Angle: " + mouseToChampionAngle, Util.Logger.Color.YELLOW, this);
 
             //KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
             //    champion.transform.position + mouseToChampionDirection.normalized *

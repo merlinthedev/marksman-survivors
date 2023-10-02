@@ -1,5 +1,6 @@
 ﻿using EventBus;
 using UnityEngine;
+using Event = UnityEngine.Event;
 
 namespace Core {
     public class GameManager : MonoBehaviour {
@@ -9,11 +10,17 @@ namespace Core {
         private void OnEnable() {
             EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);
             EventBus<UILevelUpPanelClosedEvent>.Subscribe(OnLevelUpPanelClosed);
+
+            EventBus<UISettingsMenuClosedEvent>.Subscribe(OnSettingsMenuClosed);
+            EventBus<UISettingsMenuOpenedEvent>.Subscribe(OnSettingsMenuOpen);
         }
 
         private void OnDisable() {
             EventBus<UILevelUpPanelOpenEvent>.Unsubscribe(OnLevelUpPanelOpen);
             EventBus<UILevelUpPanelClosedEvent>.Unsubscribe(OnLevelUpPanelClosed);
+
+            EventBus<UISettingsMenuClosedEvent>.Unsubscribe(OnSettingsMenuClosed);
+            EventBus<UISettingsMenuOpenedEvent>.Unsubscribe(OnSettingsMenuOpen);
         }
 
         private void Start() {
@@ -40,6 +47,14 @@ namespace Core {
         }
 
         private void OnLevelUpPanelClosed(UILevelUpPanelClosedEvent obj) {
+            ResumeGame();
+        }
+
+        private void OnSettingsMenuOpen(UISettingsMenuOpenedEvent obj) {
+            PauseGame();
+        }
+
+        private void OnSettingsMenuClosed(UISettingsMenuClosedEvent obj) {
             ResumeGame();
         }
 

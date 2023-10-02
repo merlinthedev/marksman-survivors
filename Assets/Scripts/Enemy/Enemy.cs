@@ -157,7 +157,7 @@ namespace Enemy {
             if (focusAnim) {
                 if (renderer.material.GetVector("_Color").magnitude <
                     2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude) {
-                    Debug.Log("Increasing intensity...");
+                    // Debug.Log("Increasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier += 0.03f;
                 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
 using Dialogue;
+using Unity.VisualScripting;
 
 namespace EventBus {
     public abstract class EventBus<T> where T : Event {
@@ -196,21 +197,17 @@ namespace EventBus {
 
     public class SubscribeICooldownEvent : Event {
         public ICooldown Cooldown { get; private set; }
-        public event System.Action OnCooldownCompleted;
 
-        public SubscribeICooldownEvent(ICooldown cooldown, System.Action OnCooldownCompleted) {
+        public SubscribeICooldownEvent(ICooldown cooldown) {
             Cooldown = cooldown;
-            this.OnCooldownCompleted += OnCooldownCompleted;
         }
     }
 
     public class UnsubscribeICooldownEvent : Event {
         public ICooldown Cooldown { get; private set; }
-        public event System.Action OnCooldownCompleted;
 
-        public UnsubscribeICooldownEvent(ICooldown cooldown, System.Action OnCooldownCompleted) {
+        public UnsubscribeICooldownEvent(ICooldown cooldown) {
             Cooldown = cooldown;
-            this.OnCooldownCompleted += OnCooldownCompleted;
         }
     }
 
@@ -219,4 +216,8 @@ namespace EventBus {
     public class GameResumedEvent : Event { }
 
     public class ToggleSettingsMenuEvent : Event { }
+
+    public class UISettingsMenuOpenedEvent : Event { }
+
+    public class UISettingsMenuClosedEvent : Event { }
 }

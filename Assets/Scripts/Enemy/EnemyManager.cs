@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities;
+using Core;
 using EventBus;
 using UnityEngine;
 using Util;
@@ -340,14 +341,16 @@ namespace Enemy {
 
         public void Tick(float deltaTime) {
             timeLeft -= deltaTime;
+
+            // Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE, GameManager.GetInstance());
         }
 
         public void Subscribe(ICooldown cooldown) {
-            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+            EventBus<SubscribeICooldownEvent>.Raise(new SubscribeICooldownEvent(cooldown));
         }
 
         public void Unsubscribe(ICooldown cooldown) {
-            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown, OnCooldownCompleted));
+            EventBus<UnsubscribeICooldownEvent>.Raise(new UnsubscribeICooldownEvent(cooldown));
         }
 
         public event Action OnCooldownCompleted;
