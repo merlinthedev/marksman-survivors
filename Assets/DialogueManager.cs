@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using EventBus;
+using Interactable.NPC;
 
 namespace Dialogue {
     [System.Serializable]

@@ -2,6 +2,7 @@
 using Enemy;
 using Entities;
 using EventBus;
+using Interactable;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
