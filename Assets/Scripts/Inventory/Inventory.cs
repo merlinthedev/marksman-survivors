@@ -1,9 +1,13 @@
-﻿using EventBus;
+﻿using System.Collections.Generic;
+using EventBus;
+using Inventory.Items;
 
 namespace Inventory {
     public class Inventory {
         private int gold;
         private int killCount;
+
+        private List<Item> items = new();
 
         public Inventory() {
             gold = 0;
@@ -11,17 +15,23 @@ namespace Inventory {
 
             // Subscribe to event
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilled);
+            EventBus<MerchantItemBoughtEvent>.Subscribe(OnMerchantItemBought);
         }
 
         ~Inventory() {
             // Unsubscribe from event
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilled);
+            EventBus<MerchantItemBoughtEvent>.Unsubscribe(OnMerchantItemBought);
         }
 
         private void OnEnemyKilled(EnemyKilledEvent enemyKilledEvent) {
             AddKills(1);
 
             AddGold(1);
+        }
+
+        private void OnMerchantItemBought(MerchantItemBoughtEvent merchantItemBoughtEvent) {
+            AddGold(-merchantItemBoughtEvent.item.GetPrice());
         }
 
         /// <summary>

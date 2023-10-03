@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
@@ -349,6 +350,16 @@ namespace Champions {
 
         #region Movement
 
+        public void RequestMovement(Vector3 target, float distance = 0.2f, Action callback = null) {
+            mouseHitPoint = target;
+            currentTarget = null;
+            movementCallback = callback;
+            distanceBeforeCallback = distance;
+        }
+
+        private Action movementCallback = null;
+        private float distanceBeforeCallback = 0.2f;
+
         protected virtual void OnMove() {
             if (mouseHitPoint == Vector3.zero) {
                 return;
@@ -362,10 +373,12 @@ namespace Champions {
             // Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
 
             float squaredDistance = direction.sqrMagnitude;
-            if (squaredDistance < 0.2f * 0.2f) {
+            if (squaredDistance < distanceBeforeCallback * distanceBeforeCallback) {
                 globalMovementDirectionAngle = previousAngle;
                 mouseHitPoint = Vector3.zero;
                 rigidbody.velocity = Vector3.zero;
+                movementCallback?.Invoke();
+                movementCallback = null;
                 return;
             }
 
@@ -532,10 +545,9 @@ namespace Champions {
 
         public float GetAttackDamage() => championStatistics.GetAttackDamage(1 +
                                                                              (Stacks.FindAll(stack =>
-                                                                                      stack.GetStackType() ==
-                                                                                      Stack.StackType.OVERPOWER)
-                                                                                  .Count /
-                                                                              100f));
+                                                                                     stack.GetStackType() ==
+                                                                                     Stack.StackType.OVERPOWER)
+                                                                                 .Count / 100f));
 
         public float GetLastAttackTime() => lastAttackTime;
         protected float GetDamageMultiplier() => damageMultiplier;
@@ -568,12 +580,6 @@ namespace Champions {
 
         public Transform GetTransform() {
             return gameObject.transform;
-        }
-
-        public void SetMouseHitPoint(Vector3 point) {
-            // set the target enemy to null to stop us from auto attacking it again when we reach our destination
-            currentTarget = null;
-            mouseHitPoint = point;
         }
 
         protected void SetGlobalDirectionAngle(float angle) {

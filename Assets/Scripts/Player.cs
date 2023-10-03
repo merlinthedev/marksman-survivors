@@ -1,4 +1,5 @@
-﻿using Champions;
+﻿using System.Numerics;
+using Champions;
 using Enemy;
 using Entities;
 using EventBus;
@@ -8,6 +9,8 @@ using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using UnityEngine.SceneManagement;
 using Logger = Util.Logger;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour {
     [Header("Stats")]
@@ -96,7 +99,7 @@ public class Player : MonoBehaviour {
                         firstMove = false;
                     }
 
-                    selectedChampion.SetMouseHitPoint(point);
+                    selectedChampion.RequestMovement(point);
                 }
 
                 if (hit.collider.gameObject.CompareTag("Enemy") ||
@@ -117,7 +120,18 @@ public class Player : MonoBehaviour {
                 //If we clicked on an interactable object, call the OnInteract method
                 var interactable = hit.collider.gameObject.GetComponent<IInteractable>();
                 if (interactable != null) {
-                    interactable.OnInteract();
+                    float distance = Vector3.Distance(hit.collider.gameObject.transform.position,
+                        gameObject.transform.position);
+
+                    if (distance > 5f) {
+                        selectedChampion.RequestMovement(hit.collider.gameObject.transform.position, 5f,
+                            () => interactable.OnInteract());
+                        // Logger.Log("distance is too big, moving...", Logger.Color.RED, this);
+                    }
+                    else {
+                        // Logger.Log("distance is not too big, interacting...", Logger.Color.RED, this);
+                        interactable.OnInteract();
+                    }
                 }
             }
         }
@@ -142,7 +156,8 @@ public class Player : MonoBehaviour {
                         // Uncomment to also spawn click prefab when holding down the mouse 
                         // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
 
-                        selectedChampion.SetMouseHitPoint(point);
+                        // selectedChampion.SetMouseHitPoint(point);
+                        selectedChampion.RequestMovement(point);
                     }
 
                     if (hit.collider.gameObject.CompareTag("Enemy") ||

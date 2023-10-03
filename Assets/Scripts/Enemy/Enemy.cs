@@ -407,7 +407,11 @@ namespace Enemy {
             return gameObject.transform;
         }
 
-        public void SetCanMove(bool canMove) {
+        private void SetCanMove(bool canMove) {
+            if (!canMove) {
+                rigidbody.velocity = Vector3.zero;
+            }
+
             this.canMove = canMove;
         }
 

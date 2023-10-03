@@ -4,6 +4,7 @@ using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
 using Dialogue;
+using Inventory.Items;
 using Unity.VisualScripting;
 
 namespace EventBus {
@@ -109,6 +110,24 @@ namespace EventBus {
             Upgrade = upgrade;
         }
     }
+
+    public class MerchantInteractEvent : Event {
+        public List<Item> Items { get; private set; } = new();
+
+        public MerchantInteractEvent(List<Item> items) {
+            Items = items;
+        }
+    }
+
+    public class MerchantItemBoughtEvent : Event {
+        public Item item { get; private set; }
+
+        public MerchantItemBoughtEvent(Item item) {
+            this.item = item;
+        }
+    }
+
+    public class MerchantExitEvent : Event { }
 
     public class AddGoldEvent : Event {
         public int AmountToAdd { get; private set; }
