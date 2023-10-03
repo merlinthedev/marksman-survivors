@@ -46,10 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyCode: 324
   abilityCooldown: 12
-  abilityRange: 10
+  abilityRange: 999
   abilityLevelUpBanner: {fileID: 21300000, guid: 5bd626d016925754fbd03ef67be21a86,
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: e07326544e7158f41b5a278fd036f7d9, type: 3}
   m_KitegirlSlowAreaPrefab: {fileID: 7945802645305745901, guid: 0934f29483df7ce46a5ab8b426ed0eb7,
     type: 3}
+  lifespan: 0.2
+  slowPercentage: 0.33
+  slowDuration: 3
+  ADDamageRatio: 1.2

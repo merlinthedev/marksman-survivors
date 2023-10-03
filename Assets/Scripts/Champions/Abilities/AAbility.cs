@@ -11,10 +11,10 @@ namespace Champions.Abilities {
     public abstract class AAbility : MonoBehaviour, IUpgradeable, ICooldown {
         [SerializeField] protected KeyCode keyCode;
         [SerializeField] private float abilityCooldown = 0f; // Static cooldown in seconds, should not be edited
-        [SerializeField] protected float abilityRange = 10f;
+        [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
-        [SerializeField] private float currentCooldown = 0f; // serialized because there was some weird stuff happening
+        private float currentCooldown = 0f;
         protected Champion champion;
 
         protected bool isCancelled = false;
@@ -73,7 +73,7 @@ namespace Champions.Abilities {
         }
 
         public bool IsOnCooldown() {
-            Debug.Log("we are on cooldown wtf are youdoing;  " + currentCooldown);
+            // Debug.Log("we are on cooldown wtf are youdoing;  " + currentCooldown);
             return currentCooldown > 0;
         }
 

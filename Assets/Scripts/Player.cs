@@ -192,7 +192,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-                Logger.Log("Mouse1 pressed", Logger.Color.PINK, this);
+            Logger.Log("Mouse1 pressed", Logger.Color.PINK, this);
             selectedChampion.OnAbility(KeyCode.Mouse1);
         }
     }

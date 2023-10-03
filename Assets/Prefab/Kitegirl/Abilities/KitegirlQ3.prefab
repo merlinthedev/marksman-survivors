@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyCode: 113
   abilityCooldown: 6
-  abilityRange: 10
+  abilityRange: 999
   abilityLevelUpBanner: {fileID: 21300000, guid: 64642ac54425028429ec0d96e60ee0bc,
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: b9fc20f773517c140a763856525b7022, type: 3}
-  m_ActiveTime: 2
-  m_StacksToAdd: 1
-  m_StackType: 1
+  activeTime: 2
+  stacksToAdd: 1
+  stackType: 2

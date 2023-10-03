@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using Entities;
 using EventBus;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 using Debug = UnityEngine.Debug;
 using Logger = Util.Logger;
@@ -31,11 +29,9 @@ namespace Champions {
 
         private Vector3 lastKnownDirection = Vector3.zero;
 
-        [FormerlySerializedAs("m_Grounded")] [SerializeField]
-        protected bool grounded = false;
+        [SerializeField] protected bool grounded = false;
 
-        [FormerlySerializedAs("m_GroundedRange")] [SerializeField]
-        private float groundedRange = 1.4f;
+        [SerializeField] private float groundedRange = 1.4f;
 
         private float globalMovementDirectionAngle = 0f;
         private float previousAngle = 0f;
@@ -380,8 +376,6 @@ namespace Champions {
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             lastKnownDirection = direction.normalized;
-
-            
         }
 
         private const float increaseValue = 0.008f;

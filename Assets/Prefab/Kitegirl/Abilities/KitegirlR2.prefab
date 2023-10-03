@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyCode: 114
   abilityCooldown: 60
-  abilityRange: 10
+  abilityRange: 999
   abilityLevelUpBanner: {fileID: 21300000, guid: 37f5ea19e4a670c4eb71c0e8890f466a,
     type: 3}
   upgrades:
