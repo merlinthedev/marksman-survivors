@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85bb61027b8a479eb80871bcb17fa277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 0
+  price: 5
   value: 2
   statistic: 7

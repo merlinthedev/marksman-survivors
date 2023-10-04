@@ -41,6 +41,12 @@ namespace Inventory {
                 Logger.Log("Added item: " + merchantItemBuyRequestEvent.item + " to the inventory.",
                     Logger.Color.RED, Player.GetInstance());
                 merchantItemBuyRequestEvent.item.OnEquip();
+
+                merchantItemBuyRequestEvent.panelButton.interactable = false; // TODO: THIS IS BAD REFACTOR A.S.A.P
+            }
+            else {
+                Util.Logger.Log("CANNOT BUY THIS ITEM YOU DO NOT HAVE ENOUGHT MONEY", Util.Logger.Color.RED,
+                    Player.GetInstance());
             }
         }
 
