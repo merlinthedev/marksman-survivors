@@ -4,18 +4,19 @@ using Champions.Abilities;
 using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
+using Interactable.NPC;
 using Inventory.Items;
 using UnityEngine.UI;
 
 namespace EventBus {
     public abstract class EventBus<T> where T : Event {
-        private static event System.Action<T> onEventRaised;
+        private static event Action<T> onEventRaised;
 
-        public static void Subscribe(System.Action<T> action) {
+        public static void Subscribe(Action<T> action) {
             onEventRaised += action;
         }
 
-        public static void Unsubscribe(System.Action<T> action) {
+        public static void Unsubscribe(Action<T> action) {
             onEventRaised -= action;
         }
 
@@ -112,10 +113,12 @@ namespace EventBus {
     }
 
     public class MerchantInteractEvent : Event {
-        public List<Item> Items { get; private set; } = new();
+        public List<Item> items { get; private set; } = new();
+        public Merchant merchant { get; private set; }
 
-        public MerchantInteractEvent(List<Item> items) {
-            Items = items;
+        public MerchantInteractEvent(List<Item> items, Merchant merchant) {
+            this.items = items;
+            this.merchant = merchant;
         }
     }
 
@@ -128,7 +131,13 @@ namespace EventBus {
         }
     }
 
-    public class MerchantExitEvent : Event { }
+    public class MerchantExitEvent : Event {
+        public Merchant merchant { get; private set; }
+
+        public MerchantExitEvent(Merchant merchant) {
+            this.merchant = merchant;
+        }
+    }
 
     public class AddGoldEvent : Event {
         public int AmountToAdd { get; private set; }

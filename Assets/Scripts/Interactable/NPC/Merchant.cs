@@ -15,7 +15,7 @@ namespace Interactable.NPC {
 
         public void OnInteract() {
             Logger.Log("interacting with merchant", Logger.Color.RED, this);
-            EventBus<MerchantInteractEvent>.Raise(new MerchantInteractEvent(items));
+            EventBus<MerchantInteractEvent>.Raise(new MerchantInteractEvent(items, this));
         }
     }
 }
