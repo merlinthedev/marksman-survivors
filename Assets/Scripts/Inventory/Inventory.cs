@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using EventBus;
 using Inventory.Items;
+using UnityEngine.XR;
+using Util;
 
 namespace Inventory {
     public class Inventory {
@@ -15,13 +17,13 @@ namespace Inventory {
 
             // Subscribe to event
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilled);
-            EventBus<MerchantItemBoughtEvent>.Subscribe(OnMerchantItemBought);
+            EventBus<MerchantItemBuyRequestEvent>.Subscribe(OnMerchantItemBought);
         }
 
         ~Inventory() {
             // Unsubscribe from event
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilled);
-            EventBus<MerchantItemBoughtEvent>.Unsubscribe(OnMerchantItemBought);
+            EventBus<MerchantItemBuyRequestEvent>.Unsubscribe(OnMerchantItemBought);
         }
 
         private void OnEnemyKilled(EnemyKilledEvent enemyKilledEvent) {
@@ -30,8 +32,26 @@ namespace Inventory {
             AddGold(1);
         }
 
-        private void OnMerchantItemBought(MerchantItemBoughtEvent merchantItemBoughtEvent) {
-            AddGold(-merchantItemBoughtEvent.item.GetPrice());
+        private void OnMerchantItemBought(MerchantItemBuyRequestEvent merchantItemBuyRequestEvent) {
+            // We do not worry about actually being able to afford the item for now.
+            if (CanPurchase(merchantItemBuyRequestEvent.item.GetPrice())) {
+                AddGold(-merchantItemBuyRequestEvent.item.GetPrice());
+
+                items.Add(merchantItemBuyRequestEvent.item);
+                Logger.Log("Added item: " + merchantItemBuyRequestEvent.item + " to the inventory.",
+                    Logger.Color.RED, Player.GetInstance());
+                merchantItemBuyRequestEvent.item.OnEquip();
+
+                merchantItemBuyRequestEvent.panelButton.interactable = false; // TODO: THIS IS BAD REFACTOR A.S.A.P
+            }
+            else {
+                Util.Logger.Log("CANNOT BUY THIS ITEM YOU DO NOT HAVE ENOUGHT MONEY", Util.Logger.Color.RED,
+                    Player.GetInstance());
+            }
+        }
+
+        private bool CanPurchase(int price) {
+            return gold >= price;
         }
 
         /// <summary>

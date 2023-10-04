@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem.Composites;
 
 // Scriptable object attribute
 namespace Champions {
@@ -104,25 +106,22 @@ namespace Champions {
         }
 
         public float AttackSpeed {
-            set { attackSpeed = value; }
+            get => attackSpeed * 1;
+            set => attackSpeed = value;
         }
 
         public float GetAttackSpeed(float deftnessMultiplier) {
             return attackSpeed * deftnessMultiplier;
         }
 
-        public float InitialMovementSpeed {
-            get => initialMovementSpeed;
-        }
+        public float InitialMovementSpeed => initialMovementSpeed;
 
         public float MovementSpeed {
             get => movementSpeed;
             set => movementSpeed = value;
         }
 
-        public float InitialAttackSpeed {
-            get => initialAttackSpeed;
-        }
+        public float InitialAttackSpeed => initialAttackSpeed;
 
         public float AttackRange {
             get => attackRange;
@@ -130,11 +129,12 @@ namespace Champions {
         }
 
         public float AttackDamage {
+            get => attackDamage;
             set => attackDamage = value;
         }
 
         public float GetAttackDamage(float overpowerMultiplier) {
-            return m_AttackDamage * overpowerMultiplier;
+            return attackDamage * overpowerMultiplier;
         }
 
         public float CriticalStrikeChance {
@@ -158,5 +158,100 @@ namespace Champions {
         }
 
         #endregion
+
+        public float GetStatisticByEnum(Statistic statistic) {
+            switch (statistic) {
+                case Statistic.MAX_HEALTH:
+                    return MaxHealth;
+                case Statistic.MAX_MANA:
+                    return MaxMana;
+                case Statistic.HEALTH_REGEN:
+                    return HealthRegen;
+                case Statistic.MANA_REGEN:
+                    return ManaRegen;
+                case Statistic.ATTACK_SPEED:
+                    return AttackSpeed;
+                case Statistic.MOVEMENT_SPEED:
+                    return MovementSpeed;
+                case Statistic.ATTACK_RANGE:
+                    return AttackRange;
+                case Statistic.ATTACK_DAMAGE:
+                    return AttackDamage;
+                case Statistic.CRITICAL_STRIKE_CHANCE:
+                    return CriticalStrikeChance;
+                case Statistic.CRITICAL_STRIKE_DAMAGE:
+                    return CriticalStrikeDamage;
+                case Statistic.COOLDOWN_REDUCTION:
+                    return CooldownReduction;
+                case Statistic.CURRENT_XP:
+                    return CurrentXP;
+                default:
+                    return 0;
+            }
+        }
+
+        public void AddToStatistic(Statistic statistic, float value) {
+            switch (statistic) {
+                case Statistic.MAX_HEALTH:
+                    MaxHealth += value;
+                    break;
+                case Statistic.MAX_MANA:
+                    MaxMana += value;
+                    break;
+                case Statistic.HEALTH_REGEN:
+                    HealthRegen += value;
+                    break;
+                case Statistic.MANA_REGEN:
+                    ManaRegen += value;
+                    break;
+                case Statistic.ATTACK_SPEED:
+                    AttackSpeed += value;
+                    break;
+                case Statistic.MOVEMENT_SPEED:
+                    MovementSpeed += value;
+                    break;
+                case Statistic.ATTACK_RANGE:
+                    AttackRange += value;
+                    break;
+                case Statistic.ATTACK_DAMAGE:
+                    Util.Logger.Log("Adding " + value + " to attack damage", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    AttackDamage += value;
+
+                    Util.Logger.Log("Attack damage is now: " + AttackDamage, Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+                case Statistic.CRITICAL_STRIKE_CHANCE:
+                    CriticalStrikeChance += value;
+                    break;
+                case Statistic.CRITICAL_STRIKE_DAMAGE:
+                    CriticalStrikeDamage += value;
+                    break;
+                case Statistic.COOLDOWN_REDUCTION:
+                    CooldownReduction += value;
+                    break;
+                case Statistic.CURRENT_XP:
+                default:
+                    Util.Logger.Log("Statistic not found or could not be edited", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+            }
+        }
+    }
+
+    [Serializable]
+    public enum Statistic {
+        MAX_HEALTH,
+        MAX_MANA,
+        HEALTH_REGEN,
+        MANA_REGEN,
+        ATTACK_SPEED,
+        MOVEMENT_SPEED,
+        ATTACK_RANGE,
+        ATTACK_DAMAGE,
+        CRITICAL_STRIKE_CHANCE,
+        CRITICAL_STRIKE_DAMAGE,
+        COOLDOWN_REDUCTION,
+        CURRENT_XP
     }
 }

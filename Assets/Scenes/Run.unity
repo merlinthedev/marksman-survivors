@@ -4164,6 +4164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: []
+  items:
+  - {fileID: 8711957684602052230, guid: 5ab943250d3f2a4438841a126ed62031, type: 3}
 --- !u!95 &1134698690
 Animator:
   serializedVersion: 5

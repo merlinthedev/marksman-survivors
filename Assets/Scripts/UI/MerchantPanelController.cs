@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EventBus;
+using Interactable.NPC;
 using Inventory.Items;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace UI {
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject controlPanel;
         private List<Item> items;
+        private Merchant merchant;
 
         private void OnEnable() {
             EventBus<MerchantInteractEvent>.Subscribe(OnMerchantInteract);
@@ -19,7 +21,7 @@ namespace UI {
         }
 
         public void ExitMerchantPanel() {
-            EventBus<MerchantExitEvent>.Raise(new MerchantExitEvent());
+            EventBus<MerchantExitEvent>.Raise(new MerchantExitEvent(merchant));
             OnMerchantExit();
         }
 
@@ -28,7 +30,7 @@ namespace UI {
         }
 
         private void PopulatePanel() {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < items.Count; i++) {
                 UIMerchantPanelItem merchantPanelItem = Instantiate(merchantPanelItemPrefab, controlPanel.transform);
                 merchantPanelItem.GetPanelText().text = "Item " + i;
                 merchantPanelItem.SetItem(items[i]);
@@ -46,7 +48,8 @@ namespace UI {
         }
 
         private void OnMerchantInteract(MerchantInteractEvent e) {
-            items = e.Items;
+            items = e.items;
+            merchant = e.merchant;
 
             PopulatePanel();
         }

@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Champions.Abilities;
 using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
-using Dialogue;
+using Interactable.NPC;
 using Inventory.Items;
-using Unity.VisualScripting;
+using UnityEngine.UI;
 
 namespace EventBus {
     public abstract class EventBus<T> where T : Event {
-        private static event System.Action<T> onEventRaised;
+        private static event Action<T> onEventRaised;
 
-        public static void Subscribe(System.Action<T> action) {
+        public static void Subscribe(Action<T> action) {
             onEventRaised += action;
         }
 
-        public static void Unsubscribe(System.Action<T> action) {
+        public static void Unsubscribe(Action<T> action) {
             onEventRaised -= action;
         }
 
@@ -112,22 +113,31 @@ namespace EventBus {
     }
 
     public class MerchantInteractEvent : Event {
-        public List<Item> Items { get; private set; } = new();
+        public List<Item> items { get; private set; } = new();
+        public Merchant merchant { get; private set; }
 
-        public MerchantInteractEvent(List<Item> items) {
-            Items = items;
+        public MerchantInteractEvent(List<Item> items, Merchant merchant) {
+            this.items = items;
+            this.merchant = merchant;
         }
     }
 
-    public class MerchantItemBoughtEvent : Event {
+    public class MerchantItemBuyRequestEvent : Event {
         public Item item { get; private set; }
+        public Button panelButton;
 
-        public MerchantItemBoughtEvent(Item item) {
+        public MerchantItemBuyRequestEvent(Item item) {
             this.item = item;
         }
     }
 
-    public class MerchantExitEvent : Event { }
+    public class MerchantExitEvent : Event {
+        public Merchant merchant { get; private set; }
+
+        public MerchantExitEvent(Merchant merchant) {
+            this.merchant = merchant;
+        }
+    }
 
     public class AddGoldEvent : Event {
         public int AmountToAdd { get; private set; }
@@ -138,14 +148,14 @@ namespace EventBus {
     }
 
     public class UpdateResourceBarEvent : Event {
-        public string m_Type { get; private set; }
-        public float m_Current { get; private set; }
-        public float m_Total { get; private set; }
+        public string type { get; private set; }
+        public float current { get; private set; }
+        public float total { get; private set; }
 
         public UpdateResourceBarEvent(string type, float current, float total) {
-            m_Type = type;
-            m_Current = current;
-            m_Total = total;
+            this.type = type;
+            this.current = current;
+            this.total = total;
         }
     }
 

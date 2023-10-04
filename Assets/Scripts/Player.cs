@@ -13,6 +13,8 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour {
+    private static Player instance;
+
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
 
@@ -71,6 +73,14 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
+        if (instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+
+
         SetDefaultCursorTexture();
 
         inventory = new Inventory.Inventory();
@@ -268,4 +278,8 @@ public class Player : MonoBehaviour {
     }
 
     #endregion
+
+    public static Player GetInstance() {
+        return instance;
+    }
 }
