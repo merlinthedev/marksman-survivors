@@ -28,7 +28,7 @@ namespace UI {
         }
 
         private void PopulatePanel() {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < items.Count; i++) {
                 UIMerchantPanelItem merchantPanelItem = Instantiate(merchantPanelItemPrefab, controlPanel.transform);
                 merchantPanelItem.GetPanelText().text = "Item " + i;
                 merchantPanelItem.SetItem(items[i]);

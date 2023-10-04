@@ -15,7 +15,9 @@ namespace UI {
         public void OnButtonClick() {
             Debug.Log("Clicked " + item);
 
-            EventBus<MerchantItemBoughtEvent>.Raise(new MerchantItemBoughtEvent(item));
+            EventBus<MerchantItemBuyRequestEvent>.Raise(new MerchantItemBuyRequestEvent(item));
+
+            panelButton.interactable = false;
         }
 
         public Image GetPanelImage() {

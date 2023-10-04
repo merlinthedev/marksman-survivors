@@ -22,9 +22,9 @@ namespace UI {
         }
 
         private void UpdateResourceBar(UpdateResourceBarEvent e) {
-            float percentage = e.m_Current / e.m_Total;
+            float percentage = e.current / e.total;
 
-            switch (e.m_Type) {
+            switch (e.type) {
                 case "Health":
                     healthBar.fillAmount = percentage;
                     break;

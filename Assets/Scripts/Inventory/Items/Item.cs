@@ -1,24 +1,28 @@
-﻿using System;
+﻿using Champions;
+using UnityEngine;
 
 namespace Inventory.Items {
-    public class Item {
-        private string name = "";
-        private int price;
+    public abstract class Item : MonoBehaviour {
+        private string name;
+        [SerializeField] private int price;
 
-        public Item(string name) {
-            this.name = name;
+        public abstract void OnEquip();
+        public abstract void OnUnequip();
+
+        #region Getters & Setters
+
+        public string GetName() {
+            return name;
         }
 
         public int GetPrice() {
             return price;
         }
 
-        public void SetPrice(int price) {
-            this.price = price;
+        public override string ToString() {
+            return "Name: " + name + ", price: " + price;
         }
 
-        public override string ToString() {
-            return name;
-        }
+        #endregion
     }
 }
