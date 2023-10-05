@@ -88,6 +88,7 @@ namespace Core {
 
 
         private IEnumerator AfterMerchantSpawn() {
+            currentMerchantSpawnChance = initialSpawnChance;
             yield return new WaitForSeconds(30f);
 
             canSpawnMerchant = true;
