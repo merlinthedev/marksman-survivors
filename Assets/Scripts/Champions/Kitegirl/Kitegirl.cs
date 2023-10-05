@@ -72,11 +72,10 @@ namespace Champions.Kitegirl {
 
             if (ability != null) {
                 ability.OnUse();
-            }
-            else {
-                Debug.Log("Ability not found, please check the KeyCode");
+            } else {
+                // Debug.Log("Ability not found, please check the KeyCode");
                 // log the keycode
-                Debug.Log("Keycode: " + keyCode);
+                // Debug.Log("Keycode: " + keyCode);
             }
         }
 
@@ -114,8 +113,7 @@ namespace Champions.Kitegirl {
         protected override void OnMove() {
             if (!isDashing) {
                 base.OnMove();
-            }
-            else {
+            } else {
                 rigidbody.velocity = GetCurrentMovementDirection() * dashSpeed;
             }
         }
@@ -160,7 +158,7 @@ namespace Champions.Kitegirl {
 
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
-            KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.Euler(90, angle , 0));
+            KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
             bullet.SetSourceEntity(this);
             bullet.SetShouldChain(autoAttackShouldChain);
             bullet.SetTarget(target + randomBulletSpread);
@@ -179,8 +177,7 @@ namespace Champions.Kitegirl {
 
             if (shouldCallRecursive && recurseCount < maxRecurseCount) {
                 Utilities.InvokeDelayed(() => { ShootBullet_Recursive(true, target); }, 0.05f, this);
-            }
-            else {
+            } else {
                 recurseCount = 0;
             }
         }

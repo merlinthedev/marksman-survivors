@@ -16,6 +16,20 @@ namespace Util {
             return Mathf.Abs(A - (A1 + A2 + A3)) < 0.01f;
         }
 
+        public static Vector3 GetRandomPointInCircle(Vector3 origin, float radius) {
+            Vector3 randomPoint = Random.insideUnitSphere * radius;
+            randomPoint += origin;
+            return randomPoint;
+        }
+
+        public static Vector3 GetRandomPointInTorus(Vector3 center, float minDistance) {
+            Vector3 randomPoint = (Random.insideUnitSphere + Vector3.one) * minDistance;
+            randomPoint += center;
+            randomPoint.y = center.y;
+
+            return randomPoint;
+        }
+
         public static bool IsPointInsideCameraViewport(Camera camera, Vector3 point) {
             Vector3 viewportPoint = camera.WorldToViewportPoint(point);
             return viewportPoint.x is > 0 and < 1 && viewportPoint.y is > 0 and < 1;

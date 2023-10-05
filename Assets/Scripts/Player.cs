@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Champions;
+﻿using Champions;
 using Enemy;
 using Entities;
 using EventBus;
@@ -38,6 +37,12 @@ public class Player : MonoBehaviour {
 
     private void OnEnable() {
         // excludedContexts.Add(this);
+        if (instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
 
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
@@ -73,14 +78,6 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
-        if (instance != null) {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-
-
         SetDefaultCursorTexture();
 
         inventory = new Inventory.Inventory();
@@ -122,8 +119,7 @@ public class Player : MonoBehaviour {
                     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
                     damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
                     currentFocus = damageable.GetTransform().gameObject;
-                }
-                else {
+                } else {
                     RemoveFocus();
                 }
 
@@ -137,8 +133,7 @@ public class Player : MonoBehaviour {
                         selectedChampion.RequestMovement(hit.collider.gameObject.transform.position, 5f,
                             () => interactable.OnInteract());
                         // Logger.Log("distance is too big, moving...", Logger.Color.RED, this);
-                    }
-                    else {
+                    } else {
                         // Logger.Log("distance is not too big, interacting...", Logger.Color.RED, this);
                         interactable.OnInteract();
                     }

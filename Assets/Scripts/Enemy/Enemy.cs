@@ -5,9 +5,7 @@ using BuffsDebuffs.Stacks;
 using Champions;
 using Entities;
 using EventBus;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Util;
 using Logger = Util.Logger;
@@ -120,8 +118,7 @@ namespace Enemy {
             //Check dir
             if (rigidbody.velocity.x > 0) {
                 currentDir = (rigidbody.velocity.z > 0) ? 0 : 1;
-            }
-            else if (rigidbody.velocity.x < 0) {
+            } else if (rigidbody.velocity.x < 0) {
                 currentDir = (rigidbody.velocity.z < 0) ? 2 : 3;
             }
 
@@ -133,16 +130,13 @@ namespace Enemy {
                 if (currentDir == 0) {
                     spriteRenderer.flipX = true;
                     animator.SetInteger("Dir", 1);
-                }
-                else if (currentDir == 1) {
+                } else if (currentDir == 1) {
                     spriteRenderer.flipX = true;
                     animator.SetInteger("Dir", 0);
-                }
-                else if (currentDir == 2) {
+                } else if (currentDir == 2) {
                     spriteRenderer.flipX = false;
                     animator.SetInteger("Dir", 0);
-                }
-                else if (currentDir == 3) {
+                } else if (currentDir == 3) {
                     spriteRenderer.flipX = false;
                     animator.SetInteger("Dir", 1);
                 }
@@ -160,8 +154,7 @@ namespace Enemy {
                     // Debug.Log("Increasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier += 0.03f;
-                }
-                else {
+                } else {
                     focusAnim = false;
                 }
             }
@@ -328,9 +321,9 @@ namespace Enemy {
                 return;
             }
 
-            Logger.Log("Slow applied", Logger.Color.GREEN, this);
-            Logger.Log("MovementSpeed: " + movementSpeed + ", Initial MovementSpeed: " + initialMovementSpeed,
-                Logger.Color.BLUE, this);
+            // Logger.Log("Slow applied", Logger.Color.GREEN, this);
+            // Logger.Log("MovementSpeed: " + movementSpeed + ", Initial MovementSpeed: " + initialMovementSpeed,
+            //     Logger.Color.BLUE, this);
 
             Utilities.InvokeDelayed(() => { movementSpeed = initialMovementSpeed; }, debuff.GetDuration(), this);
         }
