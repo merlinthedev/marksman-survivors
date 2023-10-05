@@ -5,11 +5,11 @@ using EventBus;
 using Interactable;
 using UnityEngine;
 using UnityEngine.UI;
-using Vector2 = UnityEngine.Vector2;
 using UnityEngine.SceneManagement;
 using Logger = Util.Logger;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
+using Vector2 = UnityEngine.Vector2;
 
 public class Player : MonoBehaviour {
     private static Player instance;

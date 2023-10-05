@@ -35,6 +35,7 @@ public class DialogueManager : MonoBehaviour {
         if(e.npc != null) {
             currentNPC = e.npc;
         }
+        
 
         dialogue = e.dialogue;
         title.text = dialogue[pos].title;

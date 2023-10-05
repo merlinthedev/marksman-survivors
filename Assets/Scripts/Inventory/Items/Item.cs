@@ -1,9 +1,8 @@
-﻿using Champions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Inventory.Items {
     public abstract class Item : MonoBehaviour {
-        private string name;
+        [SerializeField] private string name;
         [SerializeField] private int price;
 
         public abstract void OnEquip();

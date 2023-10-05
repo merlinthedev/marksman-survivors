@@ -8,9 +8,13 @@ namespace Inventory.Items.impl {
         [SerializeField] private Statistic statistic;
 
         public override void OnEquip() {
-            Logger.Log("Calling OnEquip for item: " + this + ".", Logger.Color.RED, this);
+            // ChampionStatistics cs = Player.GetInstance().GetCurrentlySelectedChampion().GetChampionStatistics();
+            // Logger.Log("Calling OnEquip for item: " + this + ".", Logger.Color.RED, this);
+            // Logger.Log("before: " + cs.GetStatisticByEnum(statistic).ToString() + ".", Logger.Color.RED, this);
             Player.GetInstance().GetCurrentlySelectedChampion().GetChampionStatistics()
                 .AddToStatistic(statistic, value);
+
+            // Logger.Log("after: " + cs.GetStatisticByEnum(statistic).ToString() + ".", Logger.Color.RED, this);
         }
 
         public override void OnUnequip() {

@@ -1,11 +1,30 @@
-﻿namespace Inventory.Items.impl {
+﻿using Champions;
+using UnityEngine;
+using Logger = Util.Logger;
+
+namespace Inventory.Items.impl {
     public class PercentageItem : Item {
+        [SerializeField] private float percentage;
+        [SerializeField] private Statistic statistic;
+
+        private void Initialize() {
+            percentage = percentage / 100 + 1;
+        }
+
         public override void OnEquip() {
-            throw new System.NotImplementedException();
+            Initialize();
+            // ChampionStatistics cs = Player.GetInstance().GetCurrentlySelectedChampion().GetChampionStatistics();
+            // Logger.Log("Before;  " + cs.GetStatisticByEnum(statistic), Logger.Color.RED, this);
+
+            Player.GetInstance().GetCurrentlySelectedChampion().GetChampionStatistics()
+                .MultiplyStatisticByPercentage(statistic, percentage);
+
+            // Logger.Log("AFter: " + cs.GetStatisticByEnum(statistic), Logger.Color.RED, this);
         }
 
         public override void OnUnequip() {
-            throw new System.NotImplementedException();
+            Player.GetInstance().GetCurrentlySelectedChampion().GetChampionStatistics()
+                .DivideStatisticByPercentage(statistic, percentage);
         }
     }
 }

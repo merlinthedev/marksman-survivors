@@ -12,7 +12,7 @@ namespace Inventory {
         private List<Item> items = new();
 
         public Inventory() {
-            gold = 0;
+            gold = 999;
             killCount = 0;
 
             // Subscribe to event
@@ -43,8 +43,7 @@ namespace Inventory {
                 merchantItemBuyRequestEvent.item.OnEquip();
 
                 merchantItemBuyRequestEvent.panelButton.interactable = false; // TODO: THIS IS BAD REFACTOR A.S.A.P
-            }
-            else {
+            } else {
                 Util.Logger.Log("CANNOT BUY THIS ITEM YOU DO NOT HAVE ENOUGHT MONEY", Util.Logger.Color.RED,
                     Player.GetInstance());
             }
