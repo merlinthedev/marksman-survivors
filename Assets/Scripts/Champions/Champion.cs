@@ -52,6 +52,9 @@ namespace Champions {
             get => !isAutoAttacking && Time.time > lastAttackTime + (1f / GetAttackSpeed());
         }
 
+        [Header("Cheats")]
+        [SerializeField] private bool isInvincible = false;
+
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
@@ -451,6 +454,7 @@ namespace Champions {
         #region Damage & Death
 
         protected virtual void OnDamageTaken(float damage) {
+            if (isInvincible) return;
             float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
             damage = IsFragile ? damage * 1 + fragileStacks / 10 : damage;
             championStatistics.CurrentHealth -= damage;
@@ -461,9 +465,13 @@ namespace Champions {
         }
 
         public void TakeFlatDamage(float damage) {
+            if (isInvincible) return;
             OnDamageTaken(damage);
         }
 
+        public void ToggleInvincibility() {
+            isInvincible = !isInvincible;
+        }
 
         protected float CalculateDamage() {
             float damage = GetAttackDamage();
@@ -481,7 +489,7 @@ namespace Champions {
             damageable.TakeFlatDamage(damage);
         }
 
-        private void OnDeath() {
+        public void OnDeath() {
             // Death logic
 
             EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("D Hub"));

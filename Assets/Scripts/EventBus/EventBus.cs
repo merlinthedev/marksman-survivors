@@ -244,7 +244,13 @@ namespace EventBus {
 
     public class GameResumedEvent : Event { }
 
-    public class ToggleSettingsMenuEvent : Event { }
+    public class ToggleMenuEvent : Event { 
+        public string menu { get; private set; }
+
+        public ToggleMenuEvent(string menuName) {
+            this.menu = menuName;
+        }
+    }
 
     public class UISettingsMenuOpenedEvent : Event { }
 

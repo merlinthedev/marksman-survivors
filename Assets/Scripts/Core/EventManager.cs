@@ -73,8 +73,7 @@ namespace Core {
             if (Random.value < currentMerchantSpawnChance) {
                 // spawn a merchant
                 Vector3 spawnPoint = Utilities.GetRandomPointInTorus(player.transform.position, 50f);
-                GameObject merchantObject = Instantiate(merchantPrefab, spawnPoint, Quaternion.Euler(0, 45, 0));
-                Merchant merchant = merchantObject.GetComponent<Merchant>();
+                Merchant merchant = InstantiateMerchant(spawnPoint);
                 if (merchant == null) {
                     Logger.LogError("Merchant prefab does not have a Merchant component", this);
                     throw new Exception("Merchant prefab does not have a Merchant component");
@@ -92,6 +91,10 @@ namespace Core {
             }
         }
 
+        public Merchant InstantiateMerchant(Vector3 spawnPoint) {
+            GameObject merchantObject = Instantiate(merchantPrefab, spawnPoint, Quaternion.Euler(0, 45, 0));
+            return merchantObject.GetComponent<Merchant>();
+        }
 
         private IEnumerator AfterMerchantSpawn() {
             currentMerchantSpawnChance = initialSpawnChance;

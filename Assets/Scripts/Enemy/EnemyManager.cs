@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +6,7 @@ using Champions.Abilities;
 using EventBus;
 using UnityEngine;
 using Util;
+using static UnityEditor.FilePathAttribute;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
@@ -75,7 +76,7 @@ namespace Enemy {
         }
 
         private void HandleEnemySpawn() {
-            if (!shouldSpawn) return;
+            if (!shouldSpawn || Time.timeScale > 1) return;
 
             // if the time since the last spawn is less than the spawn timer, we don't want to spawn
             if (Time.time - lastSpawnTime < spawnTimer) return;
@@ -94,13 +95,7 @@ namespace Enemy {
 
             Vector3[] location = FindPositionsIteratively(Mathf.FloorToInt(randomAmountOfEnemies));
 
-            for (var i = 0; i < location.Length; i++) {
-                Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-                Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
-                enemy.SetTarget(player.transform);
-                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
-                enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
-            }
+            InstantiateEnemies(location);
 
             // randomize the spawn timer a bit to make spawns feel more natural
             internalSpawnTimer = Random.Range(spawnTimer - 0.5f, spawnTimer + 0.5f);
@@ -171,7 +166,7 @@ namespace Enemy {
 
         #endregion
 
-        private Vector3[] FindPositionsIteratively(int amountOfIterations = 1) {
+        public Vector3[] FindPositionsIteratively(int amountOfIterations = 1) {
             // get a random point on the screen
             Vector3[] randomPointOutsideScreen = GenerateSpawnPoints(amountOfIterations);
             // Debug.Log("Random point on screen: " + randomPointOutsideScreen);
@@ -224,6 +219,27 @@ namespace Enemy {
             return spawnPoints;
         }
 
+        public Enemy[] InstantiateEnemies(Vector3[] location) {
+            Enemy[] enemies = new Enemy[location.Length];
+            for (var i = 0; i < location.Length; i++) {
+                Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
+                Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
+                enemy.SetTarget(player.transform);
+                // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
+                enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+                enemies[i] = enemy;
+            }
+            return enemies;
+        }
+
+        public void WipeEnemies() {
+            //loop over enemies dictionary and destroy all enemies
+            foreach (var kvp in enemyDictionary) {
+                Destroy(kvp.Value.gameObject);
+            }
+            enemyDictionary.Clear();
+        }
+
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
             enemyDictionary.Remove(enemyKilledEvent.Collider);
         }
@@ -238,7 +254,7 @@ namespace Enemy {
         private void OnGameResumed(GameResumedEvent e) {
             shouldSpawn = true;
             foreach (var kvp in enemyDictionary) {
-                kvp.Value.OnResume();
+                kvp.Value?.OnResume();
             }
         }
 
@@ -332,6 +348,10 @@ namespace Enemy {
 
         public static EnemyManager GetInstance() {
             return instance;
+        }
+
+        public bool GetShouldSpawn() {
+            return shouldSpawn;
         }
     }
 

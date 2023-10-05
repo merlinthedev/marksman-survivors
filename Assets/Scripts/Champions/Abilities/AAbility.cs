@@ -14,7 +14,7 @@ namespace Champions.Abilities {
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
-        private float currentCooldown = 0f;
+        public float currentCooldown = 0f;
         protected Champion champion;
 
         protected bool isCancelled = false;
