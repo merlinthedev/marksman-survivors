@@ -63,11 +63,17 @@ namespace Core {
                 Logger.Log("Cannot spawn merchant yet", Logger.Color.RED, this);
                 yield break;
             }
+            
+            // 0-1, 0.001
+            
+            // Q: What is the chance of Random.value to be smaller than 0.0001 in %?
+            
+            
 
             if (Random.value < currentMerchantSpawnChance) {
                 // spawn a merchant
                 Vector3 spawnPoint = Utilities.GetRandomPointInTorus(player.transform.position, 50f);
-                GameObject merchantObject = Instantiate(merchantPrefab, spawnPoint, Quaternion.identity);
+                GameObject merchantObject = Instantiate(merchantPrefab, spawnPoint, Quaternion.Euler(0, 45, 0));
                 Merchant merchant = merchantObject.GetComponent<Merchant>();
                 if (merchant == null) {
                     Logger.LogError("Merchant prefab does not have a Merchant component", this);

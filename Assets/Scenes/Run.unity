@@ -4912,9 +4912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   merchantPrefab: {fileID: 6567137307320768544, guid: 7791f99f08ae17b46a86ff9da9c3b7ae,
     type: 3}
-  spawnInterval: 1
-  spawnChanceIncrease: 0.005
-  initialSpawnChance: 0.01
+  spawnInterval: 0.1
+  spawnChanceIncrease: 0.00005
+  initialSpawnChance: 0
 --- !u!1 &1591199045
 GameObject:
   m_ObjectHideFlags: 0
