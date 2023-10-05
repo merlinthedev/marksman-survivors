@@ -53,7 +53,7 @@ namespace Core {
 
             currentMerchantSpawnChance = initialSpawnChance;
 
-            StartCoroutine(SpawnMerchant());
+            // StartCoroutine(SpawnMerchant());
         }
 
         private IEnumerator SpawnMerchant() {

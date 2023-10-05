@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Resources;
 using UnityEngine;
 using UnityEngine.InputSystem.Composites;
 
@@ -187,6 +188,102 @@ namespace Champions {
                     return CurrentXP;
                 default:
                     return 0;
+            }
+        }
+
+        public void MultiplyStatisticByPercentage(Statistic statistic, float percentage) {
+            switch (statistic) {
+                case Statistic.MAX_HEALTH:
+                    MaxHealth *= percentage;
+                    break;
+                case Statistic.MAX_MANA:
+                    MaxMana *= percentage;
+                    break;
+                case Statistic.HEALTH_REGEN:
+                    HealthRegen *= percentage;
+                    break;
+                case Statistic.MANA_REGEN:
+                    ManaRegen *= percentage;
+                    break;
+                case Statistic.ATTACK_SPEED:
+                    AttackSpeed *= percentage;
+                    break;
+                case Statistic.MOVEMENT_SPEED:
+                    MovementSpeed *= percentage;
+                    break;
+                case Statistic.ATTACK_RANGE:
+                    AttackRange *= percentage;
+                    break;
+                case Statistic.ATTACK_DAMAGE:
+                    Util.Logger.Log("Adding percentage " + percentage + " to attack damage", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    AttackDamage *= percentage;
+
+                    Util.Logger.Log("Attack damage is now: " + AttackDamage, Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+                case Statistic.CRITICAL_STRIKE_CHANCE:
+                    CriticalStrikeChance *= percentage;
+                    break;
+                case Statistic.CRITICAL_STRIKE_DAMAGE:
+                    CriticalStrikeDamage *= percentage;
+                    break;
+                case Statistic.COOLDOWN_REDUCTION:
+                    CooldownReduction *= percentage;
+                    break;
+                case Statistic.CURRENT_XP:
+                default:
+                    Util.Logger.Log("Statistic not found or could not be edited", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+            }
+        }
+
+        public void DivideStatisticByPercentage(Statistic statistic, float percentage) {
+            switch (statistic) {
+                case Statistic.MAX_HEALTH:
+                    MaxHealth /= percentage;
+                    break;
+                case Statistic.MAX_MANA:
+                    MaxMana /= percentage;
+                    break;
+                case Statistic.HEALTH_REGEN:
+                    HealthRegen /= percentage;
+                    break;
+                case Statistic.MANA_REGEN:
+                    ManaRegen /= percentage;
+                    break;
+                case Statistic.ATTACK_SPEED:
+                    AttackSpeed /= percentage;
+                    break;
+                case Statistic.MOVEMENT_SPEED:
+                    MovementSpeed /= percentage;
+                    break;
+                case Statistic.ATTACK_RANGE:
+                    AttackRange /= percentage;
+                    break;
+                case Statistic.ATTACK_DAMAGE:
+                    Util.Logger.Log("Adding percentage " + percentage + " to attack damage", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    AttackDamage /= percentage;
+
+                    Util.Logger.Log("Attack damage is now: " + AttackDamage, Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+                case Statistic.CRITICAL_STRIKE_CHANCE:
+                    CriticalStrikeChance /= percentage;
+                    break;
+                case Statistic.CRITICAL_STRIKE_DAMAGE:
+                    CriticalStrikeDamage /= percentage;
+                    break;
+                case Statistic.COOLDOWN_REDUCTION:
+                    CooldownReduction /= percentage;
+                    break;
+                case Statistic.CURRENT_XP:
+                default:
+                    Util.Logger.Log("Statistic not found or could not be edited", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
             }
         }
 
