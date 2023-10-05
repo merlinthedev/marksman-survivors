@@ -57,5 +57,6 @@ namespace Champions.Abilities {
         private void OnICooldownUnsubscribed(UnsubscribeICooldownEvent obj) {
             cooldowns.Remove(obj.Cooldown);
         }
+
     }
 }

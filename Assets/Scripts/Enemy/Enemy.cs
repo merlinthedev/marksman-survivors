@@ -31,6 +31,7 @@ namespace Enemy {
         private float initialHealthBarWidth;
         private bool canMove = true;
         private bool canAttack = true;
+        private bool isDummy = false;
 
         private float lastAttackTime = 0f;
 
@@ -111,6 +112,9 @@ namespace Enemy {
         }
 
         private void Update() {
+            if (isDummy) {
+                rigidbody.velocity = Vector3.zero;
+            }
             if (target != null && canMove) {
                 Move();
             }
@@ -169,6 +173,7 @@ namespace Enemy {
         }
 
         private void Move() {
+            if (isDummy) return;
             Vector3 direction = target.position - transform.position;
 
             if (direction.magnitude < 0.1f) {
@@ -184,6 +189,7 @@ namespace Enemy {
             // Debug.Log("Taking flat damage");
             TakeDamage(damage);
         }
+
 
 
         private void TakeDamage(float damage) {
@@ -338,6 +344,14 @@ namespace Enemy {
                 .GetComponent<EnemyDamageNumberHelper>();
 
             enemyDamageNumberHelper.Initialize(damage.ToString());
+        }
+
+        public void MakeDummy() {
+            isDummy = true;
+            maxHealth = 999;
+            currentHealth = maxHealth;
+            damage = 0;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.gray;
         }
 
         private void UpdateHealthBar() {

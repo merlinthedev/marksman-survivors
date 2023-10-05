@@ -3,19 +3,23 @@ using EventBus;
 
 public class MenuManager : MonoBehaviour {
     [SerializeField] public GameObject settings;
+    [SerializeField] public Bamischijf bamischijf;
+    [SerializeField] public GameObject cheatsPanel;
 
     private void OnEnable() {
-        EventBus<ToggleSettingsMenuEvent>.Subscribe(ToggleSettingsMenu);
+        EventBus<ToggleMenuEvent>.Subscribe(ToggleSettingsMenu);
     }
 
     private void OnDisable() {
-        EventBus<ToggleSettingsMenuEvent>.Unsubscribe(ToggleSettingsMenu);
+        EventBus<ToggleMenuEvent>.Unsubscribe(ToggleSettingsMenu);
     }
 
-    private void ToggleSettingsMenu(ToggleSettingsMenuEvent e) {
-        settings.SetActive(!settings.activeSelf);
+    private void ToggleSettingsMenu(ToggleMenuEvent e) {
+        if (e.menu == "settings") settings.SetActive(!settings.activeSelf);
+        else if (e.menu == "cheats"&& !cheatsPanel.activeSelf) cheatsPanel.SetActive(!cheatsPanel.activeSelf);
+        else if(e.menu == "cheats" && cheatsPanel.activeSelf) bamischijf.CloseMenu();
 
-        if (settings.activeSelf) {
+        if (settings.activeSelf || cheatsPanel.activeSelf) {
             EventBus<UISettingsMenuOpenedEvent>.Raise(new UISettingsMenuOpenedEvent());
         }
         else {

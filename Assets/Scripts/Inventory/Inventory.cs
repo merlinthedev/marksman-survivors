@@ -57,9 +57,10 @@ namespace Inventory {
         /// Add gold to the inventory, add negative amount to remove gold.
         /// </summary>
         /// <param name="amount"></param>
-        private void AddGold(int amount) {
+        public void AddGold(int amount) {
             gold += amount;
 
+          
             EventBus<UIGoldChangedEvent>.Raise(new UIGoldChangedEvent(gold));
         }
 

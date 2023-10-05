@@ -224,7 +224,10 @@ public class Player : MonoBehaviour {
         hasClickedThisFrame = false;
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            EventBus<ToggleSettingsMenuEvent>.Raise(new ToggleSettingsMenuEvent());
+            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("settings"));
+        }
+        if (Input.GetKeyDown(KeyCode.Equals)) {
+            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("cheats"));
         }
 
         if (Input.GetKeyDown(KeyCode.Tab) && !isPaused) {
@@ -322,5 +325,9 @@ public class Player : MonoBehaviour {
 
     public static Player GetInstance() {
         return instance;
+    }
+
+    public Inventory.Inventory GetInventory() {
+        return inventory;
     }
 }
