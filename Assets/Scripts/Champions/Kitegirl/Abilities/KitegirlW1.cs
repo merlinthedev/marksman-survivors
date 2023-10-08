@@ -1,5 +1,6 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
+using Core;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
@@ -27,6 +28,8 @@ namespace Champions.Kitegirl.Abilities {
                                 grenadePrefab.transform.rotation);
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
                         grenade.OnThrow(point, champion);
+
+                        DamageableManager.GetInstance().AddDamageable(grenade);
 
                         base.OnUse();
                     }

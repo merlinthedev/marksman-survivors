@@ -26,15 +26,28 @@ namespace EventBus {
         }
     }
 
-    public abstract class Event { }
+    public abstract class Event {
+    }
 
-    public class EnemyStartHoverEvent : Event { }
+    public class EnemyStartHoverEvent : Event {
+    }
 
-    public class EnemyStopHoverEvent : Event { }
+    public class EnemyStopHoverEvent : Event {
+    }
 
-    public class InteractableStartHoverEvent : Event { }
+    public class InteractableStartHoverEvent : Event {
+    }
 
-    public class InteractableStopHoverEvent : Event { }
+    public class InteractableStopHoverEvent : Event {
+    }
+
+    public class EnemySpawnedEvent : Event {
+        public Enemy.Enemy enemy { get; private set; }
+
+        public EnemySpawnedEvent(Enemy.Enemy enemy) {
+            this.enemy = enemy;
+        }
+    }
 
     public class EnemyHitEvent : Event {
         public Collider m_Collider { get; private set; }
@@ -49,24 +62,28 @@ namespace EventBus {
     }
 
     public class EnemyKilledEvent : Event {
-        public Collider Collider { get; private set; }
-        public Enemy.Enemy Enemy { get; private set; }
-        public Vector3 EnemyDeathPosition { get; private set; }
+        public Collider collider { get; private set; }
+        public Enemy.Enemy enemy { get; private set; }
+        public Vector3 enemyDeathPosition { get; private set; }
 
         public EnemyKilledEvent(Collider collider, Enemy.Enemy enemy, Vector3 enemyDeathPosition) {
-            Collider = collider;
-            Enemy = enemy;
-            EnemyDeathPosition = enemyDeathPosition;
+            this.collider = collider;
+            this.enemy = enemy;
+            this.enemyDeathPosition = enemyDeathPosition;
         }
     }
 
-    public class ChampionHealthRegenerated : Event { }
+    public class ChampionHealthRegenerated : Event {
+    }
 
-    public class ChampionManaRegenerated : Event { }
+    public class ChampionManaRegenerated : Event {
+    }
 
-    public class ChampionAbilitiesHookedEvent : Event { }
+    public class ChampionAbilitiesHookedEvent : Event {
+    }
 
-    public class ChampionDamageTakenEvent : Event { }
+    public class ChampionDamageTakenEvent : Event {
+    }
 
     public class ChampionAbilityUsedEvent : Event {
         public AAbility AbstractAbility { get; private set; }
@@ -188,11 +205,14 @@ namespace EventBus {
         }
     }
 
-    public class UILevelUpPanelClosedEvent : Event { }
+    public class UILevelUpPanelClosedEvent : Event {
+    }
 
-    public class UILevelUpPanelOpenEvent : Event { }
+    public class UILevelUpPanelOpenEvent : Event {
+    }
 
-    public class ShowLevelUpPanelEvent : Event { }
+    public class ShowLevelUpPanelEvent : Event {
+    }
 
     public class LevelUpPromptEvent : Event {
         public bool open;
@@ -241,11 +261,13 @@ namespace EventBus {
         }
     }
 
-    public class GamePausedEvent : Event { }
+    public class GamePausedEvent : Event {
+    }
 
-    public class GameResumedEvent : Event { }
+    public class GameResumedEvent : Event {
+    }
 
-    public class ToggleMenuEvent : Event { 
+    public class ToggleMenuEvent : Event {
         public string menu { get; private set; }
 
         public ToggleMenuEvent(string menuName) {
@@ -253,7 +275,9 @@ namespace EventBus {
         }
     }
 
-    public class UISettingsMenuOpenedEvent : Event { }
+    public class UISettingsMenuOpenedEvent : Event {
+    }
 
-    public class UISettingsMenuClosedEvent : Event { }
+    public class UISettingsMenuClosedEvent : Event {
+    }
 }

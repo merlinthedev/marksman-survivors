@@ -36,8 +36,7 @@ namespace Entities {
 
             if (shouldMove) {
                 Move();
-            }
-            else {
+            } else {
                 Destroy(gameObject);
             }
         }

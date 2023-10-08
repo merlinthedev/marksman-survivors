@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities;
+using Core;
 using Core.Singleton;
 using EventBus;
 using UnityEngine;
@@ -217,6 +218,7 @@ namespace Enemy {
                 enemy.SetTarget(player.transform);
                 // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+                EventBus<EnemySpawnedEvent>.Raise(new EnemySpawnedEvent(enemy));
                 enemies[i] = enemy;
             }
             return enemies;
@@ -231,7 +233,7 @@ namespace Enemy {
         }
 
         private void OnEnemyKilledEvent(EnemyKilledEvent enemyKilledEvent) {
-            enemyDictionary.Remove(enemyKilledEvent.Collider);
+            enemyDictionary.Remove(enemyKilledEvent.collider);
         }
 
         private void OnGamePaused(GamePausedEvent e) {

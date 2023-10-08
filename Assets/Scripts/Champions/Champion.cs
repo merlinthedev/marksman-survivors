@@ -500,13 +500,13 @@ namespace Champions {
         #region Events
 
         private void OnEnemyKilledEvent(EnemyKilledEvent e) {
-            championStatistics.CurrentXP += e.Enemy.GetXP();
+            championStatistics.CurrentXP += e.enemy.GetXP();
             championLevelManager.CheckForLevelUp();
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", championStatistics.CurrentXP,
                 championLevelManager.CurrentLevelXP));
 
             // if the enemy that was killed was the instance of currentTarget, set currentTarget to null
-            if ((Enemy.Enemy)currentTarget == e.Enemy) {
+            if ((Enemy.Enemy)currentTarget == e.enemy) {
                 currentTarget = null;
             }
         }

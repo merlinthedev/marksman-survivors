@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
+using Core;
 using Enemy;
 using Entities;
+using EventBus;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
@@ -69,6 +71,8 @@ namespace Champions.Kitegirl.Entities {
                 kitegirl.DealDamage(enemy, (shot ? 2f : 1f) * this.damage);
                 enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, kitegirl, Debuff.DebuffType.BURN, 5f, damage, 1f));
             }
+
+            DamageableManager.GetInstance().RemoveDamageable(this);
 
             Destroy(gameObject);
         }
