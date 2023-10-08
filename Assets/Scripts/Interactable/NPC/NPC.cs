@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using System.Collections.Generic;
 using EventBus;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Interactable.NPC {
             EventBus<InteractableStopHoverEvent>.Raise(new InteractableStopHoverEvent());
         }
 
-        [SerializeField] public List<Dialogue.Dialogue> dialogue;
+        [SerializeField] public List<Dialogue> dialogue;
 
         public abstract void OnEndDialogue();
     }

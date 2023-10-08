@@ -4,6 +4,7 @@ using Champions.Abilities;
 using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
+using Core;
 using Interactable.NPC;
 using Inventory.Items;
 using UnityEngine.UI;
@@ -204,13 +205,13 @@ namespace EventBus {
 
     public class StartDialogueEvent : Event {
         //List of titles and bodies for dialogue that the DialogueManager will copy
-        public List<Dialogue.Dialogue> dialogue { get; private set; }
+        public List<Dialogue> dialogue { get; private set; }
 
         //In case the NPC needs to do something during  or after the dialogue, you may pass the NPC gameobject.
         //You may also pass "null" in case this is not relevant.
         public GameObject npc { get; private set; }
 
-        public StartDialogueEvent(List<Dialogue.Dialogue> dialogue, GameObject npc) {
+        public StartDialogueEvent(List<Dialogue> dialogue, GameObject npc) {
             this.dialogue = dialogue;
             this.npc = npc;
         }

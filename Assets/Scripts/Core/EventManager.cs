@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Core.Singleton;
+using EventBus;
+using Interactable.NPC;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Interactable.NPC;
-using EventBus;
 using UnityEngine;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Core {
-    public class EventManager : MonoBehaviour {
-        private static EventManager instance;
+    public class EventManager : Singleton<EventManager> {
 
         private List<Merchant> activeMerchants = new();
         private Player player;
@@ -43,12 +43,6 @@ namespace Core {
         }
 
         private void Start() {
-            if (instance != null) {
-                Destroy(gameObject);
-                return;
-            }
-
-            instance = this;
             player = Player.GetInstance();
 
             currentMerchantSpawnChance = initialSpawnChance;
@@ -63,12 +57,11 @@ namespace Core {
                 Logger.Log("Cannot spawn merchant yet", Logger.Color.RED, this);
                 yield break;
             }
-            
+
             // 0-1, 0.001
-            
+
             // Q: What is the chance of Random.value to be smaller than 0.0001 in %?
-            
-            
+
 
             if (Random.value < currentMerchantSpawnChance) {
                 // spawn a merchant
@@ -103,8 +96,5 @@ namespace Core {
             canSpawnMerchant = true;
         }
 
-        public static EventManager GetInstance() {
-            return instance;
-        }
     }
 }

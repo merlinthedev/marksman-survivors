@@ -1,10 +1,8 @@
-﻿using EventBus;
-using UnityEngine;
-using Event = UnityEngine.Event;
+﻿using Core.Singleton;
+using EventBus;
 
 namespace Core {
-    public class GameManager : MonoBehaviour {
-        private static GameManager instance;
+    public class GameManager : Singleton<GameManager> {
         public bool Paused { get; private set; }
 
         private void OnEnable() {
@@ -29,14 +27,6 @@ namespace Core {
             EventBus<MerchantExitEvent>.Unsubscribe(OnMerchantExit);
         }
 
-        private void Start() {
-            if (instance != null) {
-                Destroy(gameObject);
-                return;
-            }
-
-            instance = this;
-        }
 
         private void ResumeGame() {
             EventBus<GameResumedEvent>.Raise(new GameResumedEvent());
@@ -76,8 +66,6 @@ namespace Core {
 
         #endregion
 
-        public static GameManager GetInstance() {
-            return instance;
-        }
+
     }
 }
