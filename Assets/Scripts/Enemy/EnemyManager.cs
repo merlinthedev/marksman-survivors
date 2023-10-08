@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities;
+using Core.Singleton;
 using EventBus;
 using UnityEngine;
 using Util;
-using static UnityEditor.FilePathAttribute;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Enemy {
-    public class EnemyManager : MonoBehaviour {
+    public class EnemyManager : Singleton<EnemyManager> {
         [SerializeField] private Player player; // THIS IS BAD LETS NOT DO THIS
         [SerializeField] private Enemy enemyPrefab;
 
@@ -36,7 +36,6 @@ namespace Enemy {
 
         private int amountOfEnemies = 0;
         private Dictionary<Collider, Enemy> enemyDictionary = new();
-        private static EnemyManager instance;
 
         private void OnEnable() {
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
@@ -53,12 +52,6 @@ namespace Enemy {
         }
 
         private void Start() {
-            if (instance != null) {
-                Destroy(this);
-                return;
-            }
-
-            instance = this;
             internalSpawnTimer = Random.Range(spawnTimer - 0.25f, spawnTimer + 0.25f);
 
             EnemyTimerHandle();
@@ -199,16 +192,13 @@ namespace Enemy {
                 if (i < movementData.x * amountOfIterations) {
                     x = Random.Range(-0.3f, 1.3f);
                     y = 2.3f;
-                }
-                else if (i < (movementData.x + movementData.y) * amountOfIterations) {
+                } else if (i < (movementData.x + movementData.y) * amountOfIterations) {
                     x = 1.3f;
                     y = Random.Range(-0.3f, 2.3f);
-                }
-                else if (i < (movementData.x + movementData.y + movementData.z) * amountOfIterations) {
+                } else if (i < (movementData.x + movementData.y + movementData.z) * amountOfIterations) {
                     x = Random.Range(-0.3f, 1.3f);
                     y = -1.3f;
-                }
-                else {
+                } else {
                     x = -0.3f;
                     y = Random.Range(-0.3f, 2.3f);
                 }
@@ -344,10 +334,6 @@ namespace Enemy {
         /// <param name="shouldSpawn">bool to decide whether to spawn enemies.</param>
         public void SetShouldSpawn(bool shouldSpawn) {
             this.shouldSpawn = shouldSpawn;
-        }
-
-        public static EnemyManager GetInstance() {
-            return instance;
         }
 
         public bool GetShouldSpawn() {

@@ -1,5 +1,5 @@
 ﻿using Champions;
-using Enemy;
+using Core.Singleton;
 using Entities;
 using EventBus;
 using Interactable;
@@ -11,8 +11,7 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
-public class Player : MonoBehaviour {
-    private static Player instance;
+public class Player : Singleton<Player> {
 
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
@@ -37,12 +36,6 @@ public class Player : MonoBehaviour {
 
     private void OnEnable() {
         // excludedContexts.Add(this);
-        if (instance != null) {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
 
         EventBus<EnemyStartHoverEvent>.Subscribe(OnEnemyStartHover);
         EventBus<EnemyStopHoverEvent>.Subscribe(OnEnemyStopHover);
@@ -323,9 +316,6 @@ public class Player : MonoBehaviour {
 
     #endregion
 
-    public static Player GetInstance() {
-        return instance;
-    }
 
     public Inventory.Inventory GetInventory() {
         return inventory;
