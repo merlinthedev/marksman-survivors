@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using EventBus;
 using UnityEngine;
+using Logger = Util.Logger;
 
 namespace Champions.Abilities {
     /// <summary>
@@ -35,7 +36,11 @@ namespace Champions.Abilities {
         }
 
         private void Update() {
-            if (!shouldTickCooldowns) return;
+            if (!shouldTickCooldowns) {
+                // Logger.Log("Cooldowns are not ticking because the game is paused.", this);
+                return;
+            }
+
             TickCooldowns();
         }
 
@@ -43,9 +48,12 @@ namespace Champions.Abilities {
         /// Ticks each cooldown in the list.
         /// </summary>
         private void TickCooldowns() {
+            // Logger.Log("Ticking cooldowns.", this);
             cooldowns.ForEach(cooldown => {
                 if (cooldown.ShouldTick) {
                     cooldown.Tick(Time.deltaTime);
+                } else {
+                    // Logger.Log("ShouldTick is false", this);
                 }
             });
         }
@@ -57,6 +65,5 @@ namespace Champions.Abilities {
         private void OnICooldownUnsubscribed(UnsubscribeICooldownEvent obj) {
             cooldowns.Remove(obj.Cooldown);
         }
-
     }
 }

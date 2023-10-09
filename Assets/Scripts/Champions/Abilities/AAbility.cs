@@ -4,17 +4,15 @@ using System.Linq;
 using Champions.Abilities.Upgrades;
 using EventBus;
 using UnityEngine;
-using Logger = Util.Logger;
-using static Util.Logger;
 
 namespace Champions.Abilities {
     public abstract class AAbility : MonoBehaviour, IUpgradeable, ICooldown {
         [SerializeField] protected KeyCode keyCode;
-        [SerializeField] private float abilityCooldown = 0f; // Static cooldown in seconds, should not be edited
+        [SerializeField] private float abilityCooldown; // Static cooldown in seconds, should not be edited
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
-        public float currentCooldown = 0f;
+        public float currentCooldown;
         protected Champion champion;
 
         protected bool isCancelled = false;
@@ -24,7 +22,7 @@ namespace Champions.Abilities {
         public void Hook(Champion champion) {
             this.champion = champion;
 
-            currentCooldown = 0f;
+            currentCooldown = 0;
 
             // Subscribe to the cooldown manager
             Subscribe(this);
@@ -35,7 +33,9 @@ namespace Champions.Abilities {
         }
 
         public void Tick(float deltaTime) {
+            // Log("Ticking cooldown for " + this, Logger.Color.RED, this);
             currentCooldown -= deltaTime;
+            // Log("Cooldown ticked! Current cooldown: " + currentCooldown, Logger.Color.RED, this);
         }
 
         public void Subscribe(ICooldown cooldown) {
@@ -49,11 +49,14 @@ namespace Champions.Abilities {
         public event Action OnCooldownCompleted;
 
         public virtual void OnUse() {
-            Log("An ability was used!", Logger.Color.RED, this);
+            // Log("An ability was used!", Logger.Color.RED, this);
+            // Log("CurrentCooldown: " + currentCooldown + ", AbilityCooldown: " + abilityCooldown, this);
             currentCooldown = abilityCooldown;
 
             //Raise cooldown event
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(this));
+
+            // Log("ShouldTick: " + ShouldTick + ", currentCooldown: " + currentCooldown, Logger.Color.RED, this);
         }
 
         public void OnUpgrade(Upgrade upgrade) {

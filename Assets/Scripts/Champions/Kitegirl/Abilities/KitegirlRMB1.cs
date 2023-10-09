@@ -20,7 +20,7 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            Log("RMB1", Logger.Color.PINK, this);
+            // Log("RMB1", Logger.Color.PINK, this);
 
             Vector3 mousePosition = Vector3.zero;
 
@@ -40,7 +40,7 @@ namespace Champions.Kitegirl.Abilities {
             // Debug.Log("<color=red>MousePosition: " + mousePosition + "</color>", this);
 
             if (mousePosition == Vector3.zero) {
-                Log("RMB1 break 1", Logger.Color.RED, this);
+                // Log("RMB1 break 1", Logger.Color.RED, this);
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace Champions.Kitegirl.Abilities {
             kitegirlSlowArea.SetSlowPercentage(slowPercentage);
             kitegirlSlowArea.SetADDamageRatio(ADDamageRatio);
 
-            Log("Done, Calling base.OnUse()", Logger.Color.PINK, this);
+            // Log("Done, Calling base.OnUse()", Logger.Color.PINK, this);
 
             base.OnUse();
         }
