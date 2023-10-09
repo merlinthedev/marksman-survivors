@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace Enemy {
     public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
-        private Transform target;
+        public IDamageable currentTarget { get; set; }
         [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
         private Canvas canvas;
 
@@ -107,8 +107,8 @@ namespace Enemy {
         }
 
 
-        public void SetTarget(Transform target) {
-            this.target = target;
+        public void SetTarget(IDamageable target) {
+            currentTarget = target;
         }
 
         private void Update() {
@@ -116,7 +116,7 @@ namespace Enemy {
                 rigidbody.velocity = Vector3.zero;
             }
 
-            if (target != null && canMove) {
+            if (currentTarget != null && canMove) {
                 Move();
             }
 
@@ -175,10 +175,10 @@ namespace Enemy {
 
         private void Move() {
             if (isDummy) return;
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction = currentTarget.GetTransform().position - transform.position;
 
             if (direction.magnitude < 0.1f) {
-                target = null;
+                currentTarget = null;
                 return;
             }
 
@@ -283,10 +283,6 @@ namespace Enemy {
 
         public void DealDamage(IDamageable damageable, float damage) {
             damageable.TakeFlatDamage(damage);
-        }
-
-        public void SetCurrentTarget(IDamageable target) {
-            throw new NotImplementedException();
         }
 
         public void ResetCurrentTarget() {

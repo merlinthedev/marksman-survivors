@@ -110,7 +110,7 @@ namespace Enemy {
                 yield return new WaitForSeconds(spawnTimer);
                 // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
                 Enemy enemy = Instantiate(enemyPrefab, FindPositionsIteratively()[0], Quaternion.Euler(0, 45, 0));
-                enemy.SetTarget(player.transform);
+                enemy.SetTarget(player.GetCurrentlySelectedChampion());
                 //enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
                 amountOfEnemies++; // For when we want to limit the amount of enemies on the screen for testing purposes
@@ -248,7 +248,7 @@ namespace Enemy {
             for (var i = 0; i < location.Length; i++) {
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
                 Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
-                enemy.SetTarget(player.transform);
+                enemy.SetTarget(player.GetCurrentlySelectedChampion());
                 // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
                 EventBus<EnemySpawnedEvent>.Raise(new EnemySpawnedEvent(enemy));

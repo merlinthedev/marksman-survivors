@@ -38,11 +38,12 @@ namespace Champions {
         private float previousAngle = 0f;
         public bool IsMoving => rigidbody.velocity.magnitude > 0.001f;
 
+
+        public IDamageable currentTarget { get; set; }
+
         [Header("Attack")]
-        protected IDamageable currentTarget = null;
-
-
         private bool nextAttackWillCrit = false;
+
         protected float lastAttackTime = 0f;
         private float damageMultiplier = 1f;
 
@@ -593,10 +594,6 @@ namespace Champions {
 
         public void SetNextAttackWillCrit(bool b) {
             nextAttackWillCrit = b;
-        }
-
-        public void SetCurrentTarget(IDamageable target) {
-            currentTarget = target;
         }
 
         public void ResetCurrentTarget() {

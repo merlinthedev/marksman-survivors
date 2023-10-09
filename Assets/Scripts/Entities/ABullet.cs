@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Entities {
     public abstract class ABullet : MonoBehaviour {
         protected IDamager sourceEntity;
+        protected IDamageable targetEntity;
         [SerializeField] private float m_TravelSpeed = 30f;
         [SerializeField] private float m_BulletLifeTime = 2f;
         private float bulletSpawnTime = 0f;
@@ -12,17 +13,18 @@ namespace Entities {
         protected bool shouldMove = false;
 
         private Vector3 direction;
-        protected IDamageable target;
 
         public void SetSourceEntity(IDamager sourceEntity) {
             this.sourceEntity = sourceEntity;
         }
 
         public void SetTarget(IDamageable target, Vector3 randomBulletSpread) {
-            this.target = target;
             shouldMove = true;
-            direction = (this.target.GetTransform().position - transform.position).normalized + randomBulletSpread;
+            direction = (sourceEntity.currentTarget.GetTransform().position - transform.position).normalized +
+                        randomBulletSpread;
             bulletSpawnTime = Time.time;
+            // clone the target into targetEntity so that we don't get null reference when the original target is set to null
+            targetEntity = target;
         }
 
         public void SetDamage(float damage) {
@@ -43,12 +45,14 @@ namespace Entities {
 
 
         private void Move() {
-            if (target == null) {
+            if (targetEntity == null) {
                 shouldMove = false;
                 return;
             }
+
             //transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
-            transform.position = Vector3.MoveTowards(transform.position, target.GetTransform().position,
+            transform.position = Vector3.MoveTowards(transform.position,
+                targetEntity.GetTransform().position,
                 m_TravelSpeed * Time.deltaTime);
         }
 

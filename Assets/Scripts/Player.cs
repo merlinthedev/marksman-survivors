@@ -195,7 +195,7 @@ public class Player : Core.Singleton.Singleton<Player> {
                 } else {
                     IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
                     if (damageable != null) {
-                        if (damageable as Player == this) {
+                        if (damageable as Player != this) {
                             selectedChampion.OnAutoAttack(damageable);
 
                             RemoveFocus();
