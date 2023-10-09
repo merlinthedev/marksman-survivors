@@ -15,7 +15,6 @@ using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
 public class Player : Singleton<Player> {
-
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
 
@@ -175,43 +174,6 @@ public class Player : Singleton<Player> {
             int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
             layerMask = ~layerMask;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
-                // if (hit.collider.gameObject.CompareTag("Ground")) {
-                //     hasClickedThisFrame = true;
-                //     var point = hit.point;
-                //     Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-                //     point.y = transform.position.y;
-                //
-                //     selectedChampion.RequestMovement(point);
-                // }
-                //
-                // if (hit.collider.gameObject.CompareTag("Enemy") ||
-                //     hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                //     IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                //     selectedChampion.OnAutoAttack(damageable);
-                //
-                //     RemoveFocus();
-                //
-                //     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                //     damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
-                //     currentFocus = damageable.GetTransform().gameObject;
-                // } else {
-                //     RemoveFocus();
-                // }
-                //
-                // //If we clicked on an interactable object, call the OnInteract method
-                // var interactable = hit.collider.gameObject.GetComponent<IInteractable>();
-                // if (interactable != null) {
-                //     float distance = Vector3.Distance(hit.collider.gameObject.transform.position, gameObject.transform.position);
-                //
-                //     if (distance > 5f) {
-                //         selectedChampion.RequestMovement(hit.collider.gameObject.transform.position, 5f, () => interactable.OnInteract());
-                //         // Logger.Log("distance is too big, moving...", Logger.Color.RED, this);
-                //     } else {
-                //         // Logger.Log("distance is not too big, interacting...", Logger.Color.RED, this);
-                //         interactable.OnInteract();
-                //     }
-                // }
-
                 if (hit.collider.gameObject.CompareTag("Ground")) {
                     hasClickedThisFrame = true;
                     var point = hit.point;
@@ -221,6 +183,8 @@ public class Player : Singleton<Player> {
 
                     if (damageable != null) {
                         selectedChampion.OnAutoAttack(damageable);
+                        var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+                        x.GetComponent<Renderer>().material.color = Color.red;
 
                         if (damageable is Enemy.Enemy) {
                             RemoveFocus();
@@ -229,11 +193,8 @@ public class Player : Singleton<Player> {
                             damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
                             currentFocus = damageable.GetTransform().gameObject;
                         }
-
                     }
-
                 }
-
             }
         }
 
@@ -243,6 +204,7 @@ public class Player : Singleton<Player> {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("settings"));
         }
+
         if (Input.GetKeyDown(KeyCode.Equals)) {
             EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("cheats"));
         }

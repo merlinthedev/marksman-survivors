@@ -1,4 +1,5 @@
 ﻿using BuffsDebuffs;
+using Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Entities {
@@ -41,16 +42,16 @@ namespace Champions.Kitegirl.Entities {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (other.gameObject.CompareTag("Enemy")) {
-                // Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
-                //
-                // enemy.ApplyDebuff(Debuff.CreateDebuff(kitegirl, Debuff.DebuffType.Slow,
-                //     slowDuration, slowPercentage));
-                // enemy.TakeFlatDamage(kitegirl.GetAttackDamage() * adDamageRatio);
+            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+
+            if (damageable != null) {
                 IDebuffable debuffable = other.gameObject.GetComponent<IDebuffable>();
-                debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
-                    slowDuration, slowPercentage));
-                kitegirl.DealDamage(debuffable, kitegirl.GetAttackDamage() * ADDamageRatio);
+                if (debuffable != null) {
+                    debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
+                        slowDuration, slowPercentage));
+                }
+
+                kitegirl.DealDamage(damageable, kitegirl.GetAttackDamage() * ADDamageRatio);
             }
         }
     }
