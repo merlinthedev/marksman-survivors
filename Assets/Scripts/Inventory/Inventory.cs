@@ -12,7 +12,7 @@ namespace Inventory {
         private List<Item> items = new();
 
         public Inventory() {
-            gold = 999;
+            gold = 0;
             killCount = 0;
 
             // Subscribe to event
