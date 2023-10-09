@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class Bamischijf : MonoBehaviour
 {
     bool enemiesShouldSpawn = true;
-    bool cooldownsShouldReset = true;
+    bool cooldownsShouldReset = false;
     [SerializeField] private Image panel;
 
     private void OnEnable() {
@@ -102,7 +102,7 @@ public class Bamischijf : MonoBehaviour
     }
 
     public void ToggleResetCooldowns() {
-        cooldownsShouldReset = true;
+        cooldownsShouldReset = !cooldownsShouldReset;
     }
 
     private void ResetCooldowns(ChampionAbilityUsedEvent e) {
