@@ -406,22 +406,19 @@ namespace Champions {
                 if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
                 if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.EAST) {
+            } else if (CurrentMovementDirection == MovementDirection.EAST) {
                 directionTracker.y += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
                 if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.SOUTH) {
+            } else if (CurrentMovementDirection == MovementDirection.SOUTH) {
                 directionTracker.z += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
                 if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.WEST) {
+            } else if (CurrentMovementDirection == MovementDirection.WEST) {
                 directionTracker.w += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
@@ -598,6 +595,16 @@ namespace Champions {
             nextAttackWillCrit = b;
         }
 
+        public void SetCurrentTarget(IDamageable target) {
+            currentTarget = target;
+        }
+
+        public void ResetCurrentTarget() {
+            currentTarget = null;
+        }
+
+        #endregion
+
         public enum MovementDirection {
             ZERO,
             NORTH,
@@ -605,7 +612,5 @@ namespace Champions {
             SOUTH,
             WEST
         }
-
-        #endregion
     }
 }

@@ -115,6 +115,7 @@ namespace Enemy {
             if (isDummy) {
                 rigidbody.velocity = Vector3.zero;
             }
+
             if (target != null && canMove) {
                 Move();
             }
@@ -189,7 +190,6 @@ namespace Enemy {
             // Debug.Log("Taking flat damage");
             TakeDamage(damage);
         }
-
 
 
         private void TakeDamage(float damage) {
@@ -283,6 +283,14 @@ namespace Enemy {
 
         public void DealDamage(IDamageable damageable, float damage) {
             damageable.TakeFlatDamage(damage);
+        }
+
+        public void SetCurrentTarget(IDamageable target) {
+            throw new NotImplementedException();
+        }
+
+        public void ResetCurrentTarget() {
+            throw new NotImplementedException();
         }
 
         public void Die() {

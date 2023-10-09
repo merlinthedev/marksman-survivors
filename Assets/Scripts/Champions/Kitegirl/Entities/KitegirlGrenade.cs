@@ -95,5 +95,9 @@ namespace Champions.Kitegirl.Entities {
         public Transform GetTransform() {
             return gameObject.transform;
         }
+
+        public Vector3 GetTargetPoint() {
+            return targetPoint;
+        }
     }
 }

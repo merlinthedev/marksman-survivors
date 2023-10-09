@@ -9,23 +9,23 @@ namespace Entities {
         private float bulletSpawnTime = 0f;
         protected float damage;
 
-        private bool shouldMove = false;
+        protected bool shouldMove = false;
 
         private Vector3 direction;
-        private Vector3 target;
+        protected IDamageable target;
 
         public void SetSourceEntity(IDamager sourceEntity) {
             this.sourceEntity = sourceEntity;
         }
 
-        public virtual void SetTarget(Vector3 target) {
+        public void SetTarget(IDamageable target, Vector3 randomBulletSpread) {
             this.target = target;
             shouldMove = true;
-            direction = (this.target - transform.position).normalized;
+            direction = (this.target.GetTransform().position - transform.position).normalized + randomBulletSpread;
             bulletSpawnTime = Time.time;
         }
 
-        public virtual void SetDamage(float damage) {
+        public void SetDamage(float damage) {
             this.damage = damage;
         }
 
@@ -43,11 +43,16 @@ namespace Entities {
 
 
         private void Move() {
+            if (target == null) {
+                shouldMove = false;
+                return;
+            }
             //transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
-            transform.position = Vector3.MoveTowards(transform.position, target, m_TravelSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.GetTransform().position,
+                m_TravelSpeed * Time.deltaTime);
         }
 
-        protected private virtual void OnTriggerEnter(Collider other) {
+        private protected virtual void OnTriggerEnter(Collider other) {
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 IDamageable damageable = other.gameObject.GetComponent<IDamageable>();

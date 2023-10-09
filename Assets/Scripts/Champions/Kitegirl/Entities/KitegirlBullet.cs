@@ -64,6 +64,8 @@ namespace Champions.Kitegirl.Entities {
                 KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
                 // kitegirlGrenade.TakeFlatDamage(1);
                 sourceEntity.DealDamage(kitegirlGrenade, damage);
+                shouldMove = false;
+                sourceEntity.ResetCurrentTarget();
             }
         }
 

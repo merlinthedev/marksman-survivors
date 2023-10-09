@@ -59,9 +59,7 @@ namespace Champions.Kitegirl {
             // Logger.Log("Deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.YELLOW, this);
             // Logger.Log("Overpower stacks: " + GetStackAmount(Stack.StackType.OVERPOWER), Logger.Color.YELLOW, this);
 
-            ShootBullet_Recursive(hasUltimateActive,
-                new Vector3(damageable.GetTransform().position.x, transform.position.y,
-                    damageable.GetTransform().position.z));
+            ShootBullet_Recursive(hasUltimateActive, damageable);
             m_AnimationController.Attack();
             isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
@@ -140,7 +138,7 @@ namespace Champions.Kitegirl {
         }
 
 
-        private void ShootBullet_Recursive(bool shouldCallRecursive, Vector3 target) {
+        private void ShootBullet_Recursive(bool shouldCallRecursive, IDamageable target) {
             recurseCount++;
 
             Vector3 randomBulletSpread = new Vector3(
@@ -154,14 +152,14 @@ namespace Champions.Kitegirl {
             // aBullet.SetTarget(target + randomBulletSpread);
             // aBullet.SetDamage(m_Damage);
 
-            Vector3 dir = target - transform.position;
+            Vector3 dir = target.GetTransform().position - transform.position;
 
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
             KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
             bullet.SetSourceEntity(this);
             bullet.SetShouldChain(autoAttackShouldChain);
-            bullet.SetTarget(target + randomBulletSpread);
+            bullet.SetTarget(target, randomBulletSpread);
             bullet.SetDamage(CalculateDamage());
 
 
