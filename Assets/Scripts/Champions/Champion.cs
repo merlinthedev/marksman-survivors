@@ -297,7 +297,7 @@ namespace Champions {
                 Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
                 Stacks.Add(stack);
             }
-            
+
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.DEFTNESS,
                 GetStackAmount(Stack.StackType.DEFTNESS), true));
         }
@@ -318,7 +318,7 @@ namespace Champions {
                 Stack stack = new Stack(Stack.StackType.OVERPOWER, this);
                 Stacks.Add(stack);
             }
-            
+
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.OVERPOWER,
                 GetStackAmount(Stack.StackType.OVERPOWER), true));
         }
@@ -578,6 +578,8 @@ namespace Champions {
         public IDamageable GetCurrentTarget() => currentTarget;
 
         public Vector3 GetCurrentMovementDirection() {
+            // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
+            // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);
             return rigidbody.velocity.normalized == Vector3.zero
                 ? lastKnownDirection
                 : rigidbody.velocity.normalized;

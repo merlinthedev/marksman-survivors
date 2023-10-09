@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Resources;
 using UnityEngine;
-using UnityEngine.InputSystem.Composites;
 
 // Scriptable object attribute
 namespace Champions {

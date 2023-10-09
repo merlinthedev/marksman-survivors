@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities;
-using Core;
 using Core.Singleton;
 using EventBus;
 using UnityEngine;
@@ -207,7 +206,7 @@ namespace Enemy {
 
                     spawnPoints[i] = new Vector3(x, y, 100);
                 } else {
-                    Logger.Log("NOT VALID", this);
+                    // Logger.Log("NOT VALID", this);
                     int randomSide = Random.Range(0, 4);
 
                     switch (randomSide) {

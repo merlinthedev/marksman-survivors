@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using EventBus;
 using Inventory.Items;
-using UnityEngine.XR;
 using Util;
 
 namespace Inventory {

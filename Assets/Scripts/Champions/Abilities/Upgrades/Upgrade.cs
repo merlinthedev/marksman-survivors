@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using Logger = Util.Logger;
 
 namespace Champions.Abilities.Upgrades {

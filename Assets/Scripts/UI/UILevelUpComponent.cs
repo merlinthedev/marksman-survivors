@@ -1,5 +1,4 @@
-﻿using Champions.Abilities;
-using EventBus;
+﻿using EventBus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

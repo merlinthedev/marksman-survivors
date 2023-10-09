@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Champions.Abilities {
+﻿namespace Champions.Abilities {
     public interface ICooldown {
         public bool ShouldTick { get; }
         public void Tick(float deltaTime);

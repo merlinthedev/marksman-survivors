@@ -1,7 +1,6 @@
 ﻿using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {

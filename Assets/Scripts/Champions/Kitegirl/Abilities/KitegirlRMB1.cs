@@ -1,11 +1,6 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Timeline;
-using static Util.Logger;
-using Color = UnityEngine.Color;
-using Logger = Util.Logger;
 
 namespace Champions.Kitegirl.Abilities {
     public class KitegirlRMB1 : AAbility {

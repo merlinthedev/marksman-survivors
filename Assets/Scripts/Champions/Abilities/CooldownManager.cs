@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using EventBus;
 using UnityEngine;
-using Logger = Util.Logger;
 
 namespace Champions.Abilities {
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 namespace Util {
@@ -28,6 +29,21 @@ namespace Util {
             randomPoint.y = center.y;
 
             return randomPoint;
+        }
+
+        public static Vector3 GetPointToMouseDirection(Vector3 point) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+            layerMask = ~layerMask;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                var mousePos = hit.point;
+                mousePos.y = point.y;
+
+                return (mousePos - point).normalized;
+            }
+
+            return Vector3.zero;
         }
 
         public static bool IsPointInsideCameraViewport(Camera camera, Vector3 point) {

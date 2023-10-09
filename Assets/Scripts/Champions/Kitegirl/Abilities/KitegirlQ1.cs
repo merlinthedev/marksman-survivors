@@ -1,6 +1,5 @@
 ﻿using System;
 using Champions.Abilities;
-using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
     [Serializable]

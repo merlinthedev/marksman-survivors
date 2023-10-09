@@ -4,9 +4,9 @@ using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using Entities;
 using EventBus;
-using Unity.VisualScripting;
 using UnityEngine;
 using Util;
+using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions.Kitegirl {
@@ -112,7 +112,7 @@ namespace Champions.Kitegirl {
             if (!isDashing) {
                 base.OnMove();
             } else {
-                rigidbody.velocity = GetCurrentMovementDirection() * dashSpeed;
+                rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
             }
         }
 
@@ -186,6 +186,7 @@ namespace Champions.Kitegirl {
         }
 
         public void SetIsDashing(bool p0) {
+            // Logger.Log("SetIsDashing: " + p0 + ", Time.time " + Time.time, Logger.Color.YELLOW, this);
             isDashing = p0;
         }
 

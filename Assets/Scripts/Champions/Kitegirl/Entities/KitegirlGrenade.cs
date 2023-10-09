@@ -4,9 +4,7 @@ using BuffsDebuffs.Stacks;
 using Core;
 using Enemy;
 using Entities;
-using EventBus;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 
 namespace Champions.Kitegirl.Entities {

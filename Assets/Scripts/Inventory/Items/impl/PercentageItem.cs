@@ -1,6 +1,5 @@
 ﻿using Champions;
 using UnityEngine;
-using Logger = Util.Logger;
 
 namespace Inventory.Items.impl {
     public class PercentageItem : Item {

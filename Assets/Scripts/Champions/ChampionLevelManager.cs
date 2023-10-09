@@ -1,5 +1,4 @@
 ﻿using EventBus;
-using UnityEngine;
 using Logger = Util.Logger;
 
 namespace Champions {

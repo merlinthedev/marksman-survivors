@@ -10,6 +10,8 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            
+            Util.Logger.Log(" HELLO WIORLD " + Time.time, Util.Logger.Color.YELLOW, this);
 
             // Dash forward 
             (champion as Kitegirl)?.SetIsDashing(true);

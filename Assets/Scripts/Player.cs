@@ -3,7 +3,6 @@ using Core;
 using Entities;
 using EventBus;
 using Interactable;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
