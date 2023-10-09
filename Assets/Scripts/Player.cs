@@ -1,12 +1,10 @@
 ﻿using Champions;
 using Core;
-using Core.Singleton;
-using Enemy;
 using Entities;
 using EventBus;
 using Interactable;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Logger = Util.Logger;
@@ -14,7 +12,7 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
-public class Player : Singleton<Player> {
+public class Player : Core.Singleton.Singleton<Player> {
     [Header("Stats")]
     [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
 
@@ -187,6 +185,19 @@ public class Player : Singleton<Player> {
                         x.GetComponent<Renderer>().material.color = Color.red;
 
                         if (damageable is Enemy.Enemy) {
+                            RemoveFocus();
+
+                            damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                            currentFocus = damageable.GetTransform().gameObject;
+                        }
+                    }
+                } else {
+                    IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                    if (damageable != null) {
+                        if (damageable as Player == this) {
+                            selectedChampion.OnAutoAttack(damageable);
+
                             RemoveFocus();
 
                             damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
