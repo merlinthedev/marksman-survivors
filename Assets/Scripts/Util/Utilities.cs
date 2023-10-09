@@ -55,6 +55,12 @@ namespace Util {
             );
         }
 
+        public static bool MovementInfluenceValid(Vector4 movementInfluence) {
+            float sum = 0;
+            sum += movementInfluence.x + movementInfluence.y + movementInfluence.z + movementInfluence.w;
+            return sum > 0.1f;
+        }
+
         private static IEnumerator InvokeDelayedCoroutine(System.Action action, float delay) {
             yield return new WaitForSeconds(delay);
             action.Invoke();

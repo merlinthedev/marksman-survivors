@@ -190,22 +190,55 @@ namespace Enemy {
             for (int i = 0; i < amountOfIterations; i++) {
                 float x, y;
 
-                if (i < movementData.x * amountOfIterations) {
-                    x = Random.Range(-0.3f, 1.3f);
-                    y = 2.3f;
-                } else if (i < (movementData.x + movementData.y) * amountOfIterations) {
-                    x = 1.3f;
-                    y = Random.Range(-0.3f, 2.3f);
-                } else if (i < (movementData.x + movementData.y + movementData.z) * amountOfIterations) {
-                    x = Random.Range(-0.3f, 1.3f);
-                    y = -1.3f;
-                } else {
-                    x = -0.3f;
-                    y = Random.Range(-0.3f, 2.3f);
-                }
+                if (Utilities.MovementInfluenceValid(movementData)) {
+                    if (i < movementData.x * amountOfIterations) {
+                        x = Random.Range(-0.3f, 1.3f);
+                        y = 2.3f;
+                    } else if (i < (movementData.x + movementData.y) * amountOfIterations) {
+                        x = 1.3f;
+                        y = Random.Range(-0.3f, 2.3f);
+                    } else if (i < (movementData.x + movementData.y + movementData.z) * amountOfIterations) {
+                        x = Random.Range(-0.3f, 1.3f);
+                        y = -1.3f;
+                    } else {
+                        x = -0.3f;
+                        y = Random.Range(-0.3f, 2.3f);
+                    }
 
-                spawnPoints[i] = new Vector3(x, y, 100);
+                    spawnPoints[i] = new Vector3(x, y, 100);
+                } else {
+                    Logger.Log("NOT VALID", this);
+                    int randomSide = Random.Range(0, 4);
+
+                    switch (randomSide) {
+                        case 0:
+                            x = Random.Range(-0.3f, 1.3f);
+                            y = 2.3f;
+                            break;
+                        case 1:
+                            x = 1.3f;
+                            y = Random.Range(-0.3f, 2.3f);
+                            break;
+                        case 2:
+                            x = Random.Range(0.3f, 1.3f);
+                            y = -1.3f;
+                            break;
+                        case 3:
+                            x = -0.3f;
+                            y = Random.Range(-0.3f, 2.3f);
+                            break;
+                        default:
+                            Logger.LogError("Should never happen", this);
+                            x = Random.Range(-0.3f, 1.3f);
+                            y = 2.3f;
+                            break;
+                    }
+
+                    spawnPoints[i] = new Vector3(x, y, 100);
+                }
             }
+
+            // Logger.Log("Spawnpoints: " + spawnPoints.Length, Logger.Color.WHITE, this);
 
             return spawnPoints;
         }
@@ -221,6 +254,7 @@ namespace Enemy {
                 EventBus<EnemySpawnedEvent>.Raise(new EnemySpawnedEvent(enemy));
                 enemies[i] = enemy;
             }
+
             return enemies;
         }
 
@@ -229,6 +263,7 @@ namespace Enemy {
             foreach (var kvp in enemyDictionary) {
                 Destroy(kvp.Value.gameObject);
             }
+
             enemyDictionary.Clear();
         }
 
