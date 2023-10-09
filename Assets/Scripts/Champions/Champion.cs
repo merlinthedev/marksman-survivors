@@ -154,6 +154,11 @@ namespace Champions {
                 championStatistics.CurrentXP += 100;
                 championLevelManager.CheckForLevelUp();
             }
+
+            // Logger.Log("Amount of deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.GREEN,
+            //     this);
+            // Logger.Log("Amount of overpower stacks: " + GetStackAmount(Stack.StackType.OVERPOWER), Logger.Color.GREEN,
+            //     this);
         }
 
         #endregion
@@ -228,9 +233,8 @@ namespace Champions {
                     AddOverpowerStacks(stacks);
                     break;
             }
-
-            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stackType, stacks, true));
         }
+
 
         public void RemoveStacks(int stacks, Stack.StackType stackType) {
             switch (stackType) {
@@ -248,7 +252,8 @@ namespace Champions {
 
         public void RemoveStack(Stack stack) {
             Stacks.Remove(stack);
-            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stack.GetStackType(), 1, false));
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stack.GetStackType(),
+                GetStackAmount(stack.GetStackType()), true));
         }
 
         public void CheckStacksForExpiration() {
@@ -263,6 +268,9 @@ namespace Champions {
                 Stack stack = new Stack(Stack.StackType.FRAGILE, this);
                 Stacks.Add(stack);
             }
+
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.FRAGILE,
+                GetStackAmount(Stack.StackType.FRAGILE), true));
         }
 
         private void RemoveFragileStacks(int count) {
@@ -289,6 +297,9 @@ namespace Champions {
                 Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
                 Stacks.Add(stack);
             }
+            
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.DEFTNESS,
+                GetStackAmount(Stack.StackType.DEFTNESS), true));
         }
 
         private void RemoveDeftnessStacks(int count) {
@@ -307,6 +318,9 @@ namespace Champions {
                 Stack stack = new Stack(Stack.StackType.OVERPOWER, this);
                 Stacks.Add(stack);
             }
+            
+            EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.OVERPOWER,
+                GetStackAmount(Stack.StackType.OVERPOWER), true));
         }
 
         private void RemoveOverpowerStacks(int count) {

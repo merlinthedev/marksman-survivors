@@ -10,7 +10,7 @@ namespace UI {
         }
 
         public void SetStacks(int stacks) {
-            this.stacks += stacks;
+            this.stacks = stacks;
             text.text = this.stacks.ToString();
             if (this.stacks > 0) {
                 this.gameObject.SetActive(true);

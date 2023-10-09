@@ -11,8 +11,7 @@ using Champions.Abilities;
 using EventBus;
 using UnityEngine.UI;
 
-public class Bamischijf : MonoBehaviour
-{
+public class Bamischijf : MonoBehaviour {
     bool enemiesShouldSpawn = true;
     bool cooldownsShouldReset = false;
     [SerializeField] private Image panel;
@@ -20,16 +19,20 @@ public class Bamischijf : MonoBehaviour
     private void OnEnable() {
         EventBus<ChampionAbilityUsedEvent>.Subscribe(ResetCooldowns);
     }
+
     private void OnDisable() {
         EventBus<ChampionAbilityUsedEvent>.Unsubscribe(ResetCooldowns);
     }
+
     public void CloseMenu() {
         if (!enemiesShouldSpawn) {
-            Utilities.InvokeDelayed(() => EnemyManager.GetInstance().SetShouldSpawn(enemiesShouldSpawn), 0.1f, EnemyManager.GetInstance().GetComponent<EnemyManager>());
+            Utilities.InvokeDelayed(() => EnemyManager.GetInstance().SetShouldSpawn(enemiesShouldSpawn), 0.1f,
+                EnemyManager.GetInstance().GetComponent<EnemyManager>());
         }
-        panel.gameObject.SetActive(false);
 
+        panel.gameObject.SetActive(false);
     }
+
     public StackType StringToEnum(string x) {
         switch (x) {
             case "overpower":
@@ -42,6 +45,7 @@ public class Bamischijf : MonoBehaviour
                 return StackType.defaultStack;
         }
     }
+
     public void GiveStacks(string x) {
         StackType stack = StringToEnum(x);
         Player.GetInstance().GetCurrentlySelectedChampion().AddStacks(10, stack);
@@ -79,13 +83,12 @@ public class Bamischijf : MonoBehaviour
     }
 
     public void ChangeTimescale(int x) {
-        if(x == 0) {
+        if (x == 0) {
             Time.timeScale = 1;
         } else {
             Time.timeScale += x;
             Debug.Log("timescale: " + Time.timeScale);
         }
-
     }
 
     public void Suicide() {
@@ -112,5 +115,4 @@ public class Bamischijf : MonoBehaviour
             abilities[i].currentCooldown = 0;
         }
     }
-
 }
