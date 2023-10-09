@@ -14,8 +14,7 @@ namespace UI {
             text.text = this.stacks.ToString();
             if (this.stacks > 0) {
                 this.gameObject.SetActive(true);
-            }
-            else if (this.stacks < 1) {
+            } else if (this.stacks < 1) {
                 this.gameObject.SetActive(false);
             }
         }

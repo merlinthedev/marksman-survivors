@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using static BuffsDebuffs.Stacks.Stack;
 
 namespace UI {
-    public class UIBuffs : MonoBehaviour
-    {
+    public class UIBuffs : MonoBehaviour {
         [Header("Icons")]
         [SerializeField] private Sprite m_DeftnessIcon;
+
         [SerializeField] private Sprite m_OverpowerIcon;
         [SerializeField] private Sprite m_FragileIcon;
 
@@ -18,8 +18,7 @@ namespace UI {
             [SerializeField] public StackType stackType;
         }
 
-        [SerializeField]
-        private List<Slot> m_Slots;
+        [SerializeField] private List<Slot> m_Slots;
 
         private void OnEnable() {
             EventBus<ChangeStackUIEvent>.Subscribe(OnStacksChanged);
@@ -30,12 +29,13 @@ namespace UI {
         }
 
         private void OnStacksChanged(ChangeStackUIEvent e) {
-            if(e.open) {
-                for(int i = 0; i < m_Slots.Count; i++) {
+            if (e.open) {
+                for (int i = 0; i < m_Slots.Count; i++) {
                     if (m_Slots[i].stackType == e.type) {
                         m_Slots[i].UIBuff.SetStacks(e.stacks);
                         return;
                     }
+
                     if (m_Slots[i].stackType == StackType.defaultStack) {
                         m_Slots[i].stackType = e.type;
 
@@ -45,8 +45,7 @@ namespace UI {
                         return;
                     }
                 }
-            }
-            else if(!e.open){
+            } else if (!e.open) {
                 Debug.Log("Removing " + e.stacks + " " + e.type + " stacks");
                 for (int i = 0; i < m_Slots.Count; i++) {
                     if (m_Slots[i].stackType == e.type) {
@@ -54,28 +53,23 @@ namespace UI {
                         if (m_Slots[i].UIBuff.stacks <= 0) {
                             m_Slots[i].stackType = StackType.defaultStack;
                         }
+
                         return;
                     }
-
                 }
             }
-
         }
 
         private Sprite ReturnSprite(StackType stacktype) {
-            if(stacktype == StackType.DEFTNESS) {
+            if (stacktype == StackType.DEFTNESS) {
                 return m_DeftnessIcon;
-            }
-            else if(stacktype == StackType.OVERPOWER) {
+            } else if (stacktype == StackType.OVERPOWER) {
                 return m_OverpowerIcon;
-            }
-            else if(stacktype == StackType.FRAGILE) {
+            } else if (stacktype == StackType.FRAGILE) {
                 return m_FragileIcon;
-            }
-            else {
+            } else {
                 return null;
             }
         }
-
     }
 }

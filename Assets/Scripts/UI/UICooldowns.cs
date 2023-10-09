@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core;
 using EventBus;
 using UnityEngine;
@@ -15,25 +16,14 @@ namespace UI {
         [SerializeField] private Image eImage;
         [SerializeField] private Image rImage;
 
-        private List<AbilityCooldown> abilityCooldowns = new();
-
-        private class AbilityCooldown {
-            public float TotalDuration;
-            public float CurrentTime;
-            public Image Image;
-        }
-
-        private void OnEnable() {
-            EventBus<ChampionAbilityUsedEvent>.Subscribe(HandleAbilityCooldowns);
-        }
-
-        private void OnDisable() {
-            EventBus<ChampionAbilityUsedEvent>.Unsubscribe(HandleAbilityCooldowns);
-        }
+        private Player player;
 
         private void Start() {
-            // fill all the cooldowns fully
-            // m_LMB.fillAmount = 1;
+            player = Player.GetInstance();
+            
+            // for every image, set the fill amount to 1
+            // this is because the cooldowns are not active at the start of the game
+            lmbImage.fillAmount = 1;
             rmbImage.fillAmount = 1;
             qImage.fillAmount = 1;
             wImage.fillAmount = 1;
@@ -41,77 +31,38 @@ namespace UI {
             rImage.fillAmount = 1;
         }
 
-        private void HandleAbilityCooldowns(ChampionAbilityUsedEvent e) {
-            KeyCode keyCode;
-            float duration;
-
-            if (e.AbstractAbility == null) {
-                keyCode = e.KeyCode;
-                duration = e.Duration;
-            }
-            else {
-                keyCode = e.AbstractAbility.GetKeyCode();
-                duration = e.AbstractAbility.GetAbilityCooldown();
-            }
-
-            switch (keyCode) {
-                case KeyCode.Mouse0:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = lmbImage
-                    });
-                    break;
-                case KeyCode.Mouse1:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = rmbImage
-                    });
-                    break;
-                case KeyCode.Q:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = qImage
-                    });
-                    break;
-                case KeyCode.W:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = wImage
-                    });
-                    break;
-                case KeyCode.E:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = eImage
-                    });
-                    break;
-                case KeyCode.R:
-                    abilityCooldowns.Add(new AbilityCooldown() {
-                        TotalDuration = duration,
-                        CurrentTime = duration,
-                        Image = rImage
-                    });
-                    break;
-            }
-        }
-
         private void Update() {
             if (GameManager.GetInstance().Paused) return;
-            for (int i = 0; i < abilityCooldowns.Count; i++) {
-                AbilityCooldown abilityCooldown = abilityCooldowns[i];
-                abilityCooldown.CurrentTime -= Time.deltaTime;
-                float cooldownPercentage = abilityCooldown.CurrentTime / abilityCooldown.TotalDuration;
-                abilityCooldown.Image.fillAmount = cooldownPercentage;
-                if (abilityCooldown.CurrentTime <= 0) {
-                    abilityCooldowns.RemoveAt(i);
-                    i--;
+            foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
+                switch (ability.GetKeyCode()) {
+                    case KeyCode.Q:
+                        qImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        break;
+                    case KeyCode.W:
+                        wImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        break;
+                    case KeyCode.E:
+                        eImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        break;
+                    case KeyCode.R:
+                        rImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        break;
+                    case KeyCode.Mouse1:
+                        rmbImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
+
+            float x = Time.time;
+            float y = player.GetCurrentlySelectedChampion().GetChampionStatistics().GetAttackSpeed(1);
+            float z = player.GetCurrentlySelectedChampion().GetLastAttackTime();
+            
+            // lmbImage.fillAmount = (x - z) / y;
+            // do the calculation above but flip the result
+            lmbImage.fillAmount = 1 - (x - z) / y;
+            
         }
     }
 }
