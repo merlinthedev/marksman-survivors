@@ -1,5 +1,4 @@
 ﻿using Champions.Abilities;
-using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {
@@ -10,15 +9,23 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
-            
-            Util.Logger.Log(" HELLO WIORLD " + Time.time, Util.Logger.Color.YELLOW, this);
+
+            // Util.Logger.Log(" HELLO WIORLD " + Time.time, Util.Logger.Color.YELLOW, this);
 
             // Dash forward 
             (champion as Kitegirl)?.SetIsDashing(true);
             (champion as Kitegirl)?.SetNextAttackWillCrit(true);
+            float angle = Utilities.GetGlobalAngleFromDirection(champion);
 
-            Utilities.InvokeDelayed(() => { (champion as Kitegirl)?.SetIsDashing(false); }, dashDuration,
-                champion);
+            Utilities.InvokeDelayed(() => {
+                (champion as Kitegirl)?.SetIsDashing(false);
+
+                if (angle > 45) {
+                    champion.Stop();
+                    // Util.Logger.Log("Stopping the champion because the angle between our direction and our " +
+                    //                 "position to the cursor is greater than 45", Util.Logger.Color.RED, this);
+                }
+            }, dashDuration, champion);
 
             base.OnUse();
         }
