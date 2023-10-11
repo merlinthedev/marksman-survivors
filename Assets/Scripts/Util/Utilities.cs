@@ -4,6 +4,7 @@ using System.Numerics;
 using Champions;
 using UnityEditor;
 using UnityEngine;
+using Matrix4x4 = UnityEngine.Matrix4x4;
 using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -88,9 +89,9 @@ namespace Util {
             // Debug.Log("Champion Position: " + champion.transform.position);
             // Debug.Log("Direction: " + direction);
             //
-            // Debug.DrawLine(GetMouseWorldPosition(), champion.transform.position, Color.red, 0.5f);
-            // Debug.DrawLine(champion.transform.position,
-            //     champion.transform.position + champion.GetCurrentMovementDirection(), Color.yellow, 0.5f);
+            Debug.DrawLine(GetMouseWorldPosition(), champion.transform.position, Color.red, 0.5f);
+            Debug.DrawLine(champion.transform.position,
+                champion.transform.position + champion.GetCurrentMovementDirection(), Color.yellow, 0.5f);
 
             angle = Vector3.SignedAngle(direction, champion.GetCurrentMovementDirection(), Vector3.up);
             // Debug.Log("Champion current movement direction: " + champion.GetCurrentMovementDirection());

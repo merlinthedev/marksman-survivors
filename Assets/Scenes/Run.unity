@@ -2629,7 +2629,6 @@ MonoBehaviour:
     type: 3}
   prompt: {fileID: 1233336288}
   abilities:
-  - {fileID: -6238975156126620012, guid: 91481cedeb0cdf74db51635ff984c3d4, type: 3}
   - {fileID: 5491228764203184346, guid: 7954af5003773b942946b48c6deac079, type: 3}
   - {fileID: 640121110517076604, guid: bc94e5e8ee2208f4bbcd1dcdf939d1e2, type: 3}
   - {fileID: -5498696720246338259, guid: 1fb49ee4e290ece4f87254b83b587c4d, type: 3}
