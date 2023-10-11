@@ -1,19 +1,22 @@
 ﻿using System;
 using EventBus;
+using UnityEngine;
+using UnityEngine.Rendering.UI;
 
 namespace Champions.Abilities {
-    public class Dash : ICooldown {
+    public class Dodge : ICooldown {
         private readonly float cooldown;
         private float timeLeft;
         public bool ShouldTick => timeLeft > 0;
 
-        public Dash(float cooldown) {
+
+        public Dodge(float cooldown) {
             this.cooldown = cooldown;
 
             Subscribe(this);
         }
 
-        ~Dash() {
+        ~Dodge() {
             Unsubscribe(this);
 
             OnCooldownCompleted = null;
@@ -21,6 +24,7 @@ namespace Champions.Abilities {
 
         public void Tick(float deltaTime) {
             timeLeft -= deltaTime;
+            Debug.LogWarning("Ticking the cooldown: new cooldown: " + timeLeft);
 
             if (timeLeft <= 0) {
                 OnCooldownCompleted?.Invoke();
@@ -41,6 +45,19 @@ namespace Champions.Abilities {
 
         public bool IsOnCooldown() {
             return timeLeft > 0;
+        }
+
+        public void ResetCooldown() {
+            Debug.LogWarning("RESETTING THE COOLDOWN");
+            timeLeft = 0f;
+        }
+
+        public float GetCooldown() {
+            return cooldown;
+        }
+
+        public float GetTimeLeft() {
+            return timeLeft;
         }
 
         public event Action OnCooldownCompleted;

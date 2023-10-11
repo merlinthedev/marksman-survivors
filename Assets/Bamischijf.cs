@@ -111,5 +111,7 @@ public class Bamischijf : MonoBehaviour {
         for (int i = 0; i < abilities.Count; i++) {
             abilities[i].currentCooldown = 0;
         }
+
+        Player.GetInstance().GetCurrentlySelectedChampion().GetDodge().ResetCooldown();
     }
 }

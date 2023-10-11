@@ -49,7 +49,7 @@ namespace Champions {
         protected float lastAttackTime = 0f;
         private float damageMultiplier = 1f;
 
-        private Dash dash;
+        private Dodge dodge;
         [SerializeField] private float dashCooldown = 20f;
         [SerializeField] private float dashDuration = 0.2f;
         [SerializeField] private float dashSpeed = 20f;
@@ -123,7 +123,7 @@ namespace Champions {
                 championStatistics.CurrentHealth,
                 championStatistics.MaxHealth));
 
-            dash = new Dash(dashCooldown);
+            dodge = new Dodge(dashCooldown);
         }
 
         protected virtual void FixedUpdate() {
@@ -420,7 +420,7 @@ namespace Champions {
         }
 
         public void OnDash() {
-            if (dash.IsOnCooldown()) {
+            if (dodge.IsOnCooldown()) {
                 Logger.Log("Dash is on cooldown.", this);
                 return;
             }
@@ -431,7 +431,7 @@ namespace Champions {
 
             rigidbody.useGravity = false;
             collider.isTrigger = true;
-            
+
             rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
 
             Logger.Log("Angle: " + angle, Logger.Color.RED, this);
@@ -439,6 +439,8 @@ namespace Champions {
 
             Utilities.InvokeDelayed(() => {
                 isDashing = false;
+                collider.isTrigger = false;
+                rigidbody.useGravity = true;
                 if (angle > 45 || angle < -45) {
                     Stop();
                     ResetCurrentTarget();
@@ -449,7 +451,8 @@ namespace Champions {
                 }
             }, dashDuration, this);
 
-            dash.StartCooldown();
+            dodge.StartCooldown();
+            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Space, dodge.GetCooldown()));
         }
 
         private const float increaseValue = 0.008f;
@@ -645,6 +648,10 @@ namespace Champions {
 
         public Transform GetTransform() {
             return gameObject.transform;
+        }
+
+        public Dodge GetDodge() {
+            return dodge;
         }
 
         protected void SetGlobalDirectionAngle(float angle) {
