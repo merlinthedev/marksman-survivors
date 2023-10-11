@@ -24,10 +24,10 @@ namespace Champions.Kitegirl.Abilities {
 
                     if (DistanceCheck(point)) {
                         KitegirlGrenade grenade =
-                            Instantiate(grenadePrefab, this.champion.transform.position,
+                            Instantiate(grenadePrefab, new Vector3(this.champion.transform.position.x, 0.5f, this.champion.transform.position.z),
                                 grenadePrefab.transform.rotation);
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
-                        grenade.OnThrow(point, champion);
+                        grenade.OnThrow(new Vector3(point.x, 0.5f, point.z), champion);
 
                         DamageableManager.GetInstance().AddDamageable(grenade);
 

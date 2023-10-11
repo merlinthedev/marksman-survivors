@@ -19,6 +19,8 @@ namespace Champions.Kitegirl.Entities {
         [SerializeField] private float detonateTime = 2f;
 
         [SerializeField] private float damageRadius = 5f;
+        
+        [SerializeField] private GameObject explosionPrefab;
 
         private float damage = 0f;
         private float thrownTime = 0f;
@@ -71,6 +73,8 @@ namespace Champions.Kitegirl.Entities {
             }
 
             DamageableManager.GetInstance().RemoveDamageable(this);
+
+            Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.1f, transform.position.z), Quaternion.Euler(90, 0, 0));
 
             Destroy(gameObject);
         }

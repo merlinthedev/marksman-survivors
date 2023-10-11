@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &39745354
 Transform:
   m_ObjectHideFlags: 0
@@ -1675,6 +1675,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grid
       objectReference: {fileID: 0}
+    - target: {fileID: 1348919437849178687, guid: 7e78c8c63a28f44478a8f184736b460e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1691,6 +1696,7 @@ GameObject:
   - component: {fileID: 1702028393}
   - component: {fileID: 1702028391}
   - component: {fileID: 1702028390}
+  - component: {fileID: 1702028394}
   m_Layer: 6
   m_Name: Ground
   m_TagString: Ground
@@ -1777,6 +1783,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1702028394
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702028389}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2114737650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1985,6 +1999,7 @@ MonoBehaviour:
   mouseHitPoint: {x: 0, y: 0, z: 0}
   grounded: 0
   groundedRange: 1.16
+  isInvincible: 0
   directionTracker: {x: 0, y: 0, z: 0, w: 0}
   m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
