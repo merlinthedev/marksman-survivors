@@ -5,6 +5,7 @@ using BuffsDebuffs.Stacks;
 using Champions;
 using Entities;
 using EventBus;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -52,7 +53,7 @@ namespace Enemy {
         [SerializeField] private float intensityMultiplier = 1f;
 
         private bool isDead {
-            get => !canMove;
+            get => currentHealth <= 0;
         }
 
         public List<Debuff> Debuffs { get; } = new();
@@ -382,19 +383,31 @@ namespace Enemy {
 
         private void OnCollisionStay(Collision other) {
             if (other.gameObject.CompareTag("Player")) {
-                if (isDead || !canAttack) return;
+                Collision(other.collider);
+            }
+        }
 
-                Champion champion = other.gameObject.GetComponent<Champion>();
-                if (champion == null) {
-                    Logger.Log("Missing champion component", Logger.Color.RED, this);
-                    return;
-                }
+        private void OnTriggerEnter(Collider other) {
+            if (other.gameObject.CompareTag("Player")) {
+                // Logger.Log("Collision with player", this);
+                Collision(other);
+            }
+        }
 
-                if (Time.time > lastAttackTime + attackCooldown) {
-                    // champion.TakeFlatDamage(damage);
-                    DealDamage(champion, damage);
-                    lastAttackTime = Time.time;
-                }
+        private void Collision(Collider other) {
+            if (isDead || !canAttack) return;
+
+            Champion champion = other.gameObject.GetComponent<Champion>();
+            if (champion == null) {
+                Logger.Log("Missing champion component", Logger.Color.RED, this);
+                return;
+            }
+
+            if (Time.time > lastAttackTime + attackCooldown) {
+                // champion.TakeFlatDamage(damage);
+                // Logger.Log("Dealing damage", this);
+                DealDamage(champion, damage);
+                lastAttackTime = Time.time;
             }
         }
 

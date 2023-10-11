@@ -18,6 +18,8 @@ namespace Champions {
         [Header("References")]
         [SerializeField] protected Rigidbody rigidbody;
 
+        [SerializeField] private Collider collider;
+
         [Header("Stats")]
         [SerializeField] protected ChampionStatistics championStatistics;
 
@@ -47,9 +49,11 @@ namespace Champions {
         protected float lastAttackTime = 0f;
         private float damageMultiplier = 1f;
 
+        private Dash dash;
+        [SerializeField] private float dashCooldown = 20f;
+        [SerializeField] private float dashDuration = 0.2f;
+        [SerializeField] private float dashSpeed = 20f;
         private bool isDashing = false;
-        private float dashDuration = 0.2f;
-        private float dashSpeed = 20f;
 
         private bool shouldMove => mouseHitPoint != Vector3.zero;
 
@@ -118,6 +122,8 @@ namespace Champions {
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
                 championStatistics.CurrentHealth,
                 championStatistics.MaxHealth));
+
+            dash = new Dash(dashCooldown);
         }
 
         protected virtual void FixedUpdate() {
@@ -414,10 +420,18 @@ namespace Champions {
         }
 
         public void OnDash() {
+            if (dash.IsOnCooldown()) {
+                Logger.Log("Dash is on cooldown.", this);
+                return;
+            }
+
             bool isMovingPreDash = IsMoving;
             isDashing = true;
             float angle = Utilities.GetGlobalAngleFromDirection(this);
 
+            rigidbody.useGravity = false;
+            collider.isTrigger = true;
+            
             rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
 
             Logger.Log("Angle: " + angle, Logger.Color.RED, this);
@@ -427,12 +441,15 @@ namespace Champions {
                 isDashing = false;
                 if (angle > 45 || angle < -45) {
                     Stop();
+                    ResetCurrentTarget();
                 } else {
                     if (!isMovingPreDash) {
                         Stop();
                     }
                 }
             }, dashDuration, this);
+
+            dash.StartCooldown();
         }
 
         private const float increaseValue = 0.008f;

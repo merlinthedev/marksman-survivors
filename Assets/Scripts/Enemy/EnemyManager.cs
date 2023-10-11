@@ -360,7 +360,7 @@ namespace Enemy {
         /// </summary>
         private void IncreaseDifficulty() {
             internalSpawnRatio *= internalGrowthRate;
-            // Logger.Log("Increased difficulty, new spawn ratio: " + internalSpawnRatio, Logger.Color.BLUE, this);
+            Logger.Log("Increased difficulty, new spawn ratio: " + internalSpawnRatio, Logger.Color.BLUE, this);
         }
 
 
@@ -406,6 +406,7 @@ namespace Enemy {
                 // Logger.Log("Time left before difficulty increase: " + timeLeft, Logger.Color.BLUE,
                 //     GameManager.GetInstance());
                 OnCooldownCompleted?.Invoke();
+                timeLeft = cooldown;
             }
         }
 

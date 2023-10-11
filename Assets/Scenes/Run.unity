@@ -11372,17 +11372,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilities: []
   rigidbody: {fileID: 2114737658}
+  collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}
   mouseHitPoint: {x: 0, y: 0, z: 0}
   grounded: 0
   groundedRange: 1.16
+  dashCooldown: 20
+  dashDuration: 0.2
+  dashSpeed: 20
   isInvincible: 0
   directionTracker: {x: 0, y: 0, z: 0, w: 0}
   m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
   m_AnimationController: {fileID: 2114737660}
   maxChainCount: 3
-  dashSpeed: 20
 --- !u!114 &2114737660
 MonoBehaviour:
   m_ObjectHideFlags: 0
