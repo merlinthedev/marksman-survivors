@@ -47,11 +47,15 @@ namespace Champions.Kitegirl.Entities {
             if (damageable != null) {
                 IDebuffable debuffable = other.gameObject.GetComponent<IDebuffable>();
                 if (debuffable != null) {
-                    debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
-                        slowDuration, slowPercentage));
+                    if (debuffable != kitegirl) {
+                        debuffable.ApplyDebuff(Debuff.CreateDebuff(debuffable, kitegirl, Debuff.DebuffType.SLOW,
+                            slowDuration, slowPercentage));
+                    }
                 }
 
-                kitegirl.DealDamage(damageable, kitegirl.GetAttackDamage() * ADDamageRatio);
+                if (damageable != kitegirl) {
+                    kitegirl.DealDamage(damageable, kitegirl.GetAttackDamage() * ADDamageRatio);
+                }
             }
         }
     }
