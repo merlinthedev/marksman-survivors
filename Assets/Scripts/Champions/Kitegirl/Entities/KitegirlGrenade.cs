@@ -17,7 +17,6 @@ namespace Champions.Kitegirl.Entities {
         [SerializeField] private Rigidbody m_Rigidbody;
 
         [SerializeField] private float detonateTime = 2f;
-
         [SerializeField] private float damageRadius = 5f;
 
         private float damage = 0f;

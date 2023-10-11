@@ -5,6 +5,7 @@ using BuffsDebuffs.Stacks;
 using Champions.Abilities;
 using Entities;
 using EventBus;
+using Unity.VisualScripting;
 using UnityEngine;
 using Util;
 using Debug = UnityEngine.Debug;
@@ -46,6 +47,12 @@ namespace Champions {
 
         protected float lastAttackTime = 0f;
         private float damageMultiplier = 1f;
+
+        private bool isDashing = false;
+        private float dashDuration = 0.2f;
+        private float dashSpeed = 20f;
+
+        private bool shouldMove => mouseHitPoint != Vector3.zero;
 
         protected bool isAutoAttacking = false;
 
@@ -117,10 +124,8 @@ namespace Champions {
         protected virtual void FixedUpdate() {
             GroundCheck();
 
-            if (mouseHitPoint != Vector3.zero) {
-                if (grounded) {
-                    OnMove();
-                }
+            if (grounded) {
+                OnMove();
             }
 
             ChangeMovementInfluence();
@@ -379,7 +384,7 @@ namespace Champions {
         private float distanceBeforeCallback = 0.2f;
 
         protected virtual void OnMove() {
-            if (mouseHitPoint == Vector3.zero) {
+            if (!shouldMove || isDashing) {
                 return;
             }
 
@@ -402,11 +407,33 @@ namespace Champions {
 
             int deftnessStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count;
 
-            rigidbody.velocity = direction.normalized *
-                                 (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
+            rigidbody.velocity =
+                direction.normalized * (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
             lastKnownDirection = direction.normalized;
+        }
+
+        public void OnDash() {
+            bool isMovingPreDash = IsMoving;
+            isDashing = true;
+            float angle = Utilities.GetGlobalAngleFromDirection(this);
+
+            rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
+
+            Logger.Log("Angle: " + angle, Logger.Color.RED, this);
+
+
+            Utilities.InvokeDelayed(() => {
+                isDashing = false;
+                if (angle > 45 || angle < -45) {
+                    Stop();
+                } else {
+                    if (!isMovingPreDash) {
+                        Stop();
+                    }
+                }
+            }, dashDuration, this);
         }
 
         private const float increaseValue = 0.008f;

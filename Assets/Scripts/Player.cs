@@ -4,6 +4,7 @@ using Entities;
 using EventBus;
 using Interactable;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Logger = Util.Logger;
@@ -251,8 +252,11 @@ public class Player : Core.Singleton.Singleton<Player> {
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            Logger.Log("Mouse1 pressed", Logger.Color.PINK, this);
             selectedChampion.OnAbility(KeyCode.Mouse1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            selectedChampion.OnDash();
         }
     }
 

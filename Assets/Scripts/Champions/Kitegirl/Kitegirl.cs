@@ -15,7 +15,6 @@ namespace Champions.Kitegirl {
         [SerializeField] private Champion_AnimationController m_AnimationController;
 
         private bool autoAttackShouldChain = false;
-        private bool isDashing = false;
         private bool hasUltimateActive = false;
         private bool attackShouldApplyDeftness = false;
 
@@ -26,7 +25,6 @@ namespace Champions.Kitegirl {
 
         private int currentChainCount = 0;
 
-        [SerializeField] private float dashSpeed = 20f;
 
         public override void OnAutoAttack(IDamageable damageable) {
             if (!CanAttack) {
@@ -108,13 +106,6 @@ namespace Champions.Kitegirl {
             rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
         }
 
-        protected override void OnMove() {
-            if (!isDashing) {
-                base.OnMove();
-            } else {
-                rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
-            }
-        }
 
         public override void DealDamage(IDamageable damageable, float damage) {
             if (attackShouldApplyDeftness) {
@@ -185,10 +176,6 @@ namespace Champions.Kitegirl {
             autoAttackShouldChain = b;
         }
 
-        public void SetIsDashing(bool p0) {
-            // Logger.Log("SetIsDashing: " + p0 + ", Time.time " + Time.time, Logger.Color.YELLOW, this);
-            isDashing = p0;
-        }
 
         public void SetAttackDeftnessApply(bool value) {
             attackShouldApplyDeftness = value;
