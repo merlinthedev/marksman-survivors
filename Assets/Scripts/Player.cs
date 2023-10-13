@@ -77,6 +77,111 @@ public class Player : Core.Singleton.Singleton<Player> {
     }
 
     private void HandleMouseClicks() {
+        HandleMoveClick();
+        HandleMoveHoldClick();
+        HandleAttackMove();
+
+
+        hasClickedThisFrame = false;
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("settings"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Equals)) {
+            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("cheats"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPaused) {
+            EventBus<ShowLevelUpPanelEvent>.Raise(new ShowLevelUpPanelEvent());
+        }
+    }
+
+    private void HandleAttackMove() {
+        if (Input.GetKeyDown(KeyCode.A) && !isPaused) {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                return;
+            }
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+            layerMask = ~layerMask;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                if (hit.collider.gameObject.CompareTag("Ground")) {
+                    hasClickedThisFrame = true;
+                    var point = hit.point;
+                    point.y = transform.position.y;
+
+                    IDamageable damageable = DamageableManager.GetInstance().GetClosestDamageable(point);
+
+                    if (damageable != null) {
+                        selectedChampion.OnAutoAttack(damageable);
+                        var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+                        x.GetComponent<Renderer>().material.color = Color.red;
+
+                        if (damageable is Enemy.Enemy) {
+                            RemoveFocus();
+
+                            damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                            currentFocus = damageable.GetTransform().gameObject;
+                        }
+                    }
+                } else {
+                    IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                    if (damageable != null) {
+                        if (damageable as Player != this) {
+                            selectedChampion.OnAutoAttack(damageable);
+
+                            RemoveFocus();
+
+                            damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                            currentFocus = damageable.GetTransform().gameObject;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void HandleMoveHoldClick() {
+        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame && !isPaused) {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                return;
+            }
+
+            // if it is the 10th frame, do the thing
+            if (Time.frameCount % 10 == 0) {
+                // Log("Mouse held down", Logger.Color.GREEN, this);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
+                layerMask = ~layerMask;
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+                    if (hit.collider.gameObject.CompareTag("Ground")) {
+                        var point = hit.point;
+                        point.y = transform.position.y;
+
+                        // Uncomment to also spawn click prefab when holding down the mouse 
+                        // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+
+                        // selectedChampion.SetMouseHitPoint(point);
+                        selectedChampion.RequestMovement(point);
+                    }
+
+                    if (hit.collider.gameObject.CompareTag("Enemy") ||
+                        hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
+                        IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                        selectedChampion.OnAutoAttack(damageable);
+                    }
+                }
+            }
+        }
+    }
+
+    private void HandleMoveClick() {
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
             // check if the mouse is on a canvas object
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
@@ -127,101 +232,6 @@ public class Player : Core.Singleton.Singleton<Player> {
                     }
                 }
             }
-        }
-
-        if (Input.GetKey(KeyCode.Mouse0) && !hasClickedThisFrame && !isPaused) {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                return;
-            }
-
-            // if it is the 10th frame, do the thing
-            if (Time.frameCount % 10 == 0) {
-                // Log("Mouse held down", Logger.Color.GREEN, this);
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
-                layerMask = ~layerMask;
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
-                    if (hit.collider.gameObject.CompareTag("Ground")) {
-                        var point = hit.point;
-                        point.y = transform.position.y;
-
-                        // Uncomment to also spawn click prefab when holding down the mouse 
-                        // Instantiate(m_ClickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-
-                        // selectedChampion.SetMouseHitPoint(point);
-                        selectedChampion.RequestMovement(point);
-                    }
-
-                    if (hit.collider.gameObject.CompareTag("Enemy") ||
-                        hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
-                        IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                        selectedChampion.OnAutoAttack(damageable);
-                    }
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.A) && !isPaused) {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                return;
-            }
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            int layerMask = LayerMask.GetMask("ExcludeFromMovementClicks");
-            layerMask = ~layerMask;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
-                if (hit.collider.gameObject.CompareTag("Ground")) {
-                    hasClickedThisFrame = true;
-                    var point = hit.point;
-                    point.y = transform.position.y;
-
-                    IDamageable damageable = DamageableManager.GetInstance().GetClosestDamageable(point);
-
-                    if (damageable != null) {
-                        selectedChampion.OnAutoAttack(damageable);
-                        var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
-                        x.GetComponent<Renderer>().material.color = Color.red;
-
-                        if (damageable is Enemy.Enemy) {
-                            RemoveFocus();
-
-                            damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
-                            currentFocus = damageable.GetTransform().gameObject;
-                        }
-                    }
-                } else {
-                    IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                    if (damageable != null) {
-                        if (damageable as Player != this) {
-                            selectedChampion.OnAutoAttack(damageable);
-
-                            RemoveFocus();
-
-                            damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
-                            currentFocus = damageable.GetTransform().gameObject;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        hasClickedThisFrame = false;
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("settings"));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Equals)) {
-            EventBus<ToggleMenuEvent>.Raise(new ToggleMenuEvent("cheats"));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab) && !isPaused) {
-            EventBus<ShowLevelUpPanelEvent>.Raise(new ShowLevelUpPanelEvent());
         }
     }
 

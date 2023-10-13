@@ -21,6 +21,8 @@ namespace UI {
         [SerializeField] private List<AAbility> abilities = new();
         private List<ILevelPanelComponent> levelPanelComponents = new();
 
+        private int stackedLevelUp = 0;
+
         private void OnEnable() {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
             EventBus<ShowLevelUpPanelEvent>.Subscribe(ShowPanel);
@@ -89,6 +91,10 @@ namespace UI {
                         new ChampionAbilityChosenEvent(ability));
                     EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(ability.GetKeyCode(), 0));
                     HidePanel();
+
+                    if (stackedLevelUp >= 1) {
+                        EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
+                    }
                 });
                 uiLevelUpComponent.GetBannerImage().sprite = toInstantiate[i].GetAbilityLevelUpBannerSprite();
 
@@ -108,6 +114,10 @@ namespace UI {
                     EventBus<ChampionUpgradeChosenEvent>.Raise(
                         new ChampionUpgradeChosenEvent(upgrade));
                     HidePanel();
+
+                    if (stackedLevelUp >= 1) {
+                        EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
+                    }
                 });
 
                 uiUpgradeComponent.GetBannerImage().sprite = upgrade.GetUpgradeLevelUpSprite();
@@ -116,6 +126,8 @@ namespace UI {
                 levelPanelComponents.Add(uiUpgradeComponent);
             }
 
+            stackedLevelUp--;
+
             // raise an event to stop the enemies from spawning and moving
             EventBus<UILevelUpPanelOpenEvent>.Raise(new UILevelUpPanelOpenEvent());
 
@@ -123,7 +135,7 @@ namespace UI {
             levelPanel.SetActive(true);
 
             // set the leveled up bool to false and remove the level up prompt
-            leveledUp = false;
+            leveledUp = stackedLevelUp >= 1;
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(false));
         }
 
@@ -186,6 +198,8 @@ namespace UI {
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
             abilitiesToLevelUp = e.m_ChampionAbilities;
             leveledUp = true;
+            stackedLevelUp++;
+            Logger.Log("stackedLevelUp: " + stackedLevelUp, Logger.Color.RED, this);
         }
     }
 }
