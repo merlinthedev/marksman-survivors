@@ -316,7 +316,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6350459874293242623}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_EnemyDamageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
     type: 3}
   m_Collider: {fileID: 0}
-  movementSpeed: 4
+  movementSpeed: 3
   maxHealth: 12
   currentHealth: 12
   m_HealthBar: {fileID: 8277267421854434963}

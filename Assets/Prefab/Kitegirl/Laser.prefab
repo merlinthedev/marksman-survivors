@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3999905143876424293}
-  m_LocalRotation: {x: 0.6176101, y: 0.34432223, z: -0.34432223, w: 0.6176101}
+  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 6.3917, y: 10.24909, z: 6.3917}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 148.28, z: 90}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
 --- !u!212 &8980868955460073198
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -98,10 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc5bef611b54e79a6a83ea2a0f65c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowPercentage: 0.33
-  slowDuration: 3
-  adDamageRatio: 1.2
-  lifeSpan: 0.2
 --- !u!65 &1993516885612653206
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -121,5 +117,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.64546263, y: 1.2799999, z: 0.0056455215}
-  m_Center: {x: -0.000016766924, y: -2.1114354e-20, z: 0}
+  m_Size: {x: 0.64546263, y: 1.28, z: 1.5529245}
+  m_Center: {x: -0.000016748274, y: 0, z: -0.02636932}
