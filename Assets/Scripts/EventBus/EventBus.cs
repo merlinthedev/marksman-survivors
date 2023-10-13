@@ -5,6 +5,7 @@ using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
 using Core;
+using Enemies;
 using Interactable.NPC;
 using Inventory.Items;
 using UnityEngine.UI;
@@ -26,35 +27,30 @@ namespace EventBus {
         }
     }
 
-    public abstract class Event {
-    }
+    public abstract class Event { }
 
-    public class EnemyStartHoverEvent : Event {
-    }
+    public class EnemyStartHoverEvent : Event { }
 
-    public class EnemyStopHoverEvent : Event {
-    }
+    public class EnemyStopHoverEvent : Event { }
 
-    public class InteractableStartHoverEvent : Event {
-    }
+    public class InteractableStartHoverEvent : Event { }
 
-    public class InteractableStopHoverEvent : Event {
-    }
+    public class InteractableStopHoverEvent : Event { }
 
     public class EnemySpawnedEvent : Event {
-        public Enemy.Enemy enemy { get; private set; }
+        public Enemy enemy { get; private set; }
 
-        public EnemySpawnedEvent(Enemy.Enemy enemy) {
+        public EnemySpawnedEvent(Enemy enemy) {
             this.enemy = enemy;
         }
     }
 
     public class EnemyHitEvent : Event {
         public Collider m_Collider { get; private set; }
-        public Enemy.Enemy m_Enemy { get; private set; }
+        public Enemy m_Enemy { get; private set; }
         public Vector3 m_BulletHitPosition { get; private set; }
 
-        public EnemyHitEvent(Collider collider, Enemy.Enemy enemy, Vector3 bulletHitPosition) {
+        public EnemyHitEvent(Collider collider, Enemy enemy, Vector3 bulletHitPosition) {
             m_Collider = collider;
             m_Enemy = enemy;
             m_BulletHitPosition = bulletHitPosition;
@@ -63,27 +59,23 @@ namespace EventBus {
 
     public class EnemyKilledEvent : Event {
         public Collider collider { get; private set; }
-        public Enemy.Enemy enemy { get; private set; }
+        public Enemy enemy { get; private set; }
         public Vector3 enemyDeathPosition { get; private set; }
 
-        public EnemyKilledEvent(Collider collider, Enemy.Enemy enemy, Vector3 enemyDeathPosition) {
+        public EnemyKilledEvent(Collider collider, Enemy enemy, Vector3 enemyDeathPosition) {
             this.collider = collider;
             this.enemy = enemy;
             this.enemyDeathPosition = enemyDeathPosition;
         }
     }
 
-    public class ChampionHealthRegenerated : Event {
-    }
+    public class ChampionHealthRegenerated : Event { }
 
-    public class ChampionManaRegenerated : Event {
-    }
+    public class ChampionManaRegenerated : Event { }
 
-    public class ChampionAbilitiesHookedEvent : Event {
-    }
+    public class ChampionAbilitiesHookedEvent : Event { }
 
-    public class ChampionDamageTakenEvent : Event {
-    }
+    public class ChampionDamageTakenEvent : Event { }
 
     public class ChampionAbilityUsedEvent : Event {
         public AAbility AbstractAbility { get; private set; }
@@ -205,14 +197,11 @@ namespace EventBus {
         }
     }
 
-    public class UILevelUpPanelClosedEvent : Event {
-    }
+    public class UILevelUpPanelClosedEvent : Event { }
 
-    public class UILevelUpPanelOpenEvent : Event {
-    }
+    public class UILevelUpPanelOpenEvent : Event { }
 
-    public class ShowLevelUpPanelEvent : Event {
-    }
+    public class ShowLevelUpPanelEvent : Event { }
 
     public class LevelUpPromptEvent : Event {
         public bool open;
@@ -261,11 +250,9 @@ namespace EventBus {
         }
     }
 
-    public class GamePausedEvent : Event {
-    }
+    public class GamePausedEvent : Event { }
 
-    public class GameResumedEvent : Event {
-    }
+    public class GameResumedEvent : Event { }
 
     public class ToggleMenuEvent : Event {
         public string menu { get; private set; }
@@ -275,9 +262,7 @@ namespace EventBus {
         }
     }
 
-    public class UISettingsMenuOpenedEvent : Event {
-    }
+    public class UISettingsMenuOpenedEvent : Event { }
 
-    public class UISettingsMenuClosedEvent : Event {
-    }
+    public class UISettingsMenuClosedEvent : Event { }
 }

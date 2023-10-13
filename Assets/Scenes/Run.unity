@@ -6506,6 +6506,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1712726245}
+  dummyPrefab: {fileID: -4530384888738143981, guid: f069be163fd05b9429cbfaa336b7c63f,
+    type: 3}
 --- !u!1 &1336124638
 GameObject:
   m_ObjectHideFlags: 0
@@ -7506,8 +7508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2114737657}
-  enemyPrefab: {fileID: 6350459874293242501, guid: 4aa8b8f07d0f92d469373549abf8ccf7,
-    type: 3}
+  enemyPrefabs:
+  - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
   shouldSpawn: 1
   maxAmountOfEnemies: 999999999
   secondsBeforeDifficultyIncrease: 50

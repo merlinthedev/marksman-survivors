@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Core;
-using Enemy;
 using static BuffsDebuffs.Stacks.Stack;
 using Util;
 using Champions.Abilities;
+using Enemies;
 using EventBus;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Bamischijf : MonoBehaviour {
     bool enemiesShouldSpawn = true;
     bool cooldownsShouldReset = false;
     [SerializeField] private Image panel;
+
+    [SerializeField] private Dummy dummyPrefab;
 
     private void OnEnable() {
         EventBus<ChampionAbilityUsedEvent>.Subscribe(ResetCooldowns);
@@ -69,10 +72,16 @@ public class Bamischijf : MonoBehaviour {
     }
 
     public void SpawnDummy() {
-        Vector3[] location = new Vector3[1];
-        location[0] = Player.GetInstance().GetCurrentlySelectedChampion().transform.position + new Vector3(5, 0, 0);
-        Enemy.Enemy[] enemy = EnemyManager.GetInstance().InstantiateEnemies(location);
-        enemy[0].MakeDummy();
+        // Vector3[] location = new Vector3[1];
+        // location[0] = Player.GetInstance().GetCurrentlySelectedChampion().transform.position + new Vector3(5, 0, 0);
+        // Enemy[] enemy = EnemyManager.GetInstance().InstantiateEnemies(location);
+        // enemy[0].MakeDummy();
+
+        Dummy dummy = Instantiate(this.dummyPrefab);
+        dummy.transform.position = Player.GetInstance().GetCurrentlySelectedChampion().transform.position +
+                                   new Vector3(5, 0, 0);
+        EnemyManager.GetInstance().AddEnemy(dummy);
+        DamageableManager.GetInstance().AddDamageable(dummy);
     }
 
     public void WipeEnemies() {

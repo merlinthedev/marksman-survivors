@@ -1,5 +1,6 @@
 ﻿using Champions;
 using Core;
+using Enemies;
 using Entities;
 using EventBus;
 using Interactable;
@@ -120,11 +121,11 @@ public class Player : Core.Singleton.Singleton<Player> {
                         var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                         x.GetComponent<Renderer>().material.color = Color.red;
 
-                        if (damageable is Enemy.Enemy) {
+                        if (damageable is Enemy) {
                             RemoveFocus();
 
                             damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                            damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
                             currentFocus = damageable.GetTransform().gameObject;
                         }
                     }
@@ -137,7 +138,7 @@ public class Player : Core.Singleton.Singleton<Player> {
                             RemoveFocus();
 
                             damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                            damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                            damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
                             currentFocus = damageable.GetTransform().gameObject;
                         }
                     }
@@ -185,6 +186,8 @@ public class Player : Core.Singleton.Singleton<Player> {
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
             // check if the mouse is on a canvas object
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                Debug.LogError("Mouse is over a UI element, not moving" +
+                               UnityEngine.EventSystems.EventSystem.current.transform.name);
                 return;
             }
 
@@ -210,7 +213,7 @@ public class Player : Core.Singleton.Singleton<Player> {
                     RemoveFocus();
 
                     damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                    damageable.GetTransform().GetComponent<Enemy.Enemy>().focusAnim = true;
+                    damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
                     currentFocus = damageable.GetTransform().gameObject;
                 } else {
                     RemoveFocus();

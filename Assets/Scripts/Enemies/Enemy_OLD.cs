@@ -5,15 +5,14 @@ using BuffsDebuffs.Stacks;
 using Champions;
 using Entities;
 using EventBus;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
-namespace Enemy {
-    public class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
+namespace Enemies {
+    public class Enemy_OLD : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
         public IDamageable currentTarget { get; set; }
         [SerializeField] private GameObject m_EnemyDamageNumberPrefab;
         private Canvas canvas;
@@ -196,7 +195,7 @@ namespace Enemy {
         private void TakeDamage(float damage) {
             if (isDead) return;
             // Debug.Log("Taking damage");
-            float damageTaken = CalculateDamage(damage);
+            float damageTaken = CalculateIncomingDamage(damage);
             currentHealth -= damageTaken;
 
             m_HealthBar.enabled = true;
@@ -217,7 +216,7 @@ namespace Enemy {
             }
         }
 
-        private float CalculateDamage(float incomingDamage) {
+        public float CalculateIncomingDamage(float incomingDamage) {
             int amountOfFragileStacks = Stacks.FindAll(x => x.GetStackType() == Stack.StackType.FRAGILE).Count;
             if (IsFragile) {
                 incomingDamage *= 1 + amountOfFragileStacks / 100f;
@@ -291,7 +290,7 @@ namespace Enemy {
         }
 
         public void Die() {
-            EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, this, transform.position));
+            EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(m_Collider, null, transform.position));
 
             Destroy(gameObject);
         }

@@ -10,10 +10,12 @@ using Util;
 using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
-namespace Enemy {
+namespace Enemies {
     public class EnemyManager : Singleton<EnemyManager> {
         [SerializeField] private Player player; // THIS IS BAD LETS NOT DO THIS
-        [SerializeField] private Enemy enemyPrefab;
+
+        // [SerializeField] private Enemy_OLD enemyPrefab;
+        [SerializeField] private List<Enemy> enemyPrefabs = new();
 
         // exposed to the editor because there were some unexplainable things happening :D
         [SerializeField] private bool shouldSpawn = false;
@@ -59,13 +61,13 @@ namespace Enemy {
 
         private void Update() {
             // when i hold left shift, i want to log the mouse position on the camera viewport
-            if (Input.GetKey(KeyCode.LeftShift)) {
-                Vector3 mousePos = Input.mousePosition;
-                Vector3 mousePosOnScreen = Camera.main.ScreenToViewportPoint(mousePos);
-                Logger.Log("Mouse position on screen: " + mousePosOnScreen, Logger.Color.BLUE, this);
-            }
+            // if (Input.GetKey(KeyCode.LeftShift)) {
+            //     Vector3 mousePos = Input.mousePosition;
+            //     Vector3 mousePosOnScreen = Camera.main.ScreenToViewportPoint(mousePos);
+            //     Logger.Log("Mouse position on screen: " + mousePosOnScreen, Logger.Color.BLUE, this);
+            // }
 
-            HandleEnemySpawn();
+            // HandleEnemySpawn();
         }
 
         private void HandleEnemySpawn() {
@@ -108,10 +110,10 @@ namespace Enemy {
 
                 yield return new WaitForSeconds(spawnTimer);
                 // Logger.Log("Spawing enemy", Logger.Color.BLUE, this);
-                Enemy enemy = Instantiate(enemyPrefab, FindPositionsIteratively()[0], Quaternion.Euler(0, 45, 0));
-                enemy.SetTarget(player.GetCurrentlySelectedChampion());
+                // Enemy_OLD enemy = Instantiate(enemyPrefab, FindPositionsIteratively()[0], Quaternion.Euler(0, 45, 0));
+                // enemy.SetTarget(player.GetCurrentlySelectedChampion());
                 //enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
-                enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
+                // enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
                 amountOfEnemies++; // For when we want to limit the amount of enemies on the screen for testing purposes
             }
         }
@@ -246,7 +248,7 @@ namespace Enemy {
             Enemy[] enemies = new Enemy[location.Length];
             for (var i = 0; i < location.Length; i++) {
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-                Enemy enemy = Instantiate(enemyPrefab, location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
+                Enemy enemy = Instantiate(enemyPrefabs[0], location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.GetCurrentlySelectedChampion());
                 // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
@@ -255,6 +257,10 @@ namespace Enemy {
             }
 
             return enemies;
+        }
+
+        public void AddEnemy(Enemy enemy) {
+            enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);
         }
 
         public void WipeEnemies() {
@@ -299,17 +305,17 @@ namespace Enemy {
         public Enemy GetClosestEnemy(Vector3 position, List<Enemy> enemiesToIgnore = null) {
             float closestDistance = Mathf.Infinity;
 
-            Enemy closestEnemy = null;
+            Enemy closestEnemyOld = null;
             foreach (var enemy in enemyDictionary) {
                 // if (enemy.Value == enemyToIgnore) continue;
                 if (enemiesToIgnore != null && enemiesToIgnore.Contains(enemy.Value)) continue;
                 float distance = Vector3.Distance(position, enemy.Value.transform.position);
                 if (!(distance < closestDistance)) continue;
                 closestDistance = distance;
-                closestEnemy = enemy.Value;
+                closestEnemyOld = enemy.Value;
             }
 
-            return closestEnemy;
+            return closestEnemyOld;
         }
 
         /// <summary>
