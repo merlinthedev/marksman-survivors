@@ -452,5 +452,5 @@ MonoBehaviour:
   intensityMultiplier: 1
   focusAnim: 0
   initialMovementSpeed: 0
-  maxHealth: 0
+  maxHealth: 1000
   rewardXP: 0

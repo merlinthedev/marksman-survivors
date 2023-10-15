@@ -67,7 +67,7 @@ namespace Enemies {
             //     Logger.Log("Mouse position on screen: " + mousePosOnScreen, Logger.Color.BLUE, this);
             // }
 
-            // HandleEnemySpawn();
+            HandleEnemySpawn();
         }
 
         private void HandleEnemySpawn() {
