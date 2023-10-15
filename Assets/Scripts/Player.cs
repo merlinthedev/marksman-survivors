@@ -186,8 +186,8 @@ public class Player : Core.Singleton.Singleton<Player> {
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
             // check if the mouse is on a canvas object
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                Debug.LogError("Mouse is over a UI element, not moving" +
-                               UnityEngine.EventSystems.EventSystem.current.transform.name);
+                // Debug.LogError("Mouse is over a UI element, not moving" +
+                //                UnityEngine.EventSystems.EventSystem.current.transform.name);
                 return;
             }
 
