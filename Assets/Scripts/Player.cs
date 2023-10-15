@@ -35,6 +35,11 @@ public class Player : Core.Singleton.Singleton<Player> {
 
     private Inventory.Inventory inventory;
 
+    private Enemy lastHoveredEnemy;
+    private float maxForgivenessDistance = 12f;
+    private float lastEnemyHoverTime = 0f;
+    private float forgivenessTime = 1f;
+
     private void OnEnable() {
         // excludedContexts.Add(this);
 
@@ -202,6 +207,25 @@ public class Player : Core.Singleton.Singleton<Player> {
                     Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                     point.y = transform.position.y;
 
+                    if (Time.time < lastEnemyHoverTime + forgivenessTime && lastHoveredEnemy != null) {
+                        Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
+                        Logger.Log("Within forgiveness time.", Logger.Color.RED, this);
+
+                        if (enemy != null) {
+                            float distance = (enemy.transform.position - transform.position).magnitude;
+
+                            if (distance < maxForgivenessDistance) {
+                                Logger.Log("Within forgiveness distance, attacking.", Logger.Color.RED, this);
+                                selectedChampion.OnAutoAttack(enemy);
+
+                                SetFocus(enemy);
+                                return;
+                            }
+
+                        }
+                    }
+
+                    Logger.Log("Requesting movement", Logger.Color.RED, this);
                     selectedChampion.RequestMovement(point);
                 }
 
@@ -210,11 +234,7 @@ public class Player : Core.Singleton.Singleton<Player> {
                     IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
                     selectedChampion.OnAutoAttack(damageable);
 
-                    RemoveFocus();
-
-                    damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
-                    damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
-                    currentFocus = damageable.GetTransform().gameObject;
+                    SetFocus(damageable);
                 } else {
                     RemoveFocus();
                 }
@@ -236,6 +256,14 @@ public class Player : Core.Singleton.Singleton<Player> {
                 }
             }
         }
+    }
+
+    private void SetFocus(IDamageable damageable) {
+        RemoveFocus();
+
+        damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+        damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
+        currentFocus = damageable.GetTransform().gameObject;
     }
 
     private void RemoveFocus() {
@@ -284,6 +312,8 @@ public class Player : Core.Singleton.Singleton<Player> {
 
     private void OnEnemyStartHover(EnemyStartHoverEvent e) {
         Cursor.SetCursor(m_AttackCursorTexture, Vector2.zero, CursorMode.Auto);
+        lastEnemyHoverTime = Time.time;
+        lastHoveredEnemy = e.enemy;
     }
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {

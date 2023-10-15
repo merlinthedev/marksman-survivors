@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace Enemies {
     public class EnemyManager : Singleton<EnemyManager> {
+        [SerializeField] private bool IWANTTOSPAWN = true;
         [SerializeField] private Player player; // THIS IS BAD LETS NOT DO THIS
 
         // [SerializeField] private Enemy_OLD enemyPrefab;
@@ -67,7 +68,10 @@ namespace Enemies {
             //     Logger.Log("Mouse position on screen: " + mousePosOnScreen, Logger.Color.BLUE, this);
             // }
 
-            HandleEnemySpawn();
+            if (IWANTTOSPAWN) {
+                HandleEnemySpawn();
+
+            }
         }
 
         private void HandleEnemySpawn() {
@@ -314,6 +318,8 @@ namespace Enemies {
                 closestDistance = distance;
                 closestEnemyOld = enemy.Value;
             }
+
+            Logger.Log("Closest enemy: " + closestEnemyOld.gameObject.name, Logger.Color.BLUE, this);
 
             return closestEnemyOld;
         }

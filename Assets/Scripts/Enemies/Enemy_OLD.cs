@@ -63,7 +63,7 @@ namespace Enemies {
 
 
         private void OnMouseEnter() {
-            EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent());
+            EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent(null));
         }
 
         private void OnMouseExit() {

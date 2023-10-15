@@ -7507,6 +7507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IWANTTOSPAWN: 0
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
@@ -7541,6 +7542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8434d72977514ea99969e517e981a3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Paused: 0
 --- !u!114 &1574137039
 MonoBehaviour:
   m_ObjectHideFlags: 0

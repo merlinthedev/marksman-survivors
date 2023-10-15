@@ -84,6 +84,13 @@ namespace Enemies {
             FocusAnimation();
         }
 
+        private void OnMouseEnter() {
+            EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent(this));
+        }
+
+        private void OnMouseExit() {
+            EventBus<EnemyStopHoverEvent>.Raise(new EnemyStopHoverEvent());
+        }
 
         #region Movement
 
@@ -232,7 +239,6 @@ namespace Enemies {
         }
 
         #endregion
-
 
         #region Debuffs
 
