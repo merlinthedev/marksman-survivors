@@ -36,7 +36,7 @@ public class Player : Core.Singleton.Singleton<Player> {
     private Inventory.Inventory inventory;
 
     private Enemy lastHoveredEnemy;
-    private float maxForgivenessDistance = 12f;
+    private float maxForgivenessDistance = 2.1f;
     private float lastEnemyHoverTime = 0f;
     private float forgivenessTime = 1f;
 
@@ -84,7 +84,10 @@ public class Player : Core.Singleton.Singleton<Player> {
 
     private void HandleMouseClicks() {
         HandleMoveClick();
-        HandleMoveHoldClick();
+        if (Time.time > lastEnemyHoverTime + forgivenessTime) {
+            HandleMoveHoldClick();
+        }
+
         HandleAttackMove();
 
 
@@ -207,12 +210,13 @@ public class Player : Core.Singleton.Singleton<Player> {
                     Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                     point.y = transform.position.y;
 
+                    Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
                     if (Time.time < lastEnemyHoverTime + forgivenessTime && lastHoveredEnemy != null) {
-                        Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
                         Logger.Log("Within forgiveness time.", Logger.Color.RED, this);
 
                         if (enemy != null) {
-                            float distance = (enemy.transform.position - transform.position).magnitude;
+                            float distance = (enemy.transform.position - point).magnitude;
+                            Logger.Log("Distance: " + distance, Logger.Color.RED, this);
 
                             if (distance < maxForgivenessDistance) {
                                 Logger.Log("Within forgiveness distance, attacking.", Logger.Color.RED, this);
@@ -221,11 +225,14 @@ public class Player : Core.Singleton.Singleton<Player> {
                                 SetFocus(enemy);
                                 return;
                             }
-
                         }
                     }
 
-                    Logger.Log("Requesting movement", Logger.Color.RED, this);
+                    if (enemy != null) {
+                        float dist = (enemy.transform.position - point).magnitude;
+                        Logger.Log("Requesting movement, DISTANCE: " + dist, Logger.Color.RED, this);
+                    }
+
                     selectedChampion.RequestMovement(point);
                 }
 

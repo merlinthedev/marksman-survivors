@@ -70,7 +70,6 @@ namespace Enemies {
 
             if (IWANTTOSPAWN) {
                 HandleEnemySpawn();
-
             }
         }
 
@@ -318,8 +317,6 @@ namespace Enemies {
                 closestDistance = distance;
                 closestEnemyOld = enemy.Value;
             }
-
-            Logger.Log("Closest enemy: " + closestEnemyOld.gameObject.name, Logger.Color.BLUE, this);
 
             return closestEnemyOld;
         }
