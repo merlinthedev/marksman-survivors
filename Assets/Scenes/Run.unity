@@ -7507,7 +7507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IWANTTOSPAWN: 0
+  IWANTTOSPAWN: 1
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
@@ -11335,6 +11335,8 @@ MonoBehaviour:
   selectedChampion: {fileID: 2114737659}
   clickAnimPrefab: {fileID: 4175078626578945524, guid: 874709a6833ca564cb0d17fb6a62bd58,
     type: 3}
+  maxForgivenessDistance: 2.1
+  forgivenessTime: 0.15
 --- !u!54 &2114737658
 Rigidbody:
   m_ObjectHideFlags: 0

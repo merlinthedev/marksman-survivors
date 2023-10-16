@@ -36,9 +36,12 @@ public class Player : Core.Singleton.Singleton<Player> {
     private Inventory.Inventory inventory;
 
     private Enemy lastHoveredEnemy;
-    private float maxForgivenessDistance = 2.1f;
     private float lastEnemyHoverTime = 0f;
-    private float forgivenessTime = 1f;
+
+    [Header("FORGIVENESS CLICKS")]
+    [SerializeField] private float maxForgivenessDistance = 2.1f;
+
+    [SerializeField] private float forgivenessTime = 0.15f;
 
     private void OnEnable() {
         // excludedContexts.Add(this);
