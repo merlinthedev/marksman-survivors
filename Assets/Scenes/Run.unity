@@ -8186,10 +8186,10 @@ MonoBehaviour:
   shouldSpawn: 1
   maxAmountOfEnemies: 30
   secondsBeforeDifficultyIncrease: 30
-  spawnTimer: 6
+  spawnTimer: 7
   internalMinimumSpawnNumber: 1
   internalMaximumSpawnNumber: 3
-  internalGrowthRate: 1.5
+  internalGrowthRate: 1.1
 --- !u!114 &1574137037
 MonoBehaviour:
   m_ObjectHideFlags: 0

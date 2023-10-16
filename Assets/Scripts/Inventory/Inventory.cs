@@ -17,18 +17,18 @@ namespace Inventory {
             // Subscribe to event
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilled);
             EventBus<MerchantItemBuyRequestEvent>.Subscribe(OnMerchantItemBought);
+            EventBus<AddGoldEvent>.Subscribe(AddGoldListener);
         }
 
         ~Inventory() {
             // Unsubscribe from event
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilled);
             EventBus<MerchantItemBuyRequestEvent>.Unsubscribe(OnMerchantItemBought);
+            EventBus<AddGoldEvent>.Unsubscribe(AddGoldListener);
         }
 
         private void OnEnemyKilled(EnemyKilledEvent enemyKilledEvent) {
             AddKills(1);
-
-            AddGold(1);
         }
 
         private void OnMerchantItemBought(MerchantItemBuyRequestEvent merchantItemBuyRequestEvent) {
@@ -50,6 +50,10 @@ namespace Inventory {
 
         private bool CanPurchase(int price) {
             return gold >= price;
+        }
+
+        private void AddGoldListener(AddGoldEvent e) {
+            AddGold(e.AmountToAdd);
         }
 
         /// <summary>

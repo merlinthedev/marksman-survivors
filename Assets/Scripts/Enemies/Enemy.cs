@@ -7,6 +7,7 @@ using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Random = UnityEngine.Random;
 
 namespace Enemies {
     public abstract class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
@@ -65,9 +66,12 @@ namespace Enemies {
             renderer = GetComponent<Renderer>();
             canvas = GetComponentInChildren<Canvas>();
 
-            movementSpeed = initialMovementSpeed;
+            movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);
             currentHealth = maxHealth;
             UpdateHealthBar();
+            
+            
+            GetComponent<Rigidbody>().mass = movementSpeed;
         }
 
         private void Update() {

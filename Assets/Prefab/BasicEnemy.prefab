@@ -451,7 +451,7 @@ MonoBehaviour:
     type: 3}
   intensityMultiplier: 1
   focusAnim: 0
-  initialMovementSpeed: 3
+  initialMovementSpeed: 3.5
   maxHealth: 12
   rewardXP: 1
   damage: 1
