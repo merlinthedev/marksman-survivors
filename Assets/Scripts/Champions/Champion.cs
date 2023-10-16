@@ -515,6 +515,7 @@ namespace Champions {
         private void OnDamageTaken(float damage) {
             if (isInvincible) return;
             damage = CalculateIncomingDamage(damage);
+            // Debug.Log("With value " + damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (championStatistics.CurrentHealth <= 0) {
@@ -524,6 +525,7 @@ namespace Champions {
 
         public void TakeFlatDamage(float damage) {
             if (isInvincible) return;
+            // Debug.Log("Taking damage");
             OnDamageTaken(damage);
         }
 

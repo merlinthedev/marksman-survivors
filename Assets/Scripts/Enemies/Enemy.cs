@@ -42,15 +42,15 @@ namespace Enemies {
 
         [SerializeField] private float rewardXP;
         private float currentHealth;
-        protected float damage;
+        [SerializeField] protected float damage = 1f;
 
         protected bool isDead => currentHealth <= 0;
         private bool canMove = true;
         protected bool canAttack = true;
 
         protected float lastAttackTime;
-        protected float attackChargeTime;
-        protected float attackCooldown;
+        protected float attackChargeTime = 0.2f;
+        protected float attackCooldown = 0.2f;
 
         public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
         public List<Stack> Stacks { get; } = new();
