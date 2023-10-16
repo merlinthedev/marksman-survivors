@@ -46,6 +46,22 @@ namespace Core {
             return closestDamageable;
         }
 
+        public List<IDamageable> GetDamageablesInArea(Vector3 position, float radius, IDamageable toExclude = null) {
+            List<IDamageable> damageablesInArea = new List<IDamageable>();
+
+            foreach (var damageable in damageables) {
+                if (damageable == toExclude) {
+                    continue;
+                }
+
+                if (Vector3.Distance(position, damageable.GetTransform().position) <= radius) {
+                    damageablesInArea.Add(damageable);
+                }
+            }
+
+            return damageablesInArea;
+        }
+
         public List<IDamageable> GetDamageablesInCone(Vector3 position, Vector3 leftConePoint, Vector3 rightConePoint,
             IDamageable toExclude = null) {
             List<IDamageable> damageablesInCone = new List<IDamageable>();
