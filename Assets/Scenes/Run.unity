@@ -2219,7 +2219,7 @@ MonoBehaviour:
   lmbCooldown: {fileID: 1186357113}
   lmbDisable: {fileID: 662872067}
   rmbCooldown: {fileID: 551421892}
-  rmbDisable: {fileID: 662872067}
+  rmbDisable: {fileID: 1123249947}
   qCooldown: {fileID: 1987703364}
   qDisable: {fileID: 177269630}
   wCooldown: {fileID: 642320713}
@@ -8184,11 +8184,11 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
   shouldSpawn: 1
-  maxAmountOfEnemies: 999999999
-  secondsBeforeDifficultyIncrease: 50
-  spawnTimer: 3
+  maxAmountOfEnemies: 30
+  secondsBeforeDifficultyIncrease: 30
+  spawnTimer: 6
   internalMinimumSpawnNumber: 1
-  internalMaximumSpawnNumber: 4
+  internalMaximumSpawnNumber: 3
   internalGrowthRate: 1.5
 --- !u!114 &1574137037
 MonoBehaviour:
