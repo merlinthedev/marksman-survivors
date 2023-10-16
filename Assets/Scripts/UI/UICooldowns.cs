@@ -6,27 +6,42 @@ using UnityEngine.UI;
 namespace UI {
     public class UICooldowns : MonoBehaviour {
         [Header("References")]
-        [SerializeField] private Image lmbImage;
-
-        [SerializeField] private Image rmbImage;
-        [SerializeField] private Image qImage;
-        [SerializeField] private Image wImage;
-        [SerializeField] private Image eImage;
-        [SerializeField] private Image rImage;
+        [SerializeField] private Image lmbCooldown;
+        [SerializeField] private GameObject lmbDisable;
+        [SerializeField] private Image rmbCooldown;
+        [SerializeField] private GameObject rmbDisable;
+        [SerializeField] private Image qCooldown;
+        [SerializeField] private GameObject qDisable;
+        [SerializeField] private Image wCooldown;
+        [SerializeField] private GameObject wDisable;
+        [SerializeField] private Image eCooldown;
+        [SerializeField] private GameObject eDisable;
+        [SerializeField] private Image rCooldown;
+        [SerializeField] private GameObject rDisable;
+        [SerializeField] private Image spaceCooldown;
+        [SerializeField] private GameObject spaceDisable;
 
         private Player player;
 
         private void Start() {
             player = Player.GetInstance();
             
-            // for every image, set the fill amount to 1
+            // for every image, set the fill amount to 0
             // this is because the cooldowns are not active at the start of the game
-            lmbImage.fillAmount = 1;
-            rmbImage.fillAmount = 1;
-            qImage.fillAmount = 1;
-            wImage.fillAmount = 1;
-            eImage.fillAmount = 1;
-            rImage.fillAmount = 1;
+            lmbCooldown.fillAmount = 0;
+            lmbDisable.SetActive(false);
+            rmbCooldown.fillAmount = 0;
+            rmbDisable.SetActive(true);
+            qCooldown.fillAmount = 0;
+            qDisable.SetActive(true);
+            wCooldown.fillAmount = 0;
+            wDisable.SetActive(true);
+            eCooldown.fillAmount = 0;
+            eDisable.SetActive(true);
+            rCooldown.fillAmount = 0;
+            rDisable.SetActive(true);
+            spaceCooldown.fillAmount = 0;
+            spaceDisable.SetActive(true);
         }
 
         private void Update() {
@@ -34,19 +49,34 @@ namespace UI {
             foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
                 switch (ability.GetKeyCode()) {
                     case KeyCode.Q:
-                        qImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(!qDisable.activeSelf) qDisable.SetActive(true);
+                        qCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(qCooldown.fillAmount == 0) qDisable.SetActive(false);
                         break;
                     case KeyCode.W:
-                        wImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(!wDisable.activeSelf) wDisable.SetActive(true);
+                        wCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(wCooldown.fillAmount == 0) wDisable.SetActive(false);
                         break;
                     case KeyCode.E:
-                        eImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(!eDisable.activeSelf) eDisable.SetActive(true);
+                        eCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(eCooldown.fillAmount == 0) eDisable.SetActive(false);
                         break;
                     case KeyCode.R:
-                        rImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(!rDisable.activeSelf) rDisable.SetActive(true);
+                        rCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(rCooldown.fillAmount == 0) rDisable.SetActive(false);
                         break;
                     case KeyCode.Mouse1:
-                        rmbImage.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(!rmbDisable.activeSelf) rmbDisable.SetActive(true);
+                        rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
+                        break;
+                    case KeyCode.Space:
+                        if(!spaceDisable.activeSelf) spaceDisable.SetActive(true);
+                        spaceCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                        if(spaceCooldown.fillAmount == 0) spaceDisable.SetActive(false);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -59,7 +89,11 @@ namespace UI {
             
             // lmbImage.fillAmount = (x - z) / y;
             // do the calculation above but flip the result
-            lmbImage.fillAmount = 1 - (x - z) / y;
+            if(!lmbDisable.activeSelf){
+                if (player.GetCurrentlySelectedChampion().GetLastAttackTime() > 0) lmbDisable.SetActive(true);
+            }
+            lmbCooldown.fillAmount = 1 - (x - z) / y;
+            if(lmbCooldown.fillAmount == 0) lmbDisable.SetActive(false);
             
         }
     }
