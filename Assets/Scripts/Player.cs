@@ -215,14 +215,10 @@ public class Player : Core.Singleton.Singleton<Player> {
 
                     Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
                     if (Time.time < lastEnemyHoverTime + forgivenessTime && lastHoveredEnemy != null) {
-                        Logger.Log("Within forgiveness time.", Logger.Color.RED, this);
-
                         if (enemy != null) {
                             float distance = (enemy.transform.position - point).magnitude;
-                            Logger.Log("Distance: " + distance, Logger.Color.RED, this);
 
                             if (distance < maxForgivenessDistance) {
-                                Logger.Log("Within forgiveness distance, attacking.", Logger.Color.RED, this);
                                 selectedChampion.OnAutoAttack(enemy);
 
                                 SetFocus(enemy);
@@ -231,10 +227,6 @@ public class Player : Core.Singleton.Singleton<Player> {
                         }
                     }
 
-                    if (enemy != null) {
-                        float dist = (enemy.transform.position - point).magnitude;
-                        Logger.Log("Requesting movement, DISTANCE: " + dist, Logger.Color.RED, this);
-                    }
 
                     selectedChampion.RequestMovement(point);
                 }
