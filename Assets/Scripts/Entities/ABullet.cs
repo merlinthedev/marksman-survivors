@@ -17,10 +17,9 @@ namespace Entities {
             this.sourceEntity = sourceEntity;
         }
 
-        public void SetTarget(IDamageable target, Vector3 randomBulletSpread) {
+        public void SetTarget(IDamageable target) {
             shouldMove = true;
-            direction = (sourceEntity.currentTarget.GetTransform().position - transform.position).normalized +
-                        randomBulletSpread;
+            direction = (sourceEntity.currentTarget.GetTransform().position - transform.position).normalized;
             bulletSpawnTime = Time.time;
             // clone the target into targetEntity so that we don't get null reference when the original target is set to null
             targetEntity = target;

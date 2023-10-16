@@ -1,4 +1,5 @@
 ﻿using Champions;
+using Champions.Abilities;
 using Core;
 using Enemies;
 using Entities;
@@ -279,23 +280,33 @@ public class Player : Core.Singleton.Singleton<Player> {
         // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
         if (Input.GetKeyDown(KeyCode.Q)) {
-            selectedChampion.OnAbility(KeyCode.Q);
+            if (selectedChampion.GetAbilities()[0] != null) {
+                selectedChampion.OnAbility(selectedChampion.GetAbilities()[0]);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.W)) {
-            selectedChampion.OnAbility(KeyCode.W);
+            if (selectedChampion.GetAbilities()[1] != null) {
+                selectedChampion.OnAbility(selectedChampion.GetAbilities()[1]);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
-            selectedChampion.OnAbility(KeyCode.E);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R)) {
-            selectedChampion.OnAbility(KeyCode.R);
+            if (selectedChampion.GetAbilities()[2] != null) {
+                selectedChampion.OnAbility(selectedChampion.GetAbilities()[2]);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
-            selectedChampion.OnAbility(KeyCode.Mouse1);
+            if (selectedChampion.GetAbilities()[3] != null) {
+                selectedChampion.OnAbility(selectedChampion.GetAbilities()[3]);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            if (selectedChampion.GetAbilities()[4] != null) {
+                selectedChampion.OnAbility(selectedChampion.GetAbilities()[4]);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) {

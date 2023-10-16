@@ -44,13 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c323c77bc154e389cc51c8dc03b2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyCode: 114
   abilityCooldown: 60
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 21300000, guid: 2c018863daa16fc40b68212c6c99766e,
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: b9934efd647be424c91f38ff8351f6b4, type: 3}
+  currentCooldown: 0
+  abilityUseType: 1
+  abilityType: 1
   m_UltimateDuration: 10
   m_BurstAmount: 5
   m_SlowAmount: 0.5

@@ -1,13 +1,24 @@
-﻿using Champions.Abilities;
+﻿using System.Collections.Generic;
+using Champions.Abilities;
+using Entities;
+using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
-    public class BouncingBullets : AAbility {
-        public override void OnUse() {
-            if (IsOnCooldown()) return;
+    public class BouncingBullets : Ability {
+        [SerializeField] private float timeBetweenBounces = 0.3f;
+        [SerializeField] private int bounces = 2;
 
-            (champion as Kitegirl)?.SetAutoAttackChain(true);
+        public override void Hook(Champion champion) {
+            base.Hook(champion);
+            champion.OnAutoAttackEnded += Use;
+        }
 
-            base.OnUse();
+        private void Use(IDamageable damageable) {
+            (champion as Kitegirl)?.Bounce(bounces, timeBetweenBounces, damageable);
+        }
+
+        private void OnApplicationQuit() {
+            champion.OnAutoAttackEnded -= Use;
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE

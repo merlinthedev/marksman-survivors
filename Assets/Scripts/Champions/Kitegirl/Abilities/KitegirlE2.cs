@@ -3,7 +3,7 @@ using Champions.Kitegirl.Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlE2 : AAbility {
+    public class KitegirlE2 : Ability {
         [SerializeField] private KitegirlSmokescreen smokescreenPrefab = null;
         [SerializeField] private float dashRange = 3f;
         [SerializeField] private float yForceOffset = 4f;

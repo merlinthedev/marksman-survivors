@@ -13,7 +13,7 @@ using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
+    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
         #region Properties
 
         [Header("References")]
@@ -97,6 +97,18 @@ namespace Champions {
 
         #endregion
 
+        public event Action<IDamageable> OnAutoAttackEnded;
+        public event Action<IDamageable> OnAutoAttackStarted;
+
+        public void AutoAttackEnded(IDamageable t) {
+            OnAutoAttackEnded?.Invoke(t);
+        }
+
+        public void AutoAttackStarted() {
+            OnAutoAttackStarted?.Invoke(currentTarget);
+        }
+
+
         #region OnEnable/OnDisable
 
         private void OnEnable() {
@@ -178,7 +190,9 @@ namespace Champions {
 
         public abstract void OnAutoAttack(IDamageable damageable);
 
-        public abstract void OnAbility(KeyCode keyCode);
+        public void OnAbility(Ability ability) {
+            ability.OnUse();
+        }
 
         #endregion
 
@@ -579,9 +593,9 @@ namespace Champions {
         }
 
         private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
-            AAbility abilty = e.Ability;
+            Ability abilty = e.Ability;
             Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
-            Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
+            // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
             abilities.Add(abilty);
             abilty.Hook(this);
         }
