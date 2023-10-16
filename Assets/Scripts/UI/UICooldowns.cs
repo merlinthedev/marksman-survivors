@@ -1,4 +1,5 @@
 ﻿using System;
+using Champions;
 using Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,11 +74,6 @@ namespace UI {
                         rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
                         if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
                         break;
-                    case KeyCode.Space:
-                        if(!spaceDisable.activeSelf) spaceDisable.SetActive(true);
-                        spaceCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(spaceCooldown.fillAmount == 0) spaceDisable.SetActive(false);
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -94,7 +90,13 @@ namespace UI {
             }
             lmbCooldown.fillAmount = 1 - (x - z) / y;
             if(lmbCooldown.fillAmount == 0) lmbDisable.SetActive(false);
+
+            Champion champion = player.GetCurrentlySelectedChampion();
+            float timeLeftOnDodge = champion.GetDodge().GetTimeLeft();
+            float dodgeBaseCooldown = champion.GetDodge().GetCooldown();
             
+            spaceCooldown.fillAmount = timeLeftOnDodge / dodgeBaseCooldown;
+
         }
     }
 }
