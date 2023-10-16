@@ -450,6 +450,8 @@ MonoBehaviour:
   damageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
     type: 3}
   intensityMultiplier: 1
+  focusAnim: 0
   initialMovementSpeed: 3
   maxHealth: 12
   rewardXP: 1
+  damage: 1

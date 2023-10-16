@@ -16,6 +16,7 @@ namespace Enemies {
         }
 
         public override void DealDamage(IDamageable damageable, float damage) {
+            // Debug.Log("Enemy dealing damage");
             damageable.TakeFlatDamage(damage);
         }
 
