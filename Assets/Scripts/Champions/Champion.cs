@@ -94,20 +94,22 @@ namespace Champions {
 
 
         [SerializeField] private Vector4 directionTracker = Vector4.zero;
+        private Vector3 lastAttackDirection = Vector3.zero;
 
         #endregion
 
-        public event Action<IDamageable> OnAutoAttackEnded;
         public event Action<IDamageable> OnAutoAttackStarted;
 
-        public void AutoAttackEnded(IDamageable t) {
-            OnAutoAttackEnded?.Invoke(t);
-        }
+        public event Action<IDamageable> OnBulletHit;
+
 
         public void AutoAttackStarted() {
             OnAutoAttackStarted?.Invoke(currentTarget);
         }
 
+        public void BulletHit(IDamageable t) {
+            OnBulletHit?.Invoke(t);
+        }
 
         #region OnEnable/OnDisable
 
@@ -431,7 +433,7 @@ namespace Champions {
                 direction.normalized * (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
-            lastKnownDirection = direction.normalized;
+            movementDirection = direction.normalized;
         }
 
         public void OnDash() {
@@ -646,11 +648,13 @@ namespace Champions {
 
         public IDamageable GetCurrentTarget() => currentTarget;
 
+        private Vector3 movementDirection;
+
         public Vector3 GetCurrentMovementDirection() {
             // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
             // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);
             return rigidbody.velocity.normalized == Vector3.zero
-                ? lastKnownDirection
+                ? movementDirection
                 : rigidbody.velocity.normalized;
         }
 
@@ -665,6 +669,10 @@ namespace Champions {
             return directionTracker;
         }
 
+        public Vector3 GetLastAttackDirection() {
+            return lastAttackDirection;
+        }
+
         public int GetStackAmount(Stack.StackType stackType) {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
@@ -675,6 +683,15 @@ namespace Champions {
 
         public Dodge GetDodge() {
             return dodge;
+        }
+
+
+        public void SetCurrentMovementDirection(Vector3 dir) {
+            movementDirection = dir;
+        }
+
+        public void SetLastAttackDirection(Vector3 dir) {
+            lastAttackDirection = dir;
         }
 
         protected void SetGlobalDirectionAngle(float angle) {

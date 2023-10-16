@@ -10,7 +10,7 @@ namespace Champions.Kitegirl.Abilities {
 
         public override void Hook(Champion champion) {
             base.Hook(champion);
-            champion.OnAutoAttackEnded += Use;
+            champion.OnBulletHit += Use;
         }
 
         private void Use(IDamageable damageable) {
@@ -18,7 +18,7 @@ namespace Champions.Kitegirl.Abilities {
         }
 
         private void OnApplicationQuit() {
-            champion.OnAutoAttackEnded -= Use;
+            champion.OnBulletHit -= Use;
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE

@@ -51,6 +51,7 @@ namespace Champions.Kitegirl {
 
 
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
+            SetLastAttackDirection(dir.normalized);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
             rigidbody.velocity = Vector3.zero;
 
@@ -132,7 +133,7 @@ namespace Champions.Kitegirl {
             bullet.SetSourceEntity(this);
             bullet.SetTarget(currentTarget);
             bullet.SetDamage(CalculateDamage());
-            bullet.Init(AutoAttackEnded);
+            bullet.Init(BulletHit);
         }
 
         public void Bounce(int bounces, float timeBetweenBounces, IDamageable initialTarget) {

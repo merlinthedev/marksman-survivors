@@ -3,6 +3,7 @@ using Entities;
 using EventBus;
 using System.Collections.Generic;
 using UnityEngine;
+using Util;
 
 namespace Core {
     public class DamageableManager : Singleton<DamageableManager> {
@@ -44,7 +45,26 @@ namespace Core {
 
             return closestDamageable;
         }
-        
+
+        public List<IDamageable> GetDamageablesInCone(Vector3 position, Vector3 leftConePoint, Vector3 rightConePoint,
+            IDamageable toExclude = null) {
+            List<IDamageable> damageablesInCone = new List<IDamageable>();
+
+            foreach (var damageable in damageables) {
+                if (damageable == toExclude) {
+                    continue;
+                }
+
+                if (Utilities.IsInsideTriangle(new Vector2(position.x, position.z),
+                        new Vector2(leftConePoint.x, leftConePoint.z), new Vector2(rightConePoint.x, rightConePoint.z),
+                        new Vector2(damageable.GetTransform().position.x, damageable.GetTransform().position.z))) {
+                    damageablesInCone.Add(damageable);
+                }
+            }
+
+            return damageablesInCone;
+        }
+
 
         private void OnEnemySpawn(EnemySpawnedEvent enemySpawnedEvent) {
             AddDamageable(enemySpawnedEvent.enemy);
