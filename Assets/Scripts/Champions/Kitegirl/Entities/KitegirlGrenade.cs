@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Core;
-using Enemy;
+using Enemies;
 using Entities;
 using UnityEngine;
 using Util;
@@ -18,7 +18,7 @@ namespace Champions.Kitegirl.Entities {
 
         [SerializeField] private float detonateTime = 2f;
         [SerializeField] private float damageRadius = 5f;
-        
+
         [SerializeField] private GameObject explosionPrefab;
 
         private float damage = 0f;
@@ -58,11 +58,11 @@ namespace Champions.Kitegirl.Entities {
             if (regularDetonationCancelled) return;
             // Debug.Log("Detonating");
 
-            List<Enemy.Enemy> enemiesInRange =
+            List<Enemy> enemiesInRange =
                 EnemyManager.GetInstance().GetEnemiesInArea(transform.position, damageRadius);
 
 
-            foreach (Enemy.Enemy enemy in enemiesInRange) {
+            foreach (Enemy enemy in enemiesInRange) {
                 float damage = enemy.GetMaxHealth() * 0.01f /* 1% of max health */ +
                                kitegirl.GetAttackDamage() *
                                0.01f; // 1% of AD
@@ -73,7 +73,8 @@ namespace Champions.Kitegirl.Entities {
 
             DamageableManager.GetInstance().RemoveDamageable(this);
 
-            Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.1f, transform.position.z), Quaternion.Euler(90, 0, 0));
+            Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.1f, transform.position.z),
+                Quaternion.Euler(90, 0, 0));
 
             Destroy(gameObject);
         }
@@ -91,6 +92,10 @@ namespace Champions.Kitegirl.Entities {
 
         public void TakeFlatDamage(float damage) {
             EarlyDetonate();
+        }
+
+        public float CalculateIncomingDamage(float damage) {
+            return this.damage;
         }
 
         public Transform GetTransform() {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
-using Enemy;
+using Enemies;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,7 +20,7 @@ namespace Champions.Kitegirl.Entities {
         private float slowPercentage = 0.33f; // Normalized! 0-1
 
         private float useTime = 0f;
-        private Dictionary<Enemy.Enemy, Debuff> affectedEnemies = new();
+        private Dictionary<Enemy, Debuff> affectedEnemies = new();
 
         public void OnThrow(Kitegirl sourceEntity) {
             kitegirl = sourceEntity;
@@ -30,7 +30,7 @@ namespace Champions.Kitegirl.Entities {
 
         private void Update() {
             if (Time.time > useTime + smokescreenDuration) {
-                foreach (KeyValuePair<Enemy.Enemy, Debuff> enemy in affectedEnemies) {
+                foreach (KeyValuePair<Enemy, Debuff> enemy in affectedEnemies) {
                     enemy.Key.RemoveDebuff(enemy.Value);
                 }
 
@@ -40,7 +40,7 @@ namespace Champions.Kitegirl.Entities {
 
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+                Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
                 // enemy fragile stacks
                 enemy.AddStacks(fragileStacks, Stack.StackType.FRAGILE);
 
@@ -54,7 +54,7 @@ namespace Champions.Kitegirl.Entities {
 
         private void OnTriggerExit(Collider other) {
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy.Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
+                Enemy enemy = EnemyManager.GetInstance().GetEnemy(other);
                 if (affectedEnemies.ContainsKey(enemy)) {
                     enemy.RemoveDebuff(affectedEnemies[enemy]);
                     affectedEnemies.Remove(enemy);

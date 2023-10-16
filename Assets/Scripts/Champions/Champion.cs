@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
+using Enemies;
 using Entities;
 using EventBus;
 using UnityEngine;
@@ -511,10 +512,9 @@ namespace Champions {
 
         #region Damage & Death
 
-        protected virtual void OnDamageTaken(float damage) {
+        private void OnDamageTaken(float damage) {
             if (isInvincible) return;
-            float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
-            damage = IsFragile ? damage * 1 + fragileStacks / 10 : damage;
+            damage = CalculateIncomingDamage(damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (championStatistics.CurrentHealth <= 0) {
@@ -525,6 +525,13 @@ namespace Champions {
         public void TakeFlatDamage(float damage) {
             if (isInvincible) return;
             OnDamageTaken(damage);
+        }
+
+        public float CalculateIncomingDamage(float damage) {
+            float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
+            damage = IsFragile ? damage * 1 + fragileStacks / 100f : damage;
+
+            return damage;
         }
 
         public void ToggleInvincibility() {
@@ -564,7 +571,7 @@ namespace Champions {
                 championLevelManager.CurrentLevelXP));
 
             // if the enemy that was killed was the instance of currentTarget, set currentTarget to null
-            if ((Enemy.Enemy)currentTarget == e.enemy) {
+            if ((Enemy)currentTarget == e.enemy) {
                 currentTarget = null;
             }
         }

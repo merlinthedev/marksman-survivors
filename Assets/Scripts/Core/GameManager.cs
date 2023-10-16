@@ -3,7 +3,7 @@ using EventBus;
 
 namespace Core {
     public class GameManager : Singleton<GameManager> {
-        public bool Paused { get; private set; }
+        public bool Paused;
 
         private void OnEnable() {
             EventBus<UILevelUpPanelOpenEvent>.Subscribe(OnLevelUpPanelOpen);

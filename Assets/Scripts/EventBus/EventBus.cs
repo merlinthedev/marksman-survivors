@@ -5,6 +5,7 @@ using UnityEngine;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities.Upgrades;
 using Core;
+using Enemies;
 using Interactable.NPC;
 using Inventory.Items;
 using UnityEngine.UI;
@@ -30,7 +31,13 @@ namespace EventBus {
     }
 
     public class EnemyStartHoverEvent : Event {
+        public Enemy enemy;
+
+        public EnemyStartHoverEvent(Enemy enemy) {
+            this.enemy = enemy;
+        }
     }
+
 
     public class EnemyStopHoverEvent : Event {
     }
@@ -42,19 +49,19 @@ namespace EventBus {
     }
 
     public class EnemySpawnedEvent : Event {
-        public Enemy.Enemy enemy { get; private set; }
+        public Enemy enemy { get; private set; }
 
-        public EnemySpawnedEvent(Enemy.Enemy enemy) {
+        public EnemySpawnedEvent(Enemy enemy) {
             this.enemy = enemy;
         }
     }
 
     public class EnemyHitEvent : Event {
         public Collider m_Collider { get; private set; }
-        public Enemy.Enemy m_Enemy { get; private set; }
+        public Enemy m_Enemy { get; private set; }
         public Vector3 m_BulletHitPosition { get; private set; }
 
-        public EnemyHitEvent(Collider collider, Enemy.Enemy enemy, Vector3 bulletHitPosition) {
+        public EnemyHitEvent(Collider collider, Enemy enemy, Vector3 bulletHitPosition) {
             m_Collider = collider;
             m_Enemy = enemy;
             m_BulletHitPosition = bulletHitPosition;
@@ -63,10 +70,10 @@ namespace EventBus {
 
     public class EnemyKilledEvent : Event {
         public Collider collider { get; private set; }
-        public Enemy.Enemy enemy { get; private set; }
+        public Enemy enemy { get; private set; }
         public Vector3 enemyDeathPosition { get; private set; }
 
-        public EnemyKilledEvent(Collider collider, Enemy.Enemy enemy, Vector3 enemyDeathPosition) {
+        public EnemyKilledEvent(Collider collider, Enemy enemy, Vector3 enemyDeathPosition) {
             this.collider = collider;
             this.enemy = enemy;
             this.enemyDeathPosition = enemyDeathPosition;
@@ -280,4 +287,5 @@ namespace EventBus {
 
     public class UISettingsMenuClosedEvent : Event {
     }
+
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Enemy;
+using Enemies;
 using Entities;
 using UnityEngine;
 
@@ -16,39 +16,34 @@ namespace Champions.Kitegirl.Entities {
         private protected override void OnTriggerEnter(Collider other) {
             // Debug.Log("KitegirlBullet OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy.Enemy enemy = other.gameObject.GetComponent<Enemy.Enemy>();
+                Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 if (shouldChain) {
                     // enemy.TakeFlatDamage(this.m_Damage);
                     if ((bool)(sourceEntity as Kitegirl)?.HasUltimateActive()) {
                         if (enemy.IsFragile) {
                             enemy.Die();
-                        }
-                        else {
+                        } else {
                             // enemy.TakeFlatDamage(damage);
                             sourceEntity.DealDamage(enemy, damage);
                         }
-                    }
-                    else {
+                    } else {
                         // enemy.TakeFlatDamage(damage);
                         sourceEntity.DealDamage(enemy, damage);
                     }
 
                     TryReduceECooldown();
-                    Chain(other.gameObject.transform.position, new List<Enemy.Enemy> { enemy });
+                    Chain(other.gameObject.transform.position, new List<Enemy> { enemy });
                     Destroy(gameObject);
-                }
-                else {
+                } else {
                     // enemy.TakeFlatDamage(this.m_Damage);
                     if ((bool)(sourceEntity as Kitegirl)?.HasUltimateActive()) {
                         if (enemy.IsFragile) {
                             enemy.Die();
-                        }
-                        else {
+                        } else {
                             // enemy.TakeFlatDamage(damage);
                             sourceEntity.DealDamage(enemy, damage);
                         }
-                    }
-                    else {
+                    } else {
                         // enemy.TakeFlatDamage(damage);
                         sourceEntity.DealDamage(enemy, damage);
                     }
@@ -70,8 +65,8 @@ namespace Champions.Kitegirl.Entities {
         }
 
 
-        private void Chain(Vector3 bulletHitPoint, List<Enemy.Enemy> alreadyHit, bool shouldRecurse = true) {
-            Enemy.Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
+        private void Chain(Vector3 bulletHitPoint, List<Enemy> alreadyHit, bool shouldRecurse = true) {
+            Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
             damage *= 0.8f;
             // enemy.TakeFlatDamage(damage);
             sourceEntity.DealDamage(enemy, damage);
