@@ -1,9 +1,7 @@
-﻿using System;
-using Champions.Abilities;
+﻿using Champions.Abilities;
 
 namespace Champions.Kitegirl.Abilities {
-    [Serializable]
-    public class KitegirlQ1 : AAbility {
+    public class BouncingBullets : AAbility {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 

@@ -107,11 +107,18 @@ namespace Champions.Abilities {
         /// <summary>
         /// May need this in the future who knows
         /// </summary>
-        public enum AbilityType {
+        public enum AbilityUseType {
             PASSIVE, // Passive abilities are always on
-            DAMAGE, // Damage abilities are used to deal damage
-            MOBILITY, // Mobility abilities are used to move around
-            UTILITY, // Utility abilities are used to provide utility, like buffs or debuffs
+            ACTIVE, // Utility abilities are used to provide utility, like buffs or debuffs
+        }
+
+        public enum AbilityType {
+            BASIC,
+            EMPOWERING,
+            OFFENSE,
+            DEFENSE,
+            MOBILITY,
+            ULTIMATE
         }
     }
 }

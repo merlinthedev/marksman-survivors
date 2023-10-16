@@ -67,7 +67,7 @@ namespace Champions.Kitegirl.Entities {
 
         private void Chain(Vector3 bulletHitPoint, List<Enemy> alreadyHit, bool shouldRecurse = true) {
             Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(bulletHitPoint, alreadyHit);
-            damage *= 0.8f;
+            damage *= 0.5f;
             // enemy.TakeFlatDamage(damage);
             sourceEntity.DealDamage(enemy, damage);
             alreadyHit.Add(enemy);
