@@ -15,7 +15,7 @@ namespace Enemies {
             rigidbody.velocity = direction.normalized * movementSpeed;
         }
 
-        public override void DealDamage(IDamageable damageable, float damage) {
+        public override void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true) {
             // Debug.Log("Enemy dealing damage");
             damageable.TakeFlatDamage(damage);
         }

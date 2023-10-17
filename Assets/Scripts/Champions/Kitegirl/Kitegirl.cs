@@ -105,12 +105,12 @@ namespace Champions.Kitegirl {
         }
 
 
-        public override void DealDamage(IDamageable damageable, float damage) {
+        public override void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true) {
             if (attackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
-            base.DealDamage(damageable, damage);
+            base.DealDamage(damageable, damage, true);
         }
 
         protected override void Update() {
@@ -154,9 +154,8 @@ namespace Champions.Kitegirl {
                 Utilities.InvokeDelayed(() => {
                     // Debug.Log("Bouncing to " + damageable, this);
                     BounceTo(damageable, i1);
-
                 }, timeBetweenBounces * i, this);
-                
+
                 Utilities.InvokeDelayed(() => {
                     AnimateBulletBounce(alreadyHit, index);
                     index++;
@@ -165,13 +164,15 @@ namespace Champions.Kitegirl {
         }
 
         private void BounceTo(IDamageable damageable, int index) {
-            DealDamage(damageable, CalculateDamage() * Mathf.Pow(0.5f, index));
+            DealDamage(damageable, CalculateDamage() * Mathf.Pow(0.5f, index), true);
         }
+
         private void AnimateBulletBounce(List<IDamageable> targets, int index) {
             Vector3 dir = targets[index].GetTransform().position - targets[index - 1].GetTransform().position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-            
-            KitegirlBullet bouncingBullet = Instantiate(bulletPrefab, targets[index - 1].GetTransform().position, Quaternion.Euler(90, angle, 0));
+
+            KitegirlBullet bouncingBullet = Instantiate(bulletPrefab, targets[index - 1].GetTransform().position,
+                Quaternion.Euler(90, angle, 0));
             bouncingBullet.IsFake();
             bouncingBullet.SetTarget(targets[index]);
         }

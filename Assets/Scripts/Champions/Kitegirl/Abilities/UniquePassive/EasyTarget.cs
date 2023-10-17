@@ -14,7 +14,7 @@ namespace Champions.Kitegirl.Abilities.UniquePassive {
 
         private void Use(IDamageable damageable) {
             if (damageable is Enemy enemy) {
-                champion.DealDamage(enemy, enemy.GetMaxHealth() * maxHealthPercentageAsDamage);
+                champion.DealDamage(enemy, enemy.GetMaxHealth() * maxHealthPercentageAsDamage, false);
             }
         }
 

@@ -44,7 +44,7 @@ namespace Enemies {
         [SerializeField] private float rewardXP;
         private float currentHealth;
         [SerializeField] protected float damage = 1f;
-        
+
         [Header("Loot")]
         [SerializeField] private List<GameObject> lootPrefabs;
 
@@ -242,7 +242,7 @@ namespace Enemies {
             return damage;
         }
 
-        public abstract void DealDamage(IDamageable damageable, float damage);
+        public abstract void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true);
 
         public void ResetCurrentTarget() {
             currentTarget = null;
@@ -350,7 +350,9 @@ namespace Enemies {
 
         private void DropLoot() {
             for (int i = 0; i < lootPrefabs.Count; i++) {
-                Instantiate(lootPrefabs[i], new Vector3(transform.transform.position.x, 0, transform.transform.position.z), Quaternion.identity);
+                Instantiate(lootPrefabs[i],
+                    new Vector3(transform.transform.position.x, 0, transform.transform.position.z),
+                    Quaternion.identity);
             }
         }
 

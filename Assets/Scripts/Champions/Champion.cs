@@ -571,9 +571,11 @@ namespace Champions {
             return Mathf.Floor(damage);
         }
 
-        public virtual void DealDamage(IDamageable damageable, float damage) {
+        public virtual void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true) {
             damageable.TakeFlatDamage(damage);
-            OnDamageDone?.Invoke(damageable);
+            if (shouldInvoke) {
+                OnDamageDone?.Invoke(damageable);
+            }
         }
 
         public void OnDeath() {

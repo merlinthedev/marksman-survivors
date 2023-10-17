@@ -12013,7 +12013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: -8455518367097311757, guid: 94d2a193f79ed0041a7a5328b4438ca1, type: 3}
+  - {fileID: 7277570672238939788, guid: 5f3a7c89d827b3941875e12248cd06f6, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}
@@ -12025,9 +12025,9 @@ MonoBehaviour:
   dashSpeed: 20
   isInvincible: 0
   directionTracker: {x: 0, y: 0, z: 0, w: 0}
-  m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
+  bulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
-  m_AnimationController: {fileID: 2114737660}
+  animationController: {fileID: 2114737660}
   maxChainCount: 3
 --- !u!114 &2114737660
 MonoBehaviour:
