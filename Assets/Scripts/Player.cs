@@ -53,6 +53,8 @@ public class Player : Core.Singleton.Singleton<Player> {
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
 
+        EventBus<ChampionManaRegenerated>.Subscribe(OnChampionManaRegenerated);
+
         EventBus<LoadSceneEvent>.Subscribe(LoadScene);
 
 
@@ -69,6 +71,9 @@ public class Player : Core.Singleton.Singleton<Player> {
 
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
+
+        EventBus<ChampionManaRegenerated>.Unsubscribe(OnChampionManaRegenerated);
+
 
         EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
 
@@ -261,6 +266,8 @@ public class Player : Core.Singleton.Singleton<Player> {
     private void SetFocus(IDamageable damageable) {
         RemoveFocus();
 
+        if (!(damageable is Enemy)) return;
+
         damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
         damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
         currentFocus = damageable.GetTransform().gameObject;
@@ -346,6 +353,11 @@ public class Player : Core.Singleton.Singleton<Player> {
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
         EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
             selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
+    }
+
+    private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Mana",
+            selectedChampion.GetChampionStatistics().CurrentMana, selectedChampion.GetChampionStatistics().MaxMana));
     }
 
     private void OnGamePaused(GamePausedEvent e) {

@@ -2202,6 +2202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 2052183664}
+  manaBar: {fileID: 876738597}
   xpBar: {fileID: 326249762}
   levelText: {fileID: 1613401057}
 --- !u!114 &362836951
@@ -12013,7 +12014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: 7277570672238939788, guid: 5f3a7c89d827b3941875e12248cd06f6, type: 3}
+  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

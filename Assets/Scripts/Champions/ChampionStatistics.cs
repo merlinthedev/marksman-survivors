@@ -1,4 +1,5 @@
 ﻿using System;
+using EventBus;
 using UnityEngine;
 
 // Scriptable object attribute
@@ -332,13 +333,67 @@ namespace Champions {
                     break;
             }
         }
+
+        public void DeductFromStatistic(Statistic statistic, float value) {
+            switch (statistic) {
+                case Statistic.MAX_HEALTH:
+                    MaxHealth -= value;
+                    break;
+                case Statistic.MAX_MANA:
+                    MaxMana -= value;
+                    break;
+                case Statistic.HEALTH_REGEN:
+                    HealthRegen -= value;
+                    break;
+                case Statistic.CURRENT_MANA:
+                    CurrentMana -= value;
+                    EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Mana", CurrentMana, MaxMana));
+                    break;
+                case Statistic.MANA_REGEN:
+                    ManaRegen -= value;
+                    break;
+                case Statistic.ATTACK_SPEED:
+                    AttackSpeed -= value;
+                    break;
+                case Statistic.MOVEMENT_SPEED:
+                    MovementSpeed -= value;
+                    break;
+                case Statistic.ATTACK_RANGE:
+                    AttackRange -= value;
+                    break;
+                case Statistic.ATTACK_DAMAGE:
+                    Util.Logger.Log("Removing " + value + " to attack damage", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    AttackDamage -= value;
+
+                    Util.Logger.Log("Attack damage is now: " + AttackDamage, Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+                case Statistic.CRITICAL_STRIKE_CHANCE:
+                    CriticalStrikeChance -= value;
+                    break;
+                case Statistic.CRITICAL_STRIKE_DAMAGE:
+                    CriticalStrikeDamage -= value;
+                    break;
+                case Statistic.COOLDOWN_REDUCTION:
+                    CooldownReduction -= value;
+                    break;
+                case Statistic.CURRENT_XP:
+                default:
+                    Util.Logger.Log("Statistic not found or could not be edited", Util.Logger.Color.RED,
+                        Player.GetInstance());
+                    break;
+            }
+        }
     }
 
     [Serializable]
     public enum Statistic {
         MAX_HEALTH,
-        MAX_MANA,
+        CURRENT_HEALTH,
         HEALTH_REGEN,
+        MAX_MANA,
+        CURRENT_MANA,
         MANA_REGEN,
         ATTACK_SPEED,
         MOVEMENT_SPEED,

@@ -3,14 +3,15 @@ using Champions.Kitegirl.Entities;
 using Core;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
-    public class KitegirlW1 : Ability {
+namespace Champions.Kitegirl.Abilities.Offense {
+    public class ViciousGrenade : Ability {
         [SerializeField] private KitegirlGrenade grenadePrefab;
 
-        [SerializeField] private float attackDamageRatio = 0.6f; // 0.6f => 60% of AD
+        [SerializeField] private float attackDamageRatio = 1f; // 0.6f => 60% of AD
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
+            if (!CanAfford()) return;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -24,7 +25,9 @@ namespace Champions.Kitegirl.Abilities {
 
                     if (DistanceCheck(point)) {
                         KitegirlGrenade grenade =
-                            Instantiate(grenadePrefab, new Vector3(this.champion.transform.position.x, 0.5f, this.champion.transform.position.z),
+                            Instantiate(grenadePrefab,
+                                new Vector3(this.champion.transform.position.x, 0.5f,
+                                    this.champion.transform.position.z),
                                 grenadePrefab.transform.rotation);
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
                         grenade.OnThrow(new Vector3(point.x, 0.5f, point.z), champion);
@@ -44,7 +47,7 @@ namespace Champions.Kitegirl.Abilities {
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE
-        protected internal override void DeductFromCooldown(float timeToDeduct) {
+        protected override void DeductFromCooldown(float timeToDeduct) {
             base.DeductFromCooldown(timeToDeduct);
         }
     }

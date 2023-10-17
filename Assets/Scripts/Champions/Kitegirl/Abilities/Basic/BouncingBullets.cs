@@ -29,7 +29,7 @@ namespace Champions.Kitegirl.Abilities.Basic {
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE
-        protected internal override void DeductFromCooldown(float timeToDeduct) {
+        protected override void DeductFromCooldown(float timeToDeduct) {
             base.DeductFromCooldown(timeToDeduct);
         }
     }
