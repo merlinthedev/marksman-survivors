@@ -19,7 +19,7 @@ namespace Champions.Kitegirl.Abilities {
         private void Use(IDamageable damageable) {
             Utilities.InvokeDelayed(() => {
                 List<IDamageable> damageables = DamageableManager.GetInstance()
-                    .GetDamageablesInArea(damageable.GetTransform().position, damageArea, damageable);
+                    .GetDamageablesInArea(damageable.GetTransform().position, damageArea);
                 damageables.ForEach(d => { champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage); });
             }, timeToExplode, champion);
         }
