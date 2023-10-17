@@ -4,7 +4,7 @@ using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlQ3 : AAbility {
+    public class KitegirlQ3 : Ability {
         [SerializeField] private float activeTime = 2f;
         [SerializeField] private int stacksToAdd = 1;
         [SerializeField] private Stack.StackType stackType = Stack.StackType.DEFTNESS;

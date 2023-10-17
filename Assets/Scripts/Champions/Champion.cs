@@ -13,7 +13,7 @@ using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AAbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
+    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
         #region Properties
 
         [Header("References")]
@@ -94,8 +94,22 @@ namespace Champions {
 
 
         [SerializeField] private Vector4 directionTracker = Vector4.zero;
+        private Vector3 lastAttackDirection = Vector3.zero;
 
         #endregion
+
+        public event Action<IDamageable> OnAutoAttackStarted;
+
+        public event Action<IDamageable> OnBulletHit;
+
+
+        public void AutoAttackStarted() {
+            OnAutoAttackStarted?.Invoke(currentTarget);
+        }
+
+        public void BulletHit(IDamageable t) {
+            OnBulletHit?.Invoke(t);
+        }
 
         #region OnEnable/OnDisable
 
@@ -178,7 +192,9 @@ namespace Champions {
 
         public abstract void OnAutoAttack(IDamageable damageable);
 
-        public abstract void OnAbility(KeyCode keyCode);
+        public void OnAbility(Ability ability) {
+            ability.OnUse();
+        }
 
         #endregion
 
@@ -417,7 +433,7 @@ namespace Champions {
                 direction.normalized * (championStatistics.MovementSpeed * (1f + deftnessStacks / 100f));
 
             // Logger.Log("Velocity: " + rigidbody.velocity.magnitude, Util.Logger.Color.GREEN, this);
-            lastKnownDirection = direction.normalized;
+            movementDirection = direction.normalized;
         }
 
         public void OnDash() {
@@ -579,9 +595,9 @@ namespace Champions {
         }
 
         private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
-            AAbility abilty = e.Ability;
+            Ability abilty = e.Ability;
             Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
-            Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
+            // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
             abilities.Add(abilty);
             abilty.Hook(this);
         }
@@ -632,11 +648,13 @@ namespace Champions {
 
         public IDamageable GetCurrentTarget() => currentTarget;
 
+        private Vector3 movementDirection;
+
         public Vector3 GetCurrentMovementDirection() {
             // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
             // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);
             return rigidbody.velocity.normalized == Vector3.zero
-                ? lastKnownDirection
+                ? movementDirection
                 : rigidbody.velocity.normalized;
         }
 
@@ -651,6 +669,10 @@ namespace Champions {
             return directionTracker;
         }
 
+        public Vector3 GetLastAttackDirection() {
+            return lastAttackDirection;
+        }
+
         public int GetStackAmount(Stack.StackType stackType) {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
@@ -661,6 +683,15 @@ namespace Champions {
 
         public Dodge GetDodge() {
             return dodge;
+        }
+
+
+        public void SetCurrentMovementDirection(Vector3 dir) {
+            movementDirection = dir;
+        }
+
+        public void SetLastAttackDirection(Vector3 dir) {
+            lastAttackDirection = dir;
         }
 
         protected void SetGlobalDirectionAngle(float angle) {

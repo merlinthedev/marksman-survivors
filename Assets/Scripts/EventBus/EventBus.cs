@@ -93,12 +93,12 @@ namespace EventBus {
     }
 
     public class ChampionAbilityUsedEvent : Event {
-        public AAbility AbstractAbility { get; private set; }
+        public Ability AbstractAbility { get; private set; }
 
         public KeyCode KeyCode { get; private set; }
         public float Duration { get; private set; }
 
-        public ChampionAbilityUsedEvent(AAbility ability) {
+        public ChampionAbilityUsedEvent(Ability ability) {
             AbstractAbility = ability;
         }
 
@@ -112,9 +112,9 @@ namespace EventBus {
     public class ChampionLevelUpEvent : Event {
         public int m_CurrentLevel { get; private set; }
         public int m_PreviousLevel { get; private set; }
-        public List<AAbility> m_ChampionAbilities { get; private set; }
+        public List<Ability> m_ChampionAbilities { get; private set; }
 
-        public ChampionLevelUpEvent(int currentLevel, int previousLevel, List<AAbility> championAbilities) {
+        public ChampionLevelUpEvent(int currentLevel, int previousLevel, List<Ability> championAbilities) {
             m_CurrentLevel = currentLevel;
             m_PreviousLevel = previousLevel;
             m_ChampionAbilities = championAbilities;
@@ -122,9 +122,9 @@ namespace EventBus {
     }
 
     public class ChampionAbilityChosenEvent : Event {
-        public AAbility Ability { get; private set; }
+        public Ability Ability { get; private set; }
 
-        public ChampionAbilityChosenEvent(AAbility ability) {
+        public ChampionAbilityChosenEvent(Ability ability) {
             Ability = ability;
         }
     }

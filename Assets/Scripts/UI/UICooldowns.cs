@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using Champions;
+using System.Collections.Generic;
+using Champions.Abilities;
 using Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,10 +81,11 @@ namespace UI {
                 }
             }
 
+
             float x = Time.time;
             float y = player.GetCurrentlySelectedChampion().GetChampionStatistics().GetAttackSpeed(1);
             float z = player.GetCurrentlySelectedChampion().GetLastAttackTime();
-            
+
             // lmbImage.fillAmount = (x - z) / y;
             // do the calculation above but flip the result
             if(!lmbDisable.activeSelf){

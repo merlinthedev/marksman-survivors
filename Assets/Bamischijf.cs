@@ -116,7 +116,7 @@ public class Bamischijf : MonoBehaviour {
 
     private void ResetCooldowns(ChampionAbilityUsedEvent e) {
         if (!cooldownsShouldReset) return;
-        List<AAbility> abilities = Player.GetInstance().GetCurrentlySelectedChampion().GetAbilities();
+        List<Ability> abilities = Player.GetInstance().GetCurrentlySelectedChampion().GetAbilities();
         for (int i = 0; i < abilities.Count; i++) {
             abilities[i].currentCooldown = 0;
         }

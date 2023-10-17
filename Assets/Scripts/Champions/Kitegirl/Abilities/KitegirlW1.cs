@@ -4,7 +4,7 @@ using Core;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlW1 : AAbility {
+    public class KitegirlW1 : Ability {
         [SerializeField] private KitegirlGrenade grenadePrefab;
 
         [SerializeField] private float attackDamageRatio = 0.6f; // 0.6f => 60% of AD

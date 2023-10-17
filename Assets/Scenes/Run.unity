@@ -12012,7 +12012,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031a7555116348445a14a06a627f3b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilities: []
+  abilities:
+  - {fileID: 640121110517076604, guid: bc94e5e8ee2208f4bbcd1dcdf939d1e2, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

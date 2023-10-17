@@ -3,7 +3,7 @@ using Champions.Abilities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlR2 : AAbility {
+    public class KitegirlR2 : Ability {
         [SerializeField] private int m_AmountOfDeftnessStacks = 100;
 
         public override void OnUse() {

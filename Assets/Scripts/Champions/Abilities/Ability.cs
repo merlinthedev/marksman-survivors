@@ -6,8 +6,7 @@ using EventBus;
 using UnityEngine;
 
 namespace Champions.Abilities {
-    public abstract class AAbility : MonoBehaviour, IUpgradeable, ICooldown {
-        [SerializeField] protected KeyCode keyCode;
+    public abstract class Ability : MonoBehaviour, IUpgradeable, ICooldown {
         [SerializeField] private float abilityCooldown; // Static cooldown in seconds, should not be edited
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
@@ -16,10 +15,12 @@ namespace Champions.Abilities {
         protected Champion champion;
 
         protected bool isCancelled = false;
+        public AbilityUseType abilityUseType;
+        public AbilityType abilityType;
 
         public bool ShouldTick => currentCooldown > 0;
 
-        public void Hook(Champion champion) {
+        public virtual void Hook(Champion champion) {
             this.champion = champion;
 
             currentCooldown = 0;
@@ -88,10 +89,6 @@ namespace Champions.Abilities {
             return currentCooldown;
         }
 
-        public KeyCode GetKeyCode() {
-            return keyCode;
-        }
-
         public Sprite GetAbilityLevelUpBannerSprite() {
             return abilityLevelUpBanner;
         }
@@ -107,11 +104,18 @@ namespace Champions.Abilities {
         /// <summary>
         /// May need this in the future who knows
         /// </summary>
-        public enum AbilityType {
+        public enum AbilityUseType {
             PASSIVE, // Passive abilities are always on
-            DAMAGE, // Damage abilities are used to deal damage
-            MOBILITY, // Mobility abilities are used to move around
-            UTILITY, // Utility abilities are used to provide utility, like buffs or debuffs
+            ACTIVE, // Utility abilities are used to provide utility, like buffs or debuffs
+        }
+
+        public enum AbilityType {
+            BASIC,
+            UNIQUE_PASSIVE,
+            OFFENSE,
+            DEFENSE,
+            MOBILITY,
+            ULTIMATE
         }
     }
 }

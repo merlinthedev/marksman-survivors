@@ -3,7 +3,7 @@ using Champions.Kitegirl.Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlRMB1 : AAbility {
+    public class KitegirlRMB1 : Ability {
         [SerializeField] private KitegirlSlowArea m_KitegirlSlowAreaPrefab;
 
         [SerializeField] private float lifespan = 0.2f;

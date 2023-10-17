@@ -44,13 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df378cc065c4746ae858ca7bde4453c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyCode: 101
   abilityCooldown: 8
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 21300000, guid: 89f335d5214d92a458871a722e7b5c11,
     type: 3}
   upgrades:
   - {fileID: -8079239298508076044, guid: 0f326b0d2c4e5ed4ebf344b67885ba09, type: 3}
+  currentCooldown: 0
+  abilityUseType: 1
+  abilityType: 1
   smokescreenPrefab: {fileID: 1727126102520338091, guid: c6a00cf551fc8c04698b7aa21d8fcc41,
     type: 3}
   dashRange: 3

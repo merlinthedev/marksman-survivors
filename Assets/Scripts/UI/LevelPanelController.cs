@@ -14,11 +14,11 @@ namespace UI {
         [SerializeField] private GameObject abilityComponentPrefab;
         [SerializeField] private GameObject upgradeComponentPrefab;
 
-        private List<AAbility> abilitiesToLevelUp;
+        private List<Ability> abilitiesToLevelUp;
         private bool leveledUp;
         [SerializeField] private TMP_Text prompt;
 
-        [SerializeField] private List<AAbility> abilities = new();
+        [SerializeField] private List<Ability> abilities = new();
         private List<ILevelPanelComponent> levelPanelComponents = new();
 
         private int stackedLevelUp = 0;
@@ -58,7 +58,7 @@ namespace UI {
                 return;
             }
 
-            List<AAbility> toInstantiate = GetRandomAbilities(abilitiesToLevelUp);
+            List<Ability> toInstantiate = GetRandomAbilities(abilitiesToLevelUp);
 
             List<Upgrade> upgradesToInstantiate = new();
 
@@ -82,14 +82,14 @@ namespace UI {
             for (int i = 0; i < toInstantiate.Count; i++) {
                 // Instantiate the ability panel prefab
                 GameObject abilityComponent = Instantiate(abilityComponentPrefab, levelPanel.transform);
-                AAbility ability = toInstantiate[i];
+                Ability ability = toInstantiate[i];
                 ILevelPanelComponent uiLevelUpComponent = abilityComponent.GetComponent<ILevelPanelComponent>();
                 uiLevelUpComponent.SetLevelPanelController(this);
                 // set action
                 uiLevelUpComponent.SetAction(() => {
                     EventBus<ChampionAbilityChosenEvent>.Raise(
                         new ChampionAbilityChosenEvent(ability));
-                    EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(ability.GetKeyCode(), 0));
+                    EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(ability));
                     HidePanel();
 
                     if (stackedLevelUp >= 1) {
@@ -139,9 +139,9 @@ namespace UI {
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(false));
         }
 
-        private List<AAbility> GetRandomAbilities(List<AAbility> currentChampionAbilities) {
+        private List<Ability> GetRandomAbilities(List<Ability> currentChampionAbilities) {
             // fetch 3 random abilities from the list
-            List<AAbility> randomAbilities = new();
+            List<Ability> randomAbilities = new();
 
             int maxAttempts = 20; // Set a maximum number of attempts
 
@@ -155,13 +155,13 @@ namespace UI {
                     int randomIndex = Random.Range(0, abilities.Count);
                     var x = abilities[randomIndex];
 
-                    if (!canUnlockUltimate && x.GetKeyCode() == KeyCode.R) {
+                    if (!canUnlockUltimate && x.abilityType == Ability.AbilityType.ULTIMATE) {
                         attempts++;
                         continue;
                     }
 
                     // Check if the currentChampionAbilities already contain an ability with the same keycode
-                    if (currentChampionAbilities.Exists(ability => ability.GetKeyCode() == x.GetKeyCode())) {
+                    if (currentChampionAbilities.Exists(ability => ability.abilityType == Ability.AbilityType.BASIC)) {
                         attempts++;
                         continue;
                     }
@@ -181,7 +181,7 @@ namespace UI {
             return randomAbilities;
         }
 
-        private List<Upgrade> GetRandomUpgrades(List<AAbility> currentChampionAbilities, int amountToReturn) {
+        private List<Upgrade> GetRandomUpgrades(List<Ability> currentChampionAbilities, int amountToReturn) {
             List<Upgrade> randomUpgrades = new();
             currentChampionAbilities.ForEach(ability => {
                 if (ability.GetUpgrades().Count > 0) {

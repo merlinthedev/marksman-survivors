@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: -5836431172475230976}
+  - component: {fileID: 640121110517076604}
   m_Layer: 0
-  m_Name: KitegirlR2
+  m_Name: BouncingBullets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5836431172475230976
+--- !u!114 &640121110517076604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,16 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01ac90c8b2ef426eac77ffe423f60cf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 568e0da6a017fbb4f8aaf7c72e79a609, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityCooldown: 60
+  keyCode: 113
+  abilityCooldown: 6
   abilityRange: 999
-  abilityLevelUpBanner: {fileID: 21300000, guid: 37f5ea19e4a670c4eb71c0e8890f466a,
+  abilityLevelUpBanner: {fileID: 21300000, guid: 5d1babf43be20d44d82fb492c5b2f589,
     type: 3}
   upgrades:
-  - {fileID: -8079239298508076044, guid: 8a9a05f2cac30bc4bbade6e42ecdbfbf, type: 3}
-  currentCooldown: 0
-  abilityUseType: 1
-  abilityType: 1
-  m_AmountOfDeftnessStacks: 25
+  - {fileID: -8079239298508076044, guid: 44f789cc0ad618c45aed6e5582c6283f, type: 3}

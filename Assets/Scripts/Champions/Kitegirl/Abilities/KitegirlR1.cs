@@ -3,7 +3,7 @@ using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities {
-    public class KitegirlR1 : AAbility {
+    public class KitegirlR1 : Ability {
         [SerializeField] private float m_UltimateDuration = 10f;
         [SerializeField] private float m_BurstAmount = 5f;
         [SerializeField] private float m_SlowAmount = 0.5f; // 50% slow, 0-1 Normalized!
