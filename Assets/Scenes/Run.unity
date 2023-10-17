@@ -12025,9 +12025,9 @@ MonoBehaviour:
   dashSpeed: 20
   isInvincible: 0
   directionTracker: {x: 0, y: 0, z: 0, w: 0}
-  m_BulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
+  bulletPrefab: {fileID: -8195420019729085985, guid: fa0dcd18fbdcf874ba604f59e0041ad1,
     type: 3}
-  m_AnimationController: {fileID: 2114737660}
+  animationController: {fileID: 2114737660}
   maxChainCount: 3
 --- !u!114 &2114737660
 MonoBehaviour:

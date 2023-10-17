@@ -9,6 +9,7 @@ namespace Champions.Kitegirl.Abilities {
         [SerializeField] private float damagePercentage = 0.33f;
         [SerializeField] private float coneAngle = 20f;
         [SerializeField] private float coneRange = 5f;
+        [SerializeField] private ParticleSystem vfx;
 
         public override void Hook(Champion champion) {
             base.Hook(champion);
@@ -36,6 +37,15 @@ namespace Champions.Kitegirl.Abilities {
                 .GetDamageablesInCone(damageablePosition, leftPoint, rightPoint, damageable);
 
             damageablesInCone.ForEach(d => { champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage); });
+            
+            //Instantiate vfx
+            Vector3 dir = damageablePosition - champion.GetTransform().position;
+            float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+            
+            
+            ParticleSystem effect = Instantiate(vfx, damageablePosition, Quaternion.Euler(90, angle - 45, 0));
+            var main = effect.main;
+            main.simulationSpeed = 5f;
 
             Debug.Log("x " + damageablesInCone.Count);
         }
