@@ -100,9 +100,9 @@ namespace Champions {
         #endregion
 
         public event Action<IDamageable> OnAutoAttackStarted;
-
         public event Action<IDamageable> OnBulletHit;
         public event Action<Ability> OnAbilityUsed;
+        public event Action<IDamageable> OnDamageDone;
 
 
         public void AutoAttackStarted() {
@@ -573,6 +573,7 @@ namespace Champions {
 
         public virtual void DealDamage(IDamageable damageable, float damage) {
             damageable.TakeFlatDamage(damage);
+            OnDamageDone?.Invoke(damageable);
         }
 
         public void OnDeath() {
