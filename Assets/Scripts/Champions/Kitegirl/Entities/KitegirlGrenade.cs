@@ -69,7 +69,7 @@ namespace Champions.Kitegirl.Entities {
                                kitegirl.GetAttackDamage() *
                                0.01f; // 1% of AD
                 // enemy.TakeFlatDamage((shot ? 2f : 1f) * m_Damage);
-                kitegirl.DealDamage(enemy, (shot ? 2f : 1f) * this.damage);
+                kitegirl.DealDamage(enemy, (shot ? 2f : 1f) * this.damage, Champion.DamageType.NON_BASIC);
                 enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, kitegirl, Debuff.DebuffType.BURN, 5f, damage, 1f));
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
+using Champions;
 using Entities;
 using EventBus;
 using UnityEngine;
@@ -61,6 +62,7 @@ namespace Enemies {
         public List<Debuff> Debuffs { get; } = new();
         public List<IAttachable> attachables { get; } = new();
         public IDamageable currentTarget { get; set; } = null;
+        public bool IsReady => false;
 
         private void Start() {
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
@@ -242,7 +244,8 @@ namespace Enemies {
             return damage;
         }
 
-        public abstract void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true);
+        public abstract void DealDamage(IDamageable damageable, float damage, Champion.DamageType damageType,
+            bool shouldInvoke = true);
 
         public void ResetCurrentTarget() {
             currentTarget = null;

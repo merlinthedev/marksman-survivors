@@ -105,12 +105,18 @@ namespace Champions.Kitegirl {
         }
 
 
-        public override void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true) {
+        public override void DealDamage(IDamageable damageable, float damage, DamageType damageType,
+            bool shouldInvoke = true) {
             if (attackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
-            base.DealDamage(damageable, damage, shouldInvoke);
+            if (damageType == DamageType.NON_BASIC && IsReady) {
+                base.DealDamage(damageable, damage * 1.1f, damageType, shouldInvoke);
+                return;
+            }
+
+            base.DealDamage(damageable, damage, damageType, shouldInvoke);
         }
 
         protected override void Update() {
@@ -164,7 +170,7 @@ namespace Champions.Kitegirl {
         }
 
         private void BounceTo(IDamageable damageable, int index) {
-            DealDamage(damageable, CalculateDamage() * Mathf.Pow(0.5f, index), true);
+            DealDamage(damageable, CalculateDamage() * Mathf.Pow(0.5f, index), DamageType.BASIC);
         }
 
         private void AnimateBulletBounce(List<IDamageable> targets, int index) {

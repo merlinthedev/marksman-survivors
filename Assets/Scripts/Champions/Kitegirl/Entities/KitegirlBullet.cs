@@ -26,11 +26,11 @@ namespace Champions.Kitegirl.Entities {
                         enemy.Die();
                     } else {
                         // enemy.TakeFlatDamage(damage);
-                        sourceEntity.DealDamage(enemy, damage);
+                        sourceEntity.DealDamage(enemy, damage, Champion.DamageType.BASIC);
                     }
                 } else {
                     // enemy.TakeFlatDamage(damage);
-                    sourceEntity.DealDamage(enemy, damage);
+                    sourceEntity.DealDamage(enemy, damage, Champion.DamageType.BASIC);
                 }
 
                 OnBulletHit?.Invoke(targetEntity);
@@ -44,7 +44,7 @@ namespace Champions.Kitegirl.Entities {
                 // Debug.Log("Hit a grenade");
                 KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
                 // kitegirlGrenade.TakeFlatDamage(1);
-                sourceEntity.DealDamage(kitegirlGrenade, damage);
+                sourceEntity.DealDamage(kitegirlGrenade, damage, Champion.DamageType.BASIC);
                 shouldMove = false;
                 sourceEntity.ResetCurrentTarget();
 

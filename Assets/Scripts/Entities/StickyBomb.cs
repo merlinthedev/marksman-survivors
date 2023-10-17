@@ -32,7 +32,8 @@ namespace Entities {
             List<IDamageable> damageables = DamageableManager.GetInstance()
                 .GetDamageablesInArea(damageable.GetTransform().position, radius);
             foreach (var dam in damageables) {
-                source.DealDamage(dam, (float)(source as Champion)?.GetAttackDamage() * damagePercentage);
+                source.DealDamage(dam, (float)(source as Champion)?.GetAttackDamage() * damagePercentage,
+                    Champion.DamageType.BASIC);
             }
 
 

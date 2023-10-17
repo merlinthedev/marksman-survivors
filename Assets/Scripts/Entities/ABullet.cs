@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Champions;
+using UnityEngine;
 
 namespace Entities {
     public abstract class ABullet : MonoBehaviour {
@@ -19,9 +20,8 @@ namespace Entities {
         }
 
         public void SetTarget(IDamageable target) {
-
             shouldMove = true;
-            
+
             // if (isFake) {
             //     direction = (transform.position - target.GetTransform().position).normalized;
             // }
@@ -65,20 +65,20 @@ namespace Entities {
             transform.position = Vector3.MoveTowards(transform.position,
                 targetEntity.GetTransform().position,
                 m_TravelSpeed * Time.deltaTime);
-            
-            if(isFake && transform.position == targetEntity.GetTransform().position) {
+
+            if (isFake && transform.position == targetEntity.GetTransform().position) {
                 Destroy(gameObject);
             }
         }
 
         private protected virtual void OnTriggerEnter(Collider other) {
-            if(isFake) Destroy(gameObject);
+            if (isFake) Destroy(gameObject);
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
                 // damageable.TakeFlatDamage(damage);
                 // Debug.Log("Hit an enemy");
-                sourceEntity.DealDamage(damageable, damage);
+                sourceEntity.DealDamage(damageable, damage, Champion.DamageType.BASIC);
 
                 Destroy(gameObject);
             }

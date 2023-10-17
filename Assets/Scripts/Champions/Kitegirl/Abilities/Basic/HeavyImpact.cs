@@ -34,7 +34,9 @@ namespace Champions.Kitegirl.Abilities.Basic {
             var damageablesInCone = DamageableManager.GetInstance()
                 .GetDamageablesInCone(damageablePosition, leftPoint, rightPoint, damageable);
 
-            damageablesInCone.ForEach(d => { champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage); });
+            damageablesInCone.ForEach(d => {
+                champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage, Champion.DamageType.BASIC);
+            });
 
             Debug.Log("x " + damageablesInCone.Count);
         }

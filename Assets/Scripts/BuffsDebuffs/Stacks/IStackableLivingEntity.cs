@@ -3,6 +3,7 @@ using System.Collections.Generic;
 namespace BuffsDebuffs.Stacks {
     public interface IStackableLivingEntity : IEntity {
         bool IsFragile { get; }
+        bool IsReady { get; }
 
         List<Stack> Stacks { get; }
 

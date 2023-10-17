@@ -6,7 +6,6 @@ using Champions.Abilities;
 using Enemies;
 using Entities;
 using EventBus;
-using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 using Util;
 using Debug = UnityEngine.Debug;
@@ -71,6 +70,9 @@ namespace Champions {
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
+        public bool IsReady => Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime;
+        public float LastNonBasicAbilityCastTime { get; set; } = 0f;
+        public float RhythmActivationTime { get; set; } = 0f;
         public List<IAttachable> attachables { get; } = new();
         public bool IsFragile { get; }
 
@@ -572,7 +574,7 @@ namespace Champions {
             return Mathf.Floor(damage);
         }
 
-        public virtual void DealDamage(IDamageable damageable, float damage, bool shouldInvoke = true) {
+        public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType, bool shouldInvoke = true) {
             damageable.TakeFlatDamage(damage);
             if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);
@@ -721,6 +723,11 @@ namespace Champions {
             EAST,
             SOUTH,
             WEST
+        }
+
+        public enum DamageType {
+            BASIC,
+            NON_BASIC
         }
     }
 }
