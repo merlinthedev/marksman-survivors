@@ -110,7 +110,7 @@ namespace Champions.Kitegirl {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
-            base.DealDamage(damageable, damage, true);
+            base.DealDamage(damageable, damage, shouldInvoke);
         }
 
         protected override void Update() {
