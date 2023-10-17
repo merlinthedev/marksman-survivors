@@ -27,6 +27,8 @@ namespace Champions.Kitegirl.Entities {
         private bool destinationReached = false;
         private bool regularDetonationCancelled = false;
 
+        public List<IAttachable> attachables { get; } = new();
+
 
         public void OnThrow(Vector3 targetPoint, IEntity sourceEntity) {
             this.targetPoint = targetPoint;

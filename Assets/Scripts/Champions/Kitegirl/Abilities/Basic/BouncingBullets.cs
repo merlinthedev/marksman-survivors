@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Champions.Abilities;
+﻿using Champions.Abilities;
 using Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace Champions.Kitegirl.Abilities.Basic {
     public class BouncingBullets : Ability {
         [SerializeField] private float timeBetweenBounces = 0.3f;
         [SerializeField] private int bounces = 2;

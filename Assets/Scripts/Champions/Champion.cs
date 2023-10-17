@@ -70,6 +70,7 @@ namespace Champions {
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
+        public List<IAttachable> attachables { get; } = new();
         public bool IsFragile { get; }
 
         private MovementDirection CurrentMovementDirection {
@@ -101,6 +102,7 @@ namespace Champions {
         public event Action<IDamageable> OnAutoAttackStarted;
 
         public event Action<IDamageable> OnBulletHit;
+        public event Action<Ability> OnAbilityUsed;
 
 
         public void AutoAttackStarted() {
@@ -194,6 +196,7 @@ namespace Champions {
 
         public void OnAbility(Ability ability) {
             ability.OnUse();
+            OnAbilityUsed?.Invoke(ability);
         }
 
         #endregion

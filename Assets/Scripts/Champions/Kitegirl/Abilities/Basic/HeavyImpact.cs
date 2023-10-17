@@ -1,10 +1,9 @@
 ﻿using Champions.Abilities;
 using Core;
-using Enemies;
 using Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace Champions.Kitegirl.Abilities.Basic {
     public class HeavyImpact : Ability {
         [SerializeField] private float damagePercentage = 0.33f;
         [SerializeField] private float coneAngle = 20f;

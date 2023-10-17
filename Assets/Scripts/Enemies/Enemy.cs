@@ -56,6 +56,7 @@ namespace Enemies {
         public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
         public List<Stack> Stacks { get; } = new();
         public List<Debuff> Debuffs { get; } = new();
+        public List<IAttachable> attachables { get; } = new();
         public IDamageable currentTarget { get; set; } = null;
 
         private void Start() {
@@ -69,8 +70,8 @@ namespace Enemies {
             movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);
             currentHealth = maxHealth;
             UpdateHealthBar();
-            
-            
+
+
             GetComponent<Rigidbody>().mass = movementSpeed;
         }
 
@@ -221,6 +222,8 @@ namespace Enemies {
         }
 
         public void Die() {
+            attachables.ForEach(attachable => attachable.OnUse());
+
             EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(collider, this, transform.position));
 
             Destroy(gameObject);

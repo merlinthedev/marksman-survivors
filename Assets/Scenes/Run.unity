@@ -2216,20 +2216,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c7d934c8e0e0b4596208bc4c76ed93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lmbCooldown: {fileID: 1186357113}
-  lmbDisable: {fileID: 662872067}
-  rmbCooldown: {fileID: 551421892}
-  rmbDisable: {fileID: 1123249947}
-  qCooldown: {fileID: 1987703364}
-  qDisable: {fileID: 177269630}
-  wCooldown: {fileID: 642320713}
-  wDisable: {fileID: 941676225}
-  eCooldown: {fileID: 832591780}
-  eDisable: {fileID: 1643308627}
-  rCooldown: {fileID: 281132207}
-  rDisable: {fileID: 1907487248}
-  spaceCooldown: {fileID: 1159375166}
-  spaceDisable: {fileID: 201044944}
+  lmbCooldown: {fileID: 0}
+  lmbDisable: {fileID: 0}
+  rmbCooldown: {fileID: 0}
+  rmbDisable: {fileID: 0}
+  qCooldown: {fileID: 0}
+  qDisable: {fileID: 0}
+  wCooldown: {fileID: 0}
+  wDisable: {fileID: 0}
+  eCooldown: {fileID: 0}
+  eDisable: {fileID: 0}
+  rCooldown: {fileID: 0}
+  rDisable: {fileID: 0}
+  spaceCooldown: {fileID: 0}
+  spaceDisable: {fileID: 0}
 --- !u!114 &362836952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12013,7 +12013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: 640121110517076604, guid: bc94e5e8ee2208f4bbcd1dcdf939d1e2, type: 3}
+  - {fileID: -8455518367097311757, guid: 94d2a193f79ed0041a7a5328b4438ca1, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

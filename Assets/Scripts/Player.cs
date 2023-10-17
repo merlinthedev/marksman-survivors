@@ -1,15 +1,12 @@
 ﻿using Champions;
-using Champions.Abilities;
 using Core;
 using Enemies;
 using Entities;
 using EventBus;
 using Interactable;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Logger = Util.Logger;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
