@@ -111,7 +111,7 @@ namespace Champions.Abilities {
 
         public enum AbilityType {
             BASIC,
-            EMPOWERING,
+            UNIQUE_PASSIVE,
             OFFENSE,
             DEFENSE,
             MOBILITY,
