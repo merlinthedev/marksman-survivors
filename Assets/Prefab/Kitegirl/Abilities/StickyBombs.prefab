@@ -54,5 +54,5 @@ MonoBehaviour:
   stickyBombPrefab: {fileID: 2390358252064678385, guid: 5f056498e47fc2043937e7943b352f9e,
     type: 3}
   timeToExplode: 3
-  damagePercentage: 0.1
-  damageArea: 5
+  damagePercentage: 0.15
+  damageArea: 4

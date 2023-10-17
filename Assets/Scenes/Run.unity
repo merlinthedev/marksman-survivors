@@ -2752,7 +2752,7 @@ MonoBehaviour:
   prompt: {fileID: 1233336288}
   abilities:
   - {fileID: 5491228764203184346, guid: 7954af5003773b942946b48c6deac079, type: 3}
-  - {fileID: 640121110517076604, guid: bc94e5e8ee2208f4bbcd1dcdf939d1e2, type: 3}
+  - {fileID: 0}
   - {fileID: -5498696720246338259, guid: 1fb49ee4e290ece4f87254b83b587c4d, type: 3}
   - {fileID: -1318103399301311301, guid: e9962c6ce2b135546bd7849cdd5db18e, type: 3}
   - {fileID: -5836431172475230976, guid: ee230c949f26d78479ca5eef23c3f31a, type: 3}

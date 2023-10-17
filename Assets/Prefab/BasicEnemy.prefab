@@ -455,3 +455,5 @@ MonoBehaviour:
   maxHealth: 12
   rewardXP: 1
   damage: 1
+  lootPrefabs:
+  - {fileID: 3424441254785389761, guid: a475612ac56c7494783f9439da45885f, type: 3}

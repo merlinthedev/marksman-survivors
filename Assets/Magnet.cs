@@ -23,7 +23,6 @@ public class Magnet : MonoBehaviour {
 
     private void MoveParent() {
         float speed = Vector3.Distance(transform.root.position, target) * 0.04f + 0.05f;
-        Debug.Log(speed);
         transform.root.position = Vector3.MoveTowards(transform.root.position, new Vector3(target.x, transform.root.position.y, target.z), speed);
 
     }

@@ -15,6 +15,7 @@ namespace Champions.Kitegirl.Entities {
         }
 
         private protected override void OnTriggerEnter(Collider other) {
+            if (isFake) return;
             // Debug.Log("KitegirlBullet OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();

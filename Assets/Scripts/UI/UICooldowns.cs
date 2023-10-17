@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Champions;
 using System.Collections.Generic;
 using Champions.Abilities;
@@ -48,62 +48,38 @@ namespace UI {
         }
 
         private void Update() {
-            // if (GameManager.GetInstance().Paused) return;
-            // foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
-            //     switch (ability.GetKeyCode()) {
-            //         case KeyCode.Q:
-            //             if(!qDisable.activeSelf) qDisable.SetActive(true);
-            //             qCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-            //             if(qCooldown.fillAmount == 0) qDisable.SetActive(false);
-            //             break;
-            //         case KeyCode.W:
-            //             if(!wDisable.activeSelf) wDisable.SetActive(true);
-            //             wCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-            //             if(wCooldown.fillAmount == 0) wDisable.SetActive(false);
-            //             break;
-            //         case KeyCode.E:
-            //             if(!eDisable.activeSelf) eDisable.SetActive(true);
-            //             eCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-            //             if(eCooldown.fillAmount == 0) eDisable.SetActive(false);
-            //             break;
-            //         case KeyCode.R:
-            //             if(!rDisable.activeSelf) rDisable.SetActive(true);
-            //             rCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-            //             if(rCooldown.fillAmount == 0) rDisable.SetActive(false);
-            //             break;
-            //         case KeyCode.Mouse1:
-            //             if(!rmbDisable.activeSelf) rmbDisable.SetActive(true);
-            //             rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-            //             if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
-            //             break;
-            //         default:
-            //             throw new ArgumentOutOfRangeException();
-            //     }
-            // }
-            //
-            //
-            // float x = Time.time;
-            // float y = player.GetCurrentlySelectedChampion().GetChampionStatistics().GetAttackSpeed(1);
-            // float z = player.GetCurrentlySelectedChampion().GetLastAttackTime();
-            //
-            // // lmbImage.fillAmount = (x - z) / y;
-            // // do the calculation above but flip the result
-            // if(!lmbDisable.activeSelf){
-            //     if (player.GetCurrentlySelectedChampion().GetLastAttackTime() > 0) lmbDisable.SetActive(true);
-            // }
-            // if (player.GetCurrentlySelectedChampion().GetLastAttackTime() > 0) lmbCooldown.fillAmount = 1 - (x - z) / y;
-            // if(lmbCooldown.fillAmount == 0) lmbDisable.SetActive(false);
-            //
-            //
-            //
-            // Champion champion = player.GetCurrentlySelectedChampion();
-            // if(!spaceDisable.activeSelf){
-            //     if (champion.GetDodge().GetTimeLeft() > 0) spaceDisable.SetActive(true);
-            // }
-            // float timeLeftOnDodge = champion.GetDodge().GetTimeLeft();
-            // float dodgeBaseCooldown = champion.GetDodge().GetCooldown();
-            // spaceCooldown.fillAmount = timeLeftOnDodge / dodgeBaseCooldown;
-            // if(spaceCooldown.fillAmount == 0) spaceDisable.SetActive(false);
+            if (GameManager.GetInstance().Paused) return;
+            foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
+                // switch (ability.GetKeyCode()) {
+                //     case KeyCode.Q:
+                //         if(!qDisable.activeSelf) qDisable.SetActive(true);
+                //         qCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(qCooldown.fillAmount == 0) qDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.W:
+                //         if(!wDisable.activeSelf) wDisable.SetActive(true);
+                //         wCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(wCooldown.fillAmount == 0) wDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.E:
+                //         if(!eDisable.activeSelf) eDisable.SetActive(true);
+                //         eCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(eCooldown.fillAmount == 0) eDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.R:
+                //         if(!rDisable.activeSelf) rDisable.SetActive(true);
+                //         rCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(rCooldown.fillAmount == 0) rDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.Mouse1:
+                //         if(!rmbDisable.activeSelf) rmbDisable.SetActive(true);
+                //         rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
+                //         break;
+                //     default:
+                //         throw new ArgumentOutOfRangeException();
+                // }
+            }
 
         }
     }

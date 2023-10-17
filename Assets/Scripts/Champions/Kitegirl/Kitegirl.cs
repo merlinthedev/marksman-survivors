@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BuffsDebuffs;
 using Champions.Abilities;
 using Champions.Kitegirl.Entities;
@@ -8,13 +9,14 @@ using Core;
 using Entities;
 using EventBus;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 using Stack = BuffsDebuffs.Stacks.Stack;
 
 namespace Champions.Kitegirl {
     public class Kitegirl : Champion {
-        [SerializeField] private KitegirlBullet m_BulletPrefab;
-        [SerializeField] private Champion_AnimationController m_AnimationController;
+        [SerializeField] private KitegirlBullet bulletPrefab;
+        [SerializeField] private Champion_AnimationController animationController;
 
         private bool autoAttackShouldChain = false;
         private bool hasUltimateActive = false;
@@ -65,7 +67,7 @@ namespace Champions.Kitegirl {
             Shoot();
 
 
-            m_AnimationController.Attack();
+            animationController.Attack();
             isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
         }
@@ -129,7 +131,7 @@ namespace Champions.Kitegirl {
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
 
-            KitegirlBullet bullet = Instantiate(m_BulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
+            KitegirlBullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
             bullet.SetSourceEntity(this);
             bullet.SetTarget(currentTarget);
             bullet.SetDamage(CalculateDamage());
@@ -139,23 +141,39 @@ namespace Champions.Kitegirl {
         public void Bounce(int bounces, float timeBetweenBounces, IDamageable initialTarget) {
             List<IDamageable> alreadyHit = new List<IDamageable>();
             alreadyHit.Add(initialTarget);
+            int index = 1;
 
             for (int i = 1; i <= bounces; i++) {
                 IDamageable damageable = DamageableManager.GetInstance()
                     .GetClosestDamageable(alreadyHit[i - 1].GetTransform().position, alreadyHit);
                 alreadyHit.Add(damageable);
 
+
                 // invoke the bounce after the delay
                 var i1 = i;
                 Utilities.InvokeDelayed(() => {
                     // Debug.Log("Bouncing to " + damageable, this);
                     BounceTo(damageable, i1);
+
                 }, timeBetweenBounces * i, this);
+                
+                Utilities.InvokeDelayed(() => {
+                    AnimateBulletBounce(alreadyHit, index);
+                    index++;
+                }, timeBetweenBounces * (i - 1), this);
             }
         }
 
         private void BounceTo(IDamageable damageable, int index) {
             DealDamage(damageable, CalculateDamage() * Mathf.Pow(0.5f, index));
+        }
+        private void AnimateBulletBounce(List<IDamageable> targets, int index) {
+            Vector3 dir = targets[index].GetTransform().position - targets[index - 1].GetTransform().position;
+            float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+            
+            KitegirlBullet bouncingBullet = Instantiate(bulletPrefab, targets[index - 1].GetTransform().position, Quaternion.Euler(90, angle, 0));
+            bouncingBullet.IsFake();
+            bouncingBullet.SetTarget(targets[index]);
         }
 
         public void SetAutoAttackChain(bool b) {
