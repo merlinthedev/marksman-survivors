@@ -7,6 +7,7 @@ namespace Entities {
         [SerializeField] private float m_TravelSpeed = 30f;
         [SerializeField] private float m_BulletLifeTime = 2f;
         private float bulletSpawnTime = 0f;
+        protected bool isFake = false;
         protected float damage;
 
         protected bool shouldMove = false;
@@ -18,8 +19,16 @@ namespace Entities {
         }
 
         public void SetTarget(IDamageable target) {
+
             shouldMove = true;
-            direction = (sourceEntity.currentTarget.GetTransform().position - transform.position).normalized;
+            
+            // if (isFake) {
+            //     direction = (transform.position - target.GetTransform().position).normalized;
+            // }
+            // else {
+            //     direction = (sourceEntity.currentTarget.GetTransform().position - transform.position).normalized;
+            // }
+
             bulletSpawnTime = Time.time;
             // clone the target into targetEntity so that we don't get null reference when the original target is set to null
             targetEntity = target;
@@ -27,6 +36,10 @@ namespace Entities {
 
         public void SetDamage(float damage) {
             this.damage = damage;
+        }
+
+        public void IsFake() {
+            isFake = true;
         }
 
         private void Update() {
@@ -52,9 +65,14 @@ namespace Entities {
             transform.position = Vector3.MoveTowards(transform.position,
                 targetEntity.GetTransform().position,
                 m_TravelSpeed * Time.deltaTime);
+            
+            if(isFake && transform.position == targetEntity.GetTransform().position) {
+                Destroy(gameObject);
+            }
         }
 
         private protected virtual void OnTriggerEnter(Collider other) {
+            if(isFake) Destroy(gameObject);
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
                 IDamageable damageable = other.gameObject.GetComponent<IDamageable>();

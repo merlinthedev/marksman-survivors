@@ -50,35 +50,35 @@ namespace UI {
         private void Update() {
             if (GameManager.GetInstance().Paused) return;
             foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
-                switch (ability.GetKeyCode()) {
-                    case KeyCode.Q:
-                        if(!qDisable.activeSelf) qDisable.SetActive(true);
-                        qCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(qCooldown.fillAmount == 0) qDisable.SetActive(false);
-                        break;
-                    case KeyCode.W:
-                        if(!wDisable.activeSelf) wDisable.SetActive(true);
-                        wCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(wCooldown.fillAmount == 0) wDisable.SetActive(false);
-                        break;
-                    case KeyCode.E:
-                        if(!eDisable.activeSelf) eDisable.SetActive(true);
-                        eCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(eCooldown.fillAmount == 0) eDisable.SetActive(false);
-                        break;
-                    case KeyCode.R:
-                        if(!rDisable.activeSelf) rDisable.SetActive(true);
-                        rCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(rCooldown.fillAmount == 0) rDisable.SetActive(false);
-                        break;
-                    case KeyCode.Mouse1:
-                        if(!rmbDisable.activeSelf) rmbDisable.SetActive(true);
-                        rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                        if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                // switch (ability.GetKeyCode()) {
+                //     case KeyCode.Q:
+                //         if(!qDisable.activeSelf) qDisable.SetActive(true);
+                //         qCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(qCooldown.fillAmount == 0) qDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.W:
+                //         if(!wDisable.activeSelf) wDisable.SetActive(true);
+                //         wCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(wCooldown.fillAmount == 0) wDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.E:
+                //         if(!eDisable.activeSelf) eDisable.SetActive(true);
+                //         eCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(eCooldown.fillAmount == 0) eDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.R:
+                //         if(!rDisable.activeSelf) rDisable.SetActive(true);
+                //         rCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(rCooldown.fillAmount == 0) rDisable.SetActive(false);
+                //         break;
+                //     case KeyCode.Mouse1:
+                //         if(!rmbDisable.activeSelf) rmbDisable.SetActive(true);
+                //         rmbCooldown.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                //         if(rmbCooldown.fillAmount == 0) rmbDisable.SetActive(false);
+                //         break;
+                //     default:
+                //         throw new ArgumentOutOfRangeException();
+                // }
             }
 
 

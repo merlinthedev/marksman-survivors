@@ -52,5 +52,5 @@ MonoBehaviour:
   abilityUseType: 0
   abilityType: 0
   timeToExplode: 3
-  damagePercentage: 0.1
-  damageArea: 5
+  damagePercentage: 0.15
+  damageArea: 4

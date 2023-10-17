@@ -51,6 +51,6 @@ MonoBehaviour:
   currentCooldown: 0
   abilityUseType: 0
   abilityType: 0
-  damagePercentage: 0.33
-  coneAngle: 20
-  coneRange: 5
+  damagePercentage: 0.4
+  coneAngle: 35
+  coneRange: 7.5

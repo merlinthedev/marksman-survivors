@@ -44,6 +44,9 @@ namespace Enemies {
         [SerializeField] private float rewardXP;
         private float currentHealth;
         [SerializeField] protected float damage = 1f;
+        
+        [Header("Loot")]
+        [SerializeField] private List<GameObject> lootPrefabs;
 
         protected bool isDead => currentHealth <= 0;
         private bool canMove = true;
@@ -222,7 +225,7 @@ namespace Enemies {
 
         public void Die() {
             EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(collider, this, transform.position));
-
+            DropLoot();
             Destroy(gameObject);
         }
 
@@ -336,6 +339,16 @@ namespace Enemies {
                 SetCanMove(true);
                 SetCanAttack(true);
             }, 0.2f, this);
+        }
+
+        #endregion
+
+        #region Other Methods
+
+        private void DropLoot() {
+            for (int i = 0; i < lootPrefabs.Count; i++) {
+                Instantiate(lootPrefabs[i], new Vector3(transform.transform.position.x, 0, transform.transform.position.z), Quaternion.identity);
+            }
         }
 
         #endregion

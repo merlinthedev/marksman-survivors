@@ -16,10 +16,13 @@ namespace Champions.Kitegirl.Abilities {
         private void Use(IDamageable damageable) {
             (champion as Kitegirl)?.Bounce(bounces, timeBetweenBounces, damageable);
         }
+        
 
         private void OnApplicationQuit() {
             champion.OnBulletHit -= Use;
         }
+        
+        
 
         // WE NEED THIS FUNCTION DO NOT DELETE
         protected override void ResetCooldown() {
