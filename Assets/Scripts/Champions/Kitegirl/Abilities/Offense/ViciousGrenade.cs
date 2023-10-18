@@ -10,7 +10,6 @@ namespace Champions.Kitegirl.Abilities.Offense {
         [SerializeField] private float attackDamageRatio = 1f; // 0.6f => 60% of AD
 
         public override void OnUse() {
-            if (IsOnCooldown()) return;
             if (!CanAfford()) return;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
