@@ -52,8 +52,9 @@ MonoBehaviour:
   resourceCost: 0
   abilityUseType: 1
   abilityType: 2
+  enemies:
+    pairs: []
   projectileSpeed: 25
   damagePercentage: 1
   projectilePrefab: {fileID: 5728109114151554510, guid: b82a6ec9e09f42d4994f0055869c9045,
     type: 3}
-  <ChannelTime>k__BackingField: 2

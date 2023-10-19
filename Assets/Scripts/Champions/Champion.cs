@@ -666,6 +666,8 @@ namespace Champions {
 
         private Vector3 movementDirection;
 
+        private Dictionary<Guid, Dictionary<string, int>> THEONETORULETHEMALL = new();
+
         public Vector3 GetCurrentMovementDirection() {
             // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
             // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);

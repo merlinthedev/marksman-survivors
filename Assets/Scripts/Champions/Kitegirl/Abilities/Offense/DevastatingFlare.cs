@@ -1,10 +1,13 @@
 ﻿using Champions.Abilities;
+using Enemies;
 using Entities;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities.Offense {
     public class DevastatingFlare : Ability, IChannelable {
+        [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float damagePercentage = 1f;
         [SerializeField] private Projectile projectilePrefab;
@@ -18,7 +21,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
         public override void Hook(Champion champion) {
             base.Hook(champion);
 
-            ChannelTime = 0.5f * champion.GetAttackSpeed();
+            ChannelTime = 2f * champion.GetAttackSpeed();
         }
 
         public override void OnUse() {

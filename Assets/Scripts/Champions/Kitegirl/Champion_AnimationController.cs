@@ -14,7 +14,7 @@ namespace Champions.Kitegirl {
             int globalDirection = Mathf.FloorToInt((m_ChampionScript.GetGlobalDirectionAngle() + 22.5f) / 45.0f);
             dir = (globalDirection + 7) % 8;
             m_Animator.SetInteger("Dir", dir);
-            Debug.Log("Dir: " + dir);
+            // Debug.Log("Dir: " + dir);
             Move();
         }
 
@@ -38,10 +38,15 @@ namespace Champions.Kitegirl {
         }
 
         public void SetDirection(float angle) {
-            Debug.Log("Setting angle");
+            // Debug.Log("Setting angle");
             int globalDirection = Mathf.FloorToInt((angle + 22.5f) / 45.0f);
             dir = (globalDirection + 7) % 8;
             m_Animator.SetInteger("Dir", dir);
+            TriggerCastEnd();
+        }
+
+        public void TriggerCastEnd() {
+            m_Animator.SetTrigger("CastEnd");
         }
     }
 }
