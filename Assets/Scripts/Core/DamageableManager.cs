@@ -2,12 +2,13 @@
 using Entities;
 using EventBus;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Util;
 
 namespace Core {
     public class DamageableManager : Singleton<DamageableManager> {
-        private readonly List<IDamageable> damageables = new();
+        private readonly Dictionary<Collider, IDamageable> damageables = new();
 
         private void OnEnable() {
             EventBus<EnemySpawnedEvent>.Subscribe(OnEnemySpawn);
@@ -20,19 +21,19 @@ namespace Core {
         }
 
 
-        public void AddDamageable(IDamageable damageable) {
-            damageables.Add(damageable);
+        public void AddDamageable(Collider collider, IDamageable damageable) {
+            damageables.Add(collider, damageable);
         }
 
-        public void RemoveDamageable(IDamageable damageable) {
-            damageables.Remove(damageable);
+        public void RemoveDamageable(Collider collider) {
+            damageables.Remove(collider);
         }
 
         public IDamageable GetClosestDamageable(Vector3 position, List<IDamageable> toIgnore = null) {
             float closestDistance = float.MaxValue;
 
             IDamageable closestDamageable = null;
-            foreach (IDamageable damageable in damageables) {
+            foreach (IDamageable damageable in damageables.Values) {
                 if (toIgnore != null && toIgnore.Contains(damageable)) {
                     continue;
                 }
@@ -49,7 +50,7 @@ namespace Core {
         public List<IDamageable> GetDamageablesInArea(Vector3 position, float radius, IDamageable toExclude = null) {
             List<IDamageable> damageablesInArea = new List<IDamageable>();
 
-            foreach (var damageable in damageables) {
+            foreach (var damageable in damageables.Values) {
                 if (damageable == toExclude) {
                     continue;
                 }
@@ -66,7 +67,7 @@ namespace Core {
             IDamageable toExclude = null) {
             List<IDamageable> damageablesInCone = new List<IDamageable>();
 
-            foreach (var damageable in damageables) {
+            foreach (var damageable in damageables.Values) {
                 if (damageable == toExclude) {
                     continue;
                 }
@@ -83,15 +84,21 @@ namespace Core {
 
 
         private void OnEnemySpawn(EnemySpawnedEvent enemySpawnedEvent) {
-            AddDamageable(enemySpawnedEvent.enemy);
+            AddDamageable(enemySpawnedEvent.enemy.GetComponent<Collider>(), enemySpawnedEvent.enemy);
         }
 
         private void OnEnemyKilled(EnemyKilledEvent enemyKilledEvent) {
-            RemoveDamageable(enemyKilledEvent.enemy);
+            RemoveDamageable(enemyKilledEvent.enemy.GetComponent<Collider>());
         }
 
         public List<IDamageable> GetDamageables() {
-            return damageables;
+            return damageables.Values.ToList();
+        }
+
+        public IDamageable GetDamageable(Collider collider) {
+            IDamageable damageable;
+            damageables.TryGetValue(collider, out damageable);
+            return damageable;
         }
     }
 }

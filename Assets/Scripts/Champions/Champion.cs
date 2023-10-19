@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
+using Champions.Kitegirl;
 using Enemies;
 using Entities;
 using EventBus;
@@ -100,6 +101,8 @@ namespace Champions {
         [SerializeField] private Vector4 directionTracker = Vector4.zero;
         private Vector3 lastAttackDirection = Vector3.zero;
 
+        protected bool isChanneling = false;
+
         #endregion
 
         public event Action<IDamageable> OnAutoAttackStarted;
@@ -149,17 +152,20 @@ namespace Champions {
         protected virtual void FixedUpdate() {
             GroundCheck();
 
-            if (grounded) {
-                OnMove();
+            if (!isChanneling) {
+                if (grounded) {
+                    OnMove();
+                }
+
+                ChangeMovementInfluence();
             }
 
-            ChangeMovementInfluence();
 
             grounded = false;
         }
 
         protected virtual void Update() {
-            if (!IsMoving && currentTarget != null) {
+            if (!IsMoving && currentTarget != null && !isChanneling) {
                 OnAutoAttack(currentTarget);
             }
 
@@ -574,7 +580,8 @@ namespace Champions {
             return Mathf.Floor(damage);
         }
 
-        public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType, bool shouldInvoke = true) {
+        public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType,
+            bool shouldInvoke = true) {
             damageable.TakeFlatDamage(damage);
             if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);
@@ -694,6 +701,9 @@ namespace Champions {
             return dodge;
         }
 
+        public bool IsChanneling() {
+            return isChanneling;
+        }
 
         public void SetCurrentMovementDirection(Vector3 dir) {
             movementDirection = dir;
@@ -703,13 +713,18 @@ namespace Champions {
             lastAttackDirection = dir;
         }
 
-        protected void SetGlobalDirectionAngle(float angle) {
+        public void SetGlobalDirectionAngle(float angle) {
             globalMovementDirectionAngle = angle;
         }
 
         public void SetNextAttackWillCrit(bool b) {
             nextAttackWillCrit = b;
         }
+
+        public void SetIsChanneling(bool isChanneling) {
+            this.isChanneling = isChanneling;
+        }
+        
 
         public void ResetCurrentTarget() {
             currentTarget = null;

@@ -81,7 +81,7 @@ public class Bamischijf : MonoBehaviour {
         dummy.transform.position = Player.GetInstance().GetCurrentlySelectedChampion().transform.position +
                                    new Vector3(5, 0, 0);
         EnemyManager.GetInstance().AddEnemy(dummy);
-        DamageableManager.GetInstance().AddDamageable(dummy);
+        DamageableManager.GetInstance().AddDamageable(dummy.GetComponent<Collider>(), dummy);
     }
 
     public void WipeEnemies() {

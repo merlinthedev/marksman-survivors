@@ -31,7 +31,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
                         grenade.OnThrow(new Vector3(point.x, 0.5f, point.z), champion);
 
-                        DamageableManager.GetInstance().AddDamageable(grenade);
+                        DamageableManager.GetInstance().AddDamageable(grenade.GetComponent<Collider>(), grenade);
 
                         base.OnUse();
                     }

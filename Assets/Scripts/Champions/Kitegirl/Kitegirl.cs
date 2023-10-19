@@ -187,6 +187,8 @@ namespace Champions.Kitegirl {
             autoAttackShouldChain = b;
         }
 
+        public Champion_AnimationController GetAnimator() => animationController;
+
 
         public void SetAttackDeftnessApply(bool value) {
             attackShouldApplyDeftness = value;

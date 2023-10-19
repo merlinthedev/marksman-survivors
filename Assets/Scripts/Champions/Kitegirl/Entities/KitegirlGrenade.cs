@@ -73,7 +73,7 @@ namespace Champions.Kitegirl.Entities {
                 enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, kitegirl, Debuff.DebuffType.BURN, 5f, damage, 1f));
             }
 
-            DamageableManager.GetInstance().RemoveDamageable(this);
+            DamageableManager.GetInstance().RemoveDamageable(m_Collider);
 
             Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.1f, transform.position.z),
                 Quaternion.Euler(90, 0, 0));
