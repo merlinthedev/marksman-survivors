@@ -51,6 +51,6 @@ MonoBehaviour:
   currentCooldown: 0
   abilityUseType: 0
   abilityType: 0
-  timeToExplode: 3
-  damagePercentage: 0.15
+  timeToExplode: 2
+  damagePercentage: 0.4
   damageArea: 4

@@ -74,7 +74,7 @@ namespace Enemies {
             UpdateHealthBar();
             
             
-            GetComponent<Rigidbody>().mass = movementSpeed;
+            GetComponent<Rigidbody>().mass = movementSpeed * 2;
         }
 
         private void Update() {

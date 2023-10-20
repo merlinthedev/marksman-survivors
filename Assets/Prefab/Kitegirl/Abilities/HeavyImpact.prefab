@@ -52,6 +52,6 @@ MonoBehaviour:
   abilityUseType: 0
   abilityType: 0
   damagePercentage: 0.5
-  coneAngle: 50
-  coneRange: 4
+  coneAngle: 35
+  coneRange: 5.5
   vfx: {fileID: 566133935454849732, guid: 07a4ad7430a559a42bc2545bd56a2797, type: 3}
