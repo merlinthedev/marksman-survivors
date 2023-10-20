@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
-using Champions.Kitegirl;
 using Enemies;
 using Entities;
 using EventBus;

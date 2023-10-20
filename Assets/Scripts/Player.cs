@@ -328,13 +328,22 @@ public class Player : Core.Singleton.Singleton<Player> {
         Cursor.SetCursor(m_CursorTexture, Vector2.zero, CursorMode.Auto);
     }
 
+    private IDamageable currentHoverEntity;
+
+    public IDamageable GetCurrentHoverEntity() {
+        return currentHoverEntity;
+    }
+
     private void OnEnemyStartHover(EnemyStartHoverEvent e) {
         Cursor.SetCursor(m_AttackCursorTexture, Vector2.zero, CursorMode.Auto);
         lastEnemyHoverTime = Time.time;
         lastHoveredEnemy = e.enemy;
+
+        currentHoverEntity = e.enemy;
     }
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
+        currentHoverEntity = null;
         SetDefaultCursorTexture();
     }
 
