@@ -49,7 +49,7 @@ MonoBehaviour:
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
   currentCooldown: 0
-  resourceCost: 0
+  resourceCost: 60
   abilityUseType: 1
   abilityType: 2
   enemies:
