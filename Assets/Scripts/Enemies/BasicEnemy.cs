@@ -15,7 +15,8 @@ namespace Enemies {
             rigidbody.velocity = direction.normalized * movementSpeed;
         }
 
-        public override void DealDamage(IDamageable damageable, float damage) {
+        public override void DealDamage(IDamageable damageable, float damage, Champion.DamageType damageType,
+            bool shouldInvoke = true) {
             // Debug.Log("Enemy dealing damage");
             damageable.TakeFlatDamage(damage);
         }
@@ -44,7 +45,7 @@ namespace Enemies {
             if (Time.time > lastAttackTime + attackCooldown) {
                 // champion.TakeFlatDamage(damage);
                 // Logger.Log("Dealing damage", this);
-                DealDamage(champion, damage);
+                DealDamage(champion, damage, Champion.DamageType.BASIC);
                 lastAttackTime = Time.time;
             }
         }

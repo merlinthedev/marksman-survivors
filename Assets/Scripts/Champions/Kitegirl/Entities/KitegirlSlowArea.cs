@@ -54,7 +54,8 @@ namespace Champions.Kitegirl.Entities {
                 }
 
                 if (damageable != kitegirl) {
-                    kitegirl.DealDamage(damageable, kitegirl.GetAttackDamage() * ADDamageRatio);
+                    kitegirl.DealDamage(damageable, kitegirl.GetAttackDamage() * ADDamageRatio,
+                        Champion.DamageType.NON_BASIC);
                 }
             }
         }

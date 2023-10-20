@@ -1,10 +1,9 @@
-﻿using Champions.Abilities;
+using Champions.Abilities;
 using Core;
-using Enemies;
 using Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace Champions.Kitegirl.Abilities.Basic {
     public class HeavyImpact : Ability {
         [SerializeField] private float damagePercentage = 0.33f;
         [SerializeField] private float coneAngle = 20f;
@@ -36,8 +35,6 @@ namespace Champions.Kitegirl.Abilities {
             var damageablesInCone = DamageableManager.GetInstance()
                 .GetDamageablesInCone(damageablePosition, leftPoint, rightPoint, damageable);
 
-            damageablesInCone.ForEach(d => { champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage); });
-            
             //Instantiate vfx
             Vector3 dir = damageablePosition - champion.GetTransform().position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
@@ -46,6 +43,9 @@ namespace Champions.Kitegirl.Abilities {
             ParticleSystem effect = Instantiate(vfx, damageablePosition, Quaternion.Euler(90, angle - 45, 0));
             var main = effect.main;
             main.simulationSpeed = 5f;
+            damageablesInCone.ForEach(d => {
+                champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage, Champion.DamageType.BASIC);
+            });
 
             Debug.Log("x " + damageablesInCone.Count);
         }

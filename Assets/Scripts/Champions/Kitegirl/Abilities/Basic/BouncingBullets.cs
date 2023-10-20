@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Champions.Abilities;
+﻿using Champions.Abilities;
 using Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace Champions.Kitegirl.Abilities.Basic {
     public class BouncingBullets : Ability {
         [SerializeField] private float timeBetweenBounces = 0.3f;
         [SerializeField] private int bounces = 2;
@@ -30,7 +29,7 @@ namespace Champions.Kitegirl.Abilities {
         }
 
         // WE NEED THIS FUNCTION DO NOT DELETE
-        protected internal override void DeductFromCooldown(float timeToDeduct) {
+        protected override void DeductFromCooldown(float timeToDeduct) {
             base.DeductFromCooldown(timeToDeduct);
         }
     }

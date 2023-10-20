@@ -1,15 +1,13 @@
-﻿using Champions;
-using Champions.Abilities;
+﻿using System.Collections.Generic;
+using Champions;
 using Core;
 using Enemies;
 using Entities;
 using EventBus;
 using Interactable;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Logger = Util.Logger;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
@@ -56,6 +54,8 @@ public class Player : Core.Singleton.Singleton<Player> {
         EventBus<ChampionHealthRegenerated>.Subscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Subscribe(OnChampionDamageTakenEvent);
 
+        EventBus<ChampionManaRegenerated>.Subscribe(OnChampionManaRegenerated);
+
         EventBus<LoadSceneEvent>.Subscribe(LoadScene);
 
 
@@ -72,6 +72,9 @@ public class Player : Core.Singleton.Singleton<Player> {
 
         EventBus<ChampionHealthRegenerated>.Unsubscribe(OnChampionHealthRegenerated);
         EventBus<ChampionDamageTakenEvent>.Unsubscribe(OnChampionDamageTakenEvent);
+
+        EventBus<ChampionManaRegenerated>.Unsubscribe(OnChampionManaRegenerated);
+
 
         EventBus<LoadSceneEvent>.Unsubscribe(LoadScene);
 
@@ -264,6 +267,8 @@ public class Player : Core.Singleton.Singleton<Player> {
     private void SetFocus(IDamageable damageable) {
         RemoveFocus();
 
+        if (!(damageable is Enemy)) return;
+
         damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
         damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
         currentFocus = damageable.GetTransform().gameObject;
@@ -323,13 +328,22 @@ public class Player : Core.Singleton.Singleton<Player> {
         Cursor.SetCursor(m_CursorTexture, Vector2.zero, CursorMode.Auto);
     }
 
+    private IDamageable currentHoverEntity;
+
+    public IDamageable GetCurrentHoverEntity() {
+        return currentHoverEntity;
+    }
+
     private void OnEnemyStartHover(EnemyStartHoverEvent e) {
         Cursor.SetCursor(m_AttackCursorTexture, Vector2.zero, CursorMode.Auto);
         lastEnemyHoverTime = Time.time;
         lastHoveredEnemy = e.enemy;
+
+        currentHoverEntity = e.enemy;
     }
 
     private void OnEnemyStopHover(EnemyStopHoverEvent e) {
+        currentHoverEntity = null;
         SetDefaultCursorTexture();
     }
 
@@ -349,6 +363,11 @@ public class Player : Core.Singleton.Singleton<Player> {
     private void OnChampionHealthRegenerated(ChampionHealthRegenerated e) {
         EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
             selectedChampion.GetCurrentHealth(), selectedChampion.GetMaxHealth()));
+    }
+
+    private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
+        EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Mana",
+            selectedChampion.GetChampionStatistics().CurrentMana, selectedChampion.GetChampionStatistics().MaxMana));
     }
 
     private void OnGamePaused(GamePausedEvent e) {

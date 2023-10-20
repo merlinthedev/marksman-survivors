@@ -1,4 +1,5 @@
-﻿using Champions.Abilities;
+﻿using System.Collections.Generic;
+using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ namespace Champions.Kitegirl.Abilities {
         [SerializeField] private float slowPercentage = 0.33f; // 0-1 Normalized
         [SerializeField] private float slowDuration = 3f; // Seconds
         [SerializeField] private float ADDamageRatio = 1.2f; // 0-1 Normalized
-
 
         public override void OnUse() {
             if (IsOnCooldown()) return;

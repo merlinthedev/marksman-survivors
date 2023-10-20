@@ -70,6 +70,10 @@ namespace Champions {
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
+        public bool IsReady => Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime;
+        public float LastNonBasicAbilityCastTime { get; set; } = 0f;
+        public float RhythmActivationTime { get; set; } = 0f;
+        public List<IAttachable> attachables { get; } = new();
         public bool IsFragile { get; }
 
         private MovementDirection CurrentMovementDirection {
@@ -96,11 +100,14 @@ namespace Champions {
         [SerializeField] private Vector4 directionTracker = Vector4.zero;
         private Vector3 lastAttackDirection = Vector3.zero;
 
+        protected bool isCasting = false;
+
         #endregion
 
         public event Action<IDamageable> OnAutoAttackStarted;
-
         public event Action<IDamageable> OnBulletHit;
+        public event Action<Ability> OnAbilityUsed;
+        public event Action<IDamageable> OnDamageDone;
 
 
         public void AutoAttackStarted() {
@@ -144,17 +151,20 @@ namespace Champions {
         protected virtual void FixedUpdate() {
             GroundCheck();
 
-            if (grounded) {
-                OnMove();
+            if (!isCasting) {
+                if (grounded) {
+                    OnMove();
+                }
+
+                ChangeMovementInfluence();
             }
 
-            ChangeMovementInfluence();
 
             grounded = false;
         }
 
         protected virtual void Update() {
-            if (!IsMoving && currentTarget != null) {
+            if (!IsMoving && currentTarget != null && !isCasting) {
                 OnAutoAttack(currentTarget);
             }
 
@@ -194,6 +204,7 @@ namespace Champions {
 
         public void OnAbility(Ability ability) {
             ability.OnUse();
+            OnAbilityUsed?.Invoke(ability);
         }
 
         #endregion
@@ -568,8 +579,12 @@ namespace Champions {
             return Mathf.Floor(damage);
         }
 
-        public virtual void DealDamage(IDamageable damageable, float damage) {
+        public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType,
+            bool shouldInvoke = true) {
             damageable.TakeFlatDamage(damage);
+            if (shouldInvoke) {
+                OnDamageDone?.Invoke(damageable);
+            }
         }
 
         public void OnDeath() {
@@ -650,6 +665,8 @@ namespace Champions {
 
         private Vector3 movementDirection;
 
+        private Dictionary<Guid, Dictionary<string, int>> THEONETORULETHEMALL = new();
+
         public Vector3 GetCurrentMovementDirection() {
             // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
             // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);
@@ -685,6 +702,9 @@ namespace Champions {
             return dodge;
         }
 
+        public bool IsChanneling() {
+            return isCasting;
+        }
 
         public void SetCurrentMovementDirection(Vector3 dir) {
             movementDirection = dir;
@@ -694,13 +714,18 @@ namespace Champions {
             lastAttackDirection = dir;
         }
 
-        protected void SetGlobalDirectionAngle(float angle) {
+        public void SetGlobalDirectionAngle(float angle) {
             globalMovementDirectionAngle = angle;
         }
 
         public void SetNextAttackWillCrit(bool b) {
             nextAttackWillCrit = b;
         }
+
+        public void SetIsChanneling(bool isChanneling) {
+            this.isCasting = isChanneling;
+        }
+
 
         public void ResetCurrentTarget() {
             currentTarget = null;
@@ -714,6 +739,11 @@ namespace Champions {
             EAST,
             SOUTH,
             WEST
+        }
+
+        public enum DamageType {
+            BASIC,
+            NON_BASIC
         }
     }
 }

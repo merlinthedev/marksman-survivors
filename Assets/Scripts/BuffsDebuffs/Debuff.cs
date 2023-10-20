@@ -1,4 +1,5 @@
 using System.Collections;
+using Champions;
 using Entities;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace BuffsDebuffs {
                 // if the source is also an instance of IDamageable, apply damage
 
                 // target.TakeFlatDamage(value);
-                source.DealDamage(target, value);
+                source.DealDamage(target, value, Champion.DamageType.BASIC);
             }
         }
 

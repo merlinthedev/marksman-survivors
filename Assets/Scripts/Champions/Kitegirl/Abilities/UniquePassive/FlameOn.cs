@@ -5,5 +5,18 @@ namespace Champions.Kitegirl.Abilities.UniquePassive {
     public class FlameOn : Ability {
         [SerializeField] private float flameChance = 0.1f;
         [SerializeField] private AbilityType abilityType;
+        
+        public override void Hook(Champion champion) {
+            base.Hook(champion);
+            champion.OnAbilityUsed += Use;
+        }
+
+        private void Use(Ability ability) {
+            if (ability.abilityType == abilityType) {
+                if (Random.Range(0f, 1f) <= flameChance) {
+                    
+                }
+            }
+        }
     }
 }

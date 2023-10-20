@@ -7,6 +7,9 @@ namespace UI {
     public class UIResourceBars : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Image healthBar;
+
+        [SerializeField] private Image manaBar;
+
         [SerializeField] private Image xpBar;
         [SerializeField] private TMP_Text levelText;
 
@@ -28,12 +31,12 @@ namespace UI {
                     healthBar.fillAmount = percentage;
                     break;
                 case "Mana":
+                    manaBar.fillAmount = percentage;
                     break;
                 case "XP":
                     xpBar.fillAmount = percentage;
                     break;
             }
-
         }
 
         private void UpdateLevel(ChampionLevelUpEvent e) {

@@ -27,6 +27,8 @@ namespace Champions.Kitegirl.Entities {
         private bool destinationReached = false;
         private bool regularDetonationCancelled = false;
 
+        public List<IAttachable> attachables { get; } = new();
+
 
         public void OnThrow(Vector3 targetPoint, IEntity sourceEntity) {
             this.targetPoint = targetPoint;
@@ -67,11 +69,11 @@ namespace Champions.Kitegirl.Entities {
                                kitegirl.GetAttackDamage() *
                                0.01f; // 1% of AD
                 // enemy.TakeFlatDamage((shot ? 2f : 1f) * m_Damage);
-                kitegirl.DealDamage(enemy, (shot ? 2f : 1f) * this.damage);
+                kitegirl.DealDamage(enemy, (shot ? 2f : 1f) * this.damage, Champion.DamageType.NON_BASIC);
                 enemy.ApplyDebuff(Debuff.CreateDebuff(enemy, kitegirl, Debuff.DebuffType.BURN, 5f, damage, 1f));
             }
 
-            DamageableManager.GetInstance().RemoveDamageable(this);
+            DamageableManager.GetInstance().RemoveDamageable(m_Collider);
 
             Instantiate(explosionPrefab, new Vector3(transform.position.x, 0.1f, transform.position.z),
                 Quaternion.Euler(90, 0, 0));

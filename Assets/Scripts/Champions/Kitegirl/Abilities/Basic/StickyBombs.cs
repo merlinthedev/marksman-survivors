@@ -5,8 +5,9 @@ using Entities;
 using UnityEngine;
 using Util;
 
-namespace Champions.Kitegirl.Abilities {
+namespace Champions.Kitegirl.Abilities.Basic {
     public class StickyBombs : Ability {
+        [SerializeField] private StickyBomb stickyBombPrefab;
         [SerializeField] private float timeToExplode = 3f;
         [SerializeField] private float damagePercentage = 0.1f;
         [SerializeField] private float damageArea = 5f;
@@ -17,11 +18,10 @@ namespace Champions.Kitegirl.Abilities {
         }
 
         private void Use(IDamageable damageable) {
-            Utilities.InvokeDelayed(() => {
-                List<IDamageable> damageables = DamageableManager.GetInstance()
-                    .GetDamageablesInArea(damageable.GetTransform().position, damageArea, damageable);
-                damageables.ForEach(d => { champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage); });
-            }, timeToExplode, champion);
+            StickyBomb stickyBomb =
+                Instantiate(stickyBombPrefab, damageable.GetTransform().position, Quaternion.identity);
+            stickyBomb.Init(timeToExplode, damageArea, damagePercentage);
+            stickyBomb.OnAttach(damageable, champion);
         }
 
         private void OnApplicationQuit() {

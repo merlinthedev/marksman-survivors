@@ -81,30 +81,6 @@ namespace UI {
                 // }
             }
 
-
-            float x = Time.time;
-            float y = player.GetCurrentlySelectedChampion().GetChampionStatistics().GetAttackSpeed(1);
-            float z = player.GetCurrentlySelectedChampion().GetLastAttackTime();
-
-            // lmbImage.fillAmount = (x - z) / y;
-            // do the calculation above but flip the result
-            if(!lmbDisable.activeSelf){
-                if (player.GetCurrentlySelectedChampion().GetLastAttackTime() > 0) lmbDisable.SetActive(true);
-            }
-            if (player.GetCurrentlySelectedChampion().GetLastAttackTime() > 0) lmbCooldown.fillAmount = 1 - (x - z) / y;
-            if(lmbCooldown.fillAmount == 0) lmbDisable.SetActive(false);
-
-            
-
-            Champion champion = player.GetCurrentlySelectedChampion();
-            if(!spaceDisable.activeSelf){
-                if (champion.GetDodge().GetTimeLeft() > 0) spaceDisable.SetActive(true);
-            }
-            float timeLeftOnDodge = champion.GetDodge().GetTimeLeft();
-            float dodgeBaseCooldown = champion.GetDodge().GetCooldown();
-            spaceCooldown.fillAmount = timeLeftOnDodge / dodgeBaseCooldown;
-            if(spaceCooldown.fillAmount == 0) spaceDisable.SetActive(false);
-
         }
     }
 }

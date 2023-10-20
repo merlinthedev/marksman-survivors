@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Champions.Abilities.Upgrades;
 using EventBus;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 namespace Champions.Abilities {
@@ -15,6 +16,7 @@ namespace Champions.Abilities {
         protected Champion champion;
 
         protected bool isCancelled = false;
+        [SerializeField] protected float resourceCost = 0f;
         public AbilityUseType abilityUseType;
         public AbilityType abilityType;
 
@@ -53,6 +55,7 @@ namespace Champions.Abilities {
             // Log("An ability was used!", Logger.Color.RED, this);
             // Log("CurrentCooldown: " + currentCooldown + ", AbilityCooldown: " + abilityCooldown, this);
             currentCooldown = abilityCooldown;
+            champion.GetChampionStatistics().CurrentMana -= resourceCost; // TODO: REFACTOR
 
             //Raise cooldown event
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(this));
@@ -72,13 +75,17 @@ namespace Champions.Abilities {
             currentCooldown = 0f;
         }
 
-        protected internal virtual void DeductFromCooldown(float timeToDeduct) {
+        protected virtual void DeductFromCooldown(float timeToDeduct) {
             currentCooldown -= timeToDeduct;
         }
 
-        public bool IsOnCooldown() {
+        protected bool IsOnCooldown() {
             // Debug.Log("we are on cooldown wtf are youdoing;  " + currentCooldown);
             return currentCooldown > 0;
+        }
+
+        protected bool CanAfford() {
+            return champion.GetChampionStatistics().CurrentMana >= resourceCost;
         }
 
         public float GetAbilityCooldown() {

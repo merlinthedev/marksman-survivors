@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
+using Champions;
 using Entities;
 using EventBus;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace Enemies {
         [SerializeField] private float rewardXP;
         private float currentHealth;
         [SerializeField] protected float damage = 1f;
-        
+
         [Header("Loot")]
         [SerializeField] private List<GameObject> lootPrefabs;
 
@@ -59,7 +60,9 @@ namespace Enemies {
         public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
         public List<Stack> Stacks { get; } = new();
         public List<Debuff> Debuffs { get; } = new();
+        public List<IAttachable> attachables { get; } = new();
         public IDamageable currentTarget { get; set; } = null;
+        public bool IsReady => false;
 
         private void Start() {
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
@@ -224,6 +227,8 @@ namespace Enemies {
         }
 
         public void Die() {
+            attachables.ForEach(attachable => attachable.OnUse());
+
             EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(collider, this, transform.position));
             DropLoot();
             Destroy(gameObject);
@@ -239,7 +244,8 @@ namespace Enemies {
             return damage;
         }
 
-        public abstract void DealDamage(IDamageable damageable, float damage);
+        public abstract void DealDamage(IDamageable damageable, float damage, Champion.DamageType damageType,
+            bool shouldInvoke = true);
 
         public void ResetCurrentTarget() {
             currentTarget = null;
@@ -347,7 +353,9 @@ namespace Enemies {
 
         private void DropLoot() {
             for (int i = 0; i < lootPrefabs.Count; i++) {
-                Instantiate(lootPrefabs[i], new Vector3(transform.transform.position.x, 0, transform.transform.position.z), Quaternion.identity);
+                Instantiate(lootPrefabs[i],
+                    new Vector3(transform.transform.position.x, 0, transform.transform.position.z),
+                    Quaternion.identity);
             }
         }
 
