@@ -101,7 +101,7 @@ namespace Champions {
         [SerializeField] private Vector4 directionTracker = Vector4.zero;
         private Vector3 lastAttackDirection = Vector3.zero;
 
-        protected bool isChanneling = false;
+        protected bool isCasting = false;
 
         #endregion
 
@@ -152,7 +152,7 @@ namespace Champions {
         protected virtual void FixedUpdate() {
             GroundCheck();
 
-            if (!isChanneling) {
+            if (!isCasting) {
                 if (grounded) {
                     OnMove();
                 }
@@ -165,7 +165,7 @@ namespace Champions {
         }
 
         protected virtual void Update() {
-            if (!IsMoving && currentTarget != null && !isChanneling) {
+            if (!IsMoving && currentTarget != null && !isCasting) {
                 OnAutoAttack(currentTarget);
             }
 
@@ -704,7 +704,7 @@ namespace Champions {
         }
 
         public bool IsChanneling() {
-            return isChanneling;
+            return isCasting;
         }
 
         public void SetCurrentMovementDirection(Vector3 dir) {
@@ -724,9 +724,9 @@ namespace Champions {
         }
 
         public void SetIsChanneling(bool isChanneling) {
-            this.isChanneling = isChanneling;
+            this.isCasting = isChanneling;
         }
-        
+
 
         public void ResetCurrentTarget() {
             currentTarget = null;

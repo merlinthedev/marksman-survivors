@@ -1,5 +1,6 @@
 ﻿namespace Champions.Abilities {
-    public interface ICastable : IChannelable {
-        void OnCancel();
+    public interface ICastable {
+        float CastTime { get; set; }
+        void Cast();
     }
 }

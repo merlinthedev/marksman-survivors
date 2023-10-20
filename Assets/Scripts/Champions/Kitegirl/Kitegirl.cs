@@ -31,6 +31,7 @@ namespace Champions.Kitegirl {
 
 
         public override void OnAutoAttack(IDamageable damageable) {
+            if (isCasting) return;
             if (!CanAttack) {
                 if (!isAutoAttacking) {
                     // Queue the clicked target for our next attack

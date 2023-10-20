@@ -6,12 +6,12 @@ using UnityEngine;
 using Util;
 
 namespace Champions.Kitegirl.Abilities.Offense {
-    public class DevastatingFlare : Ability, IChannelable {
+    public class DevastatingFlare : Ability, ICastable {
         [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float damagePercentage = 1f;
         [SerializeField] private Projectile projectilePrefab;
-        public float ChannelTime { get; set; }
+        public float CastTime { get; set; }
 
         private Vector3 direction;
         private Vector3 target;
@@ -21,7 +21,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
         public override void Hook(Champion champion) {
             base.Hook(champion);
 
-            ChannelTime = 2f * champion.GetAttackSpeed();
+            CastTime = 2f * champion.GetAttackSpeed();
         }
 
         public override void OnUse() {
@@ -37,17 +37,17 @@ namespace Champions.Kitegirl.Abilities.Offense {
 
             angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-            Channel();
+            Cast();
         }
 
-        private void use() {
+        private void Use() {
             champion.SetIsChanneling(false);
 
 
             Vector3 pos = new Vector3(champion.transform.position.x, 0.16f, champion.transform.position.z);
 
             Projectile projectile = Instantiate(projectilePrefab, pos, Quaternion.Euler(0, angle, 0));
-            projectile.Init(champion, target, OnHit);
+            projectile.Init(champion, target, OnHit, projectileSpeed, abilityRange);
 
             base.OnUse();
         }
@@ -57,13 +57,13 @@ namespace Champions.Kitegirl.Abilities.Offense {
                 Champion.DamageType.NON_BASIC);
         }
 
-        public void Channel() {
+        public void Cast() {
             (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
             champion.SetGlobalDirectionAngle(angle);
             champion.Stop();
             champion.SetIsChanneling(true);
 
-            Invoke(nameof(use), ChannelTime);
+            Invoke(nameof(Use), CastTime);
         }
     }
 }
