@@ -12,7 +12,7 @@ namespace Entities {
 
         private Vector3 startPoint;
         private float range;
-        private bool shouldMove = true;
+        protected bool shouldMove = true;
 
         public void Init(IDamager source, Vector3 target, Action<IDamageable> OnHit, float projectileSpeed,
             float range) {
@@ -25,17 +25,18 @@ namespace Entities {
             startPoint = source.gameObject.transform.position;
         }
 
-        private void Update() {
+        protected virtual void Update() {
             if (shouldMove) {
                 Move();
             } else {
-                // Debug.Log("Destroying projectile...");
+                Debug.Log("Destroying projectile..." + gameObject.name);
                 Destroy(gameObject);
             }
         }
 
         protected virtual void Move() {
             transform.position = Vector3.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
+            Debug.Log("Base Move()");
 
             float dist = Vector3.Distance(startPoint, transform.position);
             // Debug.Log("Distance: " + dist);

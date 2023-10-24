@@ -35,9 +35,10 @@ namespace Champions.Kitegirl.Abilities.Offense {
             angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
 
-            TargetProjectile targetProjectile = Instantiate(bulletPrefab, this.champion.transform.position, Quaternion.Euler(0, angle, 0));
+            TargetProjectile targetProjectile = Instantiate(bulletPrefab, this.champion.transform.position, Quaternion.Euler(90, angle, 0));
 
             targetProjectile.Init(this.champion, enemy, OnHit, 30f);
+
         }
 
 

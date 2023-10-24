@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Champions {
     [CreateAssetMenu(fileName = "ChampionStatistics", menuName = "Champion/ChampionStatistics", order = 0)]
     public class ChampionStatistics : ScriptableObject {
+
         #region editor variables
 
         [SerializeField] private float m_MaxHealth;
@@ -293,6 +294,11 @@ namespace Champions {
                     break;
                 case Statistic.MAX_MANA:
                     MaxMana += value;
+                    break;
+                case Statistic.CURRENT_MANA:
+                    CurrentMana += value;
+                    if (CurrentMana > MaxMana) CurrentMana = MaxMana;
+                    EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Mana", CurrentMana, MaxMana));
                     break;
                 case Statistic.HEALTH_REGEN:
                     HealthRegen += value;

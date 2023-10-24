@@ -37,6 +37,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
 
             angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
+
             Cast();
         }
 
@@ -49,7 +50,6 @@ namespace Champions.Kitegirl.Abilities.Offense {
             Projectile projectile = Instantiate(projectilePrefab, pos, Quaternion.Euler(0, angle, 0));
             projectile.Init(champion, target, OnHit, projectileSpeed, abilityRange);
 
-            base.OnUse();
         }
 
         private void OnHit(IDamageable damageable) {
@@ -58,6 +58,8 @@ namespace Champions.Kitegirl.Abilities.Offense {
         }
 
         public void Cast() {
+            base.OnUse();
+
             (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
             champion.SetGlobalDirectionAngle(angle);
             champion.Stop();
