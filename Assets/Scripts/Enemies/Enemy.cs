@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
@@ -75,9 +75,9 @@ namespace Enemies {
             movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);
             currentHealth = maxHealth;
             UpdateHealthBar();
-
-
-            GetComponent<Rigidbody>().mass = movementSpeed;
+            
+            
+            GetComponent<Rigidbody>().mass = movementSpeed * 2;
         }
 
         private void Update() {
