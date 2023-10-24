@@ -12015,10 +12015,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
-  - {fileID: -2981717535715948435, guid: 18f86365a0006c24eb4598fc4229b9ef, type: 3}
-  - {fileID: -8391491971653843218, guid: 9c2427fe39878c14580fa4063f14f946, type: 3}
-  - {fileID: -2757117828864937263, guid: 7b19622159271524aac51143925f7d79, type: 3}
+  - {fileID: -6149129898971977744, guid: a4e9e8e57db91bf4b97c994d0f607864, type: 3}
+  - {fileID: 767245031390461950, guid: b91cafd17cec5cc4585ad165e2fa53dd, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

@@ -6,6 +6,7 @@ using Champions.Abilities;
 using Enemies;
 using Entities;
 using EventBus;
+using Unity.Properties;
 using UnityEngine;
 using Util;
 using Debug = UnityEngine.Debug;
@@ -115,15 +116,17 @@ namespace Champions {
         public event Action<IDamageable> OnBulletHit;
         public event Action<Ability> OnAbilityUsed;
         public event Action<IDamageable> OnDamageDone;
+        public event Action OnDamageTaken;
 
 
-        public void AutoAttackStarted() {
+        protected void AutoAttackStarted() {
             OnAutoAttackStarted?.Invoke(currentTarget);
         }
 
-        public void BulletHit(IDamageable t) {
+        protected void BulletHit(IDamageable t) {
             OnBulletHit?.Invoke(t);
         }
+
 
         #region OnEnable/OnDisable
 
@@ -276,6 +279,12 @@ namespace Champions {
                     break;
                 case Stack.StackType.OVERPOWER:
                     AddOverpowerStacks(stacks);
+                    break;
+                case Stack.StackType.FOCUS:
+                    for (int i = 0; i < stacks; i++) {
+                        Stack stack = new Stack(Stack.StackType.FOCUS, this, false);
+                        Stacks.Add(stack);
+                    }
                     break;
             }
         }
@@ -546,10 +555,18 @@ namespace Champions {
 
         #region Damage & Death
 
-        private void OnDamageTaken(float damage) {
+        private void TakeDamage(float damage) {
             if (isInvincible) return;
+            if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).Count > 0) {
+                Debug.Log("Champion had FOCUS stacks. Losing all stacks to negate damage.");
+                Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).ForEach(stack => {
+                    stack.Expire();
+                });
+
+                damage = 0;
+            }
             damage = CalculateIncomingDamage(damage);
-            // Debug.Log("With value " + damage);
+            Debug.Log("With value " + damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (championStatistics.CurrentHealth <= 0) {
@@ -560,7 +577,7 @@ namespace Champions {
         public void TakeFlatDamage(float damage) {
             if (isInvincible) return;
             // Debug.Log("Taking damage");
-            OnDamageTaken(damage);
+            TakeDamage(damage);
         }
 
         public float CalculateIncomingDamage(float damage) {

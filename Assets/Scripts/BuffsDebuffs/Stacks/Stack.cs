@@ -7,6 +7,7 @@ namespace BuffsDebuffs.Stacks {
         private float lifeTime = 10f;
         private float applyTime = 0f;
         private IStackableLivingEntity affectedEntity;
+        private bool shouldExpire = true;
 
         public Stack(StackType stackType, IStackableLivingEntity affectedEntity) {
             this.stackType = stackType;
@@ -15,10 +16,25 @@ namespace BuffsDebuffs.Stacks {
             applyTime = Time.time;
         }
 
+        public Stack(StackType stackType, IStackableLivingEntity affectedEntity, bool shouldExpire) {
+            this.stackType = stackType;
+            this.affectedEntity = affectedEntity;
+            this.shouldExpire = shouldExpire;
+
+            applyTime = Time.time;
+        }
+
         public void CheckForExpiration() {
-            if (Time.time > applyTime + lifeTime) {
-                affectedEntity.RemoveStack(this);
+            if (shouldExpire) {
+                if (Time.time > applyTime + lifeTime) {
+                    affectedEntity.RemoveStack(this);
+                }
             }
+
+        }
+
+        public void Expire() {
+            affectedEntity.RemoveStack(this);
         }
 
         public StackType GetStackType() {
