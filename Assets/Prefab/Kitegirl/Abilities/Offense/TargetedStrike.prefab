@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: 4709607175273982053}
+  - component: {fileID: -8391491971653843218}
   m_Layer: 0
-  m_Name: RhytmOfBattle
+  m_Name: TargetedStrike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4709607175273982053
+--- !u!114 &-8391491971653843218
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 958ae06349c3476f966c13d3d710262f, type: 3}
+  m_Script: {fileID: 11500000, guid: 641baa6512e247babc9c3a2a544dd01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   abilityCooldown: 0
@@ -49,6 +49,11 @@ MonoBehaviour:
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
   currentCooldown: 0
-  abilityUseType: 0
-  abilityType: 1
-  RhythmActivationTime: 5
+  resourceCost: 10
+  abilityUseType: 1
+  abilityType: 2
+  <CastTime>k__BackingField: 1
+  bulletPrefab: {fileID: 8129866554452607067, guid: 7f131f27086721f4a9afc7d0ccb04712,
+    type: 3}
+  damagePercentage: 3
+  projectileSpeed: 30

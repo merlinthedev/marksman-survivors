@@ -41,7 +41,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
         }
 
         private void Use() {
-            champion.SetIsChanneling(false);
+            champion.SetIsCasting(false);
 
 
             Vector3 pos = new Vector3(champion.transform.position.x, 0.16f, champion.transform.position.z);
@@ -61,7 +61,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
             (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
             champion.SetGlobalDirectionAngle(angle);
             champion.Stop();
-            champion.SetIsChanneling(true);
+            champion.SetIsCasting(true);
 
             Invoke(nameof(Use), CastTime);
         }

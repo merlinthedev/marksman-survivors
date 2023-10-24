@@ -38,6 +38,10 @@ namespace Entities {
             this.damage = damage;
         }
 
+        public void SetBulletSpeed(float speed) {
+            m_TravelSpeed = speed;
+        }
+
         public void IsFake() {
             isFake = true;
         }

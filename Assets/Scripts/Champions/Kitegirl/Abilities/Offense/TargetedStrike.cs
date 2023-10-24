@@ -1,19 +1,18 @@
 ﻿using Champions.Abilities;
 using Champions.Kitegirl.Entities;
 using Enemies;
+using Entities;
 using UnityEngine;
 
 namespace Champions.Kitegirl.Abilities.Offense {
     public class TargetedStrike : Ability, ICastable {
         [field: SerializeField] public float CastTime { get; set; }
-        [SerializeField] private KitegirlBullet bulletPrefab;
+        [SerializeField] private TargetProjectile bulletPrefab;
         [SerializeField] private float damagePercentage = 3f;
+        [SerializeField] private float projectileSpeed = 30f;
 
         private Enemy enemy;
-
-        public override void Hook(Champion champion) {
-            base.Hook(champion);
-        }
+        private float angle = 0f;
 
         public override void OnUse() {
             if (!CanAfford()) {
@@ -27,24 +26,41 @@ namespace Champions.Kitegirl.Abilities.Offense {
             Cast();
         }
 
-        private void use() {
+        private void Use() {
+            this.champion.SetIsCasting(false);
+
             Vector3 direction = enemy.transform.position - champion.transform.position;
             direction.Normalize();
 
-            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
 
-            KitegirlBullet bullet =
-                Instantiate(bulletPrefab, champion.transform.position, Quaternion.Euler(0, angle, 0));
-            
-            
+            TargetProjectile targetProjectile = Instantiate(bulletPrefab, this.champion.transform.position, Quaternion.Euler(0, angle, 0));
+
+            targetProjectile.Init(this.champion, enemy, OnHit, 30f);
+        }
+
+
+        private void OnHit(IDamageable damageable) {
+            float dam = this.champion.GetAttackDamage() * damagePercentage;
+            Debug.Log("Damage: " + dam);
+            Debug.Log("AD: " + this.champion.GetAttackDamage());
+            Debug.Log("Percentage: " + damagePercentage);
+            this.champion.DealDamage(enemy, dam, Champion.DamageType.NON_BASIC);
         }
 
 
         public void Cast() {
+            (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
+            champion.SetGlobalDirectionAngle(angle);
+            champion.Stop();
+            champion.SetIsCasting(true);
+
             enemy = (Enemy)Player.GetInstance().GetCurrentHoverEntity();
 
-            Invoke(nameof(use), CastTime);
+            if (enemy != null) {
+                Invoke(nameof(Use), CastTime);
+            }
         }
     }
 }

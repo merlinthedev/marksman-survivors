@@ -200,6 +200,7 @@ namespace Enemies {
         #region Damage
 
         public virtual void TakeFlatDamage(float damage) {
+            
             TakeDamage(damage);
         }
 

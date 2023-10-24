@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Entities {
     public class Projectile : MonoBehaviour {
-        [SerializeField] private float projectileSpeed = 0;
+        [SerializeField] protected float projectileSpeed = 0;
         private event Action<IDamageable> OnHit;
-        private IDamager source;
+        protected IDamager source;
         private Vector3 target;
 
         private Vector3 startPoint;
@@ -34,7 +34,7 @@ namespace Entities {
             }
         }
 
-        private void Move() {
+        protected virtual void Move() {
             transform.position = Vector3.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
 
             float dist = Vector3.Distance(startPoint, transform.position);
@@ -47,7 +47,7 @@ namespace Entities {
             }
         }
 
-        private void OnTriggerEnter(Collider other) {
+        protected virtual void OnTriggerEnter(Collider other) {
             IDamageable damageable = DamageableManager.GetInstance().GetDamageable(other);
             if (damageable != null && damageable is not Champion) {
                 OnHit?.Invoke(damageable);

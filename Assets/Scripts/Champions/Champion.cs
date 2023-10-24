@@ -14,6 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace Champions {
     public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
+
         #region Properties
 
         [Header("References")]
@@ -70,7 +71,13 @@ namespace Champions {
         //Buff/Debuff
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
-        public bool IsReady => Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime;
+
+        public bool IsReady {
+            get {
+                return (Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime) && this.abilities.Find(ability => ability.name == "RhythmOfBattle") != null;
+            }
+        }
+
         public float LastNonBasicAbilityCastTime { get; set; } = 0f;
         public float RhythmActivationTime { get; set; } = 0f;
         public List<IAttachable> attachables { get; } = new();
@@ -581,6 +588,7 @@ namespace Champions {
 
         public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType,
             bool shouldInvoke = true) {
+            Debug.Log("Dealing damage: " + damage);
             damageable.TakeFlatDamage(damage);
             if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);
@@ -722,8 +730,8 @@ namespace Champions {
             nextAttackWillCrit = b;
         }
 
-        public void SetIsChanneling(bool isChanneling) {
-            this.isCasting = isChanneling;
+        public void SetIsCasting(bool isCasting) {
+            this.isCasting = isCasting;
         }
 
 
