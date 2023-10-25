@@ -22,7 +22,7 @@ namespace Champions.Kitegirl.Abilities.Defense {
                 return;
             }
 
-            this.champion.AddStacks(stacksToAdd, Stack.StackType.FOCUS);
+            this.champion.AddStacks(stacksToAdd, Stack.StackType.FOCUS, effect);
             effect.OnApply();
             this.champion.OnDamageTaken += Use;
 

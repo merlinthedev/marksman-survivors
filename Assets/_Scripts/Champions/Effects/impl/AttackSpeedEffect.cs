@@ -8,6 +8,10 @@ namespace Champions.Effects.impl {
             this.champion.GetChampionStatistics().MultiplyStatisticByPercentage(Statistic.ATTACK_SPEED, attackSpeedMultiplier);
         }
 
+        public override void OnExpire() {
+            this.champion.GetChampionStatistics().DivideStatisticByPercentage(Statistic.ATTACK_SPEED, attackSpeedMultiplier);
+        }
+
         public float GetAttackSpeedMultiplier() {
             return attackSpeedMultiplier;
         }

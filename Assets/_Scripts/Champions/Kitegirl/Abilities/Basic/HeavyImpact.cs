@@ -46,7 +46,7 @@ namespace Champions.Kitegirl.Abilities.Basic {
             var main = effect.main;
             main.simulationSpeed = 5f;
 
-            Debug.Log("x " + damageablesInCone.Count);
+            // Debug.Log("x " + damageablesInCone.Count);
         }
 
         private void OnApplicationQuit() {

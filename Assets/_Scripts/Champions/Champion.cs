@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BuffsDebuffs;
 using BuffsDebuffs.Stacks;
 using Champions.Abilities;
+using Champions.Effects;
 using Enemies;
 using Entities;
 using EventBus;
@@ -183,21 +184,8 @@ namespace Champions {
             CheckDebuffsForExpiration();
 
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                AddStacks(1, Stack.StackType.FRAGILE);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                AddStacks(1, Stack.StackType.OVERPOWER);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                AddStacks(1, Stack.StackType.DEFTNESS);
-            }
-
-            if (Input.GetKeyDown(KeyCode.L)) {
-                championStatistics.CurrentXP += 100;
-                championLevelManager.CheckForLevelUp();
+            if (Input.GetKeyDown(KeyCode.S)) {
+                Debug.Log(championStatistics.ToString());
             }
 
             // Logger.Log("Amount of deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.GREEN,
@@ -269,7 +257,7 @@ namespace Champions {
 
         #region Stacks
 
-        public void AddStacks(int stacks, Stack.StackType stackType) {
+        public void AddStacks(int stacks, Stack.StackType stackType, Effect effect = null) {
             switch (stackType) {
                 case Stack.StackType.FRAGILE:
                     AddFragileStacks(stacks);
@@ -282,13 +270,17 @@ namespace Champions {
                     break;
                 case Stack.StackType.FOCUS:
                     for (int i = 0; i < stacks; i++) {
-                        Stack stack = new Stack(Stack.StackType.FOCUS, this, false);
+                        Stack stack = new Stack(Stack.StackType.FOCUS, this, false, effect);
                         Stacks.Add(stack);
                     }
                     break;
             }
         }
 
+
+        public void AddStacks(int stacks, Stack.StackType stackType) {
+            AddStacks(stacks, stackType, null);
+        }
 
         public void RemoveStacks(int stacks, Stack.StackType stackType) {
             switch (stackType) {
@@ -558,7 +550,7 @@ namespace Champions {
         private void TakeDamage(float damage) {
             if (isInvincible) return;
             if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).Count > 0) {
-                Debug.Log("Champion had FOCUS stacks. Losing all stacks to negate damage.");
+                // Debug.Log("Champion had FOCUS stacks. Losing all stacks to negate damage.");
                 Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).ForEach(stack => {
                     stack.Expire();
                 });
@@ -605,7 +597,7 @@ namespace Champions {
 
         public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType,
             bool shouldInvoke = true) {
-            Debug.Log("Dealing damage: " + damage);
+            // Debug.Log("Dealing damage: " + damage);
             damageable.TakeFlatDamage(damage);
             if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);

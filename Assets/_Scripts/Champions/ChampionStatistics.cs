@@ -391,6 +391,14 @@ namespace Champions {
                     break;
             }
         }
+
+        public override string ToString() {
+            return
+                $"MaxHealth: {MaxHealth}, CurrentHealth: {CurrentHealth}, HealthRegen: {HealthRegen}, MaxMana: {MaxMana}, CurrentMana: {CurrentMana}, " +
+                $"ManaRegen: {ManaRegen}, AttackSpeed: {AttackSpeed}, MovementSpeed: {MovementSpeed}, AttackRange: {AttackRange}, " +
+                $"AttackDamage: {AttackDamage}, CriticalStrikeChance: {CriticalStrikeChance}, CriticalStrikeDamage: {CriticalStrikeDamage}, " +
+                $"CooldownReduction: {CooldownReduction}, CurrentXP: {CurrentXP}";
+        }
     }
 
     [Serializable]

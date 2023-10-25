@@ -41,7 +41,7 @@ namespace UI {
 
                         m_Slots[i].UIBuff.SetStacks(e.stacks);
                         m_Slots[i].UIBuff.GetComponent<Image>().sprite = ReturnSprite(e.type);
-                        Debug.Log("Added " + e.stacks + " " + e.type + " stacks");
+                        // Debug.Log("Added " + e.stacks + " " + e.type + " stacks");
                         return;
                     }
                 }

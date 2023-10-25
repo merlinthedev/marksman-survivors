@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Champions.Effects;
+using System;
 using UnityEngine;
 
 namespace BuffsDebuffs.Stacks {
@@ -7,6 +8,7 @@ namespace BuffsDebuffs.Stacks {
         private float lifeTime = 10f;
         private float applyTime = 0f;
         private IStackableLivingEntity affectedEntity;
+        private Effect effect;
         private bool shouldExpire = true;
 
         public Stack(StackType stackType, IStackableLivingEntity affectedEntity) {
@@ -24,6 +26,16 @@ namespace BuffsDebuffs.Stacks {
             applyTime = Time.time;
         }
 
+        public Stack(StackType stackType, IStackableLivingEntity affectedEntity, bool shouldExpire, Effect effect) {
+            this.stackType = stackType;
+            this.affectedEntity = affectedEntity;
+            this.shouldExpire = shouldExpire;
+            this.effect = effect;
+
+            applyTime = Time.time;
+        }
+
+
         public void CheckForExpiration() {
             if (shouldExpire) {
                 if (Time.time > applyTime + lifeTime) {
@@ -35,6 +47,9 @@ namespace BuffsDebuffs.Stacks {
 
         public void Expire() {
             affectedEntity.RemoveStack(this);
+            if (effect != null) {
+                effect.OnExpire();
+            }
         }
 
         public StackType GetStackType() {

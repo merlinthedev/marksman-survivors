@@ -9,6 +9,7 @@ namespace Champions.Effects {
         }
 
         public abstract void OnApply();
+        public abstract void OnExpire();
 
     }
 }

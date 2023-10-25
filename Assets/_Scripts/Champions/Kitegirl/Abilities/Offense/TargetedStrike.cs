@@ -37,7 +37,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
 
             TargetProjectile targetProjectile = Instantiate(bulletPrefab, this.champion.transform.position, Quaternion.Euler(90, angle, 0));
 
-            targetProjectile.Init(this.champion, enemy, OnHit, 30f);
+            targetProjectile.Init(this.champion, enemy, OnHit, projectileSpeed);
 
         }
 
