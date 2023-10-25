@@ -11,8 +11,7 @@ namespace Champions.Kitegirl.Abilities.Defense {
 
         public override void Hook(Champion champion) {
             effect.Init(champion);
-
-
+            
             base.Hook(champion);
         }
 

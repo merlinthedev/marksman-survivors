@@ -15,7 +15,7 @@ using Logger = Util.Logger;
 using Random = UnityEngine.Random;
 
 namespace Champions {
-    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity {
+    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity, IShieldable {
 
         #region Properties
 
@@ -111,6 +111,16 @@ namespace Champions {
 
         protected bool isCasting = false;
 
+        public float ShieldAmount { get; set; }
+        public float ShieldLifetime { get; set; }
+        public float LastShieldTime { get; set; }
+
+        public bool HasShield {
+            get {
+                return ShieldAmount > 0;
+            }
+        }
+
         #endregion
 
         public event Action<IDamageable> OnAutoAttackStarted;
@@ -118,6 +128,7 @@ namespace Champions {
         public event Action<Ability> OnAbilityUsed;
         public event Action<IDamageable> OnDamageDone;
         public event Action OnDamageTaken;
+        public event Action OnShieldExpired;
 
 
         protected void AutoAttackStarted() {
@@ -182,6 +193,7 @@ namespace Champions {
             RegenerateResources();
             CheckStacksForExpiration();
             CheckDebuffsForExpiration();
+            CheckShieldExpiration();
 
 
             if (Input.GetKeyDown(KeyCode.S)) {
@@ -557,13 +569,30 @@ namespace Champions {
 
                 damage = 0;
             }
+
             damage = CalculateIncomingDamage(damage);
+            damage = TakeShieldDamage(damage);
+
             Debug.Log("With value " + damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (championStatistics.CurrentHealth <= 0) {
                 OnDeath();
             }
+        }
+
+        public float TakeShieldDamage(float damage) {
+            if (HasShield) {
+                if (damage >= ShieldAmount) {
+                    RemoveShield();
+                    damage -= ShieldAmount;
+                } else {
+                    ShieldAmount -= damage;
+                    damage = 0;
+                }
+            }
+
+            return damage;
         }
 
         public void TakeFlatDamage(float damage) {
@@ -608,6 +637,31 @@ namespace Champions {
             // Death logic
 
             EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("D Hub"));
+        }
+
+        public void CheckShieldExpiration() {
+            if (Time.time > LastShieldTime + ShieldLifetime) {
+                RemoveShield();
+                OnShieldExpired?.Invoke();
+            }
+        }
+
+        public void SetShield(float amount) {
+            LastShieldTime = Time.time;
+            ShieldAmount = amount;
+        }
+
+        public void RemoveShield() {
+            ShieldAmount = 0;
+            OnShieldExpired?.Invoke();
+        }
+
+        public void AddShield(float amount) {
+            ShieldAmount += amount;
+        }
+
+        public void SubtractShield(float amount) {
+            ShieldAmount -= amount;
         }
 
         #endregion
@@ -762,5 +816,6 @@ namespace Champions {
             BASIC,
             NON_BASIC
         }
+
     }
 }
