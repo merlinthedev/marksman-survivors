@@ -25,7 +25,9 @@ namespace _Scripts.Champions.Kitegirl.Entities {
                 OnBulletHit?.Invoke(this.targetEntity);
 
                 // TryReduceECooldown();
-                Destroy(gameObject);
+                if (!this.shouldPierce) {
+                    Destroy(gameObject);
+                }
             }
 
             if (other.gameObject.CompareTag("KitegirlGrenade")) {
@@ -34,7 +36,7 @@ namespace _Scripts.Champions.Kitegirl.Entities {
                 KitegirlGrenade kitegirlGrenade = other.gameObject.GetComponent<KitegirlGrenade>();
                 // kitegirlGrenade.TakeFlatDamage(1);
                 this.sourceEntity.DealDamage(kitegirlGrenade, this.damage, Champion.DamageType.BASIC);
-                this.shouldMove = false;
+                this.shouldMove = this.shouldPierce;
                 this.sourceEntity.ResetCurrentTarget();
 
                 OnBulletHit?.Invoke(this.targetEntity);

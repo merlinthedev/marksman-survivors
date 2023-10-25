@@ -14,6 +14,10 @@ namespace _Scripts.Champions.Kitegirl {
         [SerializeField] private Champion_AnimationController animationController;
 
         private bool attackShouldApplyDeftness = false;
+        public bool shouldBurst;
+        public bool shouldPierce;
+        public int maxBrust;
+
 
         public override void OnAutoAttack(IDamageable damageable) {
             if (this.isCasting) return;
@@ -105,11 +109,22 @@ namespace _Scripts.Champions.Kitegirl {
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
 
-            KitegirlBullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
-            bullet.SetSourceEntity(this);
-            bullet.SetTarget(currentTarget);
-            bullet.SetDamage(CalculateDamage());
-            bullet.Init(BulletHit);
+            if (shouldBurst) {
+                Utilities.DelayedForLoop(maxBrust, 0.2f, () => {
+                    KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, angle, 0));
+                    kitegirlBullet.SetSourceEntity(this);
+                    kitegirlBullet.SetTarget(currentTarget);
+                    kitegirlBullet.SetDamage(CalculateDamage());
+                    kitegirlBullet.ShouldPierce(shouldPierce);
+                    kitegirlBullet.Init(BulletHit);
+                }, this);
+            } else {
+                KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, angle, 0));
+                kitegirlBullet.SetSourceEntity(this);
+                kitegirlBullet.SetTarget(currentTarget);
+                kitegirlBullet.SetDamage(CalculateDamage());
+                kitegirlBullet.Init(BulletHit);
+            }
         }
 
         public void Bounce(int bounces, float timeBetweenBounces, IDamageable initialTarget) {

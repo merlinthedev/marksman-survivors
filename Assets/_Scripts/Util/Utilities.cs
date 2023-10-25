@@ -137,5 +137,13 @@ namespace _Scripts.Util {
             yield return new WaitForEndOfFrame();
             action.Invoke();
         }
+
+
+        public static void DelayedForLoop(int iterations, float delay, Action action, MonoBehaviour context) {
+            for (int i = 0; i < iterations; i++) {
+                InvokeDelayed(() => { action.Invoke(); }, delay * i, context);
+            }
+        }
+
     }
 }

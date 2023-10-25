@@ -13,7 +13,9 @@ namespace _Scripts.Entities {
 
         protected bool shouldMove = false;
 
-        private Vector3 direction;
+        protected int maxPierceCount = 0;
+        protected bool shouldPierce = false;
+
 
         public void SetSourceEntity(IDamager sourceEntity) {
             this.sourceEntity = sourceEntity;
@@ -42,6 +44,14 @@ namespace _Scripts.Entities {
             m_TravelSpeed = speed;
         }
 
+        public void ShouldPierce(bool shouldPierce) {
+            this.shouldPierce = shouldPierce;
+        }
+
+        public void SetMaxPierceCount(int maxPierceCount) {
+            this.maxPierceCount = maxPierceCount;
+        }
+
         public void IsFake() {
             isFake = true;
         }
@@ -65,17 +75,21 @@ namespace _Scripts.Entities {
                 return;
             }
 
-            //transform.Translate(direction.normalized * (m_TravelSpeed * Time.deltaTime));
-            transform.position = Vector3.MoveTowards(transform.position,
-                targetEntity.GetTransform().position,
-                m_TravelSpeed * Time.deltaTime);
+            if (!shouldPierce) {
+                transform.position = Vector3.MoveTowards(transform.position,
+                    targetEntity.GetTransform().position,
+                    m_TravelSpeed * Time.deltaTime);
+
+            } else {
+                transform.position += transform.forward * (m_TravelSpeed * Time.deltaTime);
+            }
 
             if (isFake && transform.position == targetEntity.GetTransform().position) {
                 Destroy(gameObject);
             }
         }
 
-        private protected virtual void OnTriggerEnter(Collider other) {
+        protected private virtual void OnTriggerEnter(Collider other) {
             if (isFake) Destroy(gameObject);
             // Debug.Log("ABullet base OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
@@ -84,7 +98,9 @@ namespace _Scripts.Entities {
                 // Debug.Log("Hit an enemy");
                 sourceEntity.DealDamage(damageable, damage, Champion.DamageType.BASIC);
 
-                Destroy(gameObject);
+                if (!shouldPierce) {
+                    Destroy(gameObject);
+                }
             }
         }
     }
