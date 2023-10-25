@@ -16,7 +16,7 @@ namespace _Scripts.Enemies {
         [SerializeField] protected Rigidbody rigidbody;
 
         [SerializeField] private Collider collider;
-        private Animator animator;
+        protected Animator animator;
         private SpriteRenderer spriteRenderer;
         private Renderer renderer;
 
@@ -68,15 +68,30 @@ namespace _Scripts.Enemies {
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
 
             animator = GetComponent<Animator>();
+            if (animator == null) {
+                animator = GetComponentInChildren<Animator>();
+            }
+
             spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) {
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            }
+
             renderer = GetComponent<Renderer>();
+            if (renderer == null) {
+                renderer = GetComponentInChildren<Renderer>();
+            }
+
             canvas = GetComponentInChildren<Canvas>();
+            if (canvas == null) {
+                canvas = GetComponentInChildren<Canvas>();
+            }
 
             movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);
             currentHealth = maxHealth;
             UpdateHealthBar();
-            
-            
+
+
             GetComponent<Rigidbody>().mass = movementSpeed * 2;
         }
 
@@ -200,7 +215,7 @@ namespace _Scripts.Enemies {
         #region Damage
 
         public virtual void TakeFlatDamage(float damage) {
-            
+
             TakeDamage(damage);
         }
 
@@ -314,6 +329,7 @@ namespace _Scripts.Enemies {
         }
 
         private void FocusAnimation() {
+            if (renderer == null) return;
             if (focusAnim) {
                 if (renderer.material.GetVector("_Color").magnitude <
                     2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude) {

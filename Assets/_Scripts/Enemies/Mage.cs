@@ -1,11 +1,9 @@
-using System;
+using _Scripts.Champions;
+using _Scripts.Entities;
 using System.Collections;
-using Champions;
-using Entities;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public class Mage : Enemy {
         private bool casting = false;
         [SerializeField] private float castTime = 1f;
