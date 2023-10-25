@@ -1,14 +1,13 @@
+using _Scripts.Champions;
 using System;
 using System.Collections;
-using System.Numerics;
-using Champions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 using Vector4 = UnityEngine.Vector4;
 
-namespace Util {
+namespace _Scripts.Util {
     public class Utilities : MonoBehaviour {
         private static float GetTriangleArea(Vector2 p1, Vector2 p2, Vector2 p3) {
             return Mathf.Abs((p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)) / 2.0f);

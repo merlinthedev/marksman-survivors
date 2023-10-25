@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using EventBus;
-using Inventory.Items;
-using Util;
+﻿using _Scripts.EventBus;
+using _Scripts.Inventory.Items;
+using _Scripts.Util;
+using System.Collections.Generic;
 
-namespace Inventory {
+namespace _Scripts.Inventory {
     public class Inventory {
         private int gold;
         private int killCount;

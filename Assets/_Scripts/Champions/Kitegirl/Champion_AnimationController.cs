@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Champions.Kitegirl {
+namespace _Scripts.Champions.Kitegirl {
     public class Champion_AnimationController : MonoBehaviour {
         [SerializeField] private Champion m_ChampionScript;
         [SerializeField] private Animator m_Animator;

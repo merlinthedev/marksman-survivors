@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Champions.Effects.impl {
+namespace _Scripts.Champions.Effects.impl {
     public class MovementSpeedEffect : Effect {
 
         [SerializeField] private float movementSpeedModifier = 1.01f;

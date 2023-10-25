@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BuffsDebuffs.Stacks {
+namespace _Scripts.BuffsDebuffs.Stacks {
     public interface IStackableLivingEntity : IEntity {
         bool IsFragile { get; }
         bool IsReady { get; }

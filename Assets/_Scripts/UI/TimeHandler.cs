@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using EventBus;
+﻿using _Scripts.EventBus;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class TimeHandler : MonoBehaviour {
         [SerializeField] private TMP_Text timeText;
 

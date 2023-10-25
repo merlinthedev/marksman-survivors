@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using EventBus;
+﻿using _Scripts.EventBus;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static BuffsDebuffs.Stacks.Stack;
+using static _Scripts.BuffsDebuffs.Stacks.Stack;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIBuffs : MonoBehaviour {
         [Header("Icons")]
         [SerializeField] private Sprite m_DeftnessIcon;

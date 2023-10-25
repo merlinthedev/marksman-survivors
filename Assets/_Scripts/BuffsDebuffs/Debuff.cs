@@ -1,9 +1,9 @@
+using _Scripts.Champions;
+using _Scripts.Entities;
 using System.Collections;
-using Champions;
-using Entities;
 using UnityEngine;
 
-namespace BuffsDebuffs {
+namespace _Scripts.BuffsDebuffs {
     public class Debuff {
         private IDamageable target;
         private IDamager source;

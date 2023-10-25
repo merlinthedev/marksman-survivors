@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using _Scripts.EventBus;
 using TMPro;
-using EventBus;
+using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class GoldCounter : MonoBehaviour {
         [SerializeField] private TMP_Text goldCounterText;
 

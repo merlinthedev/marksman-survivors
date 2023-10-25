@@ -1,7 +1,7 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 using UnityEngine;
 
-namespace Core {
+namespace _Scripts.Core {
     public class MenuManager : MonoBehaviour {
         [SerializeField] public GameObject settings;
         [SerializeField] public Bamischijf bamischijf;

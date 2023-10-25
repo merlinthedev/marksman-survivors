@@ -1,9 +1,9 @@
-﻿using System;
-using EventBus;
+﻿using _Scripts.EventBus;
+using System;
 using UnityEngine;
 
 // Scriptable object attribute
-namespace Champions {
+namespace _Scripts.Champions {
     [CreateAssetMenu(fileName = "ChampionStatistics", menuName = "Champion/ChampionStatistics", order = 0)]
     public class ChampionStatistics : ScriptableObject {
 

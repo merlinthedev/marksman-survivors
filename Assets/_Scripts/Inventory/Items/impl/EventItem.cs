@@ -1,4 +1,4 @@
-﻿namespace Inventory.Items.impl {
+﻿namespace _Scripts.Inventory.Items.impl {
     public class EventItem : Item {
         public override void OnEquip() {
             throw new System.NotImplementedException();

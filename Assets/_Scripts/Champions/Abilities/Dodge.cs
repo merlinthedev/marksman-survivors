@@ -1,9 +1,8 @@
-﻿using System;
-using EventBus;
+﻿using _Scripts.EventBus;
+using System;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 
-namespace Champions.Abilities {
+namespace _Scripts.Champions.Abilities {
     public class Dodge : ICooldown {
         private readonly float cooldown;
         private float timeLeft;

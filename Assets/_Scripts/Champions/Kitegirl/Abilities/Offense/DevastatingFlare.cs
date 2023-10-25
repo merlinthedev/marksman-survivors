@@ -1,11 +1,9 @@
-﻿using Champions.Abilities;
-using Enemies;
-using Entities;
-using UnityEditor.ShaderKeywordFilter;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Entities;
+using _Scripts.Util;
 using UnityEngine;
-using Util;
 
-namespace Champions.Kitegirl.Abilities.Offense {
+namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
     public class DevastatingFlare : Ability, ICastable {
         [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
@@ -30,9 +28,9 @@ namespace Champions.Kitegirl.Abilities.Offense {
             }
 
             Vector3 mousePos = Utilities.GetMouseWorldPosition();
-            direction = (mousePos - champion.transform.position).normalized;
+            direction = (mousePos - this.champion.transform.position).normalized;
 
-            target = champion.transform.position + direction * abilityRange;
+            target = this.champion.transform.position + direction * this.abilityRange;
             target.y = 0.16f;
 
             angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
@@ -42,28 +40,28 @@ namespace Champions.Kitegirl.Abilities.Offense {
         }
 
         private void Use() {
-            champion.SetIsCasting(false);
+            this.champion.SetIsCasting(false);
 
 
-            Vector3 pos = new Vector3(champion.transform.position.x, 0.16f, champion.transform.position.z);
+            Vector3 pos = new Vector3(this.champion.transform.position.x, 0.16f, this.champion.transform.position.z);
 
             Projectile projectile = Instantiate(projectilePrefab, pos, Quaternion.Euler(0, angle, 0));
-            projectile.Init(champion, target, OnHit, projectileSpeed, abilityRange);
+            projectile.Init(this.champion, target, OnHit, projectileSpeed, this.abilityRange);
 
         }
 
         private void OnHit(IDamageable damageable) {
-            champion.DealDamage(damageable, champion.GetAttackDamage() * damagePercentage,
+            this.champion.DealDamage(damageable, this.champion.GetAttackDamage() * damagePercentage,
                 Champion.DamageType.NON_BASIC);
         }
 
         public void Cast() {
             base.OnUse();
 
-            (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
-            champion.SetGlobalDirectionAngle(angle);
-            champion.Stop();
-            champion.SetIsCasting(true);
+            (this.champion as Kitegirl)?.GetAnimator().SetDirection(angle);
+            this.champion.SetGlobalDirectionAngle(angle);
+            this.champion.Stop();
+            this.champion.SetIsCasting(true);
 
             Invoke(nameof(Use), CastTime);
         }

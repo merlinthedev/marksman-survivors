@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using Champions.Abilities;
-using Core;
-using Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Entities;
 using UnityEngine;
-using Util;
 
-namespace Champions.Kitegirl.Abilities.Basic {
+namespace _Scripts.Champions.Kitegirl.Abilities.Basic {
     public class StickyBombs : Ability {
         [SerializeField] private StickyBomb stickyBombPrefab;
         [SerializeField] private float timeToExplode = 3f;
@@ -21,11 +18,11 @@ namespace Champions.Kitegirl.Abilities.Basic {
             StickyBomb stickyBomb =
                 Instantiate(stickyBombPrefab, damageable.GetTransform().position, Quaternion.identity);
             stickyBomb.Init(timeToExplode, damageArea, damagePercentage);
-            stickyBomb.OnAttach(damageable, champion);
+            stickyBomb.OnAttach(damageable, this.champion);
         }
 
         private void OnApplicationQuit() {
-            champion.OnBulletHit -= Use;
+            this.champion.OnBulletHit -= Use;
         }
     }
 }

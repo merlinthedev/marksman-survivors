@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Entities;
+﻿using _Scripts.Entities;
+using System.Collections.Generic;
 
-namespace BuffsDebuffs {
+namespace _Scripts.BuffsDebuffs {
     public interface IDebuffable : IDamageable {
         List<Debuff> Debuffs { get; }
         void ApplyDebuff(Debuff debuff);

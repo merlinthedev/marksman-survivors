@@ -1,7 +1,7 @@
-﻿using EventBus;
-using Logger = Util.Logger;
+﻿using _Scripts.EventBus;
+using Logger = _Scripts.Util.Logger;
 
-namespace Champions {
+namespace _Scripts.Champions {
     public class ChampionLevelManager {
         private Champion champion;
         private int currentLevel;

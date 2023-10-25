@@ -1,8 +1,8 @@
-﻿using Champions;
-using Entities;
+﻿using _Scripts.Champions;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public class BasicEnemy : Enemy {
         protected override void Move() {
             Vector3 direction = currentTarget.GetTransform().position - transform.position;
@@ -12,7 +12,7 @@ namespace Enemies {
                 return;
             }
 
-            rigidbody.velocity = direction.normalized * movementSpeed;
+            this.rigidbody.velocity = direction.normalized * this.movementSpeed;
         }
 
         public override void DealDamage(IDamageable damageable, float damage, Champion.DamageType damageType,
@@ -35,18 +35,18 @@ namespace Enemies {
         }
 
         private void Collision(Collider other) {
-            if (isDead || !canAttack) return;
+            if (isDead || !this.canAttack) return;
 
             Champion champion = other.gameObject.GetComponent<Champion>();
             if (champion == null) {
                 return;
             }
 
-            if (Time.time > lastAttackTime + attackCooldown) {
+            if (Time.time > this.lastAttackTime + this.attackCooldown) {
                 // champion.TakeFlatDamage(damage);
                 // Logger.Log("Dealing damage", this);
-                DealDamage(champion, damage, Champion.DamageType.BASIC);
-                lastAttackTime = Time.time;
+                DealDamage(champion, this.damage, Champion.DamageType.BASIC);
+                this.lastAttackTime = Time.time;
             }
         }
     }

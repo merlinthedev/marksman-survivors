@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Util {
+namespace _Scripts.Util {
     public static class Logger {
         private static readonly bool shouldLog = true;
         public static List<Object> excludedContexts = new();

@@ -1,8 +1,8 @@
-﻿using BuffsDebuffs;
-using Entities;
+﻿using _Scripts.BuffsDebuffs;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Entities {
+namespace _Scripts.Champions.Kitegirl.Entities {
     public class KitegirlSlowArea : MonoBehaviour {
         private Kitegirl kitegirl;
 

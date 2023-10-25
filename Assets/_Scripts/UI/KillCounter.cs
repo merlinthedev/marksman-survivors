@@ -1,8 +1,8 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 using TMPro;
 using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class KillCounter : MonoBehaviour {
         [SerializeField] private TMP_Text killCounterText;
 

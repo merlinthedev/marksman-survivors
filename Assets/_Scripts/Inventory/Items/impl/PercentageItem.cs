@@ -1,7 +1,7 @@
-﻿using Champions;
+﻿using _Scripts.Champions;
 using UnityEngine;
 
-namespace Inventory.Items.impl {
+namespace _Scripts.Inventory.Items.impl {
     public class PercentageItem : Item {
         [SerializeField] private float percentage;
         [SerializeField] private Statistic statistic;

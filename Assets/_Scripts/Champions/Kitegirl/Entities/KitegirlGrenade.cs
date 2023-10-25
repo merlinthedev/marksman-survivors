@@ -1,13 +1,13 @@
+using _Scripts.BuffsDebuffs;
+using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Core;
+using _Scripts.Enemies;
+using _Scripts.Entities;
+using _Scripts.Util;
 using System.Collections.Generic;
-using BuffsDebuffs;
-using BuffsDebuffs.Stacks;
-using Core;
-using Enemies;
-using Entities;
 using UnityEngine;
-using Util;
 
-namespace Champions.Kitegirl.Entities {
+namespace _Scripts.Champions.Kitegirl.Entities {
     public class KitegirlGrenade : MonoBehaviour, IThrowable, IDamageable {
         private Vector3 targetPoint;
 

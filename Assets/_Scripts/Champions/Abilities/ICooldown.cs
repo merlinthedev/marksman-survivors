@@ -1,4 +1,4 @@
-﻿namespace Champions.Abilities {
+﻿namespace _Scripts.Champions.Abilities {
     public interface ICooldown {
         public bool ShouldTick { get; }
         public void Tick(float deltaTime);

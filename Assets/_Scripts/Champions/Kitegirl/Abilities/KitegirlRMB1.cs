@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Champions.Abilities;
-using Champions.Kitegirl.Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Kitegirl.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace _Scripts.Champions.Kitegirl.Abilities {
     public class KitegirlRMB1 : Ability {
         [SerializeField] private KitegirlSlowArea m_KitegirlSlowAreaPrefab;
 
@@ -27,7 +26,7 @@ namespace Champions.Kitegirl.Abilities {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, float.MaxValue, layer)) {
                 Vector3 point = hit.point;
-                point.y = champion.transform.position.y;
+                point.y = this.champion.transform.position.y;
 
                 mousePosition = point;
             }
@@ -40,7 +39,7 @@ namespace Champions.Kitegirl.Abilities {
             }
 
             // get the global angle of the direction from the champion to the mouse position
-            Vector3 mouseToChampionDirection = mousePosition - champion.transform.position;
+            Vector3 mouseToChampionDirection = mousePosition - this.champion.transform.position;
             float mouseToChampionAngle = Vector3.SignedAngle(Vector3.forward, mouseToChampionDirection, Vector3.up);
 
 
@@ -52,11 +51,11 @@ namespace Champions.Kitegirl.Abilities {
             //    Quaternion.Euler(0, mouseToChampionAngle - 90, 0));
 
             KitegirlSlowArea kitegirlSlowArea = Instantiate(m_KitegirlSlowAreaPrefab,
-                champion.transform.position + mouseToChampionDirection.normalized *
+                this.champion.transform.position + mouseToChampionDirection.normalized *
                 m_KitegirlSlowAreaPrefab.transform.localScale.x,
                 Quaternion.Euler(90, mouseToChampionAngle, 0));
 
-            kitegirlSlowArea.OnThrow(champion as Kitegirl);
+            kitegirlSlowArea.OnThrow(this.champion as Kitegirl);
             kitegirlSlowArea.SetLifespan(lifespan);
             kitegirlSlowArea.SetSlowDuration(slowDuration);
             kitegirlSlowArea.SetSlowPercentage(slowPercentage);

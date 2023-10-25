@@ -1,12 +1,8 @@
-using System;
-using Champions;
-using System.Collections.Generic;
-using Champions.Abilities;
-using Core;
+using _Scripts.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UICooldowns : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Image lmbCooldown;

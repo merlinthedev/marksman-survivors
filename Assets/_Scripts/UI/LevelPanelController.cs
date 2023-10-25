@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Abilities.Upgrades;
+using _Scripts.EventBus;
+using System.Collections.Generic;
 using System.Linq;
-using Champions.Abilities;
-using Champions.Abilities.Upgrades;
-using EventBus;
 using TMPro;
 using UnityEngine;
-using Logger = Util.Logger;
+using Logger = _Scripts.Util.Logger;
 
-namespace UI {
+namespace _Scripts.UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
 

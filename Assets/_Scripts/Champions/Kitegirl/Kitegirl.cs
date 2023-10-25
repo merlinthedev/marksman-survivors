@@ -1,39 +1,24 @@
-﻿using System;
-using System.Collections;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Kitegirl.Entities;
+using _Scripts.Core;
+using _Scripts.Entities;
+using _Scripts.EventBus;
+using _Scripts.Util;
 using System.Collections.Generic;
-using System.Linq;
-using BuffsDebuffs;
-using Champions.Abilities;
-using Champions.Kitegirl.Entities;
-using Core;
-using Entities;
-using EventBus;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Util;
-using Stack = BuffsDebuffs.Stacks.Stack;
+using Stack = _Scripts.BuffsDebuffs.Stacks.Stack;
 
-namespace Champions.Kitegirl {
+namespace _Scripts.Champions.Kitegirl {
     public class Kitegirl : Champion {
         [SerializeField] private KitegirlBullet bulletPrefab;
         [SerializeField] private Champion_AnimationController animationController;
 
-        private bool autoAttackShouldChain = false;
-        private bool hasUltimateActive = false;
         private bool attackShouldApplyDeftness = false;
 
-        private int recurseCount = 0;
-        private int maxRecurseCount = 0;
-
-        [SerializeField] private int maxChainCount = 3;
-
-        private int currentChainCount = 0;
-
-
         public override void OnAutoAttack(IDamageable damageable) {
-            if (isCasting) return;
+            if (this.isCasting) return;
             if (!CanAttack) {
-                if (!isAutoAttacking) {
+                if (!this.isAutoAttacking) {
                     // Queue the clicked target for our next attack
                     currentTarget = damageable;
                     // Stop moving towards the previous mouse hitpoint
@@ -43,8 +28,8 @@ namespace Champions.Kitegirl {
                 return;
             }
 
-            mouseHitPoint = Vector3.zero;
-            lastAttackTime = Time.time;
+            this.mouseHitPoint = Vector3.zero;
+            this.lastAttackTime = Time.time;
             Vector3 dir = damageable.GetTransform().position - transform.position;
             currentTarget = damageable;
 
@@ -56,7 +41,7 @@ namespace Champions.Kitegirl {
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             SetLastAttackDirection(dir.normalized);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
-            rigidbody.velocity = Vector3.zero;
+            this.rigidbody.velocity = Vector3.zero;
 
             if (attackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
@@ -69,28 +54,10 @@ namespace Champions.Kitegirl {
 
 
             animationController.Attack();
-            isAutoAttacking = true;
+            this.isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
         }
 
-        public void ActivateUltimate(float duration, float burstAmount, float slowAmount) {
-            hasUltimateActive = true;
-            maxRecurseCount = (int)burstAmount;
-            ApplyDebuff(Debuff.CreateDebuff(this, this, Debuff.DebuffType.SLOW, duration, slowAmount));
-        }
-
-        public void DeactivateUltimate() {
-            hasUltimateActive = false;
-        }
-
-        [Obsolete("Not in use anymore.")]
-        public void TryReduceECooldown() {
-            // Ability kitegirlE = abilities.Find(ability => ability.GetKeyCode() == KeyCode.E);
-            // if (kitegirlE == null) return;
-            // if (kitegirlE.IsOnCooldown()) {
-            //     kitegirlE.DeductFromCooldown(kitegirlE.GetAbilityCooldown() * 0.02f); // 2% of cooldown 
-            // }
-        }
 
         public void SmokeScreenPushBack(float force, float yForceOffset, Vector3 mousePosition) {
             // take the direction from the mouse position to the champion
@@ -102,7 +69,7 @@ namespace Champions.Kitegirl {
 
             // Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
 
-            rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
+            this.rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
         }
 
 
@@ -126,7 +93,7 @@ namespace Champions.Kitegirl {
 
         private void Start() {
             base.Start();
-            foreach (Ability ability in abilities) {
+            foreach (Ability ability in this.abilities) {
                 ability.Hook(this);
             }
 
@@ -184,12 +151,7 @@ namespace Champions.Kitegirl {
             bouncingBullet.SetTarget(targets[index]);
         }
 
-        public void SetAutoAttackChain(bool b) {
-            autoAttackShouldChain = b;
-        }
-
         public Champion_AnimationController GetAnimator() => animationController;
-
 
         public void SetAttackDeftnessApply(bool value) {
             attackShouldApplyDeftness = value;
@@ -197,11 +159,8 @@ namespace Champions.Kitegirl {
 
         public void EnableStuffAfterAttack() {
             // Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
-            isAutoAttacking = false;
+            this.isAutoAttacking = false;
         }
 
-        public bool HasUltimateActive() {
-            return hasUltimateActive;
-        }
     }
 }

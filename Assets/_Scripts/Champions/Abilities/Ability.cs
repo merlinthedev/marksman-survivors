@@ -1,12 +1,11 @@
-﻿using System;
+﻿using _Scripts.Champions.Abilities.Upgrades;
+using _Scripts.EventBus;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Champions.Abilities.Upgrades;
-using EventBus;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
-namespace Champions.Abilities {
+namespace _Scripts.Champions.Abilities {
     public abstract class Ability : MonoBehaviour, IUpgradeable, ICooldown {
         [SerializeField] private float abilityCooldown; // Static cooldown in seconds, should not be edited
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on

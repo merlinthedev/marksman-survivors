@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Util {
+namespace _Scripts.Util {
     public class LookAtCamera : MonoBehaviour {
         [SerializeField] private Transform target;
         [SerializeField] private Quaternion offset;

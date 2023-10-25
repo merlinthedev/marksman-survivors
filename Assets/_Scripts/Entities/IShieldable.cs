@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Entities {
+namespace _Scripts.Entities {
     public interface IShieldable {
         float ShieldAmount { get; set; }
         float ShieldLifetime { get; set; }

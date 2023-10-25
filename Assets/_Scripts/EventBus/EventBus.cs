@@ -1,16 +1,16 @@
-﻿using System;
+﻿using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Abilities.Upgrades;
+using _Scripts.Core;
+using _Scripts.Enemies;
+using _Scripts.Interactable.NPC;
+using _Scripts.Inventory.Items;
+using System;
 using System.Collections.Generic;
-using Champions.Abilities;
 using UnityEngine;
-using BuffsDebuffs.Stacks;
-using Champions.Abilities.Upgrades;
-using Core;
-using Enemies;
-using Interactable.NPC;
-using Inventory.Items;
 using UnityEngine.UI;
 
-namespace EventBus {
+namespace _Scripts.EventBus {
     public abstract class EventBus<T> where T : Event {
         private static event Action<T> onEventRaised;
 

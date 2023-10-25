@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Champions;
-using Core;
+﻿using _Scripts.Champions;
+using _Scripts.Core;
+using _Scripts.Util;
+using System.Collections.Generic;
 using UnityEngine;
-using Util;
 
-namespace Entities {
+namespace _Scripts.Entities {
     public class StickyBomb : MonoBehaviour, IAttachable {
         private IDamager source;
         private IDamageable damageable;

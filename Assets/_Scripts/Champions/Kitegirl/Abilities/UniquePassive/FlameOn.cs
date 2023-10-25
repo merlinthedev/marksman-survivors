@@ -1,7 +1,7 @@
-﻿using Champions.Abilities;
+﻿using _Scripts.Champions.Abilities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.UniquePassive {
+namespace _Scripts.Champions.Kitegirl.Abilities.UniquePassive {
     public class FlameOn : Ability {
         [SerializeField] private float flameChance = 0.1f;
         [SerializeField] private AbilityType abilityType;

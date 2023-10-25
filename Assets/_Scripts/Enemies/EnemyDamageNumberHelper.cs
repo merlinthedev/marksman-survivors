@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public class EnemyDamageNumberHelper : MonoBehaviour {
         [SerializeField] private TMP_Text m_DamageText;
         private bool m_ShouldMove = false;

@@ -1,4 +1,4 @@
-﻿namespace Champions.Abilities.Upgrades {
+﻿namespace _Scripts.Champions.Abilities.Upgrades {
     public interface IUpgradeable {
         void OnUpgrade(Upgrade upgrade);
     }

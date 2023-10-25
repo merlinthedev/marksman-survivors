@@ -1,9 +1,9 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIUpgradeComponent : MonoBehaviour, ILevelPanelComponent {
         [SerializeField] private Image bannerImage;
         [SerializeField] private Button button;

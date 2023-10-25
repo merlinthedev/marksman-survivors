@@ -1,7 +1,7 @@
-﻿using Core;
+﻿using _Scripts.Core;
 using UnityEngine;
 
-namespace Entities {
+namespace _Scripts.Entities {
     public class TargetProjectile : Projectile {
         private IDamageable target;
 

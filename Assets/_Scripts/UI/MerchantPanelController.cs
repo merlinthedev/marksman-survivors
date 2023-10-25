@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using EventBus;
-using Interactable.NPC;
-using Inventory.Items;
+﻿using _Scripts.EventBus;
+using _Scripts.Interactable.NPC;
+using _Scripts.Inventory.Items;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class MerchantPanelController : MonoBehaviour {
         [SerializeField] private UIMerchantPanelItem merchantPanelItemPrefab;
         [SerializeField] private GameObject mainPanel;

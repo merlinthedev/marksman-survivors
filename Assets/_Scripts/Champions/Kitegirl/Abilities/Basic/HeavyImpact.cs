@@ -1,9 +1,9 @@
-using Champions.Abilities;
-using Core;
-using Entities;
+using _Scripts.Champions.Abilities;
+using _Scripts.Core;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Basic {
+namespace _Scripts.Champions.Kitegirl.Abilities.Basic {
     public class HeavyImpact : Ability {
         [SerializeField] private float damagePercentage = 0.33f;
         [SerializeField] private float coneAngle = 20f;
@@ -17,7 +17,7 @@ namespace Champions.Kitegirl.Abilities.Basic {
 
         private void Use(IDamageable damageable) {
             Vector3 damageablePosition = damageable.GetTransform().position;
-            Vector3 championShootDirection = champion.GetLastAttackDirection();
+            Vector3 championShootDirection = this.champion.GetLastAttackDirection();
 
             // get the direction into where we should find our triangle points
             Vector3 rightDirection = Quaternion.Euler(0, -coneAngle, 0) * championShootDirection;
@@ -36,10 +36,10 @@ namespace Champions.Kitegirl.Abilities.Basic {
                 .GetDamageablesInCone(damageablePosition, leftPoint, rightPoint, damageable);
 
             damageablesInCone.ForEach(d => {
-                champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage, Champion.DamageType.BASIC);
+                this.champion.DealDamage(d, this.champion.GetAttackDamage() * damagePercentage, Champion.DamageType.BASIC);
             });
             //Instantiate vfx
-            Vector3 dir = damageablePosition - champion.GetTransform().position;
+            Vector3 dir = damageablePosition - this.champion.GetTransform().position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
             
             ParticleSystem effect = Instantiate(vfx, damageablePosition, Quaternion.Euler(90, angle - 45, 0));
@@ -50,7 +50,7 @@ namespace Champions.Kitegirl.Abilities.Basic {
         }
 
         private void OnApplicationQuit() {
-            champion.OnBulletHit -= Use;
+            this.champion.OnBulletHit -= Use;
         }
     }
 }

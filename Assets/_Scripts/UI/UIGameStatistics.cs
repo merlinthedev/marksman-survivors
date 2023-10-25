@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIGameStatistics : MonoBehaviour {
         [SerializeField] private TMP_Text kills;
         [SerializeField] private TMP_Text gold;

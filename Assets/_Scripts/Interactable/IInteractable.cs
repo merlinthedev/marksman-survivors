@@ -1,4 +1,4 @@
-﻿namespace Interactable {
+﻿namespace _Scripts.Interactable {
     public interface IInteractable {
         void OnInteract();
     }

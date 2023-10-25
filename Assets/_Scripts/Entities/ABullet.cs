@@ -1,7 +1,7 @@
-﻿using Champions;
+﻿using _Scripts.Champions;
 using UnityEngine;
 
-namespace Entities {
+namespace _Scripts.Entities {
     public abstract class ABullet : MonoBehaviour {
         protected IDamager sourceEntity;
         protected IDamageable targetEntity;

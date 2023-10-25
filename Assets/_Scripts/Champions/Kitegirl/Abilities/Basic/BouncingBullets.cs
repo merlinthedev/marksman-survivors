@@ -1,8 +1,8 @@
-﻿using Champions.Abilities;
-using Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Basic {
+namespace _Scripts.Champions.Kitegirl.Abilities.Basic {
     public class BouncingBullets : Ability {
         [SerializeField] private float timeBetweenBounces = 0.3f;
         [SerializeField] private int bounces = 2;
@@ -13,12 +13,12 @@ namespace Champions.Kitegirl.Abilities.Basic {
         }
 
         private void Use(IDamageable damageable) {
-            (champion as Kitegirl)?.Bounce(bounces, timeBetweenBounces, damageable);
+            (this.champion as Kitegirl)?.Bounce(bounces, timeBetweenBounces, damageable);
         }
         
 
         private void OnApplicationQuit() {
-            champion.OnBulletHit -= Use;
+            this.champion.OnBulletHit -= Use;
         }
         
         

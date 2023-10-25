@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.Singleton {
+namespace _Scripts.Core.Singleton {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
 
         private static T instance;

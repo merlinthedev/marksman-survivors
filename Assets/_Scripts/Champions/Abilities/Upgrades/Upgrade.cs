@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using Logger = Util.Logger;
+using Logger = _Scripts.Util.Logger;
 
-namespace Champions.Abilities.Upgrades {
+namespace _Scripts.Champions.Abilities.Upgrades {
     public class Upgrade : MonoBehaviour {
         [SerializeField] private Sprite upgradeBannerImage;
         private bool unlocked = false;

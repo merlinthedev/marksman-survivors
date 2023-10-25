@@ -1,9 +1,9 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIResourceBars : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Image healthBar;

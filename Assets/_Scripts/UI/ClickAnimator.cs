@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class ClickAnimator : MonoBehaviour {
         [SerializeField] private GameObject circlePrefab;
 

@@ -1,8 +1,8 @@
+using _Scripts.EventBus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EventBus;
 
 public class Coin : MonoBehaviour {
     [SerializeField] private int amount = 1;

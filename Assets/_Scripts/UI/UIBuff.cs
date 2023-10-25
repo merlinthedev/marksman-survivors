@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIBuff : MonoBehaviour {
         public TMPro.TMP_Text text;
         public int stacks = 0;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Champions.Abilities {
+namespace _Scripts.Champions.Abilities {
     [Serializable]
     public class AbilityHolder : MonoBehaviour {
         [SerializeField] protected List<Ability> abilities = new List<Ability>();

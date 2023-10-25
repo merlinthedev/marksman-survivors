@@ -1,8 +1,7 @@
-﻿using System;
-using Champions.Abilities;
+﻿using _Scripts.Champions.Abilities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.UniquePassive {
+namespace _Scripts.Champions.Kitegirl.Abilities.UniquePassive {
     public class RhythmOfBattle : Ability {
         [SerializeField] private float RhythmActivationTime = 5f;
 
@@ -16,11 +15,11 @@ namespace Champions.Kitegirl.Abilities.UniquePassive {
         private void Use(Ability ability) {
             if (ability.abilityType == AbilityType.BASIC) return;
 
-            champion.LastNonBasicAbilityCastTime = Time.time;
+            this.champion.LastNonBasicAbilityCastTime = Time.time;
         }
 
         private void OnApplicationQuit() {
-            champion.OnAbilityUsed -= Use;
+            this.champion.OnAbilityUsed -= Use;
         }
     }
 }

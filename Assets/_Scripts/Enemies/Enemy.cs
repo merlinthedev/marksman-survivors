@@ -1,16 +1,16 @@
+using _Scripts.BuffsDebuffs;
+using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Champions;
+using _Scripts.Entities;
+using _Scripts.EventBus;
+using _Scripts.Util;
 using System;
 using System.Collections.Generic;
-using BuffsDebuffs;
-using BuffsDebuffs.Stacks;
-using Champions;
-using Entities;
-using EventBus;
 using UnityEngine;
 using UnityEngine.UI;
-using Util;
 using Random = UnityEngine.Random;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public abstract class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
         [Header("RIGIDBODY & COLLIDER")]
         [SerializeField] protected Rigidbody rigidbody;

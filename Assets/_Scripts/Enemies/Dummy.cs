@@ -1,10 +1,8 @@
-﻿using Champions;
-using Core;
-using Entities;
-using Unity.VisualScripting;
+﻿using _Scripts.Champions;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public class Dummy : Enemy {
         protected override void Move() { }
 

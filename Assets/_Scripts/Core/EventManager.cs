@@ -1,15 +1,15 @@
-﻿using Core.Singleton;
-using EventBus;
-using Interactable.NPC;
+﻿using _Scripts.Core.Singleton;
+using _Scripts.EventBus;
+using _Scripts.Interactable.NPC;
+using _Scripts.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Util;
-using Logger = Util.Logger;
+using Logger = _Scripts.Util.Logger;
 using Random = UnityEngine.Random;
 
-namespace Core {
+namespace _Scripts.Core {
     public class EventManager : Singleton<EventManager> {
 
         private List<Merchant> activeMerchants = new();

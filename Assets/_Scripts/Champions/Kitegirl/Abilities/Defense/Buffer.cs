@@ -1,9 +1,8 @@
-﻿using Champions.Abilities;
-using Champions.Effects;
-using Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Effects;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Defense {
+namespace _Scripts.Champions.Kitegirl.Abilities.Defense {
     public class Buffer : Ability {
         [SerializeField] private float shieldAmount = 1f;
         [SerializeField] private float shieldLifetime = 30f;

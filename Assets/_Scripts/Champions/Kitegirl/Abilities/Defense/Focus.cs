@@ -1,10 +1,10 @@
-﻿using BuffsDebuffs.Stacks;
-using Champions.Abilities;
-using Champions.Effects;
-using Champions.Effects.impl;
+﻿using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Effects;
+using _Scripts.Champions.Effects.impl;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Defense {
+namespace _Scripts.Champions.Kitegirl.Abilities.Defense {
     public class Focus : Ability {
         [SerializeField] private int stacksToAdd = 1;
         [SerializeField] private Effect effect;

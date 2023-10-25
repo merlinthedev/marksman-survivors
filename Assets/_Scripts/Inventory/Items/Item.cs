@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Inventory.Items {
+namespace _Scripts.Inventory.Items {
     public abstract class Item : MonoBehaviour {
         [SerializeField] private string name;
         [SerializeField] private int price;

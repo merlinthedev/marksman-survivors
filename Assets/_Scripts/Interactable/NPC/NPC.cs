@@ -1,9 +1,9 @@
-﻿using Core;
+﻿using _Scripts.Core;
+using _Scripts.EventBus;
 using System.Collections.Generic;
-using EventBus;
 using UnityEngine;
 
-namespace Interactable.NPC {
+namespace _Scripts.Interactable.NPC {
     public abstract class NPC : MonoBehaviour {
         private void OnMouseEnter() {
             EventBus<InteractableStartHoverEvent>.Raise(new InteractableStartHoverEvent());

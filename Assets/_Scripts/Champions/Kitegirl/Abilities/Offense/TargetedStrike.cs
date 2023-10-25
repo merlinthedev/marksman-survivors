@@ -1,10 +1,9 @@
-﻿using Champions.Abilities;
-using Champions.Kitegirl.Entities;
-using Enemies;
-using Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Enemies;
+using _Scripts.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Offense {
+namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
     public class TargetedStrike : Ability, ICastable {
         [field: SerializeField] public float CastTime { get; set; }
         [SerializeField] private TargetProjectile bulletPrefab;
@@ -29,7 +28,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
         private void Use() {
             this.champion.SetIsCasting(false);
 
-            Vector3 direction = enemy.transform.position - champion.transform.position;
+            Vector3 direction = enemy.transform.position - this.champion.transform.position;
             direction.Normalize();
 
             angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
@@ -52,10 +51,10 @@ namespace Champions.Kitegirl.Abilities.Offense {
 
 
         public void Cast() {
-            (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
-            champion.SetGlobalDirectionAngle(angle);
-            champion.Stop();
-            champion.SetIsCasting(true);
+            (this.champion as Kitegirl)?.GetAnimator().SetDirection(angle);
+            this.champion.SetGlobalDirectionAngle(angle);
+            this.champion.Stop();
+            this.champion.SetIsCasting(true);
 
             enemy = (Enemy)Player.GetInstance().GetCurrentHoverEntity();
 

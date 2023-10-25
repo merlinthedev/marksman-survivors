@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using _Scripts;
+using _Scripts.Champions.Abilities;
+using _Scripts.Core;
+using _Scripts.Enemies;
+using _Scripts.EventBus;
+using _Scripts.Util;
+using System.Collections.Generic;
 using UnityEngine;
-using Core;
-using static BuffsDebuffs.Stacks.Stack;
-using Util;
-using Champions.Abilities;
-using Enemies;
-using EventBus;
+using static _Scripts.BuffsDebuffs.Stacks.Stack;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Logger = _Scripts.Util.Logger;
 
 public class Bamischijf : MonoBehaviour {
     bool enemiesShouldSpawn = true;
@@ -63,7 +65,7 @@ public class Bamischijf : MonoBehaviour {
 
     public void ToggleEnemySpawn() {
         enemiesShouldSpawn = !enemiesShouldSpawn;
-        Util.Logger.Log("enemies should spawn: " + enemiesShouldSpawn, Util.Logger.Color.YELLOW, this);
+        Logger.Log("enemies should spawn: " + enemiesShouldSpawn, Logger.Color.YELLOW, this);
         EnemyManager.GetInstance().SetShouldSpawn(!EnemyManager.GetInstance().GetShouldSpawn());
     }
 

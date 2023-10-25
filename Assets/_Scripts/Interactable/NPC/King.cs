@@ -1,10 +1,10 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 
-namespace Interactable.NPC {
+namespace _Scripts.Interactable.NPC {
     public class King : NPC, IInteractable {
         public void OnInteract() {
             // Debug.Log("Interacting with King");
-            EventBus<StartDialogueEvent>.Raise(new StartDialogueEvent(dialogue, gameObject));
+            EventBus<StartDialogueEvent>.Raise(new StartDialogueEvent(this.dialogue, gameObject));
         }
 
         public override void OnEndDialogue() {

@@ -1,10 +1,10 @@
-﻿using EventBus;
-using Interactable.NPC;
+﻿using _Scripts.EventBus;
+using _Scripts.Interactable.NPC;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Core {
+namespace _Scripts.Core {
     [System.Serializable]
     public class Dialogue {
         public string title;

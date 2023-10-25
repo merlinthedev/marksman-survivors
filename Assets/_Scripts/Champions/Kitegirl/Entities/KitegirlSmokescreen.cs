@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using BuffsDebuffs;
-using BuffsDebuffs.Stacks;
-using Enemies;
+﻿using _Scripts.BuffsDebuffs;
+using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Enemies;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Champions.Kitegirl.Entities {
+namespace _Scripts.Champions.Kitegirl.Entities {
     public class KitegirlSmokescreen : MonoBehaviour {
         private Kitegirl kitegirl;
 

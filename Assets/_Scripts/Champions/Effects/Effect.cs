@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Champions.Effects {
+namespace _Scripts.Champions.Effects {
     public abstract class Effect : MonoBehaviour {
         protected Champion champion;
 

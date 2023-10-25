@@ -1,8 +1,8 @@
-﻿using Champions.Effects;
+﻿using _Scripts.Champions.Effects;
 using System;
 using UnityEngine;
 
-namespace BuffsDebuffs.Stacks {
+namespace _Scripts.BuffsDebuffs.Stacks {
     public class Stack {
         private StackType stackType;
         private float lifeTime = 10f;

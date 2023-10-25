@@ -1,10 +1,10 @@
-﻿using EventBus;
-using Inventory.Items;
+﻿using _Scripts.EventBus;
+using _Scripts.Inventory.Items;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UIMerchantPanelItem : MonoBehaviour {
         [SerializeField] private Image panelImage;
         [SerializeField] private TMP_Text panelText;

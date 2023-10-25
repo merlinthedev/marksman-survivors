@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Inventory.Items.impl {
+namespace _Scripts.Inventory.Items.impl {
     public class TimerItem : Item {
         [SerializeField] private float interval;
         [SerializeField] private int amountOfIntervals;

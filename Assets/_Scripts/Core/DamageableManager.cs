@@ -1,12 +1,12 @@
-﻿using Core.Singleton;
-using Entities;
-using EventBus;
+﻿using _Scripts.Core.Singleton;
+using _Scripts.Entities;
+using _Scripts.EventBus;
+using _Scripts.Util;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Util;
 
-namespace Core {
+namespace _Scripts.Core {
     public class DamageableManager : Singleton<DamageableManager> {
         private readonly Dictionary<Collider, IDamageable> damageables = new();
 

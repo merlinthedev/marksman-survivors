@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using EventBus;
+﻿using _Scripts.EventBus;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Champions.Abilities {
+namespace _Scripts.Champions.Abilities {
     /// <summary>
     /// Class that takes care of ticking cooldowns for us. 
     /// </summary>

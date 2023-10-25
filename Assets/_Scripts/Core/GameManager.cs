@@ -1,7 +1,7 @@
-﻿using Core.Singleton;
-using EventBus;
+﻿using _Scripts.Core.Singleton;
+using _Scripts.EventBus;
 
-namespace Core {
+namespace _Scripts.Core {
     public class GameManager : Singleton<GameManager> {
         public bool Paused;
 

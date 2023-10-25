@@ -1,9 +1,9 @@
-﻿using Champions.Abilities;
-using Champions.Kitegirl.Entities;
-using Core;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Kitegirl.Entities;
+using _Scripts.Core;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities.Offense {
+namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
     public class ViciousGrenade : Ability {
         [SerializeField] private KitegirlGrenade grenadePrefab;
 
@@ -29,7 +29,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
                                     this.champion.transform.position.z),
                                 grenadePrefab.transform.rotation);
                         grenade.SetDamage(this.champion.GetAttackDamage() * attackDamageRatio);
-                        grenade.OnThrow(new Vector3(point.x, 0.5f, point.z), champion);
+                        grenade.OnThrow(new Vector3(point.x, 0.5f, point.z), this.champion);
 
                         DamageableManager.GetInstance().AddDamageable(grenade.GetComponent<Collider>(), grenade);
 

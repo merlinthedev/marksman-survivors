@@ -1,8 +1,8 @@
-﻿using Champions.Abilities;
-using Champions.Kitegirl.Entities;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Kitegirl.Entities;
 using UnityEngine;
 
-namespace Champions.Kitegirl.Abilities {
+namespace _Scripts.Champions.Kitegirl.Abilities {
     public class KitegirlE2 : Ability {
         [SerializeField] private KitegirlSmokescreen smokescreenPrefab = null;
         [SerializeField] private float dashRange = 3f;
@@ -30,11 +30,11 @@ namespace Champions.Kitegirl.Abilities {
 
             // TODO: Spawn smokescreen
             KitegirlSmokescreen kitegirlSmokescreen = Instantiate(smokescreenPrefab,
-                new Vector3(champion.transform.position.x, 0f, champion.transform.position.z), Quaternion.Euler(90, 0 ,0));
-            kitegirlSmokescreen.OnThrow(champion as Kitegirl);
+                new Vector3(this.champion.transform.position.x, 0f, this.champion.transform.position.z), Quaternion.Euler(90, 0 ,0));
+            kitegirlSmokescreen.OnThrow(this.champion as Kitegirl);
 
-            champion.Stop();
-            (champion as Kitegirl)?.SmokeScreenPushBack(dashRange, yForceOffset,
+            this.champion.Stop();
+            (this.champion as Kitegirl)?.SmokeScreenPushBack(dashRange, yForceOffset,
                 mousePosition);
 
             base.OnUse();

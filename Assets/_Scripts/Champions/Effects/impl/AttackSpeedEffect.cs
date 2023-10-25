@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Champions.Effects.impl {
+namespace _Scripts.Champions.Effects.impl {
     public class AttackSpeedEffect : Effect {
         [SerializeField] private float attackSpeedMultiplier = 1.1f;
 

@@ -1,20 +1,19 @@
-﻿using System;
+﻿using _Scripts.BuffsDebuffs;
+using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Champions.Abilities;
+using _Scripts.Champions.Effects;
+using _Scripts.Enemies;
+using _Scripts.Entities;
+using _Scripts.EventBus;
+using _Scripts.Util;
+using System;
 using System.Collections.Generic;
-using BuffsDebuffs;
-using BuffsDebuffs.Stacks;
-using Champions.Abilities;
-using Champions.Effects;
-using Enemies;
-using Entities;
-using EventBus;
-using Unity.Properties;
 using UnityEngine;
-using Util;
 using Debug = UnityEngine.Debug;
-using Logger = Util.Logger;
+using Logger = _Scripts.Util.Logger;
 using Random = UnityEngine.Random;
 
-namespace Champions {
+namespace _Scripts.Champions {
     public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity, IShieldable {
 
         #region Properties
@@ -684,7 +683,7 @@ namespace Champions {
             Ability abilty = e.Ability;
             Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
             // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
-            abilities.Add(abilty);
+            this.abilities.Add(abilty);
             abilty.Hook(this);
         }
 

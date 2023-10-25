@@ -1,9 +1,9 @@
-﻿using EventBus;
+﻿using _Scripts.EventBus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace _Scripts.UI {
     public class UILevelUpComponent : MonoBehaviour, ILevelPanelComponent {
         [SerializeField] private TMP_Text abilityText;
 

@@ -1,9 +1,9 @@
-﻿using System;
-using Champions;
-using Core;
+﻿using _Scripts.Champions;
+using _Scripts.Core;
+using System;
 using UnityEngine;
 
-namespace Entities {
+namespace _Scripts.Entities {
     public class Projectile : MonoBehaviour {
         [SerializeField] protected float projectileSpeed = 0;
         private event Action<IDamageable> OnHit;

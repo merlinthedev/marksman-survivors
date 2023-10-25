@@ -1,16 +1,16 @@
-﻿using System;
+﻿using _Scripts.Champions.Abilities;
+using _Scripts.Core.Singleton;
+using _Scripts.EventBus;
+using _Scripts.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Champions.Abilities;
-using Core.Singleton;
-using EventBus;
 using UnityEngine;
-using Util;
-using Logger = Util.Logger;
+using Logger = _Scripts.Util.Logger;
 using Random = UnityEngine.Random;
 
-namespace Enemies {
+namespace _Scripts.Enemies {
     public class EnemyManager : Singleton<EnemyManager> {
         [SerializeField] private bool IWANTTOSPAWN = true;
         [SerializeField] private Player player; // THIS IS BAD LETS NOT DO THIS

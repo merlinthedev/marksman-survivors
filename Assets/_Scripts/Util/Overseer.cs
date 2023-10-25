@@ -1,11 +1,10 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 
-
-namespace Util {
+namespace _Scripts.Util {
     public class Overseer<TKey, TValue> : Dictionary<TKey, TValue> {
         public Overseer() { }
 

@@ -1,9 +1,9 @@
-﻿using BuffsDebuffs.Stacks;
-using Champions.Abilities;
+﻿using _Scripts.BuffsDebuffs.Stacks;
+using _Scripts.Champions.Abilities;
+using _Scripts.Util;
 using UnityEngine;
-using Util;
 
-namespace Champions.Kitegirl.Abilities {
+namespace _Scripts.Champions.Kitegirl.Abilities {
     public class KitegirlQ3 : Ability {
         [SerializeField] private float activeTime = 2f;
         [SerializeField] private int stacksToAdd = 1;
@@ -12,10 +12,10 @@ namespace Champions.Kitegirl.Abilities {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            (champion as Kitegirl)?.SetAttackDeftnessApply(true);
+            (this.champion as Kitegirl)?.SetAttackDeftnessApply(true);
 
-            Utilities.InvokeDelayed(() => (champion as Kitegirl)?.SetAttackDeftnessApply(false), activeTime,
-                champion);
+            Utilities.InvokeDelayed(() => (this.champion as Kitegirl)?.SetAttackDeftnessApply(false), activeTime,
+                this.champion);
 
             base.OnUse();
         }
