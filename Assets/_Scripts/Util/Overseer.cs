@@ -52,12 +52,7 @@ namespace _Scripts.Util {
         public new TValue this[TKey key] => base[key];
 
         public override string ToString() {
-            string output = "";
-            foreach (KeyValuePair<TKey, TValue> entry in this) {
-                output += entry.Key + " : " + entry.Value + "\n";
-            }
-
-            return output;
+            return this.Aggregate("", (current, entry) => current + (entry.Key + " : " + entry.Value + "\n"));
         }
     }
 }
