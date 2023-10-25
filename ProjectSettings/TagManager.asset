@@ -19,8 +19,8 @@ TagManager:
   - ChampionExclusive
   - ExcludeFromMovementClicks
   - ExcludeFromRaycast
-  - 
-  - 
+  - Enemy
+  - EnemyNoCollision
   - 
   - 
   - 
