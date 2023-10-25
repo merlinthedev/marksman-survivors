@@ -16,7 +16,7 @@ namespace Enemies {
         [SerializeField] protected Rigidbody rigidbody;
 
         [SerializeField] private Collider collider;
-        private Animator animator;
+        protected Animator animator;
         private SpriteRenderer spriteRenderer;
         private Renderer renderer;
 
@@ -67,9 +67,16 @@ namespace Enemies {
         private void Start() {
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
 
-            animator = GetComponent<Animator>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            renderer = GetComponent<Renderer>();
+            if (GetComponent<Animator>() != null) {
+                animator = GetComponent<Animator>();
+                spriteRenderer = GetComponent<SpriteRenderer>();
+                renderer = GetComponent<Renderer>();
+            }
+            else {
+                animator = GetComponentInChildren<Animator>();
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+                renderer = GetComponentInChildren<Renderer>();
+            }
             canvas = GetComponentInChildren<Canvas>();
 
             movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);

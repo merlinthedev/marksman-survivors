@@ -1999,7 +1999,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 12
+  field of view: 11
   orthographic: 0
   orthographic size: 9
   m_Depth: -1
@@ -6963,7 +6963,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1712726245}
-  dummyPrefab: {fileID: 0}
+  dummyPrefab: {fileID: -4530384888738143981, guid: f069be163fd05b9429cbfaa336b7c63f,
+    type: 3}
 --- !u!1 &1312960351
 GameObject:
   m_ObjectHideFlags: 0
@@ -8146,6 +8147,8 @@ GameObject:
   - component: {fileID: 1574137038}
   - component: {fileID: 1574137039}
   - component: {fileID: 1574137040}
+  - component: {fileID: 1574137042}
+  - component: {fileID: 1574137041}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -8180,11 +8183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IWANTTOSPAWN: 0
+  IWANTTOSPAWN: 1
   player: {fileID: 2114737657}
   enemyPrefabs:
-  - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
-  shouldSpawn: 1
+  - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
+  shouldSpawn: 0
   maxAmountOfEnemies: 30
   secondsBeforeDifficultyIncrease: 30
   spawnTimer: 7
@@ -8245,6 +8248,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c0b8661ba941e68e8fc964b6308d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!212 &1574137041
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574137034}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -266909373, guid: 6d9dd1d2918c0614389740aa8396b6ae, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.32, y: 0.48}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!95 &1574137042
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574137034}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0dbff08f02825cf438c9a0383972457d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1577065089
 GameObject:
   m_ObjectHideFlags: 0
@@ -12016,6 +12092,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
   - {fileID: -2981717535715948435, guid: 18f86365a0006c24eb4598fc4229b9ef, type: 3}
+  - {fileID: -6149129898971977744, guid: a4e9e8e57db91bf4b97c994d0f607864, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

@@ -10,7 +10,10 @@ namespace Champions.Kitegirl.Abilities.Offense {
         [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float damagePercentage = 1f;
+        [SerializeField] private float casttimeFactor = 2f;
         [SerializeField] private Projectile projectilePrefab;
+        private bool piercing = true;
+        private int maxPierce = -1;
         public float CastTime { get; set; }
 
         private Vector3 direction;
@@ -21,7 +24,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
         public override void Hook(Champion champion) {
             base.Hook(champion);
 
-            CastTime = 2f * champion.GetAttackSpeed();
+            CastTime = casttimeFactor * champion.GetAttackSpeed();
         }
 
         public override void OnUse() {
@@ -47,7 +50,7 @@ namespace Champions.Kitegirl.Abilities.Offense {
             Vector3 pos = new Vector3(champion.transform.position.x, 0.16f, champion.transform.position.z);
 
             Projectile projectile = Instantiate(projectilePrefab, pos, Quaternion.Euler(0, angle, 0));
-            projectile.Init(champion, target, OnHit, projectileSpeed, abilityRange);
+            projectile.Init(champion, target, OnHit, projectileSpeed, abilityRange, piercing);
 
             base.OnUse();
         }

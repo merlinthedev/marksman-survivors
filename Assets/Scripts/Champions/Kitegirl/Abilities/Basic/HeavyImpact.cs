@@ -43,6 +43,7 @@ namespace Champions.Kitegirl.Abilities.Basic {
             ParticleSystem effect = Instantiate(vfx, damageablePosition, Quaternion.Euler(90, angle - 45, 0));
             var main = effect.main;
             main.simulationSpeed = 5f;
+            
             damageablesInCone.ForEach(d => {
                 champion.DealDamage(d, champion.GetAttackDamage() * damagePercentage, Champion.DamageType.BASIC);
             });
