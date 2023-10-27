@@ -111,7 +111,7 @@ namespace _Scripts.Champions.Kitegirl {
 
             if (shouldBurst) {
                 Utilities.DelayedForLoop(maxBrust, 0.2f, () => {
-                    KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, angle, 0));
+                    KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
                     kitegirlBullet.SetSourceEntity(this);
                     kitegirlBullet.SetTarget(currentTarget);
                     kitegirlBullet.SetDamage(CalculateDamage());
@@ -119,7 +119,7 @@ namespace _Scripts.Champions.Kitegirl {
                     kitegirlBullet.Init(BulletHit);
                 }, this);
             } else {
-                KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, angle, 0));
+                KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
                 kitegirlBullet.SetSourceEntity(this);
                 kitegirlBullet.SetTarget(currentTarget);
                 kitegirlBullet.SetDamage(CalculateDamage());
