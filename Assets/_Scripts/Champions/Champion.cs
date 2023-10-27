@@ -354,6 +354,8 @@ namespace _Scripts.Champions {
                 Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
                 Stacks.Add(stack);
             }
+            
+            Debug.Log("Added deftness stacks");
 
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.DEFTNESS,
                 GetStackAmount(Stack.StackType.DEFTNESS), true));

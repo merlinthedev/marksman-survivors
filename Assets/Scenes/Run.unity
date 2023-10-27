@@ -12091,7 +12091,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilities:
   - {fileID: -6149129898971977744, guid: a4e9e8e57db91bf4b97c994d0f607864, type: 3}
-  - {fileID: 767245031390461950, guid: b91cafd17cec5cc4585ad165e2fa53dd, type: 3}
+  - {fileID: -3657385699758296693, guid: 722cfb11a857ace42a3366aa94d106fb, type: 3}
+  - {fileID: -2981717535715948435, guid: 18f86365a0006c24eb4598fc4229b9ef, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

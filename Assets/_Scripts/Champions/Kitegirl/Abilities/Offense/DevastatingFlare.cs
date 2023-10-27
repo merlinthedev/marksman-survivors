@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
     public class DevastatingFlare : Ability, ICastable {
-        [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float damagePercentage = 1f;
         [SerializeField] private Projectile projectilePrefab;
