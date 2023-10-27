@@ -91,6 +91,14 @@ namespace _Scripts.Champions.Kitegirl.Entities {
         public void SetDamage(float damage) {
             this.damage = damage;
         }
+        
+        public void SetDetonateTime(float detonateTime) {
+            this.detonateTime = detonateTime;
+        }
+        
+        public void SetDamageRadius(float damageRadius) {
+            this.damageRadius = damageRadius;
+        }
 
         public void TakeFlatDamage(float damage) {
             EarlyDetonate();
