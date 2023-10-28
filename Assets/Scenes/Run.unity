@@ -8186,11 +8186,12 @@ MonoBehaviour:
   IWANTTOSPAWN: 1
   player: {fileID: 2114737657}
   enemyPrefabs:
-  - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
-  shouldSpawn: 0
+  - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
+  - {fileID: 8211394154399099846, guid: 559af114f2ed50c43bdf3c14250d0860, type: 3}
+  shouldSpawn: 1
   maxAmountOfEnemies: 30
   secondsBeforeDifficultyIncrease: 30
-  spawnTimer: 7
+  spawnTimer: 3
   internalMinimumSpawnNumber: 1
   internalMaximumSpawnNumber: 3
   internalGrowthRate: 1.1
@@ -12091,7 +12092,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilities:
   - {fileID: -6149129898971977744, guid: a4e9e8e57db91bf4b97c994d0f607864, type: 3}
-  - {fileID: -3657385699758296693, guid: 722cfb11a857ace42a3366aa94d106fb, type: 3}
+  - {fileID: 767245031390461950, guid: b91cafd17cec5cc4585ad165e2fa53dd, type: 3}
+  - {fileID: -2981717535715948435, guid: 18f86365a0006c24eb4598fc4229b9ef, type: 3}
+  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
   - {fileID: 1366331452263209347, guid: 4f72ac218e2a9c54181a1d1efbf2fea3, type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}

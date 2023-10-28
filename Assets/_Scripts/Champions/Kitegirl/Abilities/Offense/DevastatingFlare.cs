@@ -18,7 +18,8 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
         public override void Hook(Champion champion) {
             base.Hook(champion);
 
-            CastTime = 2f * champion.GetAttackSpeed();
+            // CastTime = 2f * champion.GetAttackSpeed();
+            CastTime = champion.GetAttackSpeed();
         }
 
         public override void OnUse() {
@@ -46,7 +47,6 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
 
             Projectile projectile = Instantiate(projectilePrefab, pos, Quaternion.Euler(0, angle, 0));
             projectile.Init(this.champion, target, OnHit, projectileSpeed, this.abilityRange);
-
         }
 
         private void OnHit(IDamageable damageable) {
