@@ -133,7 +133,8 @@ namespace _Scripts {
 
                         if (damageable != null) {
                             selectedChampion.OnAutoAttack(damageable);
-                            var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
+                            var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z),
+                                Quaternion.identity);
                             x.GetComponent<Renderer>().material.color = Color.red;
 
                             if (damageable is Enemy) {
@@ -149,8 +150,6 @@ namespace _Scripts {
                         if (damageable != null) {
                             // check if the damagalbe is this instance of the player
                             if (damageable.GetTransform().gameObject != gameObject) {
-
-
                                 selectedChampion.OnAutoAttack(damageable);
 
                                 RemoveFocus();
@@ -371,7 +370,8 @@ namespace _Scripts {
 
         private void OnChampionManaRegenerated(ChampionManaRegenerated e) {
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Mana",
-                selectedChampion.GetChampionStatistics().CurrentMana, selectedChampion.GetChampionStatistics().MaxMana));
+                selectedChampion.GetChampionStatistics().CurrentMana,
+                selectedChampion.GetChampionStatistics().MaxMana));
         }
 
         private void OnGamePaused(GamePausedEvent e) {
