@@ -2231,6 +2231,7 @@ MonoBehaviour:
   rDisable: {fileID: 1907487248}
   spaceCooldown: {fileID: 1159375166}
   spaceDisable: {fileID: 201044944}
+  cooldownSlots: []
 --- !u!114 &362836952
 MonoBehaviour:
   m_ObjectHideFlags: 0

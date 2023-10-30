@@ -688,7 +688,7 @@ namespace _Scripts.Champions {
 
         private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
             Ability abilty = e.Ability;
-            Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
+            // Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
             // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
             abilty.Hook(this);
             if (!e.ShouldAdd) return;

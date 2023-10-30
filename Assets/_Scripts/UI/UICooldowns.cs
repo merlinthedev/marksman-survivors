@@ -124,7 +124,7 @@ namespace _Scripts.UI {
         }
 
         private void OnAbilityChosen(ChampionAbilityChosenEvent e) {
-            Debug.Log("Ability chosen: " + e.Ability);
+            // Debug.Log("Ability chosen: " + e.Ability);
             var components = GetUIComponents();
             var slot = new UICooldownSlot(e.Ability, components.Key(), components.Value());
 

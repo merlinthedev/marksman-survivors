@@ -51,5 +51,7 @@ MonoBehaviour:
   resourceCost: 0
   abilityUseType: 1
   abilityType: 5
-  stickyBombPrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
+  twinDisintegratePrefab: {fileID: 2018020574174969123, guid: eef32c98c8348b54d9fe9bfd5c66efef,
     type: 3}
+  rotationSpeed: 10
+  totalRotation: 360

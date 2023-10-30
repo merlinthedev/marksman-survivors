@@ -1,48 +1,34 @@
 ﻿using _Scripts.Champions.Abilities;
 using _Scripts.Champions.Kitegirl.Entities;
-using _Scripts.Entities;
-using _Scripts.Util;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 namespace _Scripts.Champions.Kitegirl.Abilities.Ultimate {
     public class TwinDisintegrate : Ability {
-        [SerializeField] private KitegirlGrenade stickyBombPrefab;
+        [SerializeField] private GameObject twinDisintegratePrefab;
+        [SerializeField] private float rotationSpeed;
+        [SerializeField] private float totalRotation = 360f;
 
-        public override void Hook(Champion champion) {
-            base.Hook(champion);
-        }
+        [SerializeField] [Tooltip("Percentage of the champions AD, 2 = 200%")]
+        private float damagePercentage = 2f;
 
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            int steps = 16;
-            float radius = 10f;
-            float x;
-            float y = 1.2f;
-            float z;
+            var twinDisintegrate =
+                Instantiate(twinDisintegratePrefab, champion.transform.position, Quaternion.identity);
 
-            float angle = 20f;
+            var twinDisintegrateController = twinDisintegrate.GetComponentInChildren<TwinDisintegrateController>();
+            twinDisintegrateController.Init(champion, champion.GetAttackDamage() * 2, rotationSpeed, totalRotation);
 
-            var championPos = this.champion.transform.position;
+            // instantiate another laser but rotate it counter-clockwise
+            var twinDisintegrate2 =
+                Instantiate(twinDisintegratePrefab, champion.transform.position, Quaternion.identity);
 
-            Utilities.DelayedForLoop(steps + 1, 0.05f, () => {
-                x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius;
-                z = Mathf.Cos(Mathf.Deg2Rad * angle) * radius;
-
-                var position = new Vector3(x, y, z) + championPos;
-                var sticky = Instantiate(stickyBombPrefab, position, Quaternion.identity);
-                sticky.SetDamage(this.champion.GetAttackDamage() * 2f);
-                sticky.OnThrow(position, this.champion);
-                sticky.SetDetonateTime(0.8f);
-                sticky.SetDamageRadius(6f);
-
-                angle += 360f / steps;
-            }, this.champion);
+            var twinDisintegrateController2 = twinDisintegrate2.GetComponentInChildren<TwinDisintegrateController>();
+            twinDisintegrateController2.Init(champion, champion.GetAttackDamage() * 2, -rotationSpeed, totalRotation);
 
             base.OnUse();
-
         }
-
-
     }
 }
