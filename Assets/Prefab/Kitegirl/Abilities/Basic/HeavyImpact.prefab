@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8928b4622f7748b99a2747d7797a5fe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityCooldown: 0
+  abilityCooldown: 1
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
+  resourceCost: 0
   abilityUseType: 0
   abilityType: 0
   damagePercentage: 0.5

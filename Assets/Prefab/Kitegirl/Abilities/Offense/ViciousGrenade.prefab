@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f88c640ffa15b2438a98f73b6a335f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityCooldown: 0
+  abilityCooldown: 6
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
+  resourceCost: 60
   abilityUseType: 1
   abilityType: 2
   grenadePrefab: {fileID: 4455360320208831867, guid: b05bb4722fdd6af4c9b02b92669ead53,
     type: 3}
   attackDamageRatio: 1
-  resourceCost: 60

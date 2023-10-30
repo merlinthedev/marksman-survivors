@@ -35,42 +35,39 @@ namespace _Scripts.Champions.Effects.impl {
         }
 
         private void OnInterval() {
-            Debug.Log("Interval completed.");
-            var result = this.champion.GetChampionStatistics().TryAddMana(this.champion.GetChampionStatistics().MaxMana * percentage);
+            // Debug.Log("Interval completed.");
+            var result = this.champion.GetChampionStatistics()
+                .TryAddMana(this.champion.GetChampionStatistics().MaxMana * percentage);
 
-            Debug.Log(result);
-            
+            // Debug.Log(result);
+
             if (!result.Key()) {
                 var stacks = result.Value();
                 int s = Mathf.RoundToInt(stacks);
 
-                Debug.Log("Adding " + s + " stacks.");
+                // Debug.Log("Adding " + s + " stacks.");
                 overdrive.OnInterval(s);
             }
         }
 
 
         public bool ShouldTick {
-            get {
-                return timeLeft > 0;
-            }
+            get { return timeLeft > 0; }
         }
 
         public void Tick(float deltaTime) {
             timeLeft -= deltaTime;
             durationLeft -= deltaTime;
-            
+
             if (timeLeft <= 0) {
                 OnCooldownCompleted?.Invoke();
 
                 timeLeft = currentCooldown;
             }
-            
+
             if (durationLeft <= 0) {
                 OnExpire();
             }
-
-
         }
 
         public void Subscribe(ICooldown cooldown) {

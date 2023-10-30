@@ -16,7 +16,6 @@ using Random = UnityEngine.Random;
 
 namespace _Scripts.Champions {
     public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity, IShieldable {
-
         #region Properties
 
         [SerializeField] private AutoAttack autoAttack;
@@ -78,7 +77,8 @@ namespace _Scripts.Champions {
 
         public bool IsReady {
             get {
-                return (Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime) && this.abilities.Find(ability => ability.name == "RhythmOfBattle") != null;
+                return (Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime) &&
+                       this.abilities.Find(ability => ability.name == "RhythmOfBattle") != null;
             }
         }
 
@@ -118,9 +118,7 @@ namespace _Scripts.Champions {
         public float LastShieldTime { get; set; }
 
         public bool HasShield {
-            get {
-                return ShieldAmount > 0;
-            }
+            get { return ShieldAmount > 0; }
         }
 
         #endregion
@@ -161,6 +159,7 @@ namespace _Scripts.Champions {
         #region Start and Update
 
         protected virtual void Start() {
+            base.Start();
             // add autoAttack to the first slot of the abilities list
             abilities.Insert(0, autoAttack);
             championLevelManager = new ChampionLevelManager(this);
@@ -289,6 +288,7 @@ namespace _Scripts.Champions {
                         Stack stack = new Stack(Stack.StackType.FOCUS, this, false, effect);
                         Stacks.Add(stack);
                     }
+
                     break;
             }
         }
@@ -359,7 +359,7 @@ namespace _Scripts.Champions {
                 Stack stack = new Stack(Stack.StackType.DEFTNESS, this);
                 Stacks.Add(stack);
             }
-            
+
             Debug.Log("Added deftness stacks");
 
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(Stack.StackType.DEFTNESS,
@@ -690,8 +690,9 @@ namespace _Scripts.Champions {
             Ability abilty = e.Ability;
             Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
             // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
-            this.abilities.Add(abilty);
             abilty.Hook(this);
+            if (!e.ShouldAdd) return;
+            abilities.Add(abilty);
         }
 
         #endregion
@@ -826,6 +827,5 @@ namespace _Scripts.Champions {
             BASIC,
             NON_BASIC
         }
-
     }
 }

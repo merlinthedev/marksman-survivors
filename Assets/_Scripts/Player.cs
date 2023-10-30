@@ -303,32 +303,32 @@ namespace _Scripts {
             // If Q, W, E or R is pressed, call the m_SelectedChampion.OnAbility() method and pass in the correct KeyCode
 
             if (Input.GetKeyDown(KeyCode.Q)) {
-                if (selectedChampion.GetAbilities()[0] != null) {
-                    selectedChampion.OnAbility(selectedChampion.GetAbilities()[0]);
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.W)) {
                 if (selectedChampion.GetAbilities()[1] != null) {
                     selectedChampion.OnAbility(selectedChampion.GetAbilities()[1]);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.E)) {
+            if (Input.GetKeyDown(KeyCode.W)) {
                 if (selectedChampion.GetAbilities()[2] != null) {
                     selectedChampion.OnAbility(selectedChampion.GetAbilities()[2]);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            if (Input.GetKeyDown(KeyCode.E)) {
                 if (selectedChampion.GetAbilities()[3] != null) {
                     selectedChampion.OnAbility(selectedChampion.GetAbilities()[3]);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
+            if (Input.GetKeyDown(KeyCode.Mouse1)) {
                 if (selectedChampion.GetAbilities()[4] != null) {
                     selectedChampion.OnAbility(selectedChampion.GetAbilities()[4]);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.R)) {
+                if (selectedChampion.GetAbilities()[5] != null) {
+                    selectedChampion.OnAbility(selectedChampion.GetAbilities()[5]);
                 }
             }
 

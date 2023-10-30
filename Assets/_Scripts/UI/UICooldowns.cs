@@ -27,12 +27,13 @@ namespace _Scripts.UI {
         [SerializeField] private GameObject spaceDisable;
 
         private Player player;
-        private List<UICooldownSlot> cooldownSlots = new();
+        [SerializeField] private List<UICooldownSlot> cooldownSlots = new();
 
+        [Serializable]
         private class UICooldownSlot {
-            private Ability ability;
-            private Image image;
-            private GameObject disable;
+            [SerializeField] private Ability ability;
+            [SerializeField] private Image image;
+            [SerializeField] private GameObject disable;
 
             public UICooldownSlot(Ability ability, Image image, GameObject disable) {
                 this.ability = ability;
@@ -41,13 +42,16 @@ namespace _Scripts.UI {
             }
 
             public void tick() {
-                Debug.Log("Ticking for: " + ability);
+                // Debug.Log("Ticking for: " + ability);
                 if (!disable.activeSelf) {
                     disable.SetActive(true);
                 }
 
                 image.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
-                Debug.Log("fillAmount: " + ability.GetCurrentCooldown() / ability.GetAbilityCooldown());
+                // Debug.Log(ability + ", Current cooldown: " + ability.GetCurrentCooldown() + ", ability cooldown: " +
+                // ability.GetAbilityCooldown());
+                // Debug.Log(ability + ", fillAmount: " + ability.GetCurrentCooldown() / ability.GetAbilityCooldown());
+
                 if (image.fillAmount == 0) {
                     disable.SetActive(false);
                 }
@@ -64,9 +68,6 @@ namespace _Scripts.UI {
 
         private void Start() {
             player = Player.GetInstance();
-
-            cooldownSlots.Add(new UICooldownSlot(player.GetCurrentlySelectedChampion().GetAutoAttack(), lmbCooldown,
-                lmbDisable));
 
             // for every image, set the fill amount to 0
             // this is because the cooldowns are not active at the start of the game
@@ -123,6 +124,7 @@ namespace _Scripts.UI {
         }
 
         private void OnAbilityChosen(ChampionAbilityChosenEvent e) {
+            Debug.Log("Ability chosen: " + e.Ability);
             var components = GetUIComponents();
             var slot = new UICooldownSlot(e.Ability, components.Key(), components.Value());
 
@@ -132,6 +134,9 @@ namespace _Scripts.UI {
         private Overseer<Image, GameObject> GetUIComponents() {
             Overseer<Image, GameObject> components = new();
             switch (cooldownSlots.Count) {
+                case 0:
+                    components.Add(lmbCooldown, lmbDisable);
+                    break;
                 case 1:
                     components.Add(qCooldown, qDisable);
                     break;

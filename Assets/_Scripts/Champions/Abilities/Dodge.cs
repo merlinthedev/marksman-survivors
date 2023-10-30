@@ -23,7 +23,7 @@ namespace _Scripts.Champions.Abilities {
 
         public void Tick(float deltaTime) {
             timeLeft -= deltaTime;
-            Debug.LogWarning("Ticking the cooldown: new cooldown: " + timeLeft);
+            // Debug.LogWarning("Ticking the cooldown: new cooldown: " + timeLeft);
 
             if (timeLeft <= 0) {
                 OnCooldownCompleted?.Invoke();
