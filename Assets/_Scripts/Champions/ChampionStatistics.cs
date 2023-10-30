@@ -1,4 +1,5 @@
 ﻿using _Scripts.EventBus;
+using _Scripts.Util;
 using System;
 using UnityEngine;
 
@@ -398,6 +399,21 @@ namespace _Scripts.Champions {
                 $"ManaRegen: {ManaRegen}, AttackSpeed: {AttackSpeed}, MovementSpeed: {MovementSpeed}, AttackRange: {AttackRange}, " +
                 $"AttackDamage: {AttackDamage}, CriticalStrikeChance: {CriticalStrikeChance}, CriticalStrikeDamage: {CriticalStrikeDamage}, " +
                 $"CooldownReduction: {CooldownReduction}, CurrentXP: {CurrentXP}";
+        }
+
+        public Overseer<bool, float> TryAddMana(float value) {
+            Overseer<bool, float> result = new Overseer<bool, float>();
+            if (CurrentMana + value > MaxMana) {
+                float overflow = CurrentMana + value - MaxMana;
+                result.Add(false, overflow);
+                CurrentMana = MaxMana;
+            } else {
+                result.Add(true, value);
+                CurrentMana += value;
+            }
+
+            return result;
+
         }
     }
 

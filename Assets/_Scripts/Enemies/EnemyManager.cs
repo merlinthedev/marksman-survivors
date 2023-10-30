@@ -250,8 +250,9 @@ namespace _Scripts.Enemies {
         public Enemy[] InstantiateEnemies(Vector3[] location) {
             Enemy[] enemies = new Enemy[location.Length];
             for (var i = 0; i < location.Length; i++) {
+                int random = Random.Range(0, enemyPrefabs.Count);
                 Vector3 randomSpread = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-                Enemy enemy = Instantiate(enemyPrefabs[0], location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
+                Enemy enemy = Instantiate(enemyPrefabs[random], location[i] + randomSpread, Quaternion.Euler(0, 45, 0));
                 enemy.SetTarget(player.GetCurrentlySelectedChampion());
                 // enemy.SetCanMove(false); // For when we want to test stuff on enemies that should not move
                 enemyDictionary.Add(enemy.GetComponent<Collider>(), enemy);

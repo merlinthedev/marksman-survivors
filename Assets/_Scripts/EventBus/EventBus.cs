@@ -115,9 +115,11 @@ namespace _Scripts.EventBus {
 
     public class ChampionAbilityChosenEvent : Event {
         public Ability Ability { get; private set; }
+        public bool ShouldAdd { get; private set; }
 
-        public ChampionAbilityChosenEvent(Ability ability) {
+        public ChampionAbilityChosenEvent(Ability ability, bool shouldAdd) {
             Ability = ability;
+            ShouldAdd = shouldAdd;
         }
     }
 

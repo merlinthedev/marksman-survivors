@@ -29,14 +29,14 @@ namespace _Scripts.Entities {
             if (shouldMove) {
                 Move();
             } else {
-                Debug.Log("Destroying projectile..." + gameObject.name);
+                // Debug.Log("Destroying projectile..." + gameObject.name);
                 Destroy(gameObject);
             }
         }
 
         protected virtual void Move() {
             transform.position = Vector3.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
-            Debug.Log("Base Move()");
+            // Debug.Log("Base Move()");
 
             float dist = Vector3.Distance(startPoint, transform.position);
             // Debug.Log("Distance: " + dist);

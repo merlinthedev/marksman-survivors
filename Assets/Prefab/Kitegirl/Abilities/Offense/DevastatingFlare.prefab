@@ -44,18 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd7cc70d0ed49f6b5daa986986ac4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityCooldown: 0
+  abilityCooldown: 3
   abilityRange: 15
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
   resourceCost: 60
   abilityUseType: 1
   abilityType: 2
-  enemies:
-    pairs: []
   projectileSpeed: 100
   damagePercentage: 1
-  casttimeFactor: 1
   projectilePrefab: {fileID: 5728109114151554510, guid: b82a6ec9e09f42d4994f0055869c9045,
     type: 3}

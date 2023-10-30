@@ -15,6 +15,7 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
 
         public override void OnUse() {
             if (!CanAfford()) {
+                Debug.Log("Cant afford");
                 return;
             }
 

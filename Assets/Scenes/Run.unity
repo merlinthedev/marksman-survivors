@@ -2217,20 +2217,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c7d934c8e0e0b4596208bc4c76ed93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lmbCooldown: {fileID: 0}
-  lmbDisable: {fileID: 0}
-  rmbCooldown: {fileID: 0}
-  rmbDisable: {fileID: 0}
-  qCooldown: {fileID: 0}
-  qDisable: {fileID: 0}
-  wCooldown: {fileID: 0}
-  wDisable: {fileID: 0}
-  eCooldown: {fileID: 0}
-  eDisable: {fileID: 0}
-  rCooldown: {fileID: 0}
-  rDisable: {fileID: 0}
-  spaceCooldown: {fileID: 0}
-  spaceDisable: {fileID: 0}
+  lmbCooldown: {fileID: 1186357113}
+  lmbDisable: {fileID: 662872067}
+  rmbCooldown: {fileID: 551421892}
+  rmbDisable: {fileID: 1123249947}
+  qCooldown: {fileID: 1987703364}
+  qDisable: {fileID: 177269630}
+  wCooldown: {fileID: 642320713}
+  wDisable: {fileID: 941676225}
+  eCooldown: {fileID: 832591780}
+  eDisable: {fileID: 1643308627}
+  rCooldown: {fileID: 281132207}
+  rDisable: {fileID: 1907487248}
+  spaceCooldown: {fileID: 1159375166}
+  spaceDisable: {fileID: 201044944}
+  cooldownSlots: []
 --- !u!114 &362836952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8190,7 +8191,7 @@ MonoBehaviour:
   shouldSpawn: 1
   maxAmountOfEnemies: 30
   secondsBeforeDifficultyIncrease: 30
-  spawnTimer: 7
+  spawnTimer: 3
   internalMinimumSpawnNumber: 1
   internalMaximumSpawnNumber: 3
   internalGrowthRate: 1.1
@@ -12090,8 +12091,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: -6149129898971977744, guid: a4e9e8e57db91bf4b97c994d0f607864, type: 3}
-  - {fileID: 767245031390461950, guid: b91cafd17cec5cc4585ad165e2fa53dd, type: 3}
+  - {fileID: -2757117828864937263, guid: 7b19622159271524aac51143925f7d79, type: 3}
+  - {fileID: -3657385699758296693, guid: 722cfb11a857ace42a3366aa94d106fb, type: 3}
+  - {fileID: -2981717535715948435, guid: 18f86365a0006c24eb4598fc4229b9ef, type: 3}
+  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
+  - {fileID: 1366331452263209347, guid: 4f72ac218e2a9c54181a1d1efbf2fea3, type: 3}
+  autoAttack: {fileID: 8394987239580299222, guid: 8843825ba6d23f143967641fa0f55746,
+    type: 3}
   rigidbody: {fileID: 2114737658}
   collider: {fileID: 2114737662}
   championStatistics: {fileID: 11400000, guid: 3c809513b78cd914bbd332c8948ee9dc, type: 2}

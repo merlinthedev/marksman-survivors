@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521071950101215524}
-  - component: {fileID: -8455518367097311757}
+  - component: {fileID: -5556844018463299568}
   m_Layer: 0
-  m_Name: StickyBombs
+  m_Name: OverdriveEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8455518367097311757
+--- !u!114 &-5556844018463299568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,16 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761284130717906903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 663559e0df324ad2a64e093a293d4b38, type: 3}
+  m_Script: {fileID: 11500000, guid: b8180b98f29d47ea95184de0e8409e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityCooldown: 0
-  abilityRange: 999
-  abilityLevelUpBanner: {fileID: 0}
-  upgrades: []
-  currentCooldown: 0
-  abilityUseType: 0
-  abilityType: 0
-  timeToExplode: 2
-  damagePercentage: 0.4
-  damageArea: 4
+  percentage: 0.1
+  statistic: 4
+  duration: 10

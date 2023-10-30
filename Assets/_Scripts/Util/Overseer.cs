@@ -40,7 +40,12 @@ namespace _Scripts.Util {
 
         protected Overseer(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public void Add(TKey k, TValue v) {
+        /// <summary>
+        /// Creates an entry in the Overseer
+        /// </summary>
+        /// <param name="k">Key or "password"</param>
+        /// <param name="v">Value</param>
+        public new void Add(TKey k, TValue v) {
             if (this.Count == 1) {
                 Console.WriteLine("Overseer already has an entry, returning...");
                 return;
@@ -49,7 +54,27 @@ namespace _Scripts.Util {
             base.Add(k, v);
         }
 
+        /// <summary>
+        /// Read-only getter for the value of the only entry in the Overseer
+        /// </summary>
+        /// <param name="key">Key or "password"</param>
         public new TValue this[TKey key] => base[key];
+
+        /// <summary>
+        /// Returns the key of the only entry in the Overseer
+        /// </summary>
+        /// <returns></returns>
+        public TKey Key() {
+            return this.Keys.First();
+        }
+
+        /// <summary>
+        /// Returns the value of the only entry in the Overseer
+        /// </summary>
+        /// <returns></returns>
+        public TValue Value() {
+            return this.Values.First();
+        }
 
         public override string ToString() {
             return this.Aggregate("", (current, entry) => current + (entry.Key + " : " + entry.Value + "\n"));

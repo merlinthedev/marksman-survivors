@@ -88,7 +88,7 @@ namespace _Scripts.UI {
                 // set action
                 uiLevelUpComponent.SetAction(() => {
                     EventBus<ChampionAbilityChosenEvent>.Raise(
-                        new ChampionAbilityChosenEvent(ability));
+                        new ChampionAbilityChosenEvent(ability, true));
                     EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(ability));
                     HidePanel();
 
