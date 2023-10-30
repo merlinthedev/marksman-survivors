@@ -83,14 +83,27 @@ namespace _Scripts.Enemies {
             //a: enemy
             gameObject.layer = 11;
 
+            //Get angle
             Vector3 direction = currentTarget.GetTransform().position - transform.position;
             float attackAngle = Vector3.SignedAngle(Vector3.forward, direction, Vector3.up);
-            var attackArea = Instantiate(attackIndicator, new Vector3(transform.position.x, 0, transform.position.z), Quaternion.Euler(0, attackAngle + 90, 0));
-            attackArea.transform.position += direction.normalized * chargeDistance / 2;
-            attackArea.transform.localScale = new Vector3(chargeDistance, 0.1f, 2f);
             
+            //Instantiate attack indicator
+            var attackArea = Instantiate(attackIndicator, transform.position, Quaternion.Euler(0, attackAngle + 90, 0));
+            
+            //Set attack indicator position and scale
+            attackArea.transform.position += direction.normalized * chargeDistance / 2;
+            attackArea.transform.position = new Vector3(attackArea.transform.position.x, 0.01f, attackArea.transform.position.z);
+            attackArea.transform.localScale = new Vector3(chargeDistance, 0.01f, 2f);
+            
+            //Set attack indicator variables
+            attackArea.GetComponent<AttackIndicator>().direction = direction.normalized;
+            attackArea.GetComponent<AttackIndicator>().distance = chargeDistance;
+            attackArea.GetComponent<AttackIndicator>().castTime = castTime;
+            
+            //Save own position and target position
             chargePosition = transform.position;
             chargeTarget = transform.position + direction.normalized * chargeDistance;
+            
             yield return new WaitForSeconds(castTime);
             
             Debug.Log("Charging");

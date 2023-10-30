@@ -16,6 +16,8 @@ namespace _Scripts.Enemies {
         [SerializeField] protected Rigidbody rigidbody;
 
         [SerializeField] private Collider collider;
+        [SerializeField] protected LayerMask noCollisionMask;
+        protected int originalLayer;
         protected Animator animator;
         private SpriteRenderer spriteRenderer;
         private Renderer renderer;
@@ -65,6 +67,7 @@ namespace _Scripts.Enemies {
         public bool IsReady => false;
 
         private void Start() {
+            originalLayer = gameObject.layer;
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
 
             animator = GetComponent<Animator>();

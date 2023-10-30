@@ -477,6 +477,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 6350459874293242500}
   collider: {fileID: 6350459874293242616}
+  noCollisionMask:
+    serializedVersion: 2
+    m_Bits: 2048
   healthBar: {fileID: 8277267421854434963}
   healthBarBackground: {fileID: 5725382674590694086}
   damageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
@@ -494,4 +497,5 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
   attackRange: 10
+  attackSize: 5
   attackCooldown: 5

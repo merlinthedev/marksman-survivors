@@ -11,6 +11,7 @@ namespace _Scripts.Enemies {
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private float projectileSpeed = 10f;
         [SerializeField] private float attackRange = 10f;
+        [SerializeField] private float attackSize = 2f;
         [SerializeField] private float attackCooldown = 5f;
         private Vector3 targetPos;
 
@@ -67,13 +68,24 @@ namespace _Scripts.Enemies {
 
         private IEnumerator Attack() {
             casting = true;
+
             gameObject.layer = 11;
             
             var attackArea = Instantiate(attackIndicator, new Vector3(targetPos.x, 0, targetPos.z), Quaternion.identity);
-            
+            attackArea.transform.localScale = new Vector3(attackSize, 0.01f, attackSize);
+            attackArea.GetComponent<AttackIndicator>().castTime = castTime;
+            Destroy(attackArea, castTime);
             yield return new WaitForSeconds(castTime);
+
+            //attack
+            lastAttackTime = Time.time;
             
-            Destroy(attackArea);
+            StopAttack();
+
+        }
+
+        private void StopAttack() {
+            gameObject.layer = 10;
             casting = false;
         }
     }
