@@ -18,6 +18,8 @@ namespace _Scripts.Champions {
 
         #region Properties
 
+        [SerializeField] private Ability autoAttack;
+
         [Header("References")]
         [SerializeField] protected Rigidbody rigidbody;
 
@@ -158,6 +160,8 @@ namespace _Scripts.Champions {
         #region Start and Update
 
         protected virtual void Start() {
+            // add autoAttack to the first slot of the abilities list
+            abilities.Insert(0, autoAttack);
             championLevelManager = new ChampionLevelManager(this);
             championStatistics.Initialize();
 

@@ -1,4 +1,6 @@
-﻿using _Scripts.Champions;
+﻿using System.Linq;
+using _Scripts.Champions;
+using _Scripts.Champions.Kitegirl.Abilities;
 using _Scripts.Core;
 using _Scripts.Enemies;
 using _Scripts.Entities;
@@ -132,10 +134,13 @@ namespace _Scripts {
                         IDamageable damageable = DamageableManager.GetInstance().GetClosestDamageable(point);
 
                         if (damageable != null) {
-                            selectedChampion.OnAutoAttack(damageable);
-                            var x = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z),
+                            // selectedChampion.OnAutoAttack(damageable);
+                            selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                                .ForEach(ability => { (ability as AutoAttack).OnUse(damageable); });
+
+                            var clickAnim = Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z),
                                 Quaternion.identity);
-                            x.GetComponent<Renderer>().material.color = Color.red;
+                            clickAnim.GetComponent<Renderer>().material.color = Color.red;
 
                             if (damageable is Enemy) {
                                 RemoveFocus();
@@ -150,7 +155,10 @@ namespace _Scripts {
                         if (damageable != null) {
                             // check if the damagalbe is this instance of the player
                             if (damageable.GetTransform().gameObject != gameObject) {
-                                selectedChampion.OnAutoAttack(damageable);
+                                // selectedChampion.OnAutoAttack(damageable);
+
+                                selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                                    .ForEach(ability => { (ability as AutoAttack).OnUse(damageable); });
 
                                 RemoveFocus();
 
@@ -192,7 +200,9 @@ namespace _Scripts {
                         if (hit.collider.gameObject.CompareTag("Enemy") ||
                             hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                             IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                            selectedChampion.OnAutoAttack(damageable);
+                            // selectedChampion.OnAutoAttack(damageable);
+                            selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                                .ForEach(ability => { (ability as AutoAttack).OnUse(damageable); });
                         }
                     }
                 }
@@ -225,7 +235,9 @@ namespace _Scripts {
                                 float distance = (enemy.transform.position - point).magnitude;
 
                                 if (distance < maxForgivenessDistance) {
-                                    selectedChampion.OnAutoAttack(enemy);
+                                    // selectedChampion.OnAutoAttack(enemy);
+                                    selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                                        .ForEach(ability => { (ability as AutoAttack).OnUse(enemy); });
 
                                     SetFocus(enemy);
                                     return;
@@ -240,7 +252,10 @@ namespace _Scripts {
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
                         hit.collider.gameObject.CompareTag("KitegirlGrenade")) {
                         IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                        selectedChampion.OnAutoAttack(damageable);
+                        // selectedChampion.OnAutoAttack(damageable);
+
+                        selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                            .ForEach(ability => { (ability as AutoAttack).OnUse(damageable); });
 
                         SetFocus(damageable);
                     } else {

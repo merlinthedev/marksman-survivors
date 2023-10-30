@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace _Scripts.Champions.Abilities {
     public abstract class Ability : MonoBehaviour, IUpgradeable, ICooldown {
-        [SerializeField] private float abilityCooldown; // Static cooldown in seconds, should not be edited
+        [SerializeField] protected float abilityCooldown; // Static cooldown in seconds, should not be edited
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
