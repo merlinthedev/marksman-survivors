@@ -41,11 +41,13 @@ namespace _Scripts.UI {
             }
 
             public void tick() {
+                Debug.Log("Ticking for: " + ability);
                 if (!disable.activeSelf) {
                     disable.SetActive(true);
                 }
 
                 image.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                Debug.Log("fillAmount: " + ability.GetCurrentCooldown() / ability.GetAbilityCooldown());
                 if (image.fillAmount == 0) {
                     disable.SetActive(false);
                 }
@@ -62,8 +64,9 @@ namespace _Scripts.UI {
 
         private void Start() {
             player = Player.GetInstance();
-            
-            cooldownSlots.Add(new UICooldownSlot(null, lmbCooldown, lmbDisable));
+
+            cooldownSlots.Add(new UICooldownSlot(player.GetCurrentlySelectedChampion().GetAutoAttack(), lmbCooldown,
+                lmbDisable));
 
             // for every image, set the fill amount to 0
             // this is because the cooldowns are not active at the start of the game

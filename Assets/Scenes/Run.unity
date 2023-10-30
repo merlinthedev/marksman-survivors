@@ -2217,20 +2217,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c7d934c8e0e0b4596208bc4c76ed93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lmbCooldown: {fileID: 0}
-  lmbDisable: {fileID: 0}
-  rmbCooldown: {fileID: 0}
-  rmbDisable: {fileID: 0}
-  qCooldown: {fileID: 0}
-  qDisable: {fileID: 0}
-  wCooldown: {fileID: 0}
-  wDisable: {fileID: 0}
-  eCooldown: {fileID: 0}
-  eDisable: {fileID: 0}
-  rCooldown: {fileID: 0}
-  rDisable: {fileID: 0}
-  spaceCooldown: {fileID: 0}
-  spaceDisable: {fileID: 0}
+  lmbCooldown: {fileID: 1186357113}
+  lmbDisable: {fileID: 662872067}
+  rmbCooldown: {fileID: 1123249949}
+  rmbDisable: {fileID: 551421889}
+  qCooldown: {fileID: 177269632}
+  qDisable: {fileID: 1987703361}
+  wCooldown: {fileID: 941676227}
+  wDisable: {fileID: 642320710}
+  eCooldown: {fileID: 1643308629}
+  eDisable: {fileID: 832591777}
+  rCooldown: {fileID: 1907487250}
+  rDisable: {fileID: 281132206}
+  spaceCooldown: {fileID: 201044946}
+  spaceDisable: {fileID: 1159375164}
 --- !u!114 &362836952
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using _Scripts.EventBus;
 using _Scripts.Util;
 using System;
 using System.Collections.Generic;
+using _Scripts.Champions.Kitegirl.Abilities;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Logger = _Scripts.Util.Logger;
@@ -18,7 +19,7 @@ namespace _Scripts.Champions {
 
         #region Properties
 
-        [SerializeField] private Ability autoAttack;
+        [SerializeField] private AutoAttack autoAttack;
 
         [Header("References")]
         [SerializeField] protected Rigidbody rigidbody;
@@ -776,6 +777,10 @@ namespace _Scripts.Champions {
 
         public Dodge GetDodge() {
             return dodge;
+        }
+
+        public AutoAttack GetAutoAttack() {
+            return autoAttack;
         }
 
         public bool IsChanneling() {
