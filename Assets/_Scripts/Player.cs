@@ -145,7 +145,8 @@ namespace _Scripts {
                             if (damageable is Enemy) {
                                 RemoveFocus();
 
-                                damageable.GetTransform().GetComponent<Renderer>().material.SetInt("_Focus", 1);
+                                damageable.GetTransform().GetComponentInChildren<Renderer>().material
+                                    .SetInt("_Focus", 1);
                                 damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
                                 currentFocus = damageable.GetTransform().gameObject;
                             }

@@ -701,7 +701,12 @@ namespace _Scripts.Champions {
             // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
             abilty.Hook(this);
             if (!e.ShouldAdd) return;
-            abilities.Add(abilty);
+
+            if (abilty.abilityUseType == Ability.AbilityUseType.PASSIVE) {
+                passiveAbilities.Add(abilty);
+            } else {
+                abilities.Add(abilty);
+            }
         }
 
         #endregion

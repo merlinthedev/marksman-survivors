@@ -5,6 +5,7 @@ using System.Linq;
 using _Scripts.Champions.Kitegirl.Abilities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace _Scripts.UI {
     public class LevelPanelController : MonoBehaviour {
@@ -50,6 +51,9 @@ namespace _Scripts.UI {
         private List<Ability> GetRandomAbilities() {
             List<Ability> randomAbilities = new();
 
+            bool canUnlockUltimate = currentChampionAbilities.Count >= 5;
+
+
             for (int i = 0; i < 3; i++) {
                 int randomIndex = Random.Range(0, allAbilities.Count);
 
@@ -58,6 +62,17 @@ namespace _Scripts.UI {
                     continue;
                 }
 
+                if (randomAbilities.Contains(allAbilities[randomIndex])) {
+                    i--;
+                    continue;
+                }
+
+                if (!canUnlockUltimate && allAbilities[randomIndex].abilityType == Ability.AbilityType.ULTIMATE) {
+                    i--;
+                    continue;
+                }
+
+
                 randomAbilities.Add(allAbilities[randomIndex]);
             }
 
@@ -65,6 +80,7 @@ namespace _Scripts.UI {
         }
 
         private void HidePanel() {
+            EventBus<UILevelUpPanelClosedEvent>.Raise(new());
             levelPanel.SetActive(false);
         }
 
@@ -72,14 +88,34 @@ namespace _Scripts.UI {
             prompt.gameObject.SetActive(e.open);
         }
 
+        private void RemovePreviousAbilities() {
+            for (int i = 0; i < levelPanel.transform.childCount; i++) {
+                Destroy(levelPanel.transform.GetChild(i).gameObject);
+            }
+        }
+
         private void ShowPanel(ShowLevelUpPanelEvent e) {
+            RemovePreviousAbilities();
+            EventBus<UILevelUpPanelOpenEvent>.Raise(new());
             var randomAbilities = GetRandomAbilities();
+
+            Debug.Log("random abilities count: " + randomAbilities.Count, this);
 
             for (int i = 0; i < randomAbilities.Count; i++) {
                 var ability = randomAbilities[i];
-                var inst = Instantiate(
-                    ability.GetAbilityDescriptionPrefab().transform.GetChild(0),
+                var inst = Instantiate(ability.GetAbilityDescriptionPrefab().transform.GetChild(0),
                     levelPanel.transform);
+                AbilityLevelUpController controller = inst.GetComponent<AbilityLevelUpController>();
+                if (controller == null) {
+                    Debug.LogError(inst.name + " is missing AbilityLevelUpController");
+                    Debug.LogError(inst.name + " is missing AbilityLevelUpController");
+                    return;
+                }
+
+                controller.SetAction(() => {
+                    EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(ability, true));
+                    HidePanel();
+                });
             }
 
             // activate the panel gameobject

@@ -8174,7 +8174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IWANTTOSPAWN: 0
+  IWANTTOSPAWN: 1
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
