@@ -78,6 +78,7 @@ namespace _Scripts.Enemies {
             yield return new WaitForSeconds(castTime);
 
             //attack
+            var Ray = Physics.SphereCastAll(new Vector3(targetPos.x, 0, targetPos.z), attackSize / 2, Vector3.up, 0);
             lastAttackTime = Time.time;
             
             StopAttack();
