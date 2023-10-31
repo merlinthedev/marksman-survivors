@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-8455518367097311757
 MonoBehaviour:
@@ -48,7 +48,9 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
+  abilityDescriptionPrefab: {fileID: 9137595328684461674, guid: d3989bb223182d14fb263f0dd6be88af,
+    type: 3}
+  resourceCost: 0
   abilityUseType: 0
   abilityType: 0
   stickyBombPrefab: {fileID: 2390358252064678385, guid: 5f056498e47fc2043937e7943b352f9e,

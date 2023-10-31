@@ -11,6 +11,7 @@ namespace _Scripts.Champions.Abilities {
         [SerializeField] protected float abilityRange = 999f; // Range of the ability in units, will change later on
         [SerializeField] private Sprite abilityLevelUpBanner;
         [SerializeField] private List<Upgrade> upgrades = new();
+        [SerializeField] private GameObject abilityDescriptionPrefab;
         private float currentCooldown;
         protected Champion champion;
 
