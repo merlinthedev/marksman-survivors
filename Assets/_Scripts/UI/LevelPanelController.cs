@@ -5,7 +5,6 @@ using System.Linq;
 using _Scripts.Champions.Kitegirl.Abilities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace _Scripts.UI {
     public class LevelPanelController : MonoBehaviour {
@@ -16,6 +15,9 @@ namespace _Scripts.UI {
 
         private List<Ability> allAbilities = new();
         private List<Ability> currentChampionAbilities = new();
+
+        private bool leveledUp = false;
+        private int stackedLevelUps = 0;
 
 
         private void OnEnable() {
@@ -95,6 +97,8 @@ namespace _Scripts.UI {
         }
 
         private void ShowPanel(ShowLevelUpPanelEvent e) {
+            if (!leveledUp) return;
+
             RemovePreviousAbilities();
             EventBus<UILevelUpPanelOpenEvent>.Raise(new());
             var randomAbilities = GetRandomAbilities();
@@ -115,12 +119,19 @@ namespace _Scripts.UI {
                 controller.SetAction(() => {
                     EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(ability, true));
                     HidePanel();
+
+                    if (stackedLevelUps >= 1) {
+                        EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
+                    }
                 });
             }
+
+            stackedLevelUps--;
 
             // activate the panel gameobject
             levelPanel.SetActive(true);
 
+            leveledUp = stackedLevelUps >= 1;
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(false));
         }
 
@@ -128,6 +139,8 @@ namespace _Scripts.UI {
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
             currentChampionAbilities = e.ChampionAbilities;
+            leveledUp = true;
+            stackedLevelUps++;
         }
     }
 }
