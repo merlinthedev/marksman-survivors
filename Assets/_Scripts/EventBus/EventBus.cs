@@ -102,14 +102,14 @@ namespace _Scripts.EventBus {
     }
 
     public class ChampionLevelUpEvent : Event {
-        public int m_CurrentLevel { get; private set; }
-        public int m_PreviousLevel { get; private set; }
-        public List<Ability> m_ChampionAbilities { get; private set; }
+        public int CurrentLevel { get; private set; }
+        public int PreviousLevel { get; private set; }
+        public List<Ability> ChampionAbilities { get; private set; }
 
         public ChampionLevelUpEvent(int currentLevel, int previousLevel, List<Ability> championAbilities) {
-            m_CurrentLevel = currentLevel;
-            m_PreviousLevel = previousLevel;
-            m_ChampionAbilities = championAbilities;
+            CurrentLevel = currentLevel;
+            PreviousLevel = previousLevel;
+            ChampionAbilities = championAbilities;
         }
     }
 

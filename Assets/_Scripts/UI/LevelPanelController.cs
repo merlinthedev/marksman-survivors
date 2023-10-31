@@ -14,6 +14,7 @@ namespace _Scripts.UI {
 
 
         private List<Ability> allAbilities = new();
+        private List<Ability> currentChampionAbilities = new();
 
 
         private void OnEnable() {
@@ -51,6 +52,12 @@ namespace _Scripts.UI {
 
             for (int i = 0; i < 3; i++) {
                 int randomIndex = Random.Range(0, allAbilities.Count);
+
+                if (currentChampionAbilities.Contains(allAbilities[randomIndex])) {
+                    i--;
+                    continue;
+                }
+
                 randomAbilities.Add(allAbilities[randomIndex]);
             }
 
@@ -70,6 +77,7 @@ namespace _Scripts.UI {
 
             for (int i = 0; i < randomAbilities.Count; i++) {
                 var ability = Instantiate(abilityPrefab.transform.GetChild(0), levelPanel.transform);
+                ability.GetChild(0).GetComponent<TMP_Text>().SetText(randomAbilities[i].name);
             }
 
             // activate the panel gameobject
@@ -81,6 +89,7 @@ namespace _Scripts.UI {
 
         private void OnChampionLevelUp(ChampionLevelUpEvent e) {
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
+            currentChampionAbilities = e.ChampionAbilities;
         }
     }
 }

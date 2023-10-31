@@ -40,7 +40,7 @@ namespace _Scripts.UI {
         }
 
         private void UpdateLevel(ChampionLevelUpEvent e) {
-            levelText.SetText(e.m_CurrentLevel.ToString());
+            levelText.SetText(e.CurrentLevel.ToString());
         }
     }
 }
