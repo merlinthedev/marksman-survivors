@@ -3,6 +3,7 @@ using _Scripts.Champions.Abilities.Upgrades;
 using _Scripts.EventBus;
 using System.Collections.Generic;
 using System.Linq;
+using _Scripts.Champions.Kitegirl.Abilities;
 using TMPro;
 using UnityEngine;
 using Logger = _Scripts.Util.Logger;
@@ -18,8 +19,9 @@ namespace _Scripts.UI {
         private bool leveledUp;
         [SerializeField] private TMP_Text prompt;
 
-        [SerializeField] private List<Ability> abilities = new();
         private List<ILevelPanelComponent> levelPanelComponents = new();
+
+        [SerializeField] private List<Ability> allAbilities = new();
 
         private int stackedLevelUp = 0;
 
@@ -37,6 +39,20 @@ namespace _Scripts.UI {
 
         private void Start() {
             HidePanel();
+
+            LoadPrefabs();
+        }
+
+        private void LoadPrefabs() {
+            allAbilities = Resources.LoadAll<Ability>("Prefab/Kitegirl/Abilities").ToList();
+
+            for (int i = allAbilities.Count - 1; i >= 0; i--) {
+                if (allAbilities[i] is AutoAttack) {
+                    allAbilities.RemoveAt(i);
+                }
+            }
+
+            allAbilities.ForEach(Debug.Log);
         }
 
         private void HidePanel() {
@@ -152,8 +168,8 @@ namespace _Scripts.UI {
                 int attempts = 0; // Track the number of attempts made to find a valid ability
 
                 while (attempts < maxAttempts) {
-                    int randomIndex = Random.Range(0, abilities.Count);
-                    var x = abilities[randomIndex];
+                    int randomIndex = Random.Range(0, allAbilities.Count);
+                    var x = allAbilities[randomIndex];
 
                     if (!canUnlockUltimate && x.abilityType == Ability.AbilityType.ULTIMATE) {
                         attempts++;
