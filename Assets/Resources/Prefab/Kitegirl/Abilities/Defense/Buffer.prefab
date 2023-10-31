@@ -48,8 +48,11 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
+  abilityDescriptionPrefab: {fileID: 4357135320010822396, guid: 1f9455d00b7bf3f4db2fa37df62f26f4,
+    type: 3}
   resourceCost: 0
   abilityUseType: 1
   abilityType: 3
   shieldAmount: 1
+  shieldLifetime: 30
   effect: {fileID: 8810510925734507624, guid: 6336096fa5bcd194f8215f960d2de675, type: 3}

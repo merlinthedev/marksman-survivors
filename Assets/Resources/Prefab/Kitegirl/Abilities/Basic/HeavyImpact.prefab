@@ -48,6 +48,8 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
+  abilityDescriptionPrefab: {fileID: 3641304666968098530, guid: c6e6f2549b511dc4d9f48c917f8d6552,
+    type: 3}
   resourceCost: 0
   abilityUseType: 0
   abilityType: 0

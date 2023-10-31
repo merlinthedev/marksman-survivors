@@ -48,7 +48,9 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
+  abilityDescriptionPrefab: {fileID: 9143277487128194007, guid: ec3802d5ca6c5f34e90890a527dd513f,
+    type: 3}
+  resourceCost: 0
   abilityUseType: 0
   abilityType: 1
   critChanceIncrease: 0.05

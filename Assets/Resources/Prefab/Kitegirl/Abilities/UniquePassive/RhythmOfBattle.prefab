@@ -48,7 +48,9 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
-  currentCooldown: 0
+  abilityDescriptionPrefab: {fileID: 9143277487128194007, guid: 12d3f5899f75aea4b9cfa4fe4c20af97,
+    type: 3}
+  resourceCost: 0
   abilityUseType: 0
   abilityType: 1
   RhythmActivationTime: 5

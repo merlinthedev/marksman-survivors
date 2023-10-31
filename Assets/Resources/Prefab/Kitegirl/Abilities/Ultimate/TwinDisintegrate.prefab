@@ -48,6 +48,8 @@ MonoBehaviour:
   abilityRange: 999
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
+  abilityDescriptionPrefab: {fileID: 4357135320010822396, guid: 3a719e14d436b724a919ffd490926098,
+    type: 3}
   resourceCost: 0
   abilityUseType: 1
   abilityType: 5
@@ -55,3 +57,4 @@ MonoBehaviour:
     type: 3}
   rotationSpeed: 10
   totalRotation: 360
+  damagePercentage: 2
