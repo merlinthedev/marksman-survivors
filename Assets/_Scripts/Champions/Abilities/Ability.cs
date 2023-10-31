@@ -107,6 +107,10 @@ namespace _Scripts.Champions.Abilities {
         public Upgrade GetNextUpgrade() {
             return upgrades.FirstOrDefault(upgrade => !upgrade.IsUnlocked());
         }
+        
+        public GameObject GetAbilityDescriptionPrefab() {
+            return abilityDescriptionPrefab;
+        }
 
         public void SetCooldown(float v) {
             currentCooldown = v;

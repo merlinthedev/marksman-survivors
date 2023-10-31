@@ -76,8 +76,10 @@ namespace _Scripts.UI {
             var randomAbilities = GetRandomAbilities();
 
             for (int i = 0; i < randomAbilities.Count; i++) {
-                var ability = Instantiate(abilityPrefab.transform.GetChild(0), levelPanel.transform);
-                ability.GetChild(0).GetComponent<TMP_Text>().SetText(randomAbilities[i].name);
+                var ability = randomAbilities[i];
+                var inst = Instantiate(
+                    ability.GetAbilityDescriptionPrefab().transform.GetChild(0),
+                    levelPanel.transform);
             }
 
             // activate the panel gameobject
