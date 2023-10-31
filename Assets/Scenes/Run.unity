@@ -2000,7 +2000,7 @@ Camera:
   near clip plane: 0.01
   far clip plane: 1000
   field of view: 11
-  orthographic: 1
+  orthographic: 0
   orthographic size: 9
   m_Depth: -1
   m_CullingMask:
@@ -8178,12 +8178,14 @@ MonoBehaviour:
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
+  - {fileID: 8211394154399099846, guid: 559af114f2ed50c43bdf3c14250d0860, type: 3}
+  - {fileID: -4366958975273645120, guid: e1bc83a2a46c8a34cabf50d1602a3da9, type: 3}
   shouldSpawn: 1
   maxAmountOfEnemies: 30
-  secondsBeforeDifficultyIncrease: 30
-  spawnTimer: 3
-  internalMinimumSpawnNumber: 1
-  internalMaximumSpawnNumber: 3
+  secondsBeforeDifficultyIncrease: 100
+  spawnTimer: 15
+  internalMinimumSpawnNumber: 4
+  internalMaximumSpawnNumber: 6
   internalGrowthRate: 1.1
 --- !u!114 &1574137037
 MonoBehaviour:
@@ -12081,7 +12083,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
+  - {fileID: -8391491971653843218, guid: 9c2427fe39878c14580fa4063f14f946, type: 3}
   autoAttack: {fileID: 8394987239580299222, guid: 8843825ba6d23f143967641fa0f55746,
     type: 3}
   rigidbody: {fileID: 2114737658}

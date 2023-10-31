@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _Scripts.Enemies {
     public class Brute : Enemy {
-        private bool casting = false;
+        [SerializeField] bool casting = false;
         [SerializeField] private float castTime = 1f;
         [SerializeField] private float chargeDistance = 10f;
         [SerializeField] private float chargeSpeed = 10f;

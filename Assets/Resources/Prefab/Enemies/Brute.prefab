@@ -492,9 +492,10 @@ MonoBehaviour:
   damage: 1
   lootPrefabs:
   - {fileID: 3424441254785389761, guid: a475612ac56c7494783f9439da45885f, type: 3}
-  castTime: 1
-  chargeDistance: 20
-  chargeSpeed: 25
+  casting: 0
+  castTime: 0.5
+  chargeDistance: 15
+  chargeSpeed: 30
   chargeCooldown: 10
   attackIndicator: {fileID: 4873767125794772741, guid: 2a27359b2e7503a4c8c96c06b49b5c00,
     type: 3}

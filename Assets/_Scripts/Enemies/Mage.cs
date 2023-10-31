@@ -78,7 +78,15 @@ namespace _Scripts.Enemies {
             yield return new WaitForSeconds(castTime);
 
             //attack
-            var Ray = Physics.SphereCastAll(new Vector3(targetPos.x, 0, targetPos.z), attackSize / 2, Vector3.up, 0);
+            var Ray = Physics.SphereCastAll(new Vector3(targetPos.x, 0, targetPos.z), attackSize / 2, Vector3.up, 10);
+            if (Ray.Length > 0) {
+                for(int i = 0; i < Ray.Length; i++) {
+                    if (Ray[i].collider.gameObject.CompareTag("Player")) {
+                        Champion champion = Ray[i].collider.gameObject.GetComponent<Champion>();
+                        DealDamage(champion, damage, Champion.DamageType.BASIC);
+                    }
+                }
+            }
             lastAttackTime = Time.time;
             
             StopAttack();

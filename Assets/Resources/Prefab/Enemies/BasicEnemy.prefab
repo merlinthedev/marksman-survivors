@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6333545194349557773}
   - component: {fileID: 5365476511568780676}
   - component: {fileID: 5725382674590694086}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: BarBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 8736019600239313909}
   - component: {fileID: 2433136685775610587}
   - component: {fileID: 7198179259816164608}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 2513103319614993641}
   - component: {fileID: 2790925748103280593}
   - component: {fileID: 8277267421854434963}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 2727071012428929937}
   - component: {fileID: 4421033660401773927}
   - component: {fileID: -4366958975273645120}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BasicEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -445,13 +445,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 6350459874293242500}
   collider: {fileID: 6350459874293242616}
+  noCollisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   healthBar: {fileID: 8277267421854434963}
   healthBarBackground: {fileID: 5725382674590694086}
   damageNumberPrefab: {fileID: 2048222535873221071, guid: 8d375945cdb498d4a9718d95091b7949,
     type: 3}
   intensityMultiplier: 1
   focusAnim: 0
-  initialMovementSpeed: 3.5
+  initialMovementSpeed: 4
   maxHealth: 12
   rewardXP: 1
   damage: 1

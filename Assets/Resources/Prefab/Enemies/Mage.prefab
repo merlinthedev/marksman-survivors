@@ -491,11 +491,11 @@ MonoBehaviour:
   rewardXP: 1
   damage: 1
   lootPrefabs: []
-  castTime: 3
+  castTime: 1
   attackIndicator: {fileID: 4873767125794772741, guid: 22e8c18415686c2498267658af5ffff7,
     type: 3}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
   attackRange: 10
-  attackSize: 5
+  attackSize: 6
   attackCooldown: 5

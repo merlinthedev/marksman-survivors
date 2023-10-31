@@ -58,3 +58,5 @@ MonoBehaviour:
     type: 3}
   damagePercentage: 3
   projectileSpeed: 30
+  aimImage: {fileID: 2756702563663726962, guid: ff70d5ca60d3ee54d8a2fe1677e03b00,
+    type: 3}
