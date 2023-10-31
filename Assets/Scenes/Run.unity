@@ -1387,8 +1387,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.713786, y: 53}
-  m_SizeDelta: {x: 1280, y: 720}
+  m_AnchoredPosition: {x: -0.0041428, y: -4.2061}
+  m_SizeDelta: {x: 1093.5, y: 622.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &216483669
 MonoBehaviour:
@@ -2731,8 +2731,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.713786, y: 53}
-  m_SizeDelta: {x: 1280, y: 720}
+  m_AnchoredPosition: {x: -0.015622, y: -4.2061}
+  m_SizeDelta: {x: 1093.4, y: 622.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &492736576
 MonoBehaviour:
@@ -2747,19 +2747,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelPanel: {fileID: 878052506}
-  abilityComponentPrefab: {fileID: 7870727244137347474, guid: 0a80178750c5a0f40b16ca6b2bde7780,
-    type: 3}
-  upgradeComponentPrefab: {fileID: 7870727244137347474, guid: 53b4e1ad9f72b54488e401d90b37ab51,
+  abilityPrefab: {fileID: 9137595328684461674, guid: d3989bb223182d14fb263f0dd6be88af,
     type: 3}
   prompt: {fileID: 1233336288}
-  abilities:
-  - {fileID: 5491228764203184346, guid: 7954af5003773b942946b48c6deac079, type: 3}
-  - {fileID: 0}
-  - {fileID: -5498696720246338259, guid: 1fb49ee4e290ece4f87254b83b587c4d, type: 3}
-  - {fileID: -1318103399301311301, guid: e9962c6ce2b135546bd7849cdd5db18e, type: 3}
-  - {fileID: -5836431172475230976, guid: ee230c949f26d78479ca5eef23c3f31a, type: 3}
-  - {fileID: -8325301189158293201, guid: 2f8a91740c41dd14ca598abdf45003b2, type: 3}
-  - {fileID: -2301999179170599804, guid: e252c537c7aec1a449fbb7598a4d005e, type: 3}
 --- !u!224 &502938396 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4401297704665096259, guid: 866213df7dddb1c4eab9be6d3dcd200a,
@@ -4658,15 +4648,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 878052506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 120
-    m_Right: 120
+    m_Left: 0
+    m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -8184,7 +8174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IWANTTOSPAWN: 1
+  IWANTTOSPAWN: 0
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
@@ -12090,7 +12080,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031a7555116348445a14a06a627f3b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilities: []
+  abilities:
+  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
   autoAttack: {fileID: 8394987239580299222, guid: 8843825ba6d23f143967641fa0f55746,
     type: 3}
   rigidbody: {fileID: 2114737658}

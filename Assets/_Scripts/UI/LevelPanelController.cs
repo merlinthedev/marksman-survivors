@@ -9,6 +9,7 @@ using UnityEngine;
 namespace _Scripts.UI {
     public class LevelPanelController : MonoBehaviour {
         [SerializeField] private GameObject levelPanel;
+        [SerializeField] private GameObject abilityPrefab;
         [SerializeField] private TMP_Text prompt;
 
 
@@ -45,6 +46,17 @@ namespace _Scripts.UI {
             allAbilities.ForEach(Debug.Log);
         }
 
+        private List<Ability> GetRandomAbilities() {
+            List<Ability> randomAbilities = new();
+
+            for (int i = 0; i < 3; i++) {
+                int randomIndex = Random.Range(0, allAbilities.Count);
+                randomAbilities.Add(allAbilities[randomIndex]);
+            }
+
+            return randomAbilities;
+        }
+
         private void HidePanel() {
             levelPanel.SetActive(false);
         }
@@ -54,6 +66,12 @@ namespace _Scripts.UI {
         }
 
         private void ShowPanel(ShowLevelUpPanelEvent e) {
+            var randomAbilities = GetRandomAbilities();
+
+            for (int i = 0; i < randomAbilities.Count; i++) {
+                var ability = Instantiate(abilityPrefab.transform.GetChild(0), levelPanel.transform);
+            }
+
             // activate the panel gameobject
             levelPanel.SetActive(true);
 

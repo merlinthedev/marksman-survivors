@@ -126,6 +126,7 @@ namespace _Scripts.Champions {
         public event Action<IDamageable> OnAutoAttackStarted;
         public event Action<IDamageable> OnBulletHit;
         public event Action<Ability> OnAbilityUsed;
+        public event Action OnNonBasicAbilityDamageDone;
         public event Action<IDamageable> OnDamageDone;
         public event Action OnDamageTaken;
         public event Action OnShieldExpired;
@@ -201,6 +202,10 @@ namespace _Scripts.Champions {
 
             if (Input.GetKeyDown(KeyCode.S)) {
                 Debug.Log(championStatistics.ToString());
+            }
+
+            if (Input.GetKeyDown(KeyCode.D)) {
+                Logger.Log("IsReady? " + IsReady, this);
             }
 
             // Logger.Log("Amount of deftness stacks: " + GetStackAmount(Stack.StackType.DEFTNESS), Logger.Color.GREEN,
@@ -636,6 +641,10 @@ namespace _Scripts.Champions {
             damageable.TakeFlatDamage(damage);
             if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);
+            }
+
+            if (damageType.Equals(DamageType.NON_BASIC)) {
+                OnNonBasicAbilityDamageDone?.Invoke();
             }
         }
 

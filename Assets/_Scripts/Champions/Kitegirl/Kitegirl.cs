@@ -6,6 +6,7 @@ using _Scripts.EventBus;
 using _Scripts.Util;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = _Scripts.Util.Logger;
 using Stack = _Scripts.BuffsDebuffs.Stacks.Stack;
 
 namespace _Scripts.Champions.Kitegirl {
@@ -83,9 +84,20 @@ namespace _Scripts.Champions.Kitegirl {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
-            if (damageType == DamageType.NON_BASIC && IsReady) {
-                base.DealDamage(damageable, damage * 1.1f, damageType, shouldInvoke);
-                return;
+            Logger.Log("DamageType: " + damageType, Logger.Color.YELLOW, this);
+
+            // if (damageType == DamageType.NON_BASIC && IsReady) {
+            //     Logger.Log("Dealing more damage because of rhythm", Logger.Color.YELLOW, this);
+            //     base.DealDamage(damageable, damage * 1.1f, damageType, shouldInvoke);
+            //     return;
+            // }
+            if (IsReady) {
+                Logger.Log("We were ready", this);
+                if (damageType.Equals(DamageType.NON_BASIC)) {
+                    Logger.Log("Dealing more damage because of rhythm", Logger.Color.YELLOW, this);
+                    base.DealDamage(damageable, damage * 1.1f, damageType, shouldInvoke);
+                    return;
+                }
             }
 
             base.DealDamage(damageable, damage, damageType, shouldInvoke);
@@ -111,7 +123,8 @@ namespace _Scripts.Champions.Kitegirl {
 
             if (shouldBurst) {
                 Utilities.DelayedForLoop(maxBrust, 0.2f, () => {
-                    KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
+                    KitegirlBullet kitegirlBullet =
+                        Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
                     kitegirlBullet.SetSourceEntity(this);
                     kitegirlBullet.SetTarget(currentTarget);
                     kitegirlBullet.SetDamage(CalculateDamage());
@@ -119,7 +132,8 @@ namespace _Scripts.Champions.Kitegirl {
                     kitegirlBullet.Init(BulletHit);
                 }, this);
             } else {
-                KitegirlBullet kitegirlBullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
+                KitegirlBullet kitegirlBullet =
+                    Instantiate(bulletPrefab, transform.position, Quaternion.Euler(90, angle, 0));
                 kitegirlBullet.SetSourceEntity(this);
                 kitegirlBullet.SetTarget(currentTarget);
                 kitegirlBullet.SetDamage(CalculateDamage());
@@ -176,6 +190,5 @@ namespace _Scripts.Champions.Kitegirl {
             // Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
             this.isAutoAttacking = false;
         }
-
     }
 }
