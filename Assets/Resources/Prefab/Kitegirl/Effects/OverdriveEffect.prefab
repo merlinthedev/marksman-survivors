@@ -47,3 +47,4 @@ MonoBehaviour:
   percentage: 0.1
   statistic: 4
   duration: 10
+  factor: 10

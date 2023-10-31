@@ -14,6 +14,8 @@ namespace _Scripts.Champions.Effects.impl {
         private float currentCooldown;
         private float timeLeft;
         private float durationLeft;
+        [SerializeField] private float factor;
+        private float overflow = 0;
 
         private Overdrive overdrive;
 
@@ -40,13 +42,14 @@ namespace _Scripts.Champions.Effects.impl {
                 .TryAddMana(this.champion.GetChampionStatistics().MaxMana * percentage);
 
             // Debug.Log(result);
-
             if (!result.Key()) {
-                var stacks = result.Value();
-                int s = Mathf.RoundToInt(stacks);
-
-                // Debug.Log("Adding " + s + " stacks.");
-                overdrive.OnInterval(s);
+                var stacks = result.Value() / factor;
+                overflow += stacks;
+                if (overflow >= 1) {
+                    // Debug.Log("Adding " + s + " stacks.");
+                    overdrive.OnInterval((int)overflow);
+                    overflow--;
+                }
             }
         }
 
