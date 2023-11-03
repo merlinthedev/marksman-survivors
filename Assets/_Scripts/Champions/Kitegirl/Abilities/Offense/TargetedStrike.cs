@@ -10,8 +10,8 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
         [SerializeField] private TargetProjectile bulletPrefab;
         [SerializeField] private float damagePercentage = 3f;
         [SerializeField] private float projectileSpeed = 30f;
-        [SerializeField] private Image aimImage;
-        private Image aimEffect;
+        [SerializeField] private GameObject aimAnim;
+        private GameObject aimEffect;
 
         private Enemy enemy;
         private float angle = 0f;
@@ -41,6 +41,8 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
             TargetProjectile targetProjectile = Instantiate(bulletPrefab, this.champion.transform.position, Quaternion.Euler(90, angle, 0));
 
             targetProjectile.Init(this.champion, enemy, OnHit, projectileSpeed);
+            
+            Destroy(aimEffect);
 
         }
 
@@ -51,7 +53,7 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
             Debug.Log("AD: " + this.champion.GetAttackDamage());
             Debug.Log("Percentage: " + damagePercentage);
             this.champion.DealDamage(enemy, dam, Champion.DamageType.NON_BASIC);
-            Destroy(aimEffect);
+
         }
 
 
@@ -62,11 +64,10 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
             this.champion.SetIsCasting(true);
 
             enemy = (Enemy)Player.GetInstance().GetCurrentHoverEntity();
-            aimEffect = Instantiate(aimImage, enemy.transform.position, Quaternion.identity);
+            aimEffect = Instantiate(aimAnim, enemy.transform.position, Quaternion.Euler(0, 45, 0));
             aimEffect.transform.parent = enemy.GetComponentInChildren<Canvas>().transform;
-            aimEffect.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-            aimEffect.transform.localPosition += new Vector3(0, 0.5f, 0);
-            aimEffect.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            aimEffect.transform.position = enemy.transform.position + new Vector3(0, 2.5f, 0);
+
 
             if (enemy != null) {
                 Invoke(nameof(Use), CastTime);
