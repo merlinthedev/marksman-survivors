@@ -169,6 +169,8 @@ namespace _Scripts {
                                 damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
                                 currentFocus = damageable.GetTransform().gameObject;
                             }
+                        } else {
+                            Debug.Log("Damageable is null on A click");
                         }
                     }
                 }
