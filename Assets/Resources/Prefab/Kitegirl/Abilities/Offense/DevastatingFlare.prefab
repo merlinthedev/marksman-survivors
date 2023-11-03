@@ -57,6 +57,6 @@ MonoBehaviour:
     pairs: []
   projectileSpeed: 100
   damagePercentage: 1
-  casttimeFactor: 2
+  casttimeFactor: 0.5
   projectilePrefab: {fileID: 5728109114151554510, guid: b82a6ec9e09f42d4994f0055869c9045,
     type: 3}
