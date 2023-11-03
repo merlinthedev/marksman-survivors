@@ -1,10 +1,12 @@
-﻿using _Scripts.Champions.Abilities;
+﻿using System;
+using _Scripts.Champions.Abilities;
 using _Scripts.Champions.Kitegirl.Entities;
 using _Scripts.Core;
 using _Scripts.Entities;
 using _Scripts.EventBus;
 using _Scripts.Util;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using Logger = _Scripts.Util.Logger;
 using Stack = _Scripts.BuffsDebuffs.Stacks.Stack;
@@ -21,9 +23,9 @@ namespace _Scripts.Champions.Kitegirl {
 
 
         public override void OnAutoAttack(IDamageable damageable) {
-            if (this.isCasting) return;
+            if (isCasting) return;
             if (!CanAttack) {
-                if (!this.isAutoAttacking) {
+                if (!isAutoAttacking) {
                     // Queue the clicked target for our next attack
                     currentTarget = damageable;
                     // Stop moving towards the previous mouse hitpoint
@@ -33,9 +35,19 @@ namespace _Scripts.Champions.Kitegirl {
                 return;
             }
 
-            this.mouseHitPoint = Vector3.zero;
-            this.lastAttackTime = Time.time;
+            mouseHitPoint = Vector3.zero;
+            lastAttackTime = Time.time;
             Vector3 dir = damageable.GetTransform().position - transform.position;
+
+            Debug.Log("Distance to target: " + dir.magnitude, this);
+
+            if (dir.magnitude > championStatistics.AttackRange) {
+                RequestMovement(damageable.GetTransform().position, championStatistics.AttackRange,
+                    () => { OnAutoAttack(damageable); });
+
+                return;
+            }
+
             currentTarget = damageable;
 
             AutoAttackStarted();
@@ -46,7 +58,7 @@ namespace _Scripts.Champions.Kitegirl {
             SetGlobalDirectionAngle(Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg);
             SetLastAttackDirection(dir.normalized);
             // Utilities.InvokeDelayed(() => { SetCanMove(true); }, 0.1f, this);
-            this.rigidbody.velocity = Vector3.zero;
+            rigidbody.velocity = Vector3.zero;
 
             if (attackShouldApplyDeftness) {
                 AddStacks(1, Stack.StackType.DEFTNESS);
@@ -59,11 +71,12 @@ namespace _Scripts.Champions.Kitegirl {
 
 
             animationController.Attack();
-            this.isAutoAttacking = true;
+            isAutoAttacking = true;
             EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Mouse0, GetAttackSpeed()));
         }
 
 
+        [Obsolete("Ability not in use anymore")]
         public void SmokeScreenPushBack(float force, float yForceOffset, Vector3 mousePosition) {
             // take the direction from the mouse position to the champion
             Vector3 pushbackDirection =
@@ -74,7 +87,7 @@ namespace _Scripts.Champions.Kitegirl {
 
             // Debug.Log("<color=yellow>Pushback direction: " + pushbackDirection + "</color>", this);
 
-            this.rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
+            rigidbody.AddForce(pushbackDirection * force, ForceMode.Impulse);
         }
 
 
@@ -109,14 +122,14 @@ namespace _Scripts.Champions.Kitegirl {
 
         private void Start() {
             base.Start();
-            foreach (Ability ability in this.abilities) {
+            foreach (Ability ability in abilities) {
                 ability.Hook(this);
             }
 
             EventBus<ChampionAbilitiesHookedEvent>.Raise(new ChampionAbilitiesHookedEvent()); // TODO: REFACTOR
         }
 
-        public void Shoot() {
+        private void Shoot() {
             Vector3 dir = currentTarget.GetTransform().position - transform.position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
@@ -188,7 +201,7 @@ namespace _Scripts.Champions.Kitegirl {
 
         public void EnableStuffAfterAttack() {
             // Logger.Log("THIS METHOD IS NOT IMPLEMENTED ANYMORE PLS FIX :D", Logger.Color.RED, this);
-            this.isAutoAttacking = false;
+            isAutoAttacking = false;
         }
     }
 }
