@@ -126,6 +126,10 @@ namespace _Scripts.Champions.Kitegirl {
                 ability.Hook(this);
             }
 
+            foreach (Ability ability in passiveAbilities) {
+                ability.Hook(this);
+            }
+
             EventBus<ChampionAbilitiesHookedEvent>.Raise(new ChampionAbilitiesHookedEvent()); // TODO: REFACTOR
         }
 

@@ -66,6 +66,8 @@ namespace _Scripts.Enemies {
         public IDamageable currentTarget { get; set; } = null;
         public bool IsReady => false;
 
+        private EnemyDamageNumberHelper enemyDamageNumberHelper;
+
         private void Start() {
             originalLayer = gameObject.layer;
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
@@ -89,6 +91,11 @@ namespace _Scripts.Enemies {
             if (canvas == null) {
                 canvas = GetComponentInChildren<Canvas>();
             }
+
+            enemyDamageNumberHelper = Instantiate(damageNumberPrefab, canvas.transform)
+                .GetComponent<EnemyDamageNumberHelper>();
+
+            enemyDamageNumberHelper.Initialize();
 
             movementSpeed = initialMovementSpeed + Random.Range(-1f, 1f);
             currentHealth = maxHealth;
@@ -218,7 +225,6 @@ namespace _Scripts.Enemies {
         #region Damage
 
         public virtual void TakeFlatDamage(float damage) {
-
             TakeDamage(damage);
         }
 
@@ -318,10 +324,8 @@ namespace _Scripts.Enemies {
         #region UI
 
         protected void ShowDamageUI(float damage) {
-            EnemyDamageNumberHelper enemyDamageNumberHelper = Instantiate(damageNumberPrefab, canvas.transform)
-                .GetComponent<EnemyDamageNumberHelper>();
-
-            enemyDamageNumberHelper.Initialize(damage.ToString());
+            // HERE
+            enemyDamageNumberHelper.SetDamage(damage);
         }
 
         private void UpdateHealthBar() {
