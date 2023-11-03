@@ -39,7 +39,7 @@ namespace _Scripts.Champions.Kitegirl {
             lastAttackTime = Time.time;
             Vector3 dir = damageable.GetTransform().position - transform.position;
 
-            Debug.Log("Distance to target: " + dir.magnitude, this);
+            // Debug.Log("Distance to target: " + dir.magnitude, this);
 
             if (dir.magnitude > championStatistics.AttackRange) {
                 RequestMovement(damageable.GetTransform().position, championStatistics.AttackRange,
@@ -97,7 +97,7 @@ namespace _Scripts.Champions.Kitegirl {
                 AddStacks(1, Stack.StackType.DEFTNESS);
             }
 
-            Logger.Log("DamageType: " + damageType, Logger.Color.YELLOW, this);
+            // Logger.Log("DamageType: " + damageType, Logger.Color.YELLOW, this);
 
             // if (damageType == DamageType.NON_BASIC && IsReady) {
             //     Logger.Log("Dealing more damage because of rhythm", Logger.Color.YELLOW, this);

@@ -106,7 +106,7 @@ namespace _Scripts.Enemies {
             
             yield return new WaitForSeconds(castTime);
             
-            Debug.Log("Charging");
+            // Debug.Log("Charging");
             Destroy(attackArea);
 
             rigidbody.velocity = direction.normalized * chargeSpeed;
