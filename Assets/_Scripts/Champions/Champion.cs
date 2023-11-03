@@ -495,7 +495,7 @@ namespace _Scripts.Champions {
 
             rigidbody.velocity = Utilities.GetPointToMouseDirection(transform.position) * dashSpeed;
 
-            Logger.Log("Angle: " + angle, Logger.Color.RED, this);
+            // Logger.Log("Angle: " + angle, Logger.Color.RED, this);
 
 
             Utilities.InvokeDelayed(() => {

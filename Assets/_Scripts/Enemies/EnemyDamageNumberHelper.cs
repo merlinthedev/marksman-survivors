@@ -39,7 +39,7 @@ namespace _Scripts.Enemies {
             }
 
             lastDisplayTime = Time.time;
-            Debug.Log("Setting damage to: " + currentDisplayedDamage + ".");
+            // Debug.Log("Setting damage to: " + currentDisplayedDamage + ".");
             m_DamageText.SetText(currentDisplayedDamage.ToString());
         }
 

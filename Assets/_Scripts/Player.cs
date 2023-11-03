@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using _Scripts.Champions;
 using _Scripts.Champions.Kitegirl.Abilities;
@@ -118,9 +119,10 @@ namespace _Scripts {
 
         private void HandleAttackMove() {
             if (Input.GetKeyDown(KeyCode.A) && !isPaused) {
-                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                    return;
-                }
+                // if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                //     Debug.Log("Clicking on UI, not moving");
+                //     return;
+                // }
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
@@ -165,9 +167,38 @@ namespace _Scripts {
 
                                 RemoveFocus();
 
-                                damageable.GetTransform().GetComponentInChildren<Renderer>().material.SetInt("_Focus", 1);
+                                damageable.GetTransform().GetComponentInChildren<Renderer>().material
+                                    .SetInt("_Focus", 1);
                                 damageable.GetTransform().GetComponentInChildren<Enemy>().focusAnim = true;
                                 currentFocus = damageable.GetTransform().gameObject;
+                            } else {
+                                // Debug.Log("Damageable is this instance of the player");
+
+                                IDamageable d = DamageableManager.GetInstance()
+                                    .GetClosestDamageable(transform.position, Single.PositiveInfinity,
+                                        new List<IDamageable> {
+                                            selectedChampion
+                                        });
+
+                                if (d != null) {
+                                    // selectedChampion.OnAutoAttack(damageable);
+                                    selectedChampion.GetAbilities().Where(ability => ability is AutoAttack).ToList()
+                                        .ForEach(ability => { (ability as AutoAttack).OnUse(d); });
+
+                                    var clickAnim = Instantiate(clickAnimPrefab,
+                                        new Vector3(transform.position.x, 0.2f, transform.position.z),
+                                        Quaternion.identity);
+                                    clickAnim.GetComponent<Renderer>().material.color = Color.red;
+
+                                    if (d is Enemy) {
+                                        RemoveFocus();
+
+                                        d.GetTransform().GetComponentInChildren<Renderer>().material
+                                            .SetInt("_Focus", 1);
+                                        d.GetTransform().GetComponent<Enemy>().focusAnim = true;
+                                        currentFocus = d.GetTransform().gameObject;
+                                    }
+                                }
                             }
                         } else {
                             Debug.Log("Damageable is null on A click");
