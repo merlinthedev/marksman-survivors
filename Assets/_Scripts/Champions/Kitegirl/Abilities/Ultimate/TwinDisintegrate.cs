@@ -27,6 +27,10 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Ultimate {
 
             var twinDisintegrateController2 = twinDisintegrate2.GetComponentInChildren<TwinDisintegrateController>();
             twinDisintegrateController2.Init(champion, champion.GetAttackDamage() * 2, -rotationSpeed, totalRotation);
+            
+            //parent them to the champion so they move with
+            twinDisintegrate.transform.parent = champion.transform;
+            twinDisintegrate2.transform.parent = champion.transform;
 
             base.OnUse();
         }
