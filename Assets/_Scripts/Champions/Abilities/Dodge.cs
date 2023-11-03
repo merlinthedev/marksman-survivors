@@ -4,9 +4,19 @@ using UnityEngine;
 
 namespace _Scripts.Champions.Abilities {
     public class Dodge : ICooldown {
-        private readonly float cooldown;
+        private float cooldown;
         private float timeLeft;
         public bool ShouldTick => timeLeft > 0;
+
+        public float Cooldown {
+            get => cooldown;
+            set => cooldown = value;
+        }
+
+        public float CurrentCooldown {
+            get => timeLeft;
+            set => timeLeft = value;
+        }
 
 
         public Dodge(float cooldown) {
@@ -49,14 +59,6 @@ namespace _Scripts.Champions.Abilities {
         public void ResetCooldown() {
             Debug.LogWarning("RESETTING THE COOLDOWN");
             timeLeft = 0f;
-        }
-
-        public float GetCooldown() {
-            return cooldown;
-        }
-
-        public float GetTimeLeft() {
-            return timeLeft;
         }
 
         public event Action OnCooldownCompleted;

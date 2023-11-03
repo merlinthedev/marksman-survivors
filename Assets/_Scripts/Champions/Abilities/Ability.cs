@@ -15,6 +15,16 @@ namespace _Scripts.Champions.Abilities {
         private float currentCooldown;
         protected Champion champion;
 
+        public float Cooldown {
+            get => abilityCooldown;
+            set => abilityCooldown = value;
+        }
+
+        public float CurrentCooldown {
+            get => currentCooldown;
+            set => currentCooldown = value;
+        }
+
         protected bool isCancelled = false;
         [SerializeField] protected float resourceCost = 0f;
         public AbilityUseType abilityUseType;
@@ -88,14 +98,6 @@ namespace _Scripts.Champions.Abilities {
             return champion.GetChampionStatistics().CurrentMana >= resourceCost;
         }
 
-        public float GetAbilityCooldown() {
-            return abilityCooldown;
-        }
-
-        public float GetCurrentCooldown() {
-            return currentCooldown;
-        }
-
         public Sprite GetAbilityLevelUpBannerSprite() {
             return abilityLevelUpBanner;
         }
@@ -107,7 +109,7 @@ namespace _Scripts.Champions.Abilities {
         public Upgrade GetNextUpgrade() {
             return upgrades.FirstOrDefault(upgrade => !upgrade.IsUnlocked());
         }
-        
+
         public GameObject GetAbilityDescriptionPrefab() {
             return abilityDescriptionPrefab;
         }

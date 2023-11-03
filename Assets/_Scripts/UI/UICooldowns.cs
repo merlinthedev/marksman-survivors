@@ -26,17 +26,17 @@ namespace _Scripts.UI {
         [SerializeField] private Image spaceCooldown;
         [SerializeField] private GameObject spaceDisable;
 
-        private Player player;
         [SerializeField] private List<UICooldownSlot> cooldownSlots = new();
+        private UICooldownSlot dodgeSlot;
 
         [Serializable]
         private class UICooldownSlot {
-            [SerializeField] private Ability ability;
+            private ICooldown cooldown;
             [SerializeField] private Image image;
             [SerializeField] private GameObject disable;
 
-            public UICooldownSlot(Ability ability, Image image, GameObject disable) {
-                this.ability = ability;
+            public UICooldownSlot(ICooldown cooldown, Image image, GameObject disable) {
+                this.cooldown = cooldown;
                 this.image = image;
                 this.disable = disable;
             }
@@ -47,7 +47,7 @@ namespace _Scripts.UI {
                     disable.SetActive(true);
                 }
 
-                image.fillAmount = ability.GetCurrentCooldown() / ability.GetAbilityCooldown();
+                image.fillAmount = cooldown.CurrentCooldown / cooldown.Cooldown;
                 // Debug.Log(ability + ", Current cooldown: " + ability.GetCurrentCooldown() + ", ability cooldown: " +
                 // ability.GetAbilityCooldown());
                 // Debug.Log(ability + ", fillAmount: " + ability.GetCurrentCooldown() / ability.GetAbilityCooldown());
@@ -67,8 +67,6 @@ namespace _Scripts.UI {
         }
 
         private void Start() {
-            player = Player.GetInstance();
-
             // for every image, set the fill amount to 0
             // this is because the cooldowns are not active at the start of the game
             lmbCooldown.fillAmount = 0;
@@ -85,6 +83,9 @@ namespace _Scripts.UI {
             rDisable.SetActive(true);
             spaceCooldown.fillAmount = 0;
             spaceDisable.SetActive(true);
+
+            dodgeSlot = new UICooldownSlot(Player.GetInstance().GetCurrentlySelectedChampion().GetDodge(),
+                spaceCooldown, spaceDisable);
         }
 
         private void Update() {
@@ -121,6 +122,7 @@ namespace _Scripts.UI {
             // }
             //}
             cooldownSlots.ForEach(slot => slot.tick());
+            dodgeSlot.tick();
         }
 
         private void OnAbilityChosen(ChampionAbilityChosenEvent e) {
