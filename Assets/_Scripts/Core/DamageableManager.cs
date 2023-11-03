@@ -29,7 +29,8 @@ namespace _Scripts.Core {
             damageables.Remove(collider);
         }
 
-        public IDamageable GetClosestDamageable(Vector3 position, List<IDamageable> toIgnore = null) {
+        public IDamageable GetClosestDamageable(Vector3 position, float maxDistance,
+            List<IDamageable> toIgnore = null) {
             float closestDistance = float.MaxValue;
 
             IDamageable closestDamageable = null;
@@ -40,6 +41,7 @@ namespace _Scripts.Core {
 
                 float distance = Vector3.Distance(position, damageable.GetTransform().position);
                 if (!(distance < closestDistance)) continue;
+                if (distance > maxDistance) continue;
                 closestDamageable = damageable;
                 closestDistance = distance;
             }

@@ -161,7 +161,8 @@ namespace _Scripts.Champions.Kitegirl {
 
             for (int i = 1; i <= bounces; i++) {
                 IDamageable damageable = DamageableManager.GetInstance()
-                    .GetClosestDamageable(alreadyHit[i - 1].GetTransform().position, alreadyHit);
+                    .GetClosestDamageable(alreadyHit[i - 1].GetTransform().position, 5f, alreadyHit);
+                if (damageable == null) break;
                 alreadyHit.Add(damageable);
 
 
