@@ -17,6 +17,20 @@ namespace _Scripts.Champions.Effects.impl {
         [SerializeField] private float factor;
         private float overflow = 0;
 
+        public bool ShouldTick {
+            get { return timeLeft > 0; }
+        }
+
+        public float Cooldown {
+            get => currentCooldown;
+            set => currentCooldown = value;
+        }
+
+        public float CurrentCooldown {
+            get => timeLeft;
+            set => timeLeft = value;
+        }
+
         private Overdrive overdrive;
 
         public void Link(Overdrive overdrive) {
@@ -51,11 +65,6 @@ namespace _Scripts.Champions.Effects.impl {
                     overflow--;
                 }
             }
-        }
-
-
-        public bool ShouldTick {
-            get { return timeLeft > 0; }
         }
 
         public void Tick(float deltaTime) {

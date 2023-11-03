@@ -159,6 +159,10 @@ namespace _Scripts.Champions {
 
         #region Start and Update
 
+        private void Awake() {
+            dodge = new Dodge(dashCooldown);
+        }
+
         protected virtual void Start() {
             base.Start();
             // add autoAttack to the first slot of the abilities list
@@ -170,8 +174,6 @@ namespace _Scripts.Champions {
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
                 championStatistics.CurrentHealth,
                 championStatistics.MaxHealth));
-
-            dodge = new Dodge(dashCooldown);
         }
 
         protected virtual void FixedUpdate() {
@@ -511,7 +513,7 @@ namespace _Scripts.Champions {
             }, dashDuration, this);
 
             dodge.StartCooldown();
-            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Space, dodge.GetCooldown()));
+            EventBus<ChampionAbilityUsedEvent>.Raise(new ChampionAbilityUsedEvent(KeyCode.Space, dodge.Cooldown));
         }
 
         private const float increaseValue = 0.008f;
@@ -584,7 +586,7 @@ namespace _Scripts.Champions {
             damage = CalculateIncomingDamage(damage);
             damage = TakeShieldDamage(damage);
 
-            Debug.Log("With value " + damage);
+            // Debug.Log("With value " + damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
             if (championStatistics.CurrentHealth <= 0) {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using _Scripts.Champions;
 using _Scripts.Champions.Kitegirl.Abilities;
 using _Scripts.Core;
@@ -131,7 +132,8 @@ namespace _Scripts {
                         var point = hit.point;
                         point.y = transform.position.y;
 
-                        IDamageable damageable = DamageableManager.GetInstance().GetClosestDamageable(point);
+                        IDamageable damageable = DamageableManager.GetInstance()
+                            .GetClosestDamageable(point, Single.PositiveInfinity);
 
                         if (damageable != null) {
                             // selectedChampion.OnAutoAttack(damageable);

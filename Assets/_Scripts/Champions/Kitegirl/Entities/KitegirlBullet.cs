@@ -15,12 +15,14 @@ namespace _Scripts.Champions.Kitegirl.Entities {
             if (this.isFake) return;
             // Debug.Log("KitegirlBullet OnTriggerEnter called");
             if (other.gameObject.CompareTag("Enemy")) {
-                Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                if (!other.gameObject.Equals(targetEntity.GetTransform().gameObject)) {
+                    return;
+                }
 
                 // enemy.TakeFlatDamage(this.m_Damage);
 
                 // enemy.TakeFlatDamage(damage);
-                this.sourceEntity.DealDamage(enemy, this.damage, Champion.DamageType.BASIC);
+                this.sourceEntity.DealDamage(targetEntity, this.damage, Champion.DamageType.BASIC);
 
                 OnBulletHit?.Invoke(this.targetEntity);
 

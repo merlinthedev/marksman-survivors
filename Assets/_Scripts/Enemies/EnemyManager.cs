@@ -388,8 +388,20 @@ namespace _Scripts.Enemies {
     }
 
     internal class EnemyTimer : ICooldown {
-        private readonly float cooldown;
+        private float cooldown;
         private float timeLeft;
+
+        public bool ShouldTick => timeLeft > 0;
+
+        public float Cooldown {
+            get => cooldown;
+            set => cooldown = value;
+        }
+
+        public float CurrentCooldown {
+            get => timeLeft;
+            set => timeLeft = value;
+        }
 
         public EnemyTimer(float cooldown, float timeLeft) {
             this.cooldown = cooldown;
@@ -404,7 +416,6 @@ namespace _Scripts.Enemies {
             OnCooldownCompleted = null;
         }
 
-        public bool ShouldTick => timeLeft > 0;
 
         public void Tick(float deltaTime) {
             // Debug.LogWarning("Ticking enemy timer: " + timeLeft + ", " + deltaTime);
@@ -429,9 +440,5 @@ namespace _Scripts.Enemies {
         }
 
         public event Action OnCooldownCompleted;
-
-        public float GetCooldown() {
-            return cooldown;
-        }
     }
 }
