@@ -1,8 +1,10 @@
 ﻿using _Scripts.Champions.Abilities;
 using _Scripts.Champions.Kitegirl.Entities;
 using _Scripts.Util;
+using UnityEditor.Rendering;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
+using Logger = _Scripts.Util.Logger;
 
 namespace _Scripts.Champions.Kitegirl.Abilities.Ultimate {
     public class TwinDisintegrate : Ability {
@@ -17,7 +19,7 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Ultimate {
             if (IsOnCooldown()) return;
 
             var direction = Utilities.GetPointToMouseDirection(champion.transform.position);
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
             for (int i = 0; i < 2; i++) {
                 var twinDisintegrate =
