@@ -12085,6 +12085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilities:
   - {fileID: 1366331452263209347, guid: 4f72ac218e2a9c54181a1d1efbf2fea3, type: 3}
+  - {fileID: -8455518367097311757, guid: 94d2a193f79ed0041a7a5328b4438ca1, type: 3}
   passiveAbilities: []
   autoAttack: {fileID: 8394987239580299222, guid: 8843825ba6d23f143967641fa0f55746,
     type: 3}

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using _Scripts.Util;
+using UnityEngine;
 
 namespace _Scripts.Core.Singleton {
-    public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
-
+    public abstract class Singleton<T> : MonoLogger where T : MonoBehaviour {
         private static T instance;
 
         protected virtual void Awake() {
@@ -21,6 +21,5 @@ namespace _Scripts.Core.Singleton {
         public static T GetInstance() {
             return instance;
         }
-
     }
 }

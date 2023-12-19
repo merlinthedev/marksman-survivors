@@ -97,9 +97,7 @@ namespace _Scripts {
 
         private void HandleMouseClicks() {
             HandleMoveClick();
-            // if (Time.time > lastEnemyHoverTime + forgivenessTime) {
-            //     HandleMoveHoldClick();
-            // }
+            
 
             HandleAttackMove();
 
@@ -203,7 +201,7 @@ namespace _Scripts {
                                 }
                             }
                         } else {
-                            Debug.Log("Damageable is null on A click");
+                            Log("Damageable is null on A click");
                         }
                     }
                 }
@@ -281,13 +279,13 @@ namespace _Scripts {
                                     return;
                                 }
 
-                                Logger.Log("Distance is too big, moving...", Logger.Color.RED, this);
+                                Log("Distance is too big, moving...");
                             }
                         }
 
 
                         selectedChampion.RequestMovement(point);
-                        Logger.Log("Requesting movement.", Logger.Color.RED, this);
+                        Log("Requesting movement.");
                     }
 
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
@@ -380,6 +378,7 @@ namespace _Scripts {
 
         private void Update() {
             HandleMouseClicks();
+
             HandleAbilityClicks();
         }
 
