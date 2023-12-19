@@ -1,5 +1,6 @@
 ﻿using _Scripts.Champions.Abilities;
 using _Scripts.Champions.Kitegirl.Entities;
+using _Scripts.Util;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
@@ -15,22 +16,17 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Ultimate {
         public override void OnUse() {
             if (IsOnCooldown()) return;
 
-            var twinDisintegrate =
-                Instantiate(twinDisintegratePrefab, champion.transform.position, Quaternion.identity);
+            var direction = Utilities.GetPointToMouseDirection(champion.transform.position);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            var twinDisintegrateController = twinDisintegrate.GetComponentInChildren<TwinDisintegrateController>();
-            twinDisintegrateController.Init(champion, champion.GetAttackDamage() * 2, rotationSpeed, totalRotation);
-
-            // instantiate another laser but rotate it counter-clockwise
-            var twinDisintegrate2 =
-                Instantiate(twinDisintegratePrefab, champion.transform.position, Quaternion.identity);
-
-            var twinDisintegrateController2 = twinDisintegrate2.GetComponentInChildren<TwinDisintegrateController>();
-            twinDisintegrateController2.Init(champion, champion.GetAttackDamage() * 2, -rotationSpeed, totalRotation);
-            
-            //parent them to the champion so they move with
-            twinDisintegrate.transform.parent = champion.transform;
-            twinDisintegrate2.transform.parent = champion.transform;
+            for (int i = 0; i < 2; i++) {
+                var twinDisintegrate =
+                    Instantiate(twinDisintegratePrefab, champion.transform.position, Quaternion.Euler(0, angle, 0));
+                var controller = twinDisintegrate.GetComponentInChildren<TwinDisintegrateController>();
+                controller.Init(champion, champion.GetAttackDamage() * damagePercentage,
+                    i == 0 ? rotationSpeed : -rotationSpeed, totalRotation);
+                twinDisintegrate.transform.parent = champion.transform;
+            }
 
             base.OnUse();
         }

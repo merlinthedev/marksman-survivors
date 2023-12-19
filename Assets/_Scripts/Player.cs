@@ -4,6 +4,7 @@ using System.Linq;
 using _Scripts.Champions;
 using _Scripts.Champions.Kitegirl.Abilities;
 using _Scripts.Core;
+using _Scripts.Core.Singleton;
 using _Scripts.Enemies;
 using _Scripts.Entities;
 using _Scripts.EventBus;
@@ -11,12 +12,13 @@ using _Scripts.Interactable;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Logger = _Scripts.Util.Logger;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
 namespace _Scripts {
-    public class Player : Core.Singleton.Singleton<Player> {
+    public class Player : Singleton<Player> {
         [Header("Stats")]
         [SerializeField] private Texture2D m_CursorTexture, m_AttackCursorTexture, m_InteractCursorTexture;
 
@@ -95,9 +97,9 @@ namespace _Scripts {
 
         private void HandleMouseClicks() {
             HandleMoveClick();
-            if (Time.time > lastEnemyHoverTime + forgivenessTime) {
-                HandleMoveHoldClick();
-            }
+            // if (Time.time > lastEnemyHoverTime + forgivenessTime) {
+            //     HandleMoveHoldClick();
+            // }
 
             HandleAttackMove();
 
@@ -119,10 +121,10 @@ namespace _Scripts {
 
         private void HandleAttackMove() {
             if (Input.GetKeyDown(KeyCode.A) && !isPaused) {
-                // if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                //     Debug.Log("Clicking on UI, not moving");
-                //     return;
-                // }
+                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                    // Debug.Log("Clicking on UI, not moving");
+                    return;
+                }
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
@@ -248,11 +250,11 @@ namespace _Scripts {
         private void HandleMoveClick() {
             if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused) {
                 // check if the mouse is on a canvas object
-                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                    // Debug.LogError("Mouse is over a UI element, not moving" +
-                    //                UnityEngine.EventSystems.EventSystem.current.transform.name);
-                    return;
-                }
+                // if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                //     Debug.LogError("Mouse is over a UI element, not moving" +
+                //                    UnityEngine.EventSystems.EventSystem.current.transform.name);
+                //     return;
+                // }
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
@@ -265,8 +267,8 @@ namespace _Scripts {
                         Instantiate(clickAnimPrefab, new Vector3(point.x, 0.2f, point.z), Quaternion.identity);
                         point.y = transform.position.y;
 
-                        Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
                         if (Time.time < lastEnemyHoverTime + forgivenessTime && lastHoveredEnemy != null) {
+                            Enemy enemy = EnemyManager.GetInstance().GetClosestEnemy(point);
                             if (enemy != null) {
                                 float distance = (enemy.transform.position - point).magnitude;
 
@@ -278,11 +280,14 @@ namespace _Scripts {
                                     SetFocus(enemy);
                                     return;
                                 }
+
+                                Logger.Log("Distance is too big, moving...", Logger.Color.RED, this);
                             }
                         }
 
 
                         selectedChampion.RequestMovement(point);
+                        Logger.Log("Requesting movement.", Logger.Color.RED, this);
                     }
 
                     if (hit.collider.gameObject.CompareTag("Enemy") ||
@@ -320,7 +325,7 @@ namespace _Scripts {
         private void SetFocus(IDamageable damageable) {
             RemoveFocus();
 
-            if (!(damageable is Enemy)) return;
+            if (damageable is not Enemy) return;
 
             damageable.GetTransform().GetComponentInChildren<Renderer>()?.material.SetInt("_Focus", 1);
             damageable.GetTransform().GetComponent<Enemy>().focusAnim = true;
