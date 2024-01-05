@@ -97,7 +97,7 @@ namespace _Scripts {
 
         private void HandleMouseClicks() {
             HandleMoveClick();
-            
+
 
             HandleAttackMove();
 

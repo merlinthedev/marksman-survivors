@@ -55,6 +55,6 @@ MonoBehaviour:
   abilityType: 5
   twinDisintegratePrefab: {fileID: 2018020574174969123, guid: eef32c98c8348b54d9fe9bfd5c66efef,
     type: 3}
-  rotationSpeed: 1.6
+  rotationSpeed: 8
   totalRotation: 360
   damagePercentage: 2

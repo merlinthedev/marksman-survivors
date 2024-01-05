@@ -10,10 +10,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace _Scripts.Enemies {
-    public abstract class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager {
-        [Header("RIGIDBODY & COLLIDER")]
-        [SerializeField] protected Rigidbody rigidbody;
+namespace _Scripts.Enemies
+{
+    public abstract class Enemy : MonoBehaviour, IStackableLivingEntity, IDebuffable, IDamager
+    {
+        [Header("RIGIDBODY & COLLIDER")] [SerializeField]
+        protected Rigidbody rigidbody;
 
         [SerializeField] private Collider collider;
         [SerializeField] protected LayerMask noCollisionMask;
@@ -22,8 +24,7 @@ namespace _Scripts.Enemies {
         private SpriteRenderer spriteRenderer;
         private Renderer renderer;
 
-        [Header("UI")]
-        [SerializeField] private Image healthBar;
+        [Header("UI")] [SerializeField] private Image healthBar;
 
         [SerializeField] private Image healthBarBackground;
         [SerializeField] private GameObject damageNumberPrefab;
@@ -33,23 +34,20 @@ namespace _Scripts.Enemies {
         public bool focusAnim;
 
 
-        [Header("MOVEMENT")]
-        [SerializeField] protected float initialMovementSpeed;
+        [Header("MOVEMENT")] [SerializeField] protected float initialMovementSpeed;
 
         private int currentDir = 0;
         private int newDir = 0;
         protected float movementSpeed = 0;
 
 
-        [Header("STATS")]
-        [SerializeField] private float maxHealth;
+        [Header("STATS")] [SerializeField] private float maxHealth;
 
         [SerializeField] private float rewardXP;
         private float currentHealth;
         [SerializeField] protected float damage = 1f;
 
-        [Header("Loot")]
-        [SerializeField] private List<GameObject> lootPrefabs;
+        [Header("Loot")] [SerializeField] private List<GameObject> lootPrefabs;
 
         protected bool isDead => currentHealth <= 0;
         private bool canMove = true;
@@ -68,27 +66,32 @@ namespace _Scripts.Enemies {
 
         private EnemyDamageNumberHelper enemyDamageNumberHelper;
 
-        private void Start() {
+        private void Start()
+        {
             originalLayer = gameObject.layer;
             initialHealthBarWidth = healthBar.rectTransform.sizeDelta.x;
 
             animator = GetComponent<Animator>();
-            if (animator == null) {
+            if (animator == null)
+            {
                 animator = GetComponentInChildren<Animator>();
             }
 
             spriteRenderer = GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null) {
+            if (spriteRenderer == null)
+            {
                 spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             }
 
             renderer = GetComponent<Renderer>();
-            if (renderer == null) {
+            if (renderer == null)
+            {
                 renderer = GetComponentInChildren<Renderer>();
             }
 
             canvas = GetComponentInChildren<Canvas>();
-            if (canvas == null) {
+            if (canvas == null)
+            {
                 canvas = GetComponentInChildren<Canvas>();
             }
 
@@ -105,8 +108,10 @@ namespace _Scripts.Enemies {
             GetComponent<Rigidbody>().mass = movementSpeed * 2;
         }
 
-        private void Update() {
-            if (currentTarget != null && canMove) {
+        private void Update()
+        {
+            if (currentTarget != null && canMove)
+            {
                 Move();
             }
 
@@ -119,11 +124,13 @@ namespace _Scripts.Enemies {
             FocusAnimation();
         }
 
-        private void OnMouseEnter() {
+        private void OnMouseEnter()
+        {
             EventBus<EnemyStartHoverEvent>.Raise(new EnemyStartHoverEvent(this));
         }
 
-        private void OnMouseExit() {
+        private void OnMouseExit()
+        {
             EventBus<EnemyStopHoverEvent>.Raise(new EnemyStopHoverEvent());
         }
 
@@ -131,30 +138,43 @@ namespace _Scripts.Enemies {
 
         protected abstract void Move();
 
-        private void ApplyDirection() {
-            if (currentDir != newDir) {
+        private void ApplyDirection()
+        {
+            if (currentDir != newDir)
+            {
                 newDir = currentDir;
                 animator.SetTrigger("DirChange");
-                if (currentDir == 0) {
+                if (currentDir == 0)
+                {
                     spriteRenderer.flipX = true;
                     animator.SetInteger("Dir", 1);
-                } else if (currentDir == 1) {
+                }
+                else if (currentDir == 1)
+                {
                     spriteRenderer.flipX = true;
                     animator.SetInteger("Dir", 0);
-                } else if (currentDir == 2) {
+                }
+                else if (currentDir == 2)
+                {
                     spriteRenderer.flipX = false;
                     animator.SetInteger("Dir", 0);
-                } else if (currentDir == 3) {
+                }
+                else if (currentDir == 3)
+                {
                     spriteRenderer.flipX = false;
                     animator.SetInteger("Dir", 1);
                 }
             }
         }
 
-        private void CheckDirection() {
-            if (rigidbody.velocity.x > 0) {
+        private void CheckDirection()
+        {
+            if (rigidbody.velocity.x > 0)
+            {
                 currentDir = (rigidbody.velocity.z > 0) ? 0 : 1;
-            } else if (rigidbody.velocity.x < 0) {
+            }
+            else if (rigidbody.velocity.x < 0)
+            {
                 currentDir = rigidbody.velocity.z < 0 ? 2 : 3;
             }
         }
@@ -163,8 +183,10 @@ namespace _Scripts.Enemies {
 
         #region Stacks
 
-        public void AddStacks(int stacks, Stack.StackType stackType) {
-            switch (stackType) {
+        public void AddStacks(int stacks, Stack.StackType stackType)
+        {
+            switch (stackType)
+            {
                 case Stack.StackType.FRAGILE:
                     AddFragileStacks(stacks);
                     break;
@@ -175,15 +197,19 @@ namespace _Scripts.Enemies {
             }
         }
 
-        private void AddFragileStacks(int count) {
-            for (int i = 0; i < count; i++) {
+        private void AddFragileStacks(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
                 Stack stack = new Stack(Stack.StackType.FRAGILE, this);
                 Stacks.Add(stack);
             }
         }
 
-        public void RemoveStacks(int stacks, Stack.StackType stackType) {
-            switch (stackType) {
+        public void RemoveStacks(int stacks, Stack.StackType stackType)
+        {
+            switch (stackType)
+            {
                 case Stack.StackType.FRAGILE:
                     RemoveFragileStacks(stacks);
                     break;
@@ -194,29 +220,36 @@ namespace _Scripts.Enemies {
             }
         }
 
-        private void RemoveFragileStacks(int count) {
+        private void RemoveFragileStacks(int count)
+        {
             // Remove the last count stacks
             int removed = 0;
-            for (int i = Stacks.Count - 1; i >= 0; i--) {
+            for (int i = Stacks.Count - 1; i >= 0; i--)
+            {
                 if (removed == count) break;
-                if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE) {
+                if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE)
+                {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
             }
         }
 
-        public void RemoveStack(Stack stack) {
+        public void RemoveStack(Stack stack)
+        {
             Stacks.Remove(stack);
         }
 
-        public void CheckStacksForExpiration() {
-            for (int i = Stacks.Count - 1; i >= 0; i--) {
+        public void CheckStacksForExpiration()
+        {
+            for (int i = Stacks.Count - 1; i >= 0; i--)
+            {
                 Stacks[i].CheckForExpiration();
             }
         }
 
-        public int GetStackAmount(Stack.StackType stackType) {
+        public int GetStackAmount(Stack.StackType stackType)
+        {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
 
@@ -224,12 +257,22 @@ namespace _Scripts.Enemies {
 
         #region Damage
 
-        public virtual void TakeFlatDamage(float damage) {
+        public virtual void TakeFlatDamage(float damage)
+        {
             TakeDamage(damage);
         }
 
-        private void TakeDamage(float damage) {
-            if (isDead) return;
+        private void TakeDamage(float damage)
+        {
+            if (isDead)
+            {
+                if (canMove)
+                {
+                    Invoke(nameof(Die), 0.1f);
+                }
+
+                return;
+            }
 
             float damageTaken = CalculateIncomingDamage(damage);
 
@@ -241,7 +284,8 @@ namespace _Scripts.Enemies {
             ShowDamageUI(damageTaken);
             UpdateHealthBar();
 
-            if (currentHealth <= 0) {
+            if (currentHealth <= 0)
+            {
                 canMove = false;
                 rigidbody.velocity = Vector3.zero;
                 rigidbody.useGravity = false;
@@ -251,18 +295,25 @@ namespace _Scripts.Enemies {
             }
         }
 
-        public void Die() {
-            attachables.ForEach(attachable => attachable.OnUse());
+        public void Die()
+        {
+            // attachables.ForEach(attachable => attachable.OnUse());
+            for (var i = attachables.Count - 1; i >= 0; i--)
+            {
+                attachables[i].OnUse();
+            }
 
             EventBus<EnemyKilledEvent>.Raise(new EnemyKilledEvent(collider, this, transform.position));
             DropLoot();
             Destroy(gameObject);
         }
 
-        public float CalculateIncomingDamage(float damage) {
+        public float CalculateIncomingDamage(float damage)
+        {
             int amountOfFragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
 
-            if (IsFragile) {
+            if (IsFragile)
+            {
                 damage *= 1 + amountOfFragileStacks / 100f;
             }
 
@@ -272,7 +323,8 @@ namespace _Scripts.Enemies {
         public abstract void DealDamage(IDamageable damageable, float damage, Champion.DamageType damageType,
             bool shouldInvoke = true);
 
-        public void ResetCurrentTarget() {
+        public void ResetCurrentTarget()
+        {
             currentTarget = null;
         }
 
@@ -280,41 +332,50 @@ namespace _Scripts.Enemies {
 
         #region Debuffs
 
-        public void ApplyDebuff(Debuff debuff) {
+        public void ApplyDebuff(Debuff debuff)
+        {
             Debuffs.Add(debuff);
 
-            switch (debuff.GetDebuffType()) {
+            switch (debuff.GetDebuffType())
+            {
                 case Debuff.DebuffType.SLOW:
                     ApplySlow(debuff);
                     break;
             }
         }
 
-        private void ApplySlow(Debuff debuff) {
+        private void ApplySlow(Debuff debuff)
+        {
             movementSpeed *= 1 - debuff.GetValue();
 
-            if (debuff.GetDuration() < 0) {
+            if (debuff.GetDuration() < 0)
+            {
                 return;
             }
 
             Utilities.InvokeDelayed(() => { movementSpeed = initialMovementSpeed; }, debuff.GetDuration(), this);
         }
 
-        private void RemoveSlow(Debuff debuff) {
+        private void RemoveSlow(Debuff debuff)
+        {
             movementSpeed = initialMovementSpeed;
         }
 
-        public void RemoveDebuff(Debuff debuff) {
+        public void RemoveDebuff(Debuff debuff)
+        {
             Debuffs.Remove(debuff);
-            switch (debuff.GetDebuffType()) {
+            switch (debuff.GetDebuffType())
+            {
                 case Debuff.DebuffType.SLOW:
                     RemoveSlow(debuff);
                     break;
             }
         }
 
-        public void CheckDebuffsForExpiration() {
-            for (var i = Debuffs.Count - 1; i >= 0; i--) {
+        public void CheckDebuffsForExpiration()
+        {
+            for (var i = Debuffs.Count - 1; i >= 0; i--)
+            {
                 Debuffs[i].CheckForExpiration();
             }
         }
@@ -323,31 +384,41 @@ namespace _Scripts.Enemies {
 
         #region UI
 
-        protected void ShowDamageUI(float damage) {
+        protected void ShowDamageUI(float damage)
+        {
             // HERE
             enemyDamageNumberHelper.SetDamage(damage);
         }
 
-        private void UpdateHealthBar() {
+        private void UpdateHealthBar()
+        {
             float healthPercentage = currentHealth / maxHealth;
 
             healthBar.rectTransform.sizeDelta = new Vector2(healthPercentage * initialHealthBarWidth,
                 healthBar.rectTransform.sizeDelta.y);
         }
 
-        private void FocusAnimation() {
+        private void FocusAnimation()
+        {
             if (renderer == null) return;
-            if (focusAnim) {
+            if (focusAnim)
+            {
                 if (renderer.material.GetVector("_Color").magnitude <
-                    2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude) {
+                    2.2f * new Vector4(Color.red.r, Color.red.g, Color.red.b, Color.red.a).magnitude)
+                {
                     // Debug.Log("Increasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier += 0.03f;
-                } else {
+                }
+                else
+                {
                     focusAnim = false;
                 }
-            } else {
-                if (renderer.material.GetVector("_Color").x > (Color.red).r) {
+            }
+            else
+            {
+                if (renderer.material.GetVector("_Color").x > (Color.red).r)
+                {
                     // Debug.Log("Decreasing intensity...");
                     renderer.material.SetVector("_Color", Color.red * intensityMultiplier);
                     intensityMultiplier -= 0.03f;
@@ -359,13 +430,16 @@ namespace _Scripts.Enemies {
 
         #region Pause & Resume
 
-        public void OnPause() {
+        public void OnPause()
+        {
             SetCanAttack(false);
             SetCanMove(false);
         }
 
-        public void OnResume() {
-            Utilities.InvokeDelayed(() => {
+        public void OnResume()
+        {
+            Utilities.InvokeDelayed(() =>
+            {
                 SetCanMove(true);
                 SetCanAttack(true);
             }, 0.2f, this);
@@ -375,8 +449,10 @@ namespace _Scripts.Enemies {
 
         #region Other Methods
 
-        private void DropLoot() {
-            for (int i = 0; i < lootPrefabs.Count; i++) {
+        private void DropLoot()
+        {
+            for (int i = 0; i < lootPrefabs.Count; i++)
+            {
                 Instantiate(lootPrefabs[i],
                     new Vector3(transform.transform.position.x, 0, transform.transform.position.z),
                     Quaternion.identity);
@@ -387,21 +463,27 @@ namespace _Scripts.Enemies {
 
         #region Getters & Setters
 
-        public Transform GetTransform() {
+        public Transform GetTransform()
+        {
             return gameObject.transform;
         }
 
-        public float GetMaxHealth() {
+        public float GetMaxHealth()
+        {
             return maxHealth;
         }
 
-        public float GetXP() {
+        public float GetXP()
+        {
             return rewardXP;
         }
 
-        public void SetCanMove(bool canMove) {
-            if (!canMove) {
-                if (rigidbody == null) {
+        public void SetCanMove(bool canMove)
+        {
+            if (!canMove)
+            {
+                if (rigidbody == null)
+                {
                     this.canMove = canMove;
                     return;
                 }
@@ -412,24 +494,28 @@ namespace _Scripts.Enemies {
             this.canMove = canMove;
         }
 
-        public void SetCanAttack(bool canAttack) {
+        public void SetCanAttack(bool canAttack)
+        {
             this.canAttack = canAttack;
         }
 
-        public void SetTarget(IDamageable damageable) {
+        public void SetTarget(IDamageable damageable)
+        {
             currentTarget = damageable;
         }
 
         #endregion
 
-        public enum AttackType {
+        public enum AttackType
+        {
             NONE,
             BASIC,
             AOE,
             BUFF
         }
 
-        public enum EnemyType {
+        public enum EnemyType
+        {
             BASIC,
             CASTER,
             SPEED_SHAMAN,

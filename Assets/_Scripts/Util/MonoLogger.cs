@@ -12,7 +12,7 @@ namespace _Scripts.Util {
         }
 
         protected void Log(object message, MonoBehaviour context) {
-            Debug.Log(message, context);
+            if (shouldLog) Debug.Log(message, context);
         }
     }
 }
