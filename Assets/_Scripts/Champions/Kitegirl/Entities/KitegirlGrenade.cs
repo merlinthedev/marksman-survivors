@@ -7,8 +7,10 @@ using _Scripts.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Scripts.Champions.Kitegirl.Entities {
-    public class KitegirlGrenade : MonoBehaviour, IThrowable, IDamageable {
+namespace _Scripts.Champions.Kitegirl.Entities
+{
+    public class KitegirlGrenade : MonoBehaviour, IThrowable, IDamageable
+    {
         private Vector3 targetPoint;
 
         private Kitegirl kitegirl;
@@ -30,7 +32,8 @@ namespace _Scripts.Champions.Kitegirl.Entities {
         public List<IAttachable> attachables { get; } = new();
 
 
-        public void OnThrow(Vector3 targetPoint, IEntity sourceEntity) {
+        public void OnThrow(Vector3 targetPoint, IEntity sourceEntity)
+        {
             this.targetPoint = targetPoint;
             kitegirl = (Kitegirl)sourceEntity;
             thrownTime = Time.time;
@@ -46,17 +49,21 @@ namespace _Scripts.Champions.Kitegirl.Entities {
         }
 
 
-        private void Update() {
-            if (!destinationReached) {
+        private void Update()
+        {
+            if (!destinationReached)
+            {
                 float distance = (targetPoint - transform.position).magnitude;
-                if (distance < 0.1f) {
+                if (distance < 0.1f)
+                {
                     destinationReached = true;
                     m_Rigidbody.velocity = Vector3.zero;
                 }
             }
         }
 
-        private void Detonate(bool shot = false) {
+        private void Detonate(bool shot = false)
+        {
             if (regularDetonationCancelled) return;
             // Debug.Log("Detonating");
 
@@ -64,7 +71,8 @@ namespace _Scripts.Champions.Kitegirl.Entities {
                 EnemyManager.GetInstance().GetEnemiesInArea(transform.position, damageRadius);
 
 
-            foreach (Enemy enemy in enemiesInRange) {
+            foreach (Enemy enemy in enemiesInRange)
+            {
                 float damage = enemy.GetMaxHealth() * 0.01f /* 1% of max health */ +
                                kitegirl.GetAttackDamage() *
                                0.01f; // 1% of AD
@@ -81,38 +89,46 @@ namespace _Scripts.Champions.Kitegirl.Entities {
             Destroy(gameObject);
         }
 
-        private void EarlyDetonate() {
+        private void EarlyDetonate()
+        {
             // Debug.Log("Early detonating");
             Detonate(true);
 
             regularDetonationCancelled = true;
         }
 
-        public void SetDamage(float damage) {
+        public void SetDamage(float damage)
+        {
             this.damage = damage;
         }
-        
-        public void SetDetonateTime(float detonateTime) {
+
+        public void SetDetonateTime(float detonateTime)
+        {
             this.detonateTime = detonateTime;
         }
-        
-        public void SetDamageRadius(float damageRadius) {
+
+        public void SetDamageRadius(float damageRadius)
+        {
             this.damageRadius = damageRadius;
         }
 
-        public void TakeFlatDamage(float damage) {
+        public void TakeFlatDamage(float damage)
+        {
             EarlyDetonate();
         }
 
-        public float CalculateIncomingDamage(float damage) {
+        public float CalculateIncomingDamage(float damage)
+        {
             return this.damage;
         }
 
-        public Transform GetTransform() {
+        public Transform GetTransform()
+        {
             return gameObject.transform;
         }
 
-        public Vector3 GetTargetPoint() {
+        public Vector3 GetTargetPoint()
+        {
             return targetPoint;
         }
     }

@@ -8175,7 +8175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e68a1b1022d9b47939054240c01a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IWANTTOSPAWN: 0
+  shouldLog: 0
+  IWANTTOSPAWN: 1
   player: {fileID: 2114737657}
   enemyPrefabs:
   - {fileID: 8988538447063034749, guid: f8e2e9fd7264bab44aeb84652fa6c599, type: 3}
@@ -8212,6 +8213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8434d72977514ea99969e517e981a3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldLog: 1
   Paused: 0
 --- !u!114 &1574137039
 MonoBehaviour:
@@ -8225,6 +8227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41e38218e972483898a4fc8b1ef52817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldLog: 1
   merchantPrefab: {fileID: 6567137307320768544, guid: 7791f99f08ae17b46a86ff9da9c3b7ae,
     type: 3}
   spawnInterval: 0.1
@@ -8242,6 +8245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c0b8661ba941e68e8fc964b6308d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldLog: 1
 --- !u!212 &1574137041
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12030,6 +12034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83df9413230b8c41b295bf419e6232f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldLog: 1
   m_CursorTexture: {fileID: 2800000, guid: 54cad0d84eedca24dba3aa4b8eba260f, type: 3}
   m_AttackCursorTexture: {fileID: 2800000, guid: cc3b6b70dd497e14c9ea212938c90923,
     type: 3}
@@ -12084,8 +12089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilities:
-  - {fileID: 1366331452263209347, guid: 4f72ac218e2a9c54181a1d1efbf2fea3, type: 3}
-  - {fileID: -8455518367097311757, guid: 94d2a193f79ed0041a7a5328b4438ca1, type: 3}
+  - {fileID: 6764458965673562116, guid: cb9859357ef804444b04c5dc71e63df3, type: 3}
   passiveAbilities: []
   autoAttack: {fileID: 8394987239580299222, guid: 8843825ba6d23f143967641fa0f55746,
     type: 3}
