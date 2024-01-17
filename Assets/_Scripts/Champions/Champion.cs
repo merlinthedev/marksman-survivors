@@ -890,6 +890,11 @@ namespace _Scripts.Champions
                 : globalMovementDirectionAngle;
         }
 
+        public bool GetIsCasting()
+        {
+            return isCasting;
+        }
+
         public Vector4 GetMovementData()
         {
             return directionTracker;

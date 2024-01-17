@@ -3,8 +3,10 @@ using _Scripts.Entities;
 using _Scripts.Util;
 using UnityEngine;
 
-namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
-    public class DevastatingFlare : Ability, ICastable {
+namespace _Scripts.Champions.Kitegirl.Abilities.Offense
+{
+    public class DevastatingFlare : Ability, ICastable
+    {
         [SerializeField] private SerializedDictionary<string, float> enemies = new();
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float damagePercentage = 1f;
@@ -19,14 +21,17 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
         private float angle;
 
 
-        public override void Hook(Champion champion) {
+        public override void Hook(Champion champion)
+        {
             base.Hook(champion);
 
             CastTime = casttimeFactor * champion.GetAttackSpeed();
         }
 
-        public override void OnUse() {
-            if (!CanAfford()) {
+        public override void OnUse()
+        {
+            if (!CanAfford() || champion.GetIsCasting())
+            {
                 return;
             }
 
@@ -41,7 +46,8 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
             Cast();
         }
 
-        private void Use() {
+        private void Use()
+        {
             champion.SetIsCasting(false);
 
 
@@ -53,12 +59,14 @@ namespace _Scripts.Champions.Kitegirl.Abilities.Offense {
             base.OnUse();
         }
 
-        private void OnHit(IDamageable damageable) {
+        private void OnHit(IDamageable damageable)
+        {
             champion.DealDamage(damageable, champion.GetAttackDamage() * damagePercentage,
                 Champion.DamageType.NON_BASIC);
         }
 
-        public void Cast() {
+        public void Cast()
+        {
             (champion as Kitegirl)?.GetAnimator().SetDirection(angle);
             champion.SetGlobalDirectionAngle(angle);
             champion.Stop();
