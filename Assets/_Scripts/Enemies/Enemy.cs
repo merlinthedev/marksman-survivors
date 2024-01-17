@@ -55,7 +55,7 @@ namespace _Scripts.Enemies
 
         protected float lastAttackTime;
         protected float attackChargeTime = 0.2f;
-        protected float attackCooldown = 0.2f;
+        [SerializeField] protected float attackCooldown = 0.2f;
 
         public bool IsFragile => Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count > 0;
         public List<Stack> Stacks { get; } = new();

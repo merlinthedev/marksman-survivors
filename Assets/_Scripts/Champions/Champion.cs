@@ -548,7 +548,7 @@ namespace _Scripts.Champions
         {
             if (dodge.IsOnCooldown())
             {
-                Logger.Log("Dash is on cooldown.", this);
+                Log("Dash is on cooldown.", this);
                 return;
             }
 

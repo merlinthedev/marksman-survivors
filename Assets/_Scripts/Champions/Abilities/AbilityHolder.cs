@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Scripts.Champions.Abilities {
     [Serializable]
-    public class AbilityHolder : MonoBehaviour {
+    public class AbilityHolder : MonoLogger {
         [SerializeField] protected List<Ability> abilities = new();
         [SerializeField] protected List<Ability> passiveAbilities = new();
 
@@ -19,7 +19,6 @@ namespace _Scripts.Champions.Abilities {
         }
 
         protected void Start() {
-            Debug.Log("Start");
             Utilities.InvokeNextFrame(
                 () => {
                     abilities.ForEach(ability => {

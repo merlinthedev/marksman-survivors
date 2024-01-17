@@ -133,8 +133,10 @@ namespace _Scripts
             {
                 if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
                 {
-                    // Debug.Log("Clicking on UI, not moving");
-                    return;
+                    if (SceneManager.GetActiveScene().name == "D Hub")
+                    {
+                        return;
+                    }
                 }
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -227,10 +229,6 @@ namespace _Scripts
                                 }
                             }
                         }
-                        else
-                        {
-                            Log("Damageable is null on A click");
-                        }
                     }
                 }
             }
@@ -284,12 +282,13 @@ namespace _Scripts
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && !isPaused)
             {
-                // check if the mouse is on a canvas object
-                // if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
-                //     Debug.LogError("Mouse is over a UI element, not moving" +
-                //                    UnityEngine.EventSystems.EventSystem.current.transform.name);
-                //     return;
-                // }
+                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+                {
+                    if (SceneManager.GetActiveScene().name == "D Hub")
+                    {
+                        return;
+                    }
+                }
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
