@@ -7,10 +7,12 @@ using _Scripts.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Scripts.UI {
-    public class UICooldowns : MonoBehaviour {
-        [Header("References")]
-        [SerializeField] private Image lmbCooldown;
+namespace _Scripts.UI
+{
+    public class UICooldowns : MonoBehaviour
+    {
+        [Header("References")] [SerializeField]
+        private Image lmbCooldown;
 
         [SerializeField] private GameObject lmbDisable;
         [SerializeField] private Image rmbCooldown;
@@ -30,20 +32,24 @@ namespace _Scripts.UI {
         private UICooldownSlot dodgeSlot;
 
         [Serializable]
-        private class UICooldownSlot {
+        private class UICooldownSlot
+        {
             private ICooldown cooldown;
             [SerializeField] private Image image;
             [SerializeField] private GameObject disable;
 
-            public UICooldownSlot(ICooldown cooldown, Image image, GameObject disable) {
+            public UICooldownSlot(ICooldown cooldown, Image image, GameObject disable)
+            {
                 this.cooldown = cooldown;
                 this.image = image;
                 this.disable = disable;
             }
 
-            public void tick() {
+            public void tick()
+            {
                 // Debug.Log("Ticking for: " + ability);
-                if (!disable.activeSelf) {
+                if (!disable.activeSelf)
+                {
                     disable.SetActive(true);
                 }
 
@@ -52,21 +58,25 @@ namespace _Scripts.UI {
                 // ability.GetAbilityCooldown());
                 // Debug.Log(ability + ", fillAmount: " + ability.GetCurrentCooldown() / ability.GetAbilityCooldown());
 
-                if (image.fillAmount == 0) {
+                if (image.fillAmount == 0)
+                {
                     disable.SetActive(false);
                 }
             }
         }
 
-        private void OnEnable() {
+        private void OnEnable()
+        {
             EventBus<ChampionAbilityChosenEvent>.Subscribe(OnAbilityChosen);
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnAbilityChosen);
         }
 
-        private void Start() {
+        private void Start()
+        {
             // for every image, set the fill amount to 0
             // this is because the cooldowns are not active at the start of the game
             lmbCooldown.fillAmount = 0;
@@ -88,7 +98,8 @@ namespace _Scripts.UI {
                 spaceCooldown, spaceDisable);
         }
 
-        private void Update() {
+        private void Update()
+        {
             if (GameManager.GetInstance().Paused) return;
             //foreach (var ability in player.GetCurrentlySelectedChampion().GetAbilities()) {
             // switch (ability.GetKeyCode()) {
@@ -125,8 +136,9 @@ namespace _Scripts.UI {
             dodgeSlot.tick();
         }
 
-        private void OnAbilityChosen(ChampionAbilityChosenEvent e) {
-            if (e.Ability.abilityUseType == Ability.AbilityUseType.PASSIVE) return;
+        private void OnAbilityChosen(ChampionAbilityChosenEvent e)
+        {
+            if (e.Ability.abilityUseType == AbilityUseType.PASSIVE) return;
             // Debug.Log("Ability chosen: " + e.Ability);
             var components = GetUIComponents();
             var slot = new UICooldownSlot(e.Ability, components.Key(), components.Value());
@@ -134,9 +146,11 @@ namespace _Scripts.UI {
             cooldownSlots.Add(slot);
         }
 
-        private Overseer<Image, GameObject> GetUIComponents() {
+        private Overseer<Image, GameObject> GetUIComponents()
+        {
             Overseer<Image, GameObject> components = new();
-            switch (cooldownSlots.Count) {
+            switch (cooldownSlots.Count)
+            {
                 case 0:
                     components.Add(lmbCooldown, lmbDisable);
                     break;

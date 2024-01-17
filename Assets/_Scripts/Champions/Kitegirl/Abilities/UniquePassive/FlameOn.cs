@@ -4,7 +4,6 @@ using UnityEngine;
 namespace _Scripts.Champions.Kitegirl.Abilities.UniquePassive {
     public class FlameOn : Ability {
         [SerializeField] private float flameChance = 0.1f;
-        [SerializeField] private AbilityType abilityType;
         
         public override void Hook(Champion champion) {
             base.Hook(champion);

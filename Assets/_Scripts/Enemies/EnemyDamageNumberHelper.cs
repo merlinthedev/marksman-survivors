@@ -1,6 +1,4 @@
-using System.Runtime.CompilerServices;
 using TMPro;
-using TreeEditor;
 using UnityEngine;
 
 namespace _Scripts.Enemies {

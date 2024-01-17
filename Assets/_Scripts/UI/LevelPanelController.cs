@@ -6,8 +6,10 @@ using _Scripts.Champions.Kitegirl.Abilities;
 using TMPro;
 using UnityEngine;
 
-namespace _Scripts.UI {
-    public class LevelPanelController : MonoBehaviour {
+namespace _Scripts.UI
+{
+    public class LevelPanelController : MonoBehaviour
+    {
         [SerializeField] private GameObject levelPanel;
         [SerializeField] private GameObject abilityPrefab;
         [SerializeField] private TMP_Text prompt;
@@ -20,29 +22,35 @@ namespace _Scripts.UI {
         private int stackedLevelUps = 0;
 
 
-        private void OnEnable() {
+        private void OnEnable()
+        {
             EventBus<ChampionLevelUpEvent>.Subscribe(OnChampionLevelUp);
             EventBus<ShowLevelUpPanelEvent>.Subscribe(ShowPanel);
             EventBus<LevelUpPromptEvent>.Subscribe(ShowPrompt);
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             EventBus<ChampionLevelUpEvent>.Unsubscribe(OnChampionLevelUp);
             EventBus<ShowLevelUpPanelEvent>.Unsubscribe(ShowPanel);
             EventBus<LevelUpPromptEvent>.Unsubscribe(ShowPrompt);
         }
 
-        private void Start() {
+        private void Start()
+        {
             HidePanel();
 
             LoadPrefabs();
         }
 
-        private void LoadPrefabs() {
+        private void LoadPrefabs()
+        {
             allAbilities = Resources.LoadAll<Ability>("Prefab/Kitegirl/Abilities").ToList();
 
-            for (int i = allAbilities.Count - 1; i >= 0; i--) {
-                if (allAbilities[i] is AutoAttack) {
+            for (int i = allAbilities.Count - 1; i >= 0; i--)
+            {
+                if (allAbilities[i] is AutoAttack)
+                {
                     allAbilities.RemoveAt(i);
                 }
             }
@@ -50,26 +58,31 @@ namespace _Scripts.UI {
             allAbilities.ForEach(Debug.Log);
         }
 
-        private List<Ability> GetRandomAbilities() {
+        private List<Ability> GetRandomAbilities()
+        {
             List<Ability> randomAbilities = new();
 
             bool canUnlockUltimate = currentChampionAbilities.Count >= 5;
 
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++)
+            {
                 int randomIndex = Random.Range(0, allAbilities.Count);
 
-                if (currentChampionAbilities.Contains(allAbilities[randomIndex])) {
+                if (currentChampionAbilities.Contains(allAbilities[randomIndex]))
+                {
                     i--;
                     continue;
                 }
 
-                if (randomAbilities.Contains(allAbilities[randomIndex])) {
+                if (randomAbilities.Contains(allAbilities[randomIndex]))
+                {
                     i--;
                     continue;
                 }
 
-                if (!canUnlockUltimate && allAbilities[randomIndex].abilityType == Ability.AbilityType.ULTIMATE) {
+                if (!canUnlockUltimate && allAbilities[randomIndex].abilityType == AbilityType.ULTIMATE)
+                {
                     i--;
                     continue;
                 }
@@ -81,22 +94,27 @@ namespace _Scripts.UI {
             return randomAbilities;
         }
 
-        private void HidePanel() {
+        private void HidePanel()
+        {
             EventBus<UILevelUpPanelClosedEvent>.Raise(new());
             levelPanel.SetActive(false);
         }
 
-        private void ShowPrompt(LevelUpPromptEvent e) {
+        private void ShowPrompt(LevelUpPromptEvent e)
+        {
             prompt.gameObject.SetActive(e.open);
         }
 
-        private void RemovePreviousAbilities() {
-            for (int i = 0; i < levelPanel.transform.childCount; i++) {
+        private void RemovePreviousAbilities()
+        {
+            for (int i = 0; i < levelPanel.transform.childCount; i++)
+            {
                 Destroy(levelPanel.transform.GetChild(i).gameObject);
             }
         }
 
-        private void ShowPanel(ShowLevelUpPanelEvent e) {
+        private void ShowPanel(ShowLevelUpPanelEvent e)
+        {
             if (!leveledUp) return;
 
             RemovePreviousAbilities();
@@ -105,22 +123,26 @@ namespace _Scripts.UI {
 
             Debug.Log("random abilities count: " + randomAbilities.Count, this);
 
-            for (int i = 0; i < randomAbilities.Count; i++) {
+            for (int i = 0; i < randomAbilities.Count; i++)
+            {
                 var ability = randomAbilities[i];
                 var inst = Instantiate(ability.GetAbilityDescriptionPrefab().transform.GetChild(0),
                     levelPanel.transform);
                 AbilityLevelUpController controller = inst.GetComponent<AbilityLevelUpController>();
-                if (controller == null) {
+                if (controller == null)
+                {
                     Debug.LogError(inst.name + " is missing AbilityLevelUpController");
                     Debug.LogError(inst.name + " is missing AbilityLevelUpController");
                     return;
                 }
 
-                controller.SetAction(() => {
+                controller.SetAction(() =>
+                {
                     EventBus<ChampionAbilityChosenEvent>.Raise(new ChampionAbilityChosenEvent(ability, true));
                     HidePanel();
 
-                    if (stackedLevelUps >= 1) {
+                    if (stackedLevelUps >= 1)
+                    {
                         EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
                     }
                 });
@@ -136,7 +158,8 @@ namespace _Scripts.UI {
         }
 
 
-        private void OnChampionLevelUp(ChampionLevelUpEvent e) {
+        private void OnChampionLevelUp(ChampionLevelUpEvent e)
+        {
             EventBus<LevelUpPromptEvent>.Raise(new LevelUpPromptEvent(true));
             currentChampionAbilities = e.ChampionAbilities;
             leveledUp = true;
