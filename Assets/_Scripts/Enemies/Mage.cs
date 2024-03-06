@@ -18,7 +18,7 @@ namespace _Scripts.Enemies
 
         protected override void Move()
         {
-            if (casting) return;
+            //if (casting) return;
 
             targetPos = currentTarget.GetTransform().position;
             Vector3 direction = targetPos - transform.position;
@@ -83,7 +83,7 @@ namespace _Scripts.Enemies
         {
             casting = true;
 
-            gameObject.layer = 11;
+            //gameObject.layer = 11;
 
             var attackArea = Instantiate(attackIndicator, new Vector3(targetPos.x, 0, targetPos.z),
                 Quaternion.identity);
@@ -113,7 +113,7 @@ namespace _Scripts.Enemies
 
         private void StopAttack()
         {
-            gameObject.layer = 10;
+            //gameObject.layer = 10;
             casting = false;
         }
     }

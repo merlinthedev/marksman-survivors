@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityCooldown: 3
-  abilityRange: 15
+  abilityRange: 100
   abilityLevelUpBanner: {fileID: 0}
   upgrades: []
   abilityDescriptionPrefab: {fileID: 4357135320010822396, guid: b0b835a1c67840b4db6daae5f21c1820,
@@ -55,7 +55,7 @@ MonoBehaviour:
   abilityType: 2
   enemies:
     pairs: []
-  projectileSpeed: 100
+  projectileSpeed: 80
   damagePercentage: 1
   casttimeFactor: 0.5
   projectilePrefab: {fileID: 5728109114151554510, guid: b82a6ec9e09f42d4994f0055869c9045,
