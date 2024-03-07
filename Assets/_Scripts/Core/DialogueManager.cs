@@ -15,11 +15,10 @@ namespace _Scripts.Core {
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text body;
-
         [SerializeField] private List<Dialogue> dialogue;
-        private int pos = 0;
-
         [SerializeField] private GameObject currentNPC;
+
+        private int pos = 0;
 
         private void OnEnable() {
             EventBus<StartDialogueEvent>.Subscribe(OnStartDialogue);
@@ -30,10 +29,10 @@ namespace _Scripts.Core {
         }
 
         private void OnStartDialogue(StartDialogueEvent e) {
-            if(e.npc != null) {
+            if (e.npc != null) {
                 currentNPC = e.npc;
             }
-        
+
 
             dialogue = e.dialogue;
             title.text = dialogue[pos].title;
@@ -43,12 +42,11 @@ namespace _Scripts.Core {
         }
 
         public void OnContinueDialogue() {
-            if(pos < dialogue.Count - 1) {
+            if (pos < dialogue.Count - 1) {
                 pos++;
                 title.text = dialogue[pos].title;
                 body.text = dialogue[pos].body;
-            }
-            else {
+            } else {
                 OnEndDialogue();
             }
         }
@@ -57,7 +55,7 @@ namespace _Scripts.Core {
             dialogueBox.SetActive(false);
             pos = 0;
 
-            if(currentNPC != null) {
+            if (currentNPC != null) {
                 currentNPC.GetComponent<NPC>().OnEndDialogue();
             }
         }

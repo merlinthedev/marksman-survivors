@@ -13,16 +13,18 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Logger = _Scripts.Util.Logger;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
+using _Scripts.Interactable;
 
-namespace _Scripts.Champions
-{
-    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity, IShieldable
-    {
+namespace _Scripts.Champions {
+    public abstract class Champion : AbilityHolder, IDebuffable, IDamager, IStackableLivingEntity, IShieldable {
+
         #region Properties
 
         [SerializeField] private AutoAttack autoAttack;
 
-        [Header("References")] [SerializeField]
+        [Header("References")]
+        [SerializeField]
         protected Rigidbody rigidbody;
 
         [SerializeField] private Collider collider;
@@ -33,12 +35,13 @@ namespace _Scripts.Champions
         private float lastHealthRegenerationTime = 0f;
         private ChampionLevelManager championLevelManager;
 
-        [Header("Movement")] [SerializeField] protected Vector3 mouseHitPoint;
+        [Header("Movement")]
+        [SerializeField] protected Vector3 mouseHitPoint;
+        // private IEntity requestedMoveTarget = null;
 
         private Vector3 lastKnownDirection = Vector3.zero;
 
         [SerializeField] protected bool grounded = false;
-
         [SerializeField] private float groundedRange = 1.4f;
 
         private float globalMovementDirectionAngle = 0f;
@@ -63,8 +66,7 @@ namespace _Scripts.Champions
 
         protected bool isAutoAttacking = false;
 
-        protected bool CanAttack
-        {
+        protected bool CanAttack {
             get => !isAutoAttacking && Time.time > lastAttackTime + (1f / GetAttackSpeed());
         }
 
@@ -74,10 +76,8 @@ namespace _Scripts.Champions
         public List<Debuff> Debuffs { get; } = new();
         public List<Stack> Stacks { get; } = new();
 
-        public bool IsReady
-        {
-            get
-            {
+        public bool IsReady {
+            get {
                 return (Time.time > LastNonBasicAbilityCastTime + RhythmActivationTime) &&
                        this.abilities.Find(ability => ability.name == "RhythmOfBattle") != null;
             }
@@ -88,12 +88,9 @@ namespace _Scripts.Champions
         public List<IAttachable> attachables { get; } = new();
         public bool IsFragile { get; }
 
-        private MovementDirection CurrentMovementDirection
-        {
-            get
-            {
-                switch (GetGlobalDirectionAngle())
-                {
+        private MovementDirection CurrentMovementDirection {
+            get {
+                switch (GetGlobalDirectionAngle()) {
                     case float n when n > 0 && n < 90:
                         return MovementDirection.NORTH;
                     case float n when n >= 90 && n < 180:
@@ -121,10 +118,11 @@ namespace _Scripts.Champions
         public float ShieldLifetime { get; set; }
         public float LastShieldTime { get; set; }
 
-        public bool HasShield
-        {
+        public bool HasShield {
             get { return ShieldAmount > 0; }
         }
+
+        private LineRenderer lineRenderer;
 
         #endregion
 
@@ -137,29 +135,25 @@ namespace _Scripts.Champions
         public event Action OnShieldExpired;
 
 
-        protected void AutoAttackStarted()
-        {
+        protected void AutoAttackStarted() {
             OnAutoAttackStarted?.Invoke(currentTarget);
         }
 
-        protected void BulletHit(IDamageable t)
-        {
+        protected void BulletHit(IDamageable t) {
             OnBulletHit?.Invoke(t);
         }
 
 
         #region OnEnable/OnDisable
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Logger.excludedContexts.Add(this);
 
             EventBus<EnemyKilledEvent>.Subscribe(OnEnemyKilledEvent);
             EventBus<ChampionAbilityChosenEvent>.Subscribe(OnChampionAbilityChosen);
         }
 
-        private void OnDisable()
-        {
+        private void OnDisable() {
             EventBus<EnemyKilledEvent>.Unsubscribe(OnEnemyKilledEvent);
             EventBus<ChampionAbilityChosenEvent>.Unsubscribe(OnChampionAbilityChosen);
         }
@@ -168,13 +162,11 @@ namespace _Scripts.Champions
 
         #region Start and Update
 
-        private void Awake()
-        {
+        private void Awake() {
             dodge = new Dodge(dashCooldown);
         }
 
-        protected virtual void Start()
-        {
+        protected virtual void Start() {
             base.Start();
             // add autoAttack to the first slot of the abilities list
             abilities.Insert(0, autoAttack);
@@ -185,16 +177,18 @@ namespace _Scripts.Champions
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("Health",
                 championStatistics.CurrentHealth,
                 championStatistics.MaxHealth));
+
+            // lineRenderer = GetComponent<LineRenderer>();
+            // lineRenderer.useWorldSpace = true;
         }
 
-        protected virtual void FixedUpdate()
-        {
+        protected virtual void FixedUpdate() {
             GroundCheck();
 
-            if (!isCasting)
-            {
-                if (grounded)
-                {
+            // drawAttackRange();
+
+            if (!isCasting) {
+                if (grounded) {
                     OnMove();
                 }
 
@@ -205,10 +199,8 @@ namespace _Scripts.Champions
             grounded = false;
         }
 
-        protected virtual void Update()
-        {
-            if (!IsMoving && currentTarget != null && !isCasting)
-            {
+        protected virtual void Update() {
+            if (!IsMoving && currentTarget != null && !isCasting) {
                 OnAutoAttack(currentTarget);
             }
 
@@ -218,13 +210,11 @@ namespace _Scripts.Champions
             CheckShieldExpiration();
 
 
-            if (Input.GetKeyDown(KeyCode.S))
-            {
+            if (Input.GetKeyDown(KeyCode.S)) {
                 Debug.Log(championStatistics.ToString());
             }
 
-            if (Input.GetKeyDown(KeyCode.D))
-            {
+            if (Input.GetKeyDown(KeyCode.D)) {
                 Logger.Log("IsReady? " + IsReady, this);
             }
 
@@ -240,8 +230,7 @@ namespace _Scripts.Champions
 
         public abstract void OnAutoAttack(IDamageable damageable);
 
-        public void OnAbility(Ability ability)
-        {
+        public void OnAbility(Ability ability) {
             ability.OnUse();
             OnAbilityUsed?.Invoke(ability);
         }
@@ -250,17 +239,14 @@ namespace _Scripts.Champions
 
         #region Debuffs
 
-        public void RemoveDebuff(Debuff debuff)
-        {
+        public void RemoveDebuff(Debuff debuff) {
             Debuffs.Remove(debuff);
         }
 
-        public void ApplyDebuff(Debuff debuff)
-        {
+        public void ApplyDebuff(Debuff debuff) {
             Debuffs.Add(debuff);
 
-            switch (debuff.GetDebuffType())
-            {
+            switch (debuff.GetDebuffType()) {
                 case Debuff.DebuffType.SLOW:
                     ApplySlow(debuff);
                     break;
@@ -270,35 +256,29 @@ namespace _Scripts.Champions
             }
         }
 
-        private void ApplySlow(Debuff debuff)
-        {
+        private void ApplySlow(Debuff debuff) {
             championStatistics.MovementSpeed *= 1 - debuff.GetValue();
 
-            if (debuff.GetDuration() < 0)
-            {
+            if (debuff.GetDuration() < 0) {
                 return;
             }
 
             Utilities.InvokeDelayed(
-                () =>
-                {
+                () => {
                     championStatistics.MovementSpeed = championStatistics.InitialMovementSpeed;
                     Debuffs.Remove(debuff);
                 },
                 debuff.GetDuration(), this);
         }
 
-        private void ApplyBurn(Debuff debuff)
-        {
+        private void ApplyBurn(Debuff debuff) {
             Debuffs.Add(debuff);
         }
 
-        public void CheckDebuffsForExpiration()
-        {
+        public void CheckDebuffsForExpiration() {
             // AffectedEntities.ForEach(entity => { entity.Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); }); });
             // Debuffs.ForEach(debuff => { debuff.CheckForExpiration(); });
-            for (int i = Debuffs.Count - 1; i >= 0; i--)
-            {
+            for (int i = Debuffs.Count - 1; i >= 0; i--) {
                 Debuffs[i].CheckForExpiration();
             }
         }
@@ -307,10 +287,8 @@ namespace _Scripts.Champions
 
         #region Stacks
 
-        public void AddStacks(int stacks, Stack.StackType stackType, Effect effect = null)
-        {
-            switch (stackType)
-            {
+        public void AddStacks(int stacks, Stack.StackType stackType, Effect effect = null) {
+            switch (stackType) {
                 case Stack.StackType.FRAGILE:
                     AddFragileStacks(stacks);
                     break;
@@ -321,8 +299,7 @@ namespace _Scripts.Champions
                     AddOverpowerStacks(stacks);
                     break;
                 case Stack.StackType.FOCUS:
-                    for (int i = 0; i < stacks; i++)
-                    {
+                    for (int i = 0; i < stacks; i++) {
                         Stack stack = new Stack(Stack.StackType.FOCUS, this, false, effect);
                         Stacks.Add(stack);
                     }
@@ -332,15 +309,12 @@ namespace _Scripts.Champions
         }
 
 
-        public void AddStacks(int stacks, Stack.StackType stackType)
-        {
+        public void AddStacks(int stacks, Stack.StackType stackType) {
             AddStacks(stacks, stackType, null);
         }
 
-        public void RemoveStacks(int stacks, Stack.StackType stackType)
-        {
-            switch (stackType)
-            {
+        public void RemoveStacks(int stacks, Stack.StackType stackType) {
+            switch (stackType) {
                 case Stack.StackType.FRAGILE:
                     RemoveFragileStacks(stacks);
                     break;
@@ -353,26 +327,21 @@ namespace _Scripts.Champions
             }
         }
 
-        public void RemoveStack(Stack stack)
-        {
+        public void RemoveStack(Stack stack) {
             Stacks.Remove(stack);
             EventBus<ChangeStackUIEvent>.Raise(new ChangeStackUIEvent(stack.GetStackType(),
                 GetStackAmount(stack.GetStackType()), true));
         }
 
-        public void CheckStacksForExpiration()
-        {
+        public void CheckStacksForExpiration() {
             // Stacks.ForEach(stack => { stack.CheckForExpiration(); });
-            for (int i = Stacks.Count - 1; i >= 0; i--)
-            {
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
                 Stacks[i].CheckForExpiration();
             }
         }
 
-        private void AddFragileStacks(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
+        private void AddFragileStacks(int count) {
+            for (int i = 0; i < count; i++) {
                 Stack stack = new Stack(Stack.StackType.FRAGILE, this);
                 Stacks.Add(stack);
             }
@@ -381,27 +350,21 @@ namespace _Scripts.Champions
                 GetStackAmount(Stack.StackType.FRAGILE), true));
         }
 
-        private void RemoveFragileStacks(int count)
-        {
+        private void RemoveFragileStacks(int count) {
             // Remove the last count stacks
             int removed = 0;
-            for (int i = Stacks.Count - 1; i >= 0; i--)
-            {
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
                 if (removed == count) break;
-                if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE)
-                {
+                if (Stacks[i].GetStackType() == Stack.StackType.FRAGILE) {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
             }
         }
 
-        private void AddDeftnessStacks(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count >= 25)
-                {
+        private void AddDeftnessStacks(int count) {
+            for (int i = 0; i < count; i++) {
+                if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count >= 25) {
                     // get the difference between the inital count and the current count
                     int difference = count - i;
                     AddOverpowerStacks(difference);
@@ -418,24 +381,19 @@ namespace _Scripts.Champions
                 GetStackAmount(Stack.StackType.DEFTNESS), true));
         }
 
-        private void RemoveDeftnessStacks(int count)
-        {
+        private void RemoveDeftnessStacks(int count) {
             int removed = 0;
-            for (int i = Stacks.Count - 1; i >= 0; i--)
-            {
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
                 if (removed == count) break;
-                if (Stacks[i].GetStackType() == Stack.StackType.DEFTNESS)
-                {
+                if (Stacks[i].GetStackType() == Stack.StackType.DEFTNESS) {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
             }
         }
 
-        private void AddOverpowerStacks(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
+        private void AddOverpowerStacks(int count) {
+            for (int i = 0; i < count; i++) {
                 Stack stack = new Stack(Stack.StackType.OVERPOWER, this);
                 Stacks.Add(stack);
             }
@@ -444,14 +402,11 @@ namespace _Scripts.Champions
                 GetStackAmount(Stack.StackType.OVERPOWER), true));
         }
 
-        private void RemoveOverpowerStacks(int count)
-        {
+        private void RemoveOverpowerStacks(int count) {
             int removed = 0;
-            for (int i = Stacks.Count - 1; i >= 0; i--)
-            {
+            for (int i = Stacks.Count - 1; i >= 0; i--) {
                 if (removed == count) break;
-                if (Stacks[i].GetStackType() == Stack.StackType.OVERPOWER)
-                {
+                if (Stacks[i].GetStackType() == Stack.StackType.OVERPOWER) {
                     Stacks.RemoveAt(i);
                     removed++;
                 }
@@ -462,18 +417,14 @@ namespace _Scripts.Champions
 
         #region Resources
 
-        private void RegenerateResources()
-        {
+        private void RegenerateResources() {
             TryRegenerateHealth();
             TryRegenerateMana();
         }
 
-        private void TryRegenerateHealth()
-        {
-            if (championStatistics.CurrentHealth < championStatistics.MaxHealth)
-            {
-                if (Time.time > lastHealthRegenerationTime + 1f)
-                {
+        private void TryRegenerateHealth() {
+            if (championStatistics.CurrentHealth < championStatistics.MaxHealth) {
+                if (Time.time > lastHealthRegenerationTime + 1f) {
                     championStatistics.CurrentHealth += championStatistics.HealthRegen;
                     lastHealthRegenerationTime = Time.time;
                     EventBus<ChampionHealthRegenerated>.Raise(new ChampionHealthRegenerated());
@@ -482,12 +433,9 @@ namespace _Scripts.Champions
         }
 
 
-        private void TryRegenerateMana()
-        {
-            if (championStatistics.CurrentMana < championStatistics.MaxMana)
-            {
-                if (Time.time > lastManaRegenerationTime + 1f)
-                {
+        private void TryRegenerateMana() {
+            if (championStatistics.CurrentMana < championStatistics.MaxMana) {
+                if (Time.time > lastManaRegenerationTime + 1f) {
                     championStatistics.CurrentMana += championStatistics.ManaRegen;
                     lastManaRegenerationTime = Time.time;
                     EventBus<ChampionManaRegenerated>.Raise(new ChampionManaRegenerated());
@@ -499,8 +447,7 @@ namespace _Scripts.Champions
 
         #region Movement
 
-        public void RequestMovement(Vector3 target, float distance = 0.2f, Action callback = null)
-        {
+        public void RequestMovement(Vector3 target, float distance = 0.2f, Action callback = null) {
             mouseHitPoint = target;
             currentTarget = null;
             movementCallback = callback;
@@ -510,23 +457,21 @@ namespace _Scripts.Champions
         private Action movementCallback = null;
         private float distanceBeforeCallback = 0.2f;
 
-        protected virtual void OnMove()
-        {
-            if (!shouldMove || isDashing)
-            {
+        protected virtual void OnMove() {
+            if (!shouldMove || isDashing) {
                 return;
             }
 
             // Debug.Log("Moving");
             Vector3 direction = mouseHitPoint - transform.position;
 
+
             previousAngle = globalMovementDirectionAngle;
             globalMovementDirectionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             // Logger.Log("globalMovementDirectionAngle: " + globalMovementDirectionAngle, Logger.Color.GREEN, this);
 
             float squaredDistance = direction.sqrMagnitude;
-            if (squaredDistance < distanceBeforeCallback * distanceBeforeCallback)
-            {
+            if (squaredDistance < distanceBeforeCallback * distanceBeforeCallback) {
                 globalMovementDirectionAngle = previousAngle;
                 mouseHitPoint = Vector3.zero;
                 rigidbody.velocity = Vector3.zero;
@@ -534,6 +479,7 @@ namespace _Scripts.Champions
                 movementCallback = null;
                 return;
             }
+
 
             int deftnessStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.DEFTNESS).Count;
 
@@ -544,10 +490,8 @@ namespace _Scripts.Champions
             movementDirection = direction.normalized;
         }
 
-        public void OnDash()
-        {
-            if (dodge.IsOnCooldown())
-            {
+        public void OnDash() {
+            if (dodge.IsOnCooldown()) {
                 Log("Dash is on cooldown.", this);
                 return;
             }
@@ -564,20 +508,15 @@ namespace _Scripts.Champions
             // Logger.Log("Angle: " + angle, Logger.Color.RED, this);
 
 
-            Utilities.InvokeDelayed(() =>
-            {
+            Utilities.InvokeDelayed(() => {
                 isDashing = false;
                 collider.isTrigger = false;
                 rigidbody.useGravity = true;
-                if (angle > 45 || angle < -45)
-                {
+                if (angle > 45 || angle < -45) {
                     Stop();
                     ResetCurrentTarget();
-                }
-                else
-                {
-                    if (!isMovingPreDash)
-                    {
+                } else {
+                    if (!isMovingPreDash) {
                         Stop();
                     }
                 }
@@ -590,36 +529,28 @@ namespace _Scripts.Champions
         private const float increaseValue = 0.008f;
         private const float decreaseValue = 0.009f;
 
-        private void ChangeMovementInfluence()
-        {
+        private void ChangeMovementInfluence() {
             if (CurrentMovementDirection == MovementDirection.ZERO) return;
 
-            if (CurrentMovementDirection == MovementDirection.NORTH)
-            {
+            if (CurrentMovementDirection == MovementDirection.NORTH) {
                 directionTracker.x += increaseValue;
 
                 if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
                 if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.EAST)
-            {
+            } else if (CurrentMovementDirection == MovementDirection.EAST) {
                 directionTracker.y += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
                 if (directionTracker.z > 0) directionTracker.z -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.SOUTH)
-            {
+            } else if (CurrentMovementDirection == MovementDirection.SOUTH) {
                 directionTracker.z += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
                 if (directionTracker.y > 0) directionTracker.y -= decreaseValue;
                 if (directionTracker.w > 0) directionTracker.w -= decreaseValue;
-            }
-            else if (CurrentMovementDirection == MovementDirection.WEST)
-            {
+            } else if (CurrentMovementDirection == MovementDirection.WEST) {
                 directionTracker.w += increaseValue;
 
                 if (directionTracker.x > 0) directionTracker.x -= decreaseValue;
@@ -630,21 +561,17 @@ namespace _Scripts.Champions
             directionTracker = Utilities.ClampVector4(directionTracker, 0, 1);
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             rigidbody.velocity = Vector3.zero;
             mouseHitPoint = Vector3.zero;
         }
 
-        private void GroundCheck()
-        {
+        private void GroundCheck() {
             // Debug.Log("Ground check");
             // Debug.DrawRay(transform.position, Vector3.down * 10f, Color.red, 0);
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundedRange, 1 << 6))
-            {
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundedRange, 1 << 6)) {
                 // Debug.Log("Ground check hit");
-                if (hit.collider.CompareTag("Ground"))
-                {
+                if (hit.collider.CompareTag("Ground")) {
                     // Debug.Log("Ground check hit ground");
                     grounded = true;
                 }
@@ -655,11 +582,9 @@ namespace _Scripts.Champions
 
         #region Damage & Death
 
-        private void TakeDamage(float damage)
-        {
+        private void TakeDamage(float damage) {
             if (isInvincible) return;
-            if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).Count > 0)
-            {
+            if (Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS).Count > 0) {
                 // Debug.Log("Champion had FOCUS stacks. Losing all stacks to negate damage.");
                 Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FOCUS)
                     .ForEach(stack => { stack.Expire(); });
@@ -673,23 +598,17 @@ namespace _Scripts.Champions
             // Debug.Log("With value " + damage);
             championStatistics.CurrentHealth -= damage;
             EventBus<ChampionDamageTakenEvent>.Raise(new ChampionDamageTakenEvent());
-            if (championStatistics.CurrentHealth <= 0)
-            {
+            if (championStatistics.CurrentHealth <= 0) {
                 OnDeath();
             }
         }
 
-        public float TakeShieldDamage(float damage)
-        {
-            if (HasShield)
-            {
-                if (damage >= ShieldAmount)
-                {
+        public float TakeShieldDamage(float damage) {
+            if (HasShield) {
+                if (damage >= ShieldAmount) {
                     RemoveShield();
                     damage -= ShieldAmount;
-                }
-                else
-                {
+                } else {
                     ShieldAmount -= damage;
                     damage = 0;
                 }
@@ -698,32 +617,27 @@ namespace _Scripts.Champions
             return damage;
         }
 
-        public void TakeFlatDamage(float damage)
-        {
+        public void TakeFlatDamage(float damage) {
             if (isInvincible) return;
             // Debug.Log("Taking damage");
             TakeDamage(damage);
         }
 
-        public float CalculateIncomingDamage(float damage)
-        {
+        public float CalculateIncomingDamage(float damage) {
             float fragileStacks = Stacks.FindAll(stack => stack.GetStackType() == Stack.StackType.FRAGILE).Count;
             damage = IsFragile ? damage * 1 + fragileStacks / 100f : damage;
 
             return damage;
         }
 
-        public void ToggleInvincibility()
-        {
+        public void ToggleInvincibility() {
             isInvincible = !isInvincible;
         }
 
-        protected float CalculateDamage()
-        {
+        protected float CalculateDamage() {
             float damage = GetAttackDamage();
 
-            if (Random.value < championStatistics.CriticalStrikeChance || nextAttackWillCrit)
-            {
+            if (Random.value < championStatistics.CriticalStrikeChance || nextAttackWillCrit) {
                 damage *= (1 + championStatistics.CriticalStrikeDamage);
             }
 
@@ -733,56 +647,58 @@ namespace _Scripts.Champions
         }
 
         public virtual void DealDamage(IDamageable damageable, float damage, DamageType damageType,
-            bool shouldInvoke = true)
-        {
+            bool shouldInvoke = true) {
             // Debug.Log("Dealing damage: " + damage);
             damageable.TakeFlatDamage(damage);
-            if (shouldInvoke)
-            {
+            if (shouldInvoke) {
                 OnDamageDone?.Invoke(damageable);
             }
 
-            if (damageType.Equals(DamageType.NON_BASIC))
-            {
+            if (damageType.Equals(DamageType.NON_BASIC)) {
                 OnNonBasicAbilityDamageDone?.Invoke();
             }
         }
 
-        public void OnDeath()
-        {
+        private void drawAttackRange() {
+            // Draw the attack range
+            lineRenderer.positionCount = 360;
+            lineRenderer.startWidth = 0.1f;
+            lineRenderer.endWidth = 0.1f;
+            for (int i = 0; i < 360; i++) {
+                float x = Mathf.Sin(Mathf.Deg2Rad * i) * championStatistics.AttackRange;
+                float z = Mathf.Cos(Mathf.Deg2Rad * i) * championStatistics.AttackRange;
+                lineRenderer.SetPosition(i, new Vector3(x, 0.1f, z) + transform.position);
+            }
+        }
+
+        public void OnDeath() {
             // Death logic
 
             EventBus<LoadSceneEvent>.Raise(new LoadSceneEvent("D Hub"));
         }
 
-        public void CheckShieldExpiration()
-        {
-            if (Time.time > LastShieldTime + ShieldLifetime)
-            {
+        public void CheckShieldExpiration() {
+            if (Time.time > LastShieldTime + ShieldLifetime) {
                 RemoveShield();
                 OnShieldExpired?.Invoke();
             }
         }
 
-        public void SetShield(float amount)
-        {
+        public void SetShield(float amount) {
             LastShieldTime = Time.time;
             ShieldAmount = amount;
         }
 
-        public void RemoveShield()
-        {
+        public void RemoveShield() {
             ShieldAmount = 0;
             OnShieldExpired?.Invoke();
         }
 
-        public void AddShield(float amount)
-        {
+        public void AddShield(float amount) {
             ShieldAmount += amount;
         }
 
-        public void SubtractShield(float amount)
-        {
+        public void SubtractShield(float amount) {
             ShieldAmount -= amount;
         }
 
@@ -790,34 +706,28 @@ namespace _Scripts.Champions
 
         #region Events
 
-        private void OnEnemyKilledEvent(EnemyKilledEvent e)
-        {
+        private void OnEnemyKilledEvent(EnemyKilledEvent e) {
             championStatistics.CurrentXP += e.enemy.GetXP();
             championLevelManager.CheckForLevelUp();
             EventBus<UpdateResourceBarEvent>.Raise(new UpdateResourceBarEvent("XP", championStatistics.CurrentXP,
                 championLevelManager.CurrentLevelXP));
 
             // if the enemy that was killed was the instance of currentTarget, set currentTarget to null
-            if ((Enemy)currentTarget == e.enemy)
-            {
+            if ((Enemy)currentTarget == e.enemy) {
                 currentTarget = null;
             }
         }
 
-        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e)
-        {
+        private void OnChampionAbilityChosen(ChampionAbilityChosenEvent e) {
             Ability abilty = e.Ability;
             // Logger.Log("Adding ability: " + abilty.GetType(), Logger.Color.PINK, this);
             // Logger.Log("Added ability keycode: " + abilty.GetKeyCode(), Logger.Color.PINK, this);
             abilty.Hook(this);
             if (!e.ShouldAdd) return;
 
-            if (abilty.abilityUseType == AbilityUseType.PASSIVE)
-            {
+            if (abilty.abilityUseType == AbilityUseType.PASSIVE) {
                 passiveAbilities.Add(abilty);
-            }
-            else
-            {
+            } else {
                 abilities.Add(abilty);
             }
         }
@@ -826,8 +736,7 @@ namespace _Scripts.Champions
 
         #region Debug
 
-        protected void DrawDirectionRays()
-        {
+        protected void DrawDirectionRays() {
             // Direction ray
             Debug.DrawRay(transform.position, GetCurrentMovementDirection() * 10f, Color.red);
 
@@ -873,8 +782,7 @@ namespace _Scripts.Champions
 
         private Dictionary<Guid, Dictionary<string, int>> THEONETORULETHEMALL = new();
 
-        public Vector3 GetCurrentMovementDirection()
-        {
+        public Vector3 GetCurrentMovementDirection() {
             // Logger.Log("WHERET HE FUCK IS MY GETTER?XD ", Logger.Color.RED, this);
             // Logger.Log("Velocity: " + rigidbody.velocity.normalized, Logger.Color.GREEN, this);
             return rigidbody.velocity.normalized == Vector3.zero
@@ -882,89 +790,73 @@ namespace _Scripts.Champions
                 : rigidbody.velocity.normalized;
         }
 
-        public float GetGlobalDirectionAngle()
-        {
+        public float GetGlobalDirectionAngle() {
             // return the angle but instead of -180-180 i want it to be 0-360
             return globalMovementDirectionAngle < 0
                 ? globalMovementDirectionAngle + 360
                 : globalMovementDirectionAngle;
         }
 
-        public bool GetIsCasting()
-        {
+        public bool GetIsCasting() {
             return isCasting;
         }
 
-        public Vector4 GetMovementData()
-        {
+        public Vector4 GetMovementData() {
             return directionTracker;
         }
 
-        public Vector3 GetLastAttackDirection()
-        {
+        public Vector3 GetLastAttackDirection() {
             return lastAttackDirection;
         }
 
-        public int GetStackAmount(Stack.StackType stackType)
-        {
+        public int GetStackAmount(Stack.StackType stackType) {
             return Stacks.FindAll(stack => stack.GetStackType() == stackType).Count;
         }
 
-        public Transform GetTransform()
-        {
+        public Transform GetTransform() {
             return gameObject.transform;
         }
 
-        public Dodge GetDodge()
-        {
+        public Dodge GetDodge() {
             return dodge;
         }
 
-        public AutoAttack GetAutoAttack()
-        {
+        public AutoAttack GetAutoAttack() {
             return autoAttack;
         }
 
-        public bool IsChanneling()
-        {
+        public bool IsChanneling() {
             return isCasting;
         }
 
-        public void SetCurrentMovementDirection(Vector3 dir)
-        {
+        public void SetCurrentMovementDirection(Vector3 dir) {
             movementDirection = dir;
         }
 
-        public void SetLastAttackDirection(Vector3 dir)
-        {
+        public void SetLastAttackDirection(Vector3 dir) {
             lastAttackDirection = dir;
         }
 
-        public void SetGlobalDirectionAngle(float angle)
-        {
+        public void SetGlobalDirectionAngle(float angle) {
             globalMovementDirectionAngle = angle;
         }
 
-        public void SetNextAttackWillCrit(bool b)
-        {
+        public void SetNextAttackWillCrit(bool b) {
             nextAttackWillCrit = b;
         }
 
-        public void SetIsCasting(bool isCasting)
-        {
+        public void SetIsCasting(bool isCasting) {
             this.isCasting = isCasting;
         }
 
 
-        public void ResetCurrentTarget()
-        {
+        public void ResetCurrentTarget() {
             currentTarget = null;
         }
 
         #endregion
 
-        public enum MovementDirection
-        {
+        public enum MovementDirection {
             ZERO,
             NORTH,
             EAST,
@@ -972,8 +864,7 @@ namespace _Scripts.Champions
             WEST
         }
 
-        public enum DamageType
-        {
+        public enum DamageType {
             BASIC,
             NON_BASIC
         }
